@@ -1,0 +1,389 @@
+{
+  "Id": "profileid",
+  "LinkedAccounts": {
+    "steam": "linkedsteamid"
+  },
+  "Extensions": {
+    "gameclient": null,
+    "progression": {
+      "XPGain": 0,
+      "secondsToNextDrop": 3600.0,
+      "secondsElapsed": 200.0,
+      "LastScore": 0,
+      "LastCompletedChallenge": "00000000-0000-0000-0000-000000000000",
+      "Locations": {
+        "location_ica_facility": {
+          "Xp": 0,
+          "PreviouslySeenXp": 0,
+          "LastCompletedChallenge": "00000000-0000-0000-0000-000000000000",
+          "PreviouslySeenStaging": null,
+          "Level": 1
+        },
+        "location_paris": {
+          "Xp": 9,
+          "PreviouslySeenXp": 9,
+          "LastCompletedChallenge": "00000000-0000-0000-0000-000000000000",
+          "PreviouslySeenStaging": null,
+          "Level": 1
+        },
+        "location_austria": {
+          "Xp": 0,
+          "LastCompletedChallenge": "00000000-0000-0000-0000-000000000000"
+        },
+        "location_newzealand": {
+          "Xp": 0,
+          "PreviouslySeenXp": 0,
+          "LastCompletedChallenge": "00000000-0000-0000-0000-000000000000",
+          "PreviouslySeenStaging": null,
+          "Level": 1
+        },
+        "location_miami": {
+          "Xp": 0,
+          "PreviouslySeenXp": 0,
+          "LastCompletedChallenge": "00000000-0000-0000-0000-000000000000",
+          "PreviouslySeenStaging": null,
+          "Level": 1
+        },
+        "location_colombia": {
+          "Xp": 0,
+          "PreviouslySeenXp": 0,
+          "LastCompletedChallenge": "00000000-0000-0000-0000-000000000000",
+          "PreviouslySeenStaging": null,
+          "Level": 1
+        },
+        "location_parent_coastaltown": {
+          "Xp": 0,
+          "PreviouslySeenXp": 0,
+          "LastCompletedChallenge": "00000000-0000-0000-0000-000000000000",
+          "PreviouslySeenStaging": null,
+          "Level": 1
+        },
+        "location_mumbai": {
+          "Xp": 0,
+          "PreviouslySeenXp": 0,
+          "LastCompletedChallenge": "00000000-0000-0000-0000-000000000000",
+          "PreviouslySeenStaging": null,
+          "Level": 1
+        },
+        "location_marrakech": {
+          "Xp": 0,
+          "PreviouslySeenXp": 0,
+          "LastCompletedChallenge": "00000000-0000-0000-0000-000000000000",
+          "PreviouslySeenStaging": null,
+          "Level": 1
+        },
+        "location_bangkok":  {
+          "Xp": 0,
+          "PreviouslySeenXp": 0,
+          "LastCompletedChallenge": "00000000-0000-0000-0000-000000000000",
+          "PreviouslySeenStaging": null,
+          "Level": 1
+        },
+        "location_colorado": {
+          "Xp": 0,
+          "PreviouslySeenXp": 0,
+          "LastCompletedChallenge": "00000000-0000-0000-0000-000000000000",
+          "PreviouslySeenStaging": null,
+          "Level": 1
+        },
+        "location_hokkaido": {
+          "Xp": 0,
+          "PreviouslySeenXp": 0,
+          "LastCompletedChallenge": "00000000-0000-0000-0000-000000000000",
+          "PreviouslySeenStaging": null,
+          "Level": 1
+        },
+        "location_northsea": {
+          "Xp": 0,
+          "PreviouslySeenXp": 0,
+          "LastCompletedChallenge": "00000000-0000-0000-0000-000000000000",
+          "PreviouslySeenStaging": null,
+          "Level": 1
+        },
+        "location_northamerica": {
+          "Xp": 0,
+          "PreviouslySeenXp": 0,
+          "LastCompletedChallenge": "00000000-0000-0000-0000-000000000000",
+          "PreviouslySeenStaging": null,
+          "Level": 1
+        },
+        "location_salty": {
+          "Xp": 0,
+          "PreviouslySeenXp": 0,
+          "LastCompletedChallenge": "00000000-0000-0000-0000-000000000000",
+          "PreviouslySeenStaging": null,
+          "Level": 1
+        },
+        "location_greedy": {
+          "Xp": 0,
+          "PreviouslySeenXp": 0,
+          "LastCompletedChallenge": "00000000-0000-0000-0000-000000000000",
+          "PreviouslySeenStaging": null,
+          "Level": 1
+        },
+        "location_caged": {
+          "Xp": 0,
+          "PreviouslySeenXp": 0,
+          "LastCompletedChallenge": "00000000-0000-0000-0000-000000000000",
+          "PreviouslySeenStaging": null,
+          "Level": 1
+        },
+        "location_opulent": {
+          "Xp": 0,
+          "PreviouslySeenXp": 0,
+          "LastCompletedChallenge": "00000000-0000-0000-0000-000000000000",
+          "PreviouslySeenStaging": null,
+          "Level": 1
+        }
+      },
+      "PlayerProfileXP": {
+        "Total": 0,
+        "Sublocations": [
+          {
+            "Location": "LOCATION_ICA_FACILITY",
+            "Xp": 0,
+            "ActionXp": 0
+          },
+          {
+            "Location": "LOCATION_PARIS",
+            "Xp": 0,
+            "ActionXp": 0
+          },
+          {
+            "Location": "LOCATION_AUSTRIA",
+            "Xp": 0,
+            "ActionXp": 0
+          },
+          {
+            "Location": "LOCATION_NEWZEALAND",
+            "Xp": 0,
+            "ActionXp": 0
+          },
+          {
+            "Location": "LOCATION_MIAMI",
+            "Xp": 0,
+            "ActionXp": 0
+          },
+          {
+            "Location": "LOCATION_COLOMBIA",
+            "Xp": 0,
+            "ActionXp": 0
+          },
+          {
+            "Location": "LOCATION_COASTALTOWN",
+            "Xp": 0,
+            "ActionXp": 0
+          },
+          {
+            "Location": "LOCATION_MUMBAI",
+            "Xp": 0,
+            "ActionXp": 0
+          },
+          {
+            "Location": "LOCATION_MARRAKECH",
+            "Xp": 0,
+            "ActionXp": 0
+          },
+          {
+            "Location": "LOCATION_BANGKOK",
+            "Xp": 0,
+            "ActionXp": 0
+          },
+          {
+            "Location": "LOCATION_COLORADO",
+            "Xp": 0,
+            "ActionXp": 0
+          },
+          {
+            "Location": "LOCATION_HOKKAIDO",
+            "Xp": 0,
+            "ActionXp": 0
+          },
+          {
+            "Location": "LOCATION_NORTHSEA",
+            "Xp": 0,
+            "ActionXp": 0
+          },
+          {
+            "Location": "LOCATION_MARRAKECH_NIGHT",
+            "Xp": 0,
+            "ActionXp": 0
+          },
+          {
+            "Location": "LOCATION_NORTHAMERICA",
+            "Xp": 0,
+            "ActionXp": 0
+          },
+          {
+            "Location": "LOCATION_SALTY_SEAGULL",
+            "Xp": 0,
+            "ActionXp": 0
+          },
+          {
+            "Location": "LOCATION_BANGKOK_ZIKA",
+            "Xp": 0,
+            "ActionXp": 0
+          },
+          {
+            "Location": "LOCATION_GREEDY_RACCOON",
+            "Xp": 0,
+            "ActionXp": 0
+          },
+          {
+            "Location": "LOCATION_COASTALTOWN_MOVIESET",
+            "Xp": 0,
+            "ActionXp": 0
+          },
+          {
+            "Location": "LOCATION_CAGED_FALCON",
+            "Xp": 0,
+            "ActionXp": 0
+          },
+          {
+            "Location": "LOCATION_OPULENT_STINGRAY",
+            "Xp": 0,
+            "ActionXp": 0
+          },
+          {
+            "Location": "LOCATION_MIAMI_COTTONMOUTH",
+            "Xp": 0,
+            "ActionXp": 0
+          },
+          {
+            "Location": "LOCATION_COASTALTOWN_NIGHT",
+            "Xp": 0,
+            "ActionXp": 0
+          },
+          {
+            "Location": "LOCATION_COASTALTOWN_EBOLA",
+            "Xp": 0,
+            "ActionXp": 0
+          },
+          {
+            "Location": "LOCATION_COLORADO_RABIES",
+            "Xp": 0,
+            "ActionXp": 0
+          },
+          {
+            "Location": "LOCATION_HOKKAIDO_FLU",
+            "Xp": 0,
+            "ActionXp": 0
+          }
+        ],
+        "PreviouslySeenTotal": 0,
+        "ProfileLevel": 0,
+        "PreviouslySeenStaging": null
+      },
+      "TimeDropDelta": 0,
+      "Unlockables": {
+        "firearms_sc_hero_sniper_stone": {
+          "Xp": 0,
+          "LastCompletedChallenge": "00000000-0000-0000-0000-000000000000"
+        },
+        "firearms_sc_falcon_hm": {
+          "Xp": 0,
+          "PreviouslySeenXp": 0,
+          "LastCompletedChallenge": "00000000-0000-0000-0000-000000000000",
+          "PreviouslySeenStaging": null,
+          "Level": 1
+        },
+        "firearms_sc_falcon_knight": {
+          "Xp": 0,
+          "PreviouslySeenXp": 0,
+          "LastCompletedChallenge": "00000000-0000-0000-0000-000000000000",
+          "PreviouslySeenStaging": null,
+          "Level": 1
+        }
+      }
+    },
+    "gamepersistentdata": {
+      "IsFSPUser": false,
+      "prologue": {
+        "proceed-intro": true
+      },
+      "menudata": {
+        "newunlockables": [],
+        "persistentdatacomponent": {
+          "destinations": {
+            "sub-menu-selection": "destination_category_season_1"
+          },
+          "planning": {
+            "difficulty-selection": "hard"
+          }
+        },
+        "versusmode": {
+          "disguiseunlockableid": "TOKEN_OUTFIT_HITMANSUIT"
+        },
+        "destinations": {
+          "sub-menu-selection": "destination_category_season_2"
+        }
+      },
+      "PersistentBool": {
+        "__Full": {}
+      },
+      "HitsFilterType": {
+        "MyHistory": "MyHistory",
+        "MyContracts": "MyContracts"
+      },
+      "VideoShown": {
+        "VideoShown_briefing_peacock": true,
+        "VideoShown_briefing_octopus": true,
+        "VideoShown_briefing_spider": true,
+        "VideoShown_briefing_tiger": true,
+        "VideoShown_briefing_bull": true,
+        "VideoShown_briefing_snowcrane": true,
+        "VideoShown_briefing_hawk": true,
+        "VideoShown_briefing_flamingo": true,
+        "VideoShown_briefing_hawk_stoneknight": true,
+        "VideoShown_briefing_sambuca": true,
+        "VideoShown_briefing_hippo": true,
+        "VideoShown_briefing_mongoose": true,
+        "VideoShown_briefing_highball": true,
+        "VideoShown_briefing_mamushi": true,
+        "VideoShown_briefing_skunk": true,
+        "VideoShown_briefing_goldendoublet": true,
+        "VideoShown_briefing_ghostmode": true,
+        "VideoShown_briefing_dirtyoctopus": true,
+        "VideoShown_briefing_magpie": true,
+        "VideoShown_briefing_adonis": true,
+        "VideoShown_briefing_kamikaze": true,
+        "VideoShown_briefing_sazerac": true,
+        "VideoShown_briefing_seagull": true,
+        "VideoShown_briefing_zika": true,
+        "VideoShown_briefing_sambuca2": true,
+        "VideoShown_briefing_corpsereviver": true,
+        "VideoShown_briefing_python": true,
+        "VideoShown_briefing_raccoon": true,
+        "VideoShown_briefing_maitai": true,
+        "VideoShown_briefing_caipirinha": true,
+        "VideoShown_briefing_bushwacker": true,
+        "VideoShown_briefing_falcon": true,
+        "VideoShown_briefing_whiterussian": true,
+        "VideoShown_briefing_screwdriver": true,
+        "VideoShown_briefing_lumumba": true,
+        "VideoShown_briefing_hottoddy": true,
+        "VideoShown_briefing_stingray": true,
+        "VideoShown_briefing_bloodymary": true,
+        "VideoShown_briefing_alabamaslammer": true,
+        "VideoShown_briefing_cosmopolitan": true,
+        "VideoShown_briefing_sakini": true,
+        "VideoShown_briefing_cottonmouth": true,
+        "VideoShown_briefing_falcon_stoneknight": true,
+        "VideoShown_briefing_skittlebomb": true,
+        "VideoShown_briefing_ebola": true,
+        "VideoShown_briefing_rabies": true,
+        "VideoShown_briefing_flu": true,
+        "VideoShown_briefing_copperhead": true
+      },
+      "EpilogueSeen": {}
+    },
+    "opportunityprogression": {},
+    "inventory": []
+  },
+  "ETag": null,
+  "DevId": null,
+  "SteamId": "profilesteamid",
+  "XboxLiveId": null,
+  "PSNAccountId": null,
+  "PSNOnlineId": null
+}

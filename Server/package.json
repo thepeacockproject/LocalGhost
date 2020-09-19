@@ -1,0 +1,9 @@
+{
+  "name": "hitmanserb",
+  "version": "",
+  "dependencies": {
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "uuid": "^8.3.0"
+  }
+}

@@ -1,0 +1,10 @@
+# Patcher
+Patcher/*.suo
+Patcher/bin/
+Patcher/obj/
+
+# Server
+Server/.vscode/
+Server/node_modules/
+Server/userdata/users/**
+Server/userdata/steamids/**
