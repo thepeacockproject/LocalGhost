@@ -13,8 +13,6 @@ const eventHandler = require('./components/eventHandler.js');
 const multiplayerHandler = require('./components/multiplayerHandler.js');
 const contractHandler = require('./components/contractHandler.js');
 
-process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
-
 let app = express();
 
 app.disable('x-powered-by');
