@@ -35,7 +35,7 @@ namespace Hitman2Patcher
 		public Form1()
 		{
 			InitializeComponent();
-			listView1.Columns[0].Width = listView1.Width - 4;
+			listView1.Columns[0].Width = listView1.Width - 4 - SystemInformation.VerticalScrollBarWidth;
 			timer = new Timer();
 			timer.Interval = 1000;
 			timer.Tick += timer_Tick;
