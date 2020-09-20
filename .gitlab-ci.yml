@@ -1,8 +1,8 @@
 stages:
   - build
 
-before_script:
-    - Set-Variable -Name "msbuild" -Value (Resolve-Path "C:\Program Files (x86)\MSBuild\*\Bin\amd64\MSBuild.exe")[0].Path
+variables:
+  msbuild: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\MSBuild.exe'
 
 build_patcher:
     stage: build
