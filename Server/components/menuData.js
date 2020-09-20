@@ -200,10 +200,35 @@ app.get('/multiplayer', extractToken, (req, res) => { // /multiplayer?gamemode=v
 app.get('/missionendready', (req, res) => {
     // TODO: test if this works
     res.json({
+        template: {
+            "controller": "group",
+            "id": "mission_rewards",
+            "selectable": false,
+            "pressable": false,
+            "children": [{
+                "view": "menu3.MissionRewardPage",
+                "selectable": false,
+                "pressable": false,
+                "data": {
+                    "loading": true
+                }
+            }],
+            "post-load-action": {
+                "link": {
+                    "page": "missionend",
+                    "clearhistory": true,
+                    "args": {
+                        "url": "missionend",
+                        "contractSessionId": "$.contractSessionId",
+                        "masteryUnlockableId": "$arg MasteryUnlockableId"
+                    }
+                }
+            }
+        },
         data: {
             contractSessionId: req.query.contractSessionId,
-            missionEndReady: false,
-            retryCount: Number(req.query.retryCount) + 1,
+            missionEndReady: true,
+            retryCount: 1,
         },
     });
 });
@@ -214,8 +239,8 @@ app.post('/multiplayermatchstatsready', (req, res) => {
         template: null,
         data: {
             contractSessionId: req.query.contractSessionId,
-            isReady: false,
-            retryCount: Number(req.query.retryCount) + 1, // replace with 3?
+            isReady: true,
+            retryCount: 1,
         },
     });
 });
