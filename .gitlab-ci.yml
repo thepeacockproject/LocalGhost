@@ -1,0 +1,22 @@
+stages:
+  - build
+
+before_script:
+    - Set-Variable -Name "msbuild" -Value (Resolve-Path "C:\Program Files (x86)\MSBuild\*\Bin\amd64\MSBuild.exe")[0].Path
+
+build_patcher:
+    stage: build
+    tags:
+        - windows
+    only:
+        changes:
+            - Patcher/**
+    script:
+        -  '& $msbuild .\Patcher\Hitman2Patcher.sln /t:Build /p:Configuration=Release'
+        - Set-Variable -Name patcherversion -Value (Get-ChildItem .\Patcher\bin\x64\Release\Hitman2Patcher.exe | Select-Object -ExpandProperty VersionInfo).FileVersion
+    artifacts:
+        name: "Patcher-$patcherversion-$CI_COMMIT_REF_NAME"
+        when: on_success
+        expire_in: never
+        paths:
+            - Patcher/bin/x64/Release/Hitman2Patcher.exe
