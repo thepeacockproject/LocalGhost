@@ -37,7 +37,7 @@ This defaults to `localhost`, but you can also make the game connect to remote i
 
 ### Set-up
 For developers, the included .sln or .csproj files should be openable with visual studio.
-For non-developers, I will try to include a prebuilt binary somewhere later.
+For non-developers, you can download a binary from [the CI here](https://gitlab.com/grappigegovert/localghost/-/jobs/747302335/artifacts/download).
 
 ## Missing features
 - The server currently does not keep track of any stats, so the end screen will not show any.
