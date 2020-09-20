@@ -10,7 +10,7 @@ build_patcher:
         - windows
     only:
         changes:
-            - Patcher/**
+            - Patcher/**/*
     script:
         -  '& $msbuild .\Patcher\Hitman2Patcher.sln /t:Build /p:Configuration=Release'
         - Set-Variable -Name patcherversion -Value (Get-ChildItem .\Patcher\bin\x64\Release\Hitman2Patcher.exe | Select-Object -ExpandProperty VersionInfo).FileVersion
