@@ -16,7 +16,7 @@ Things of note:
 
 ## Server
 
-The server is written in NodeJS and serves as replacement for all `*.hitman.io` domains that the game connects to.
+The server is written in NodeJS and serves as replacement for all http(s) servers that the game connects to.
 Without the patcher, the first connection the game makes is to `config.hitman.io` which serves some json that contains all other domains the game should use.
 This server returns json that makes the game connect to the same domain for all requests.
 
@@ -58,7 +58,7 @@ To use this software, download the patcher [here](https://gitlab.com/grappigegov
 Open the patcher and enter the IP address or domain name of the server you want to connect to.
 Make sure the patcher is running while you start the game.
 
-Unless someone decides to host a public server for everyone to use, you or your opponent will have to host one. Install NodeJS and follow [Server:Set-up](#set-up) to start the server. You'll have to port-forward port 80 for other player to be able to connect. Other player can then enter [your IP address](https://ident.me/) in the patcher to connect to your server.
+Unless someone decides to host a public server for everyone to use, you or your opponent will have to host one. Install NodeJS and follow [Server:Set-up](#set-up) to start the server. You'll have to port-forward port 80 for other players to be able to connect. Other players can then enter [your IP address](https://ident.me/) in the patcher to connect to your server.
 
 It should be obvious, but two players have to be connected to the same server to play a match together.
 
