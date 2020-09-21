@@ -2,6 +2,17 @@
 This project consists of two parts: a patcher, and a server.
 
 The server acts as a replacement of the IOI servers that Hitman usually connects to, and the patcher patches the game so it actually connects to this server instead of the official servers.
+- [Info for developers](#developers)
+- [Info for players](#players)
+
+Things of note:
+
+- While using this, there is no connection at all to any IOI server (I think). This means you will not have your regular progression data, and right now, no progression at all. To still have some freedom in suit selection, all unlockable disguises are made available.
+- The server sends a modified main menu, so the only thing available will be ghost mode and the options screen.
+- The server currently does not keep track of any match stats, so the end screen will not show any.
+- Matchmaking is not implemented. Inviting is the way to go.
+
+# Developers
 
 ## Server
 
@@ -36,9 +47,19 @@ This defaults to `localhost`, but you can also make the game connect to remote i
 - Send an authorization header regardless of protocol. This contains session/user details send with every request.
 
 ### Set-up
-For developers, the included .sln or .csproj files should be openable with visual studio.
-For non-developers, you can download a binary from [the CI here](https://gitlab.com/grappigegovert/localghost/-/jobs/747302335/artifacts/download).
+The included .sln or .csproj files should be openable with visual studio. Nothing special.
 
-## Missing features
-- The server currently does not keep track of any stats, so the end screen will not show any.
-- Matchmaking is not implemented. Inviting is the way to go.
+## License
+All code included in this project is licensed under the zlib license.
+A copy of the zlib license can be found in the LICENSE file
+
+# Players
+To use this software, download the patcher [here](https://gitlab.com/grappigegovert/localghost/-/jobs/747460601/artifacts/download).
+Open the patcher and enter the IP address or domain name of the server you want to connect to.
+Make sure the patcher is running while you start the game.
+
+Unless someone decides to host a public server for everyone to use, you or your opponent will have to host one. Install NodeJS and follow [Server:Set-up](#set-up) to start the server. You'll have to port-forward port 80 for other player to be able to connect. Other player can then enter [your IP address](https://ident.me/) in the patcher to connect to your server.
+
+It should be obvious, but two players have to be connected to the same server to play a match together.
+
+Happy ghosting!

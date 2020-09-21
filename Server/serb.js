@@ -1,3 +1,6 @@
+// Copyright (C) 2020 grappigegovert <grappigegovert@hotmail.com>
+// Licensed under the zlib license. See LICENSE for more info
+
 const express = require('express');
 const fs = require('fs');
 const http = require('http');
@@ -52,7 +55,7 @@ app.post('/oauth/token', (req, res) => {
     if (req.body.grant_type == 'refresh_token') {
         extractToken(req);
         res.json({
-            "access_token": req.jwt, // TODO
+            "access_token": req.jwt,
             "token_type": "bearer",
             "expires_in": 5000,
             "refresh_token": uuid.v4(),
