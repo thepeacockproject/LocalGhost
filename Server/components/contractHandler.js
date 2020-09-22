@@ -11,8 +11,8 @@ const eventHandler = require('./eventHandler.js');
 
 const app = express.Router();
 
-app.post('/GetForPlay2', express.json(), extractToken, (req, res) => {
-    const contractData = JSON.parse(fs.readFileSync(path.join('contractdata', `${req.body.id}.json`)));
+app.post('/GetForPlay2', express.json(), extractToken, async (req, res) => {
+    const contractData = JSON.parse(await fs.promises.readFile(path.join('contractdata', `${req.body.id}.json`)));
     const contractSesh = {
         Contract: contractData,
         ContractSessionId: `${process.hrtime.bigint().toString()}-${uuid.v4()}`,

@@ -8,7 +8,7 @@ const jwt = require('jsonwebtoken');
 const path = require('path');
 const uuid = require('uuid');
 
-const { extractToken, ServerVer } = require ('./components/utils.js');
+const { extractToken, ServerVer } = require('./components/utils.js');
 const profileHandler = require('./components/profileHandler.js');
 const menuSystem = require('./components/menuSystem.js');
 const menuData = require('./components/menuData.js');
@@ -26,24 +26,28 @@ app.use((req, res, next) => {
 });
 
 app.get('/config/pc-prod/7_17_0', (req, res) => {
-    let config = JSON.parse(fs.readFileSync('static/config.json', 'utf8'));
-    let serverhost = req.hostname;
-    config.Versions[0].ISSUER_ID = req.query.issuer;
-    config.Versions[0].SERVER_VER.Metrics.MetricsServerHost = `http://${serverhost}`;
-    config.Versions[0].SERVER_VER.Authentication.AuthenticationHost = `http://${serverhost}`;
-    config.Versions[0].SERVER_VER.Configuration.Url = `http://${serverhost}/files/onlineconfig.json`;
-    config.Versions[0].SERVER_VER.Configuration.AgreementUrl = `http://${serverhost}/files/privacypolicy/hm2/privacypolicy.json`;
-    config.Versions[0].SERVER_VER.Resources.ResourcesServicePath = `http://${serverhost}/files`;
-    config.Versions[0].SERVER_VER.GlobalAuthentication.AuthenticationHost = `http://${serverhost}`;
-    res.json(config);
+    fs.promises.readFile('static/config.json').then((configfile) => {
+        let config = JSON.parse(configfile);
+        let serverhost = req.hostname;
+        config.Versions[0].ISSUER_ID = req.query.issuer;
+        config.Versions[0].SERVER_VER.Metrics.MetricsServerHost = `http://${serverhost}`;
+        config.Versions[0].SERVER_VER.Authentication.AuthenticationHost = `http://${serverhost}`;
+        config.Versions[0].SERVER_VER.Configuration.Url = `http://${serverhost}/files/onlineconfig.json`;
+        config.Versions[0].SERVER_VER.Configuration.AgreementUrl = `http://${serverhost}/files/privacypolicy/hm2/privacypolicy.json`;
+        config.Versions[0].SERVER_VER.Resources.ResourcesServicePath = `http://${serverhost}/files`;
+        config.Versions[0].SERVER_VER.GlobalAuthentication.AuthenticationHost = `http://${serverhost}`;
+        res.json(config);
+    });
 });
 
-app.get('/files/privacypolicy/hm2/privacypolicy_en.json', (req, res) => {
-    let body = fs.readFileSync('static/privacypolicy_en.json');
-    res.header('Content-Length', body.length);
-    res.header('Content-Type', 'application/octet-stream');
-    res.header('x-ms-meta-version', '20181001'); // no idea what this is, but it didn't work without this header
-    res.send(body);
+app.get('/files/privacypolicy/hm2/privacypolicy_*.json', (req, res) => {
+    res.sendFile('static/privacypolicy.json', {
+        root: '.',
+        headers: {
+            'Content-Type': 'application/octet-stream',
+            'x-ms-meta-version': '20181001', // no idea what this is, but it didn't work without this header
+        }
+    });
 });
 
 app.post('/api/metrics/*', (req, res) => {
@@ -51,7 +55,7 @@ app.post('/api/metrics/*', (req, res) => {
 });
 
 app.use('/oauth/token', express.urlencoded({ extended: false, type: 'application/json' }));
-app.post('/oauth/token', (req, res) => {
+app.post('/oauth/token', async (req, res) => {
     if (req.body.grant_type == 'refresh_token') {
         extractToken(req);
         res.json({
@@ -61,36 +65,52 @@ app.post('/oauth/token', (req, res) => {
             "refresh_token": uuid.v4(),
         });
     }
-    if (req.body.grant_type != 'external_steam') {
+    if (req.body.grant_type != 'external_steam' || !req.body.steam_userid) {
         res.status(501).end();
     }
     if (!req.body.pId) { // if no profile id supplied
-        if (fs.existsSync(path.join('userdata', 'steamids', `${req.body.steam_userid}.json`))) { // get profile id from steam id
+        await fs.promises.readFile(path.join('userdata', 'steamids', `${req.body.steam_userid}.json`)).then(data => { // get profile id from steam id
             // TODO: check legit server response
-            req.body.pId = fs.readFileSync(path.join('userdata', 'steamids', `${req.body.steam_userid}.json`));
-        } else { // create new profile id and link steam id to it
+            req.body.pId = data;
+        }).catch(async err => {
+            if (err.code != 'ENOENT') {
+                throw err;
+            }
+            // steamid has no profile associated: create new profile and link steam id to it
             req.body.pId = uuid.v4();
-            fs.writeFileSync(path.join('userdata', 'steamids', `${req.body.steam_userid}.json`), req.body.pId);
-        }
-    } else {
-        if (!fs.existsSync(path.join('userdata', 'steamids', `${req.body.steam_userid}.json`))) { // if steam id not yet linked, do so
-            fs.writeFileSync(path.join('userdata', 'steamids', `${req.body.steam_userid}.json`), req.body.pId);
-        } else {
-            let pId = fs.readFileSync(path.join('userdata', 'steamids', `${req.body.steam_userid}.json`));
+            await fs.promises.writeFile(path.join('userdata', 'steamids', `${req.body.steam_userid}.json`), req.body.pId);
+        });
+    } else { // if a profile id is supplied
+        fs.promises.readFile(path.join('userdata', 'steamids', `${req.body.steam_userid}.json`)).then(pId => { // read profile id linked to supplied steam id
             if (pId != req.body.pId) { // requested steam id is linked to different profile id
                 // TODO: check legit server response
             }
-        }
+        }).catch(async err => {
+            if (err.code != 'ENOENT') {
+                throw err;
+            }
+            // steamid is not yet linked to this profile
+            await fs.promises.writeFile(path.join('userdata', 'steamids', `${req.body.steam_userid}.json`), req.body.pId); // link it
+        })
     }
 
-    if (!fs.existsSync(path.join('userdata', 'users', `${req.body.pId}.json`))) { // set default data for new users
-        let userdata = JSON.parse(fs.readFileSync(path.join('userdata', 'default.json')));
+    await fs.promises.readFile(path.join('userdata', 'users', `${req.body.pId}.json`)).then(data => {
+        let userdata = JSON.parse(data);
+        if (userdata.LinkedAccounts.steam != req.body.steam_userid) { // requested profile id is linked to different steam id
+            // TODO: check legit server response
+        }
+    }).catch(async err => {
+        if (err.code != 'ENOENT') {
+            throw err;
+        }
+
+        let userdata = JSON.parse(await fs.promises.readFile(path.join('userdata', 'default.json')));
         userdata.Id = req.body.pId;
         userdata.LinkedAccounts.steam = req.body.steam_userid;
         userdata.SteamId = req.body.steam_userid;
         // add all unlockables to player's inventory
-        const allunlockables = JSON.parse(fs.readFileSync(path.join('userdata', 'allunlockables.json')));
-        let inventory = allunlockables.map(unlockable => {
+        const allunlockables = JSON.parse(await fs.promises.readFile(path.join('userdata', 'allunlockables.json')));
+        userdata.Extensions.inventory = allunlockables.map(unlockable => {
             unlockable.GameAsset = null;
             unlockable.DisplayNameLocKey = `UI_${unlockable.Id}_NAME`;
             return {
@@ -100,18 +120,12 @@ app.post('/oauth/token', (req, res) => {
                 Properties: {},
             }
         });
-        userdata.Extensions.inventory = inventory;
         //
         for (const unlockable of userdata.Extensions.inventory) {
             unlockable.ProfileId = req.body.pId;
         }
-        fs.writeFileSync(path.join('userdata', 'users', `${req.body.pId}.json`), JSON.stringify(userdata));
-    } else {
-        let userdata = JSON.parse(fs.readFileSync(path.join('userdata', 'users', `${req.body.pId}.json`)));
-        if (userdata.LinkedAccounts.steam != req.body.steam_userid) { // requested profile id is linked to different steam id
-            // TODO: check legit server response
-        }
-    }
+        await fs.promises.writeFile(path.join('userdata', 'users', `${req.body.pId}.json`), JSON.stringify(userdata));
+    });
 
     const userinfo = {
         'auth:method': 'external_steam',
@@ -144,14 +158,14 @@ app.get('/authentication/api/configuration/Init?*', extractToken, (req, res) => 
     let serverhost = req.hostname;
     res.json({
         token: `${req.jwt.exp}-${req.jwt.nbf}-steam-${req.jwt.userid}`,
-	    blobconfig: {
-		    bloburl: `http://${serverhost}/resources-7-17/`,
-		    blobsig: '?sv=2018-03-28',
-		    blobsigduration: 7200000.0
-	    },
-	    profileid: req.jwt.unique_name,
-	    serverversion: `${ServerVer._Major}.${ServerVer._Minor}.${ServerVer._Build}.${ServerVer._Revision}`,
-	    servertimeutc: new Date().toISOString(),
+        blobconfig: {
+            bloburl: `http://${serverhost}/resources-7-17/`,
+            blobsig: '?sv=2018-03-28',
+            blobsigduration: 7200000.0
+        },
+        profileid: req.jwt.unique_name,
+        serverversion: `${ServerVer._Major}.${ServerVer._Minor}.${ServerVer._Build}.${ServerVer._Revision}`,
+        servertimeutc: new Date().toISOString(),
     });
 });
 
@@ -165,10 +179,12 @@ app.head('/resources-7-17/dynamic_resources_pc_release_rpkg', (req, res) => {
 });
 
 app.get('/files/onlineconfig.json', (req, res) => {
-    let body = fs.readFileSync('static/onlineconfig.json');
-    res.header('Content-Length', body.length);
-    res.header('Content-Type', 'application/octet-stream');
-    res.send(body);
+    res.sendFile('static/onlineconfig.json', {
+        root: '.',
+        headers: {
+            'Content-Type': 'application/octet-stream',
+        },
+    });
 });
 
 app.use('/authentication/api/userchannel/MultiplayerService/', multiplayerHandler);

@@ -12,9 +12,9 @@ const app = express.Router();
 
 // /profiles/page/
 
-app.get('/Hub', extractToken, (req, res) => {
+app.get('/Hub', extractToken, async (req, res) => {
     // TODO: send some actual data (not needed for current menu layout)
-    const userdata = JSON.parse(fs.readFileSync(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
+    const userdata = JSON.parse(await fs.promises.readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
     res.json({
         template: null,
         data: {
@@ -37,9 +37,9 @@ app.get('/Hub', extractToken, (req, res) => {
     });
 });
 
-app.get('/SafehouseCategory', extractToken, (req, res) => {
-    const inventory = JSON.parse(fs.readFileSync(path.join('userdata', 'users', `${req.jwt.unique_name}.json`))).Extensions.inventory;
-    inventory.push(...JSON.parse(fs.readFileSync(path.join('menudata', 'menudata', 'emotes.json'))));
+app.get('/SafehouseCategory', extractToken, async (req, res) => {
+    const inventory = JSON.parse(await fs.promises.readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`))).Extensions.inventory;
+    inventory.push(...JSON.parse(await fs.promises.readFile(path.join('menudata', 'menudata', 'emotes.json'))));
     let safehousedata = {
         template: null,
         data: {
@@ -112,12 +112,12 @@ app.get('/SafehouseCategory', extractToken, (req, res) => {
     res.json(safehousedata);
 })
 
-app.get('/stashpoint', extractToken, (req, res) => {
+app.get('/stashpoint', extractToken, async (req, res) => {
     // /stashpoint?contractid=e5b6ccf4-1f29-4ec6-bfb8-2e9b78882c85&slotid=4&slotname=gear4&stashpoint=&allowlargeitems=true&allowcontainers=true
     // /stashpoint?contractid=&slotid=3&slotname=disguise&stashpoint=&allowlargeitems=true&allowcontainers=false
-    const stashdata = JSON.parse(fs.readFileSync(path.join('menudata', 'menudata', 'stashpoint.json'))); // template only
-    const userdata = JSON.parse(fs.readFileSync(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
-    const contractdata = req.query.contractid ? JSON.parse(fs.readFileSync(path.join('contractdata', `${req.query.contractid}.json`))).Contract : {};
+    const stashdata = JSON.parse(await fs.promises.readFile(path.join('menudata', 'menudata', 'stashpoint.json'))); // template only
+    const userdata = JSON.parse(await fs.promises.readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
+    const contractdata = req.query.contractid ? JSON.parse(await fs.promises.readFile(path.join('contractdata', `${req.query.contractid}.json`))).Contract : {};
     stashdata.data = {
         SlotId: req.query.slotid,
         LoadoutItemsData: {
@@ -155,20 +155,20 @@ app.get('/stashpoint', extractToken, (req, res) => {
     res.json(stashdata);
 });
 
-app.get('/multiplayerpresets', extractToken, (req, res) => { // /multiplayerpresets?gamemode=versus&disguiseUnlockableId=TOKEN_OUTFIT_HOT_SUMMER_SUIT
+app.get('/multiplayerpresets', extractToken, async (req, res) => { // /multiplayerpresets?gamemode=versus&disguiseUnlockableId=TOKEN_OUTFIT_HOT_SUMMER_SUIT
     if (req.query.gamemode != 'versus') { // not sure what happens here
         next();
     }
-    let multiplayerPresets = JSON.parse(fs.readFileSync(path.join('menudata', 'menudata', 'multiplayerpresets.json')));
+    let multiplayerPresets = JSON.parse(await fs.promises.readFile(path.join('menudata', 'menudata', 'multiplayerpresets.json')));
 
-    multiplayerPresets.data.LoadoutData = getLoadoutData(req.jwt.unique_name, req.query.disguiseUnlockableId);
+    multiplayerPresets.data.LoadoutData = await getLoadoutData(req.jwt.unique_name, req.query.disguiseUnlockableId);
     // TODO: completion data for locations
     res.json(multiplayerPresets); // presets + user data for locations + contract details + loadout
 })
 
-function getLoadoutData(userId, disguiseUnlockableId) {
-    const allunlockables = JSON.parse(fs.readFileSync(path.join('userdata', 'allunlockables.json')));
-    const userInventory = JSON.parse(fs.readFileSync(path.join('userdata', 'users', `${userId}.json`))).Extensions.inventory;
+async function getLoadoutData(userId, disguiseUnlockableId) {
+    const allunlockables = JSON.parse(await fs.promises.readFile(path.join('userdata', 'allunlockables.json')));
+    const userInventory = JSON.parse(await fs.promises.readFile(path.join('userdata', 'users', `${userId}.json`))).Extensions.inventory;
     let unlockable = allunlockables.find(unlockable => unlockable.Id == disguiseUnlockableId);
     unlockable.GameAsset = null;
     unlockable.DisplayNameLocKey = `UI_${unlockable.Id}_NAME`;
@@ -188,14 +188,14 @@ function getLoadoutData(userId, disguiseUnlockableId) {
     });
 }
 
-app.get('/multiplayer', extractToken, (req, res) => { // /multiplayer?gamemode=versus&disguiseUnlockableId=TOKEN_OUTFIT_ELUSIVE_COMPLETE_15_SUIT
+app.get('/multiplayer', extractToken, async (req, res) => { // /multiplayer?gamemode=versus&disguiseUnlockableId=TOKEN_OUTFIT_ELUSIVE_COMPLETE_15_SUIT
     if (req.query.gamemode != 'versus') { // not sure what happens here
         return
     }
     res.json({
         template: null,
         data: {
-            LoadoutData: getLoadoutData(req.jwt.unique_name, req.query.disguiseUnlockableId),
+            LoadoutData: await getLoadoutData(req.jwt.unique_name, req.query.disguiseUnlockableId),
         }
     });
 });
