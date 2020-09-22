@@ -54,7 +54,7 @@ All code included in this project is licensed under the zlib license.
 A copy of the zlib license can be found in the LICENSE file
 
 # Players
-To use this software, download the patcher [here](https://gitlab.com/grappigegovert/localghost/-/jobs/747460601/artifacts/download).
+To use this software, download the patcher [here](https://gitlab.com/grappigegovert/localghost/-/jobs/750761965/artifacts/download).
 Open the patcher and enter the IP address or domain name of the server you want to connect to.
 Make sure the patcher is running while you start the game.
 
