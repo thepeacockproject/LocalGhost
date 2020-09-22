@@ -114,23 +114,42 @@ app.get('/SafehouseCategory', extractToken, async (req, res) => {
 
 app.get('/stashpoint', extractToken, async (req, res) => {
     // /stashpoint?contractid=e5b6ccf4-1f29-4ec6-bfb8-2e9b78882c85&slotid=4&slotname=gear4&stashpoint=&allowlargeitems=true&allowcontainers=true
+    // /stashpoint?contractid=c1d015b4-be08-4e44-808e-ada0f387656f&slotid=3&slotname=disguise3&stashpoint=&allowlargeitems=true&allowcontainers=true
     // /stashpoint?contractid=&slotid=3&slotname=disguise&stashpoint=&allowlargeitems=true&allowcontainers=false
+    // /stashpoint?contractid=5b5f8aa4-ecb4-4a0a-9aff-98aa1de43dcc&slotid=6&slotname=stashpoint6&stashpoint=28b03709-d1f0-4388-b207-f03611eafb64&allowlargeitems=true&allowcontainers=false
     const stashdata = JSON.parse(await fs.promises.readFile(path.join('menudata', 'menudata', 'stashpoint.json'))); // template only
     const userdata = JSON.parse(await fs.promises.readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
-    const contractdata = req.query.contractid ? JSON.parse(await fs.promises.readFile(path.join('contractdata', `${req.query.contractid}.json`))).Contract : {};
+    let contractdata;
+    await fs.promises.readFile(path.join('contractdata', `${req.query.contractid}.json`)).then(contractfile => {
+        contractdata = req.query.contractid ? JSON.parse(contractfile).Contract : null;
+    }).catch(err => {
+        if (err.code != 'ENOENT') {
+            throw err; // rethrow if error is something else than a non-existant file
+        }
+        contractdata = null;
+    })
+
+    if (req.query.slotname.endsWith(req.query.slotid.toString())) {
+        req.query.slotname = req.query.slotname.slice(0, -req.query.slotid.toString().length); // weird
+    }
+
     stashdata.data = {
         SlotId: req.query.slotid,
         LoadoutItemsData: {
             SlotId: req.query.slotid,
             Items: userdata.Extensions.inventory.filter(item => {
-                return !req.query.slotname || item.Unlockable.Properties.LoadoutSlot == req.query.slotname; // TODO: gear4?
-                // TODO: filter for query.allowlargeitems & query.allowcontainers (is this needed?)
+                return (!req.query.slotname || req.query.slotname.startsWith('stashpoint') || item.Unlockable.Properties.LoadoutSlot == req.query.slotname)
+                    && (req.query.allowcontainers || !item.Unlockable.Properties.IsContainer)
+                    && (req.query.allowlargeitems || item.Unlockable.Properties.LoadoutSlot != 'carriedweapon'); // not sure about this one
                 // TODO: filter for specific stashpoints?
             }).map(item => ({
                 Item: item,
                 ItemDetails: {
                     Capabilities: [],
-                    StatList: [],
+                    StatList: item.Unlockable.Properties.Gameplay ? Object.entries(item.Unlockable.Properties.Gameplay).map(([key, value]) => ({
+                        Name: key,
+                        Ratio: value,
+                    })) : [],
                     PropertyTexts: [],
                 },
                 SlotId: req.query.slotid,
@@ -142,15 +161,17 @@ app.get('/stashpoint', extractToken, async (req, res) => {
             HasMoreRight: false,
             OptionalData: {
                 stashpoint: req.query.stashpoint || '',
-                AllowLargeItems: req.query.allowlargeitems, //?? true (null coalescing when)
+                AllowLargeItems: req.query.allowlargeitems, //?? true (null coalescing when) (edit: not needed as it's always sent)
                 AllowContainers: req.query.allowcontainers, //?? true
             }
         },
         ShowSlotName: req.query.slotname,
-        UserCentric: {
+    }
+    if (contractdata) {
+        stashdata.data.UserCentric = {
             Contract: contractdata,
             Data: {}, // TODO: Location data
-        },
+        }
     }
     res.json(stashdata);
 });

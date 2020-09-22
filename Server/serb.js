@@ -74,7 +74,7 @@ app.post('/oauth/token', async (req, res) => {
             req.body.pId = data;
         }).catch(async err => {
             if (err.code != 'ENOENT') {
-                throw err;
+                throw err; // rethrow if error is something else than a non-existant file
             }
             // steamid has no profile associated: create new profile and link steam id to it
             req.body.pId = uuid.v4();
@@ -87,7 +87,7 @@ app.post('/oauth/token', async (req, res) => {
             }
         }).catch(async err => {
             if (err.code != 'ENOENT') {
-                throw err;
+                throw err; // rethrow if error is something else than a non-existant file
             }
             // steamid is not yet linked to this profile
             await fs.promises.writeFile(path.join('userdata', 'steamids', `${req.body.steam_userid}.json`), req.body.pId); // link it
@@ -101,7 +101,7 @@ app.post('/oauth/token', async (req, res) => {
         }
     }).catch(async err => {
         if (err.code != 'ENOENT') {
-            throw err;
+            throw err; // rethrow if error is something else than a non-existant file
         }
 
         let userdata = JSON.parse(await fs.promises.readFile(path.join('userdata', 'default.json')));
