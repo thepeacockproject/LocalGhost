@@ -63,13 +63,17 @@ namespace Hitman2Patcher
 				if (!patchedprocesses.Contains(hitman.Id))
 					try
 					{
-						patch(hitman);
+						patch(hitman, Hitman2Version.getVersion(hitman));
 					}
-					catch (Win32Exception ex)
+					catch (Win32Exception)
 					{
-						log(String.Format("Failed to patch processid {0}", hitman.Id));
+						log(String.Format("Failed to patch processid {0}: code {1}", hitman.Id, Marshal.GetLastWin32Error()));
 						patchedprocesses.Add(hitman.Id);
-						//MessageBox.Show(String.Format("Error {0}: {1}", Marshal.GetLastWin32Error(), ex.Message));
+					}
+					catch (NotImplementedException)
+					{
+						log(String.Format("Failed to patch processid {0}: version", hitman.Id));
+						patchedprocesses.Add(hitman.Id);
 					}
 			}
 		}
@@ -79,7 +83,7 @@ namespace Hitman2Patcher
 			listView1.Items.Insert(0, msg);
 		}
 
-		private void patch(Process process)
+		private void patch(Process process, Hitman2Version v)
 		{
 			IntPtr hProcess = OpenProcess(PROCESS_VM_WRITE | PROCESS_VM_OPERATION, false, process.Id);
 			IntPtr b = process.MainModule.BaseAddress;
@@ -88,19 +92,19 @@ namespace Hitman2Patcher
 			byte[] newurl = Encoding.ASCII.GetBytes(textBox1.Text).Concat(new byte[] { 0x00 }).ToArray();
 			byte[] http = Encoding.ASCII.GetBytes("http://{0}").Concat(new byte[] { 0x00 }).ToArray();
 			bool success = true;
-			// WriteProcessMemory(hProcess, b + 0x0F33363, new byte[] {0xEB}, 1, out byteswritten); // bypass cert pinning
-			success &= VirtualProtectEx(hProcess, b + 0x0B5A1F8, 0x200, PAGE_EXECUTE_READWRITE, out oldprotectflags);
-			success &= WriteProcessMemory(hProcess, b + 0x0B5A1F8, new byte[] { 0xEB }, 1, out byteswritten); // send auth header for all protocols
-			success &= WriteProcessMemory(hProcess, b + 0x0B5A21C, new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 }, 6, out byteswritten); // always send auth header
+			// WriteProcessMemory(hProcess, b + v.certpin, new byte[] {0xEB}, 1, out byteswritten); // bypass cert pinning
+			success &= VirtualProtectEx(hProcess, b + v.auth1, 0x200, PAGE_EXECUTE_READWRITE, out oldprotectflags);
+			success &= WriteProcessMemory(hProcess, b + v.auth1, new byte[] { 0xEB }, 1, out byteswritten); // send auth header for all protocols
+			success &= WriteProcessMemory(hProcess, b + v.auth2, new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 }, 6, out byteswritten); // always send auth header
 
-			success &= VirtualProtectEx(hProcess, b + 0x1824E40, 0x20, PAGE_READWRITE, out oldprotectflags);
-			success &= WriteProcessMemory(hProcess, b + 0x1824E40, newurl, (uint)newurl.Length, out byteswritten); // replace 'config.hitman.io' (setting default)
-			success &= WriteProcessMemory(hProcess, b + 0x2BBBC08, newurl, (uint)newurl.Length, out byteswritten); // (setting current)
+			success &= VirtualProtectEx(hProcess, b + v.url1, 0x20, PAGE_READWRITE, out oldprotectflags);
+			success &= WriteProcessMemory(hProcess, b + v.url1, newurl, (uint)newurl.Length, out byteswritten); // replace 'config.hitman.io' (setting default)
+			success &= WriteProcessMemory(hProcess, b + v.url2, newurl, (uint)newurl.Length, out byteswritten); // (setting current)
 
-			success &= VirtualProtectEx(hProcess, b + 0x182D598, 0x20, PAGE_READWRITE, out oldprotectflags);
-			success &= WriteProcessMemory(hProcess, b + 0x182D598, http, (uint)http.Length, out byteswritten); // replace https with http
-			success &= VirtualProtectEx(hProcess, b + 0x0B4ED64, 1, PAGE_EXECUTE_READWRITE, out oldprotectflags);
-			success &= WriteProcessMemory(hProcess, b + 0x0B4ED64, new byte[] { (byte)http.Length }, 1, out byteswritten);
+			success &= VirtualProtectEx(hProcess, b + v.protocol1, 0x20, PAGE_READWRITE, out oldprotectflags);
+			success &= WriteProcessMemory(hProcess, b + v.protocol1, http, (uint)http.Length, out byteswritten); // replace https with http
+			success &= VirtualProtectEx(hProcess, b + v.protocol2, 1, PAGE_EXECUTE_READWRITE, out oldprotectflags);
+			success &= WriteProcessMemory(hProcess, b + v.protocol2, new byte[] { (byte)http.Length }, 1, out byteswritten);
 
 			CloseHandle(hProcess);
 			if (success)
