@@ -67,7 +67,16 @@ app.post('/oauth/token', async (req, res) => {
     }
     if (req.body.grant_type != 'external_steam' || !req.body.steam_userid) {
         res.status(501).end();
+        return;
     }
+
+    if (!/^\d{1,20}$/.test(req.body.steam_userid) ||
+    req.body.pId && !/^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/.test(req.body.pId)) {
+        res.status(400).end(); // user sent some nasty info
+        return;
+    }
+
+
     if (!req.body.pId) { // if no profile id supplied
         await fs.promises.readFile(path.join('userdata', 'steamids', `${req.body.steam_userid}.json`)).then(data => { // get profile id from steam id
             // TODO: check legit server response

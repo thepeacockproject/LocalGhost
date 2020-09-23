@@ -68,6 +68,9 @@ app.post('/ProfileService/UpdateExtensions', extractToken, express.json(), async
 
 app.post('/ProfileService/ResolveProfiles', express.json(), (req, res) => {
     res.json(req.body.profileIDs.map(async id => {
+        if (!/^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/.test(id)) {
+            return {}; // user sent some nasty info
+        }
         let userdata = JSON.parse(await fs.promises.readFile(path.join('userdata', 'users', `${id}.json`)));
         userdata.Extensions = {};
         return userdata;
