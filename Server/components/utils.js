@@ -11,7 +11,7 @@ const ServerVer = {
 };
 
 function extractToken(req, res, next) {
-    let auth = req.header('Authorization').split(' ');
+    let auth = req.header('Authorization') ? req.header('Authorization').split(' ') : [];
     if (auth.length == 2 && auth[0] == "bearer") {
         req.jwt = jwt.decode(auth[1]); // I'm not going to verify the token
         next && next();
