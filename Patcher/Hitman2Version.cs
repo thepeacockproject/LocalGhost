@@ -55,7 +55,7 @@ namespace Hitman2Patcher
 			auth1 = 0x0B59D58,
 			auth2 = 0x0B59D85,
 			url1 = 0x183FF60,
-			url2 = 0x2BDA1F0,
+			url2 = 0x2BDA208,
 			protocol1 = 0x18486B8,
 			protocol2 = 0x0B4E8C4
 		};
