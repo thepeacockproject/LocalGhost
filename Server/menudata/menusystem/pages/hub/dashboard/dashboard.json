@@ -71,16 +71,60 @@
               "select": {
                 "replace-children": {
                   "target": "headline_container",
-                  "children": [{
-                    "view": "menu3.basic.HeadlineElement",
-                    "selectable": false,
-                    "pressable": false,
-                    "data": {
-                      "header": "",
-                      "title": "Go Offline",
-                      "typeicon": "goonline"
+                  "children": [
+                    {
+                      "view": "menu3.basic.HeadlineElement",
+                      "selectable": false,
+                      "pressable": false,
+                      "data": {
+                        "header": "",
+                        "title": "Go Offline",
+                        "typeicon": "goonline"
+                      }
                     }
-                  }]
+                  ]
+                }
+              },
+              "deselect": {
+                "replace-children": {
+                  "target": "headline_container",
+                  "children": []
+                }
+              }
+            }
+          },
+          {
+            "view": "menu3.basic.ItemTileSmall",
+            "row": 0,
+            "col": 4,
+            "nrows": 1.5,
+            "ncols": 2,
+            "data": {
+              "header": "$formatstring View GitLab repo",
+              "title": "localghost",
+              "icon": "arrowright",
+              "image": "$res images/livetile/grappigegovert_localghost.png"
+            },
+            "actions": {
+              "accept": {
+                "open-url": {
+                  "url": "https://gitlab.com/grappigegovert/localghost"
+                }
+              },
+              "select": {
+                "replace-children": {
+                  "target": "headline_container",
+                  "children": [
+                    {
+                      "view": "menu3.basic.HeadlineElement",
+                      "selectable": false,
+                      "pressable": false,
+                      "data": {
+                        "title": "localghost",
+                        "typeicon": "arrowright"
+                      }
+                    }
+                  ]
                 }
               },
               "deselect": {
