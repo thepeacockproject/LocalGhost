@@ -66,15 +66,15 @@ app.post('/ProfileService/UpdateExtensions', extractToken, express.json(), async
     res.json(req.body.extensionsData);
 });
 
-app.post('/ProfileService/ResolveProfiles', express.json(), (req, res) => {
-    res.json(req.body.profileIDs.map(async id => {
+app.post('/ProfileService/ResolveProfiles', express.json(), async (req, res) => {
+    res.json(await Promise.all(req.body.profileIDs.map(async id => {
         if (!/^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/.test(id)) {
             return {}; // user sent some nasty info
         }
         let userdata = JSON.parse(await fs.promises.readFile(path.join('userdata', 'users', `${id}.json`)));
         userdata.Extensions = {};
         return userdata;
-    }));
+    })));
 });
 
 app.post('/ProfileService/GetFriendsCount', extractToken, async (req, res) => {
