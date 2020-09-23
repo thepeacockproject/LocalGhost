@@ -100,7 +100,7 @@
             "nrows": 1.5,
             "ncols": 2,
             "data": {
-              "header": "$formatstring View GitLab repo",
+              "header": "View GitLab repo",
               "title": "localghost",
               "icon": "arrowright",
               "image": "$res images/livetile/grappigegovert_localghost.png"
@@ -120,7 +120,8 @@
                       "selectable": false,
                       "pressable": false,
                       "data": {
-                        "title": "localghost",
+                        "header": "https://gitlab.com/grappigegovert/localghost",
+                        "title": "View Localghost repo",
                         "typeicon": "arrowright"
                       }
                     }
