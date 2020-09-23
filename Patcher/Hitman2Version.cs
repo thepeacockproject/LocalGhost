@@ -53,7 +53,7 @@ namespace Hitman2Patcher
 		{
 			certpin = 0x0F32EC3,
 			auth1 = 0x0B59D58,
-			auth2 = 0x0B59D85,
+			auth2 = 0x0B59D7C,
 			url1 = 0x183FF60,
 			url2 = 0x2BDA208,
 			protocol1 = 0x18486B8,
