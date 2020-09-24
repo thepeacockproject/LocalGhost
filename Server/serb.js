@@ -220,5 +220,5 @@ app.all('*', (req, res) => {
 
 const httpServer = http.createServer(app);
 
-httpServer.listen(80);
+httpServer.listen(process.env.PORT || 80);
 console.log('Server started.');
