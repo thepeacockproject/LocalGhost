@@ -24,9 +24,12 @@ namespace Hitman2Patcher
 		private static extern bool CloseHandle(IntPtr hObject);
 		[DllImport("kernel32")]
 		private static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr address, byte[] buffer, uint size, out int byteswritten);
+		[DllImport("kernel32.dll", SetLastError = true)]
+		static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr address, [Out] byte[] buffer, uint size, out int numberOfBytesRead);
 		[DllImport("kernel32.dll")]
 		static extern bool VirtualProtectEx(IntPtr hProcess, IntPtr lpAddress, uint dwSize, uint flNewProtect, out uint lpflOldProtect);
 
+		private const uint PROCESS_VM_READ = 0x0010; //Required to read memory in a process using ReadProcessMemory.
 		private const uint PROCESS_VM_WRITE = 0x0020; // Required to write to memory in a process using WriteProcessMemory.
 		private const uint PROCESS_VM_OPERATION = 0x0008; // Required to perform an operation on the address space of a process using VirtualProtectEx
 		private const uint PAGE_EXECUTE_READWRITE = 0x40;
@@ -67,12 +70,12 @@ namespace Hitman2Patcher
 					}
 					catch (Win32Exception)
 					{
-						log(String.Format("Failed to patch processid {0}: code {1}", hitman.Id, Marshal.GetLastWin32Error()));
+						log(String.Format("Failed to patch processid {0}: error code {1}", hitman.Id, Marshal.GetLastWin32Error()));
 						patchedprocesses.Add(hitman.Id);
 					}
 					catch (NotImplementedException)
 					{
-						log(String.Format("Failed to patch processid {0}: version", hitman.Id));
+						log(String.Format("Failed to patch processid {0}: unknown version", hitman.Id));
 						patchedprocesses.Add(hitman.Id);
 					}
 			}
@@ -85,21 +88,25 @@ namespace Hitman2Patcher
 
 		private void patch(Process process, Hitman2Version v)
 		{
-			IntPtr hProcess = OpenProcess(PROCESS_VM_WRITE | PROCESS_VM_OPERATION, false, process.Id);
+			IntPtr hProcess = OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION, false, process.Id);
 			IntPtr b = process.MainModule.BaseAddress;
 			int byteswritten;
 			uint oldprotectflags;
 			byte[] newurl = Encoding.ASCII.GetBytes(textBox1.Text).Concat(new byte[] { 0x00 }).ToArray();
 			byte[] http = Encoding.ASCII.GetBytes("http://{0}").Concat(new byte[] { 0x00 }).ToArray();
 			bool success = true;
+
+			if(!checkReadyForPatching(hProcess, b, v)) {
+				CloseHandle(hProcess);
+				return;
+			}
+
 			// WriteProcessMemory(hProcess, b + v.certpin, new byte[] {0xEB}, 1, out byteswritten); // bypass cert pinning
 			success &= VirtualProtectEx(hProcess, b + v.auth1, 0x200, PAGE_EXECUTE_READWRITE, out oldprotectflags);
 			success &= WriteProcessMemory(hProcess, b + v.auth1, new byte[] { 0xEB }, 1, out byteswritten); // send auth header for all protocols
 			success &= WriteProcessMemory(hProcess, b + v.auth2, new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 }, 6, out byteswritten); // always send auth header
 
-			success &= VirtualProtectEx(hProcess, b + v.url1, 0x20, PAGE_READWRITE, out oldprotectflags);
-			success &= WriteProcessMemory(hProcess, b + v.url1, newurl, (uint)newurl.Length, out byteswritten); // replace 'config.hitman.io' (setting default)
-			success &= WriteProcessMemory(hProcess, b + v.url2, newurl, (uint)newurl.Length, out byteswritten); // (setting current)
+			success &= WriteProcessMemory(hProcess, b + v.url, newurl, (uint)newurl.Length, out byteswritten); // (setting current)
 
 			success &= VirtualProtectEx(hProcess, b + v.protocol1, 0x20, PAGE_READWRITE, out oldprotectflags);
 			success &= WriteProcessMemory(hProcess, b + v.protocol1, http, (uint)http.Length, out byteswritten); // replace https with http
@@ -116,6 +123,17 @@ namespace Hitman2Patcher
 			{
 				throw new Win32Exception(Marshal.GetLastWin32Error());
 			}
+		}
+
+		private bool checkReadyForPatching(IntPtr hProcess, IntPtr baseAddress, Hitman2Version version)
+		{
+			byte[] buffer = { 0 };
+			int bytesread;
+			if (!ReadProcessMemory(hProcess, baseAddress + version.url, buffer, 1, out bytesread))
+			{
+				throw new Win32Exception(Marshal.GetLastWin32Error());
+			}
+			return buffer[0] != 0;
 		}
 
 		private void button1_Click(object sender, EventArgs e)
