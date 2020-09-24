@@ -7,6 +7,7 @@ const http = require('http');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 const uuid = require('uuid');
+const { writeFile, readFile } = require('atomically');
 
 const { extractToken, ServerVer } = require('./components/utils.js');
 const profileHandler = require('./components/profileHandler.js');
@@ -78,7 +79,7 @@ app.post('/oauth/token', async (req, res) => {
 
 
     if (!req.body.pId) { // if no profile id supplied
-        await fs.promises.readFile(path.join('userdata', 'steamids', `${req.body.steam_userid}.json`)).then(data => { // get profile id from steam id
+        await readFile(path.join('userdata', 'steamids', `${req.body.steam_userid}.json`)).then(data => { // get profile id from steam id
             // TODO: check legit server response
             req.body.pId = data;
         }).catch(async err => {
@@ -87,10 +88,10 @@ app.post('/oauth/token', async (req, res) => {
             }
             // steamid has no profile associated: create new profile and link steam id to it
             req.body.pId = uuid.v4();
-            await fs.promises.writeFile(path.join('userdata', 'steamids', `${req.body.steam_userid}.json`), req.body.pId);
+            await writeFile(path.join('userdata', 'steamids', `${req.body.steam_userid}.json`), req.body.pId, { fsyncWait: false });
         });
     } else { // if a profile id is supplied
-        fs.promises.readFile(path.join('userdata', 'steamids', `${req.body.steam_userid}.json`)).then(pId => { // read profile id linked to supplied steam id
+        readFile(path.join('userdata', 'steamids', `${req.body.steam_userid}.json`)).then(pId => { // read profile id linked to supplied steam id
             if (pId != req.body.pId) { // requested steam id is linked to different profile id
                 // TODO: check legit server response
             }
@@ -99,11 +100,11 @@ app.post('/oauth/token', async (req, res) => {
                 throw err; // rethrow if error is something else than a non-existant file
             }
             // steamid is not yet linked to this profile
-            await fs.promises.writeFile(path.join('userdata', 'steamids', `${req.body.steam_userid}.json`), req.body.pId); // link it
+            await writeFile(path.join('userdata', 'steamids', `${req.body.steam_userid}.json`), req.body.pId, { fsyncWait: false }); // link it
         })
     }
 
-    await fs.promises.readFile(path.join('userdata', 'users', `${req.body.pId}.json`)).then(data => {
+    await readFile(path.join('userdata', 'users', `${req.body.pId}.json`)).then(data => {
         let userdata = JSON.parse(data);
         if (userdata.LinkedAccounts.steam != req.body.steam_userid) { // requested profile id is linked to different steam id
             // TODO: check legit server response
@@ -133,7 +134,7 @@ app.post('/oauth/token', async (req, res) => {
         for (const unlockable of userdata.Extensions.inventory) {
             unlockable.ProfileId = req.body.pId;
         }
-        await fs.promises.writeFile(path.join('userdata', 'users', `${req.body.pId}.json`), JSON.stringify(userdata));
+        await writeFile(path.join('userdata', 'users', `${req.body.pId}.json`), JSON.stringify(userdata), { fsyncWait: false });
     });
 
     const userinfo = {

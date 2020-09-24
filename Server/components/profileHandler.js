@@ -4,6 +4,8 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const { writeFile, readFile } = require('atomically');
+
 
 const { extractToken } = require ('./utils.js');
 
@@ -39,7 +41,7 @@ app.post('/ProfileService/GetProfile', extractToken, express.json(), async (req,
         console.log(`user ${req.jwt.unique_name} requested profile of ${req.body.id}`);
         return;
     }
-    let userdata = JSON.parse(await fs.promises.readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
+    let userdata = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
     for (let extension in userdata.Extensions) {
         if (!req.body.extensions.includes(extension)) {
             delete userdata[extension];
@@ -50,7 +52,7 @@ app.post('/ProfileService/GetProfile', extractToken, express.json(), async (req,
 });
 
 app.post('/UnlockableService/GetInventory', extractToken, async (req, res) => {
-    res.json(JSON.parse(await fs.promises.readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`))).Extensions.inventory);
+    res.json(JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`))).Extensions.inventory);
 });
 
 app.post('/ProfileService/UpdateExtensions', extractToken, express.json(), async (req, res) => {
@@ -58,11 +60,11 @@ app.post('/ProfileService/UpdateExtensions', extractToken, express.json(), async
         res.status(403).end();
         return;
     }
-    let userdata = JSON.parse(await fs.promises.readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
+    let userdata = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
     for (const extension in req.body.extensionsData) {
         userdata.Extensions[extension] = req.body.extensionsData[extension];
     }
-    await fs.promises.writeFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`), JSON.stringify(userdata));
+    writeFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`), JSON.stringify(userdata), { fsyncWait: false });
     res.json(req.body.extensionsData);
 });
 
@@ -71,14 +73,14 @@ app.post('/ProfileService/ResolveProfiles', express.json(), async (req, res) => 
         if (!/^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/.test(id)) {
             return {}; // user sent some nasty info
         }
-        let userdata = JSON.parse(await fs.promises.readFile(path.join('userdata', 'users', `${id}.json`)));
+        let userdata = JSON.parse(await readFile(path.join('userdata', 'users', `${id}.json`)));
         userdata.Extensions = {};
         return userdata;
     })));
 });
 
 app.post('/ProfileService/GetFriendsCount', extractToken, async (req, res) => {
-    let userdata = JSON.parse(await fs.promises.readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
+    let userdata = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
     res.json(userdata.Extensions.friends.length);
 });
 
@@ -86,7 +88,7 @@ app.post('/GamePersistentDataService/GetData', extractToken, express.json(), asy
     if (req.jwt.unique_name != req.body.userId) {
         res.status(403).end();
     }
-    let userdata = JSON.parse(await fs.promises.readFile(path.join('userdata', 'users', `${req.body.userId}.json`)));
+    let userdata = JSON.parse(await readFile(path.join('userdata', 'users', `${req.body.userId}.json`)));
     res.json(userdata.Extensions.gamepersistentdata[req.body.key]);
 })
 
@@ -94,9 +96,9 @@ app.post('/GamePersistentDataService/SaveData', extractToken, express.json(), as
     if (req.jwt.unique_name != req.body.userId) {
         res.status(403).end();
     }
-    let userdata = JSON.parse(await fs.promises.readFile(path.join('userdata', 'users', `${req.body.userId}.json`)));
+    let userdata = JSON.parse(await readFile(path.join('userdata', 'users', `${req.body.userId}.json`)));
     userdata.Extensions.gamepersistentdata[req.body.key] = req.body.data;
-    await fs.promises.writeFile(path.join('userdata', 'users', `${req.body.userId}.json`), JSON.stringify(userdata));
+    writeFile(path.join('userdata', 'users', `${req.body.userId}.json`), JSON.stringify(userdata), { fsyncWait: false });
 
     res.json(null);
 })
