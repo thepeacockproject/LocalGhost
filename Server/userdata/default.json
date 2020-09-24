@@ -378,7 +378,8 @@
       "EpilogueSeen": {}
     },
     "opportunityprogression": {},
-    "inventory": []
+    "inventory": [],
+    "friends": []
   },
   "ETag": null,
   "DevId": null,
