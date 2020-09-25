@@ -68,14 +68,24 @@ app.post('/ProfileService/UpdateExtensions', extractToken, express.json(), async
 });
 
 app.post('/ProfileService/ResolveProfiles', express.json(), async (req, res) => {
-    res.json(await Promise.all(req.body.profileIDs.map(async id => {
+    res.json((await Promise.all(req.body.profileIDs.map(async id => {
         if (!/^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/.test(id)) {
-            return {}; // user sent some nasty info
+            return null; // user sent some nasty info
         }
-        let userdata = JSON.parse(await readFile(path.join('userdata', 'users', `${id}.json`)));
-        userdata.Extensions = {};
-        return userdata;
-    })));
+        return await readFile(path.join('userdata', 'users', `${id}.json`)).then(file => {
+            let userdata = JSON.parse(file);
+            userdata.Extensions = {};
+            return userdata;
+        }).catch(err => {
+            if (err.code == 'ENOENT') {
+                console.error(`Attempted to resolve unknown profile: ${id}`);
+                return null;
+            } else {
+                console.error(err);
+                return null;
+            }
+        })
+    }))).filter(data => data)); // filter out nulls
 });
 
 app.post('/ProfileService/GetFriendsCount', extractToken, async (req, res) => {
