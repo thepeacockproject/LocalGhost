@@ -56,7 +56,7 @@ A copy of the zlib license can be found in the LICENSE file
 # Players
 _Update: dx12 version works without problems now!_
 
-To use this software, download the patcher [here](https://gitlab.com/grappigegovert/localghost/-/jobs/756440209/artifacts/download).
+To use this software, download the patcher [here](https://gitlab.com/grappigegovert/localghost/-/jobs/artifacts/master/download?job=build_patcher).
 Open the patcher and enter the IP address or domain name of the server you want to connect to.
 Make sure the patcher is running while you start the game.
 
