@@ -100,7 +100,7 @@ app.post('/SaveAndSynchronizeEvents4', extractToken, express.json(), (req, res) 
         res.status(403).send(); // Trying to save events for other user
     }
     let userQueue;
-    let newEvents = null;
+    let newEvents = [];
     // events:
     if (userQueue = eventQueue.get(req.jwt.unique_name)) {
         userQueue = userQueue.filter(item => item.time > req.body.lastEventTicks);
@@ -110,7 +110,7 @@ app.post('/SaveAndSynchronizeEvents4', extractToken, express.json(), (req, res) 
     }
 
     // push messages:
-    let pushMessages = null;
+    let pushMessages = [];
     if (userQueue = messageQueue.get(req.jwt.unique_name)) {
         userQueue = userQueue.filter(item => item.time > req.body.lastPushDt);
         messageQueue.set(req.jwt.unique_name, userQueue);
@@ -119,10 +119,10 @@ app.post('/SaveAndSynchronizeEvents4', extractToken, express.json(), (req, res) 
     }
 
     res.json({
-        SavedTokens: req.body.values ? saveEvents(req.body.userId, req.body.values) : null,
-        NewEvents: newEvents || null,
+        SavedTokens: req.body.values.length > 0 ? saveEvents(req.body.userId, req.body.values) : null,
+        NewEvents: newEvents.length > 0 ? newEvents : null,
         NextPoll: 10.0,
-        PushMessages: pushMessages || null,
+        PushMessages: pushMessages.length > 0 ? pushMessages : null,
     });
 });
 
