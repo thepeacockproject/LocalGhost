@@ -8,6 +8,7 @@ const { readFile } = require('atomically');
 
 const { extractToken } = require('./utils.js');
 const eventHandler = require('./eventHandler.js');
+const { enqueuePushMessage } = require('./eventHandler.js');
 
 const app = express.Router();
 
@@ -32,6 +33,19 @@ app.post('/RegisterToMatch', extractToken, express.json(), async (req, res) => {
     let preset = multiplayerPresets.data.Presets.find(preset => preset.Id == req.body.presetId);
     if (!preset) { // preset not found
         res.status(404).end();
+        return;
+    }
+
+    if (preset.Data.Properties.mode == 'matchmaking') {
+        res.json({
+            MatchId: uuid.v4(),
+            PreferedHostIndex: 0,
+            Tickets: [],
+            MatchMode: null,
+            MatchData: null,
+            MatchStats: {},
+            MatchType: 0
+        });
         return;
     }
 
@@ -95,11 +109,86 @@ app.post('/SetMatchData', extractToken, express.json(), (req, res) => {
     }
 });
 
-app.post('/RegisterToPreset', extractToken, express.json(), (req, res) => { // matchmaking
-    // TODO: implement matchmaking
+let matchmaking = {};
+
+app.post('/RegisterToPreset', extractToken, express.json(), async (req, res) => { // enter matchmaking
     // req.body.presetId
-    // req.body.lobbyId (this is just a timestamp?)
-    res.status(500).send();
+    // req.body.lobbyId (steam lobby id?)
+    // req.body.platformBlocklist (null)
+    // req.body.previousFailedMatch
+    let presets = JSON.parse(await readFile(path.join('menudata', 'menudata', 'multiplayerpresets.json')));
+    let preset = presets.data.Presets.find(preset => preset.Id == req.body.presetId);
+    if (!preset) { // preset not found
+        res.status(404).end();
+        return;
+    }
+    let ticket = uuid.v4();
+    res.json({
+        TicketId: ticket,
+        ExpectedWaitTime: 0
+    });
+
+    let matchesToJoin = [];
+
+    preset.Data.Contracts.forEach(contractId => {
+        let array = matchmaking[contractId] || [];
+        array.forEach(match => matchesToJoin.push(match));
+    });
+
+    if (matchesToJoin.length > 0) { // a match is available
+        let matchToJoin = matchesToJoin[Math.trunc(Math.random() * matchesToJoin.length)];
+        let matchId = uuid.v4();
+        activeMatches.set(matchId, {
+            MatchData: {
+                contractId: matchToJoin.contractId,
+            },
+            Players: [req.jwt.unique_name, matchToJoin.user],
+        });
+        // send push message to both users
+        enqueuePushMessage(req.jwt.unique_name, {
+            TicketId: ticket,
+            MatchId: matchId,
+            State: 0,
+            Lobby: matchToJoin.lobby,
+            IsHost: false,
+            MatchData: activeMatches.get(matchId).MatchData,
+        });
+        enqueuePushMessage(matchToJoin.user, {
+            TicketId: matchToJoin.ticket,
+            MatchId: matchId,
+            State: 0,
+            Lobby: matchToJoin.lobby,
+            IsHost: false,
+            MatchData: activeMatches.get(matchId).MatchData,
+        });
+        Object.keys(matchmaking).forEach(contractId => {
+            // remove joined match from all contracts in matchmaking
+            matchmaking[contractId] = matchmaking[contractId].filter(match => match.ticket != matchToJoin.ticket);
+        });
+    } else { // no match is available, enter queue
+        preset.Data.Contracts.forEach(contractId => {
+            let array = matchmaking[contractId] || [];
+            matchmaking[contractId] = array;
+            array.push({
+                contractId: contractId,
+                ticket: ticket,
+                user: req.jwt.unique_name,
+                lobby: req.body.lobbyId,
+            });
+        });
+    }
+});
+
+app.post('/CancelRegistration', express.json(), (req, res) => { // cancel matchmaking
+    Object.keys(matchmaking).forEach(contractId => {
+        // remove match from all contracts in matchmaking
+        matchmaking[contractId] = matchmaking[contractId].filter(match => match.ticket != req.body.ticketId);
+    });
+
+    res.json({
+        TicketId: req.body.ticketId,
+        CancelSuccess: false // unused?
+    });
 });
 
 module.exports = app;
