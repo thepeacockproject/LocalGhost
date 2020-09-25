@@ -7,6 +7,6 @@ Patcher/obj/
 Server/.vscode/
 Server/node_modules/
 Server/userdata/users/**
-!Server/userdata/users/.gitkeep
+!Server/userdata/users/fadb923c-e6bb-4283-a537-eb4d1150262e.json
 Server/userdata/steamids/**
 !Server/userdata/steamids/.gitkeep
