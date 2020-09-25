@@ -6,39 +6,50 @@ const fs = require('fs');
 const path = require('path');
 const uuid = require('uuid');
 
-const { extractToken, ServerVer } = require ('./utils.js');
+const { extractToken, ServerVer } = require('./utils.js');
 const eventHandler = require('./eventHandler.js');
 
 const app = express.Router();
 
 app.post('/GetForPlay2', express.json(), extractToken, async (req, res) => {
-    const contractData = JSON.parse(await fs.promises.readFile(path.join('contractdata', `${req.body.id}.json`)));
-    const contractSesh = {
-        Contract: contractData,
-        ContractSessionId: `${process.hrtime.bigint().toString()}-${uuid.v4()}`,
-    };
-    
-    eventHandler.enqueueEvent(req.jwt.unique_name, {
-        Version: ServerVer,
-        IsReplicated: false,
-        CreatedContract: null,
-        Id: uuid.v4(),
-        Name: 'ContractSessionMarker',
-        UserId: uuid.NIL,
-        ContractId: uuid.NIL,
-        SessionId: null,
-        ContractSessionId: contractSesh.ContractSessionId,
-        Timestamp: 0.0,
-        Value: {
-            Currency: {
-                ContractPaymentAllowed: true,
-                ContractPayment: null,
-            }
-        },
-        Origin: null,
-    });
+    fs.promises.readFile(path.join('contractdata', `${req.body.id}.json`)).then(contractfile => {
+        const contractData = JSON.parse(contractfile);
+        const contractSesh = {
+            Contract: contractData,
+            ContractSessionId: `${process.hrtime.bigint().toString()}-${uuid.v4()}`,
+        };
 
-    res.json(contractSesh);
+        eventHandler.enqueueEvent(req.jwt.unique_name, {
+            Version: ServerVer,
+            IsReplicated: false,
+            CreatedContract: null,
+            Id: uuid.v4(),
+            Name: 'ContractSessionMarker',
+            UserId: uuid.NIL,
+            ContractId: uuid.NIL,
+            SessionId: null,
+            ContractSessionId: contractSesh.ContractSessionId,
+            Timestamp: 0.0,
+            Value: {
+                Currency: {
+                    ContractPaymentAllowed: true,
+                    ContractPayment: null,
+                }
+            },
+            Origin: null,
+        });
+
+        res.json(contractSesh);
+    }).catch(err => {
+        if (err.code == 'ENOENT') {
+            console.error(`Requested unknown contract: ${path.basename(err.path, '.json')}`);
+            res.status(404).end();
+        } else {
+            console.error(err);
+            res.status(500).end();
+        }
+        
+    });
 });
 
 module.exports = app;
