@@ -2,9 +2,9 @@
 // Licensed under the zlib license. See LICENSE for more info
 
 const express = require('express');
-const fs = require('fs');
 const path = require('path');
 const uuid = require('uuid');
+const { readFile } = require('atomically');
 
 const { extractToken, ServerVer } = require('./utils.js');
 const eventHandler = require('./eventHandler.js');
@@ -12,7 +12,7 @@ const eventHandler = require('./eventHandler.js');
 const app = express.Router();
 
 app.post('/GetForPlay2', express.json(), extractToken, async (req, res) => {
-    fs.promises.readFile(path.join('contractdata', `${req.body.id}.json`)).then(contractfile => {
+    readFile(path.join('contractdata', `${req.body.id}.json`)).then(contractfile => {
         const contractData = JSON.parse(contractfile);
         const contractSesh = {
             Contract: contractData,

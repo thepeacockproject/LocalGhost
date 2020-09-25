@@ -2,9 +2,9 @@
 // Licensed under the zlib license. See LICENSE for more info
 
 const express = require('express');
-const fs = require('fs');
 const path = require('path');
 const uuid = require('uuid');
+const { readFile } = require('atomically');
 
 const { extractToken } = require('./utils.js');
 const eventHandler = require('./eventHandler.js');
@@ -12,7 +12,7 @@ const eventHandler = require('./eventHandler.js');
 const app = express.Router();
 
 app.post('/GetRequiredResourcesForPreset', express.json(), async (req, res) => {
-    let presetData = JSON.parse(await fs.promises.readFile(path.join('menudata', 'menudata', 'multiplayerpresets.json')));
+    let presetData = JSON.parse(await readFile(path.join('menudata', 'menudata', 'multiplayerpresets.json')));
     let result = presetData.data.Presets.find(preset => preset.Id == req.body.id).Data.Contracts.map(contractId => {
         let contract = presetData.data.UserCentricContracts.find(contract => contract.Contract.Metadata.Id == contractId);
         return {
@@ -28,7 +28,7 @@ let activeMatches = new Map();
 
 app.post('/RegisterToMatch', extractToken, express.json(), async (req, res) => {
     // get a random contract from the list of possible ones in the selected preset
-    let multiplayerPresets = JSON.parse(await fs.promises.readFile(path.join('menudata', 'menudata', 'multiplayerpresets.json')));
+    let multiplayerPresets = JSON.parse(await readFile(path.join('menudata', 'menudata', 'multiplayerpresets.json')));
     let preset = multiplayerPresets.data.Presets.find(preset => preset.Id == req.body.presetId);
     let contractId = preset.Data.Contracts[Math.trunc(Math.random() * preset.Data.Contracts.length)];
 

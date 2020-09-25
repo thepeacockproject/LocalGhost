@@ -2,7 +2,6 @@
 // Licensed under the zlib license. See LICENSE for more info
 
 const express = require('express');
-const fs = require('fs');
 const path = require('path');
 const { writeFile, readFile } = require('atomically');
 

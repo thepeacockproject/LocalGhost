@@ -2,7 +2,6 @@
 // Licensed under the zlib license. See LICENSE for more info
 
 const express = require('express');
-const fs = require('fs');
 const http = require('http');
 const jwt = require('jsonwebtoken');
 const path = require('path');
@@ -27,7 +26,7 @@ app.use((req, res, next) => {
 });
 
 app.get('/config/pc-prod/7_17_0', (req, res) => {
-    fs.promises.readFile('static/config.json').then((configfile) => {
+    readFile('static/config.json').then((configfile) => {
         let config = JSON.parse(configfile);
         let serverhost = req.hostname;
         config.Versions[0].ISSUER_ID = req.query.issuer;
@@ -72,7 +71,7 @@ app.post('/oauth/token', async (req, res) => {
     }
 
     if (!/^\d{1,20}$/.test(req.body.steam_userid) ||
-    req.body.pId && !/^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/.test(req.body.pId)) {
+        req.body.pId && !/^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/.test(req.body.pId)) {
         res.status(400).end(); // user sent some nasty info
         return;
     }
@@ -114,12 +113,12 @@ app.post('/oauth/token', async (req, res) => {
             throw err; // rethrow if error is something else than a non-existant file
         }
 
-        let userdata = JSON.parse(await fs.promises.readFile(path.join('userdata', 'default.json')));
+        let userdata = JSON.parse(await readFile(path.join('userdata', 'default.json')));
         userdata.Id = req.body.pId;
         userdata.LinkedAccounts.steam = req.body.steam_userid;
         userdata.SteamId = req.body.steam_userid;
         // add all unlockables to player's inventory
-        const allunlockables = JSON.parse(await fs.promises.readFile(path.join('userdata', 'allunlockables.json')));
+        const allunlockables = JSON.parse(await readFile(path.join('userdata', 'allunlockables.json')));
         userdata.Extensions.inventory = allunlockables.map(unlockable => {
             unlockable.GameAsset = null;
             unlockable.DisplayNameLocKey = `UI_${unlockable.Id}_NAME`;

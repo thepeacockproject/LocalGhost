@@ -2,9 +2,9 @@
 // Licensed under the zlib license. See LICENSE for more info
 
 const express = require('express');
-const fs = require('fs');
 const path = require('path');
 const uuid = require('uuid');
+const { readFile } = require('atomically');
 
 const { extractToken } = require('./utils.js');
 
@@ -14,7 +14,7 @@ const app = express.Router();
 
 app.get('/Hub', extractToken, async (req, res) => {
     // TODO: send some actual data (not needed for current menu layout)
-    const userdata = JSON.parse(await fs.promises.readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
+    const userdata = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
     res.json({
         template: null,
         data: {
@@ -38,8 +38,8 @@ app.get('/Hub', extractToken, async (req, res) => {
 });
 
 app.get('/SafehouseCategory', extractToken, async (req, res) => {
-    const inventory = JSON.parse(await fs.promises.readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`))).Extensions.inventory;
-    inventory.push(...JSON.parse(await fs.promises.readFile(path.join('menudata', 'menudata', 'emotes.json'))));
+    const inventory = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`))).Extensions.inventory;
+    inventory.push(...JSON.parse(await readFile(path.join('menudata', 'menudata', 'emotes.json'))));
     let safehousedata = {
         template: null,
         data: {
@@ -117,10 +117,10 @@ app.get('/stashpoint', extractToken, async (req, res) => {
     // /stashpoint?contractid=c1d015b4-be08-4e44-808e-ada0f387656f&slotid=3&slotname=disguise3&stashpoint=&allowlargeitems=true&allowcontainers=true
     // /stashpoint?contractid=&slotid=3&slotname=disguise&stashpoint=&allowlargeitems=true&allowcontainers=false
     // /stashpoint?contractid=5b5f8aa4-ecb4-4a0a-9aff-98aa1de43dcc&slotid=6&slotname=stashpoint6&stashpoint=28b03709-d1f0-4388-b207-f03611eafb64&allowlargeitems=true&allowcontainers=false
-    const stashdata = JSON.parse(await fs.promises.readFile(path.join('menudata', 'menudata', 'stashpoint.json'))); // template only
-    const userdata = JSON.parse(await fs.promises.readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
+    const stashdata = JSON.parse(await readFile(path.join('menudata', 'menudata', 'stashpoint.json'))); // template only
+    const userdata = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
     let contractdata;
-    await fs.promises.readFile(path.join('contractdata', `${req.query.contractid}.json`)).then(contractfile => {
+    await readFile(path.join('contractdata', `${req.query.contractid}.json`)).then(contractfile => {
         contractdata = req.query.contractid ? JSON.parse(contractfile).Contract : null;
     }).catch(err => {
         if (err.code != 'ENOENT') {
@@ -180,7 +180,7 @@ app.get('/multiplayerpresets', extractToken, async (req, res) => { // /multiplay
     if (req.query.gamemode != 'versus') { // not sure what happens here
         next();
     }
-    let multiplayerPresets = JSON.parse(await fs.promises.readFile(path.join('menudata', 'menudata', 'multiplayerpresets.json')));
+    let multiplayerPresets = JSON.parse(await readFile(path.join('menudata', 'menudata', 'multiplayerpresets.json')));
 
     multiplayerPresets.data.LoadoutData = await getLoadoutData(req.jwt.unique_name, req.query.disguiseUnlockableId);
     // TODO: completion data for locations
@@ -188,8 +188,8 @@ app.get('/multiplayerpresets', extractToken, async (req, res) => { // /multiplay
 })
 
 async function getLoadoutData(userId, disguiseUnlockableId) {
-    const allunlockables = JSON.parse(await fs.promises.readFile(path.join('userdata', 'allunlockables.json')));
-    const userInventory = JSON.parse(await fs.promises.readFile(path.join('userdata', 'users', `${userId}.json`))).Extensions.inventory;
+    const allunlockables = JSON.parse(await readFile(path.join('userdata', 'allunlockables.json')));
+    const userInventory = JSON.parse(await readFile(path.join('userdata', 'users', `${userId}.json`))).Extensions.inventory;
     let unlockable = allunlockables.find(unlockable => unlockable.Id == disguiseUnlockableId);
     unlockable.GameAsset = null;
     unlockable.DisplayNameLocKey = `UI_${unlockable.Id}_NAME`;
