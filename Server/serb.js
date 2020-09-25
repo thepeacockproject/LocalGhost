@@ -21,7 +21,9 @@ let app = express();
 app.disable('x-powered-by');
 
 app.use((req, res, next) => {
-    console.log(`${req.method} ${req.url}`); // log every request to the console
+    if (process.env.NODE_ENV === 'development') {
+        console.log(`${req.method} ${req.url}`); // log every request to the console
+    }
     next();
 });
 
