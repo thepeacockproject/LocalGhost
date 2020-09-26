@@ -2,15 +2,36 @@
 This project consists of two parts: a patcher, and a server.
 
 The server acts as a replacement of the IOI servers that Hitman usually connects to, and the patcher patches the game so it actually connects to this server instead of the official servers.
-- [Info for developers](#developers)
 - [Info for players](#players)
+- [Info for developers](#developers)
 
 Things of note:
 
 - While using this, there is no connection at all to any IOI server (I think). This means you will not have your regular progression data, and right now, no progression at all. To still have some freedom in suit selection, all unlockable disguises are made available.
 - The server sends a modified main menu, so the only thing available will be ghost mode and the options screen.
 - The server currently does not keep track of any match stats, so the end screen will not show any.
-- Matchmaking is not implemented. Inviting is the way to go.
+- Matchmaking is not (yet) implemented. Inviting is the way to go.
+
+# Players
+To use this software, download the patcher [here](https://gitlab.com/grappigegovert/localghost/-/jobs/artifacts/master/download?job=build_patcher).
+
+Open the patcher and enter the IP address or domain name of the server you want to connect to.
+Make sure the patcher is running while you start the game.
+
+## Public servers : 
+_These servers are kindly provided by members of the community. I am not responsible for any custom content they might host._
+
+| Host | Region |
+| ------ | ------ |
+| gm.hitmaps.com | Eastern US |
+| gm.hitmanstat.us  | EU |
+| gm.notex.app | Western US |
+
+If you don't want to use a public server, you or your opponent will have to host one. Install NodeJS and follow [Server:Set-up](#set-up) to start the server. You'll have to port-forward port 80 for other players to be able to connect. Other players can then enter [your IP address](https://ident.me/) in the patcher to connect to your server.
+
+It should be obvious, but two players have to be connected to the same server to play a match together.
+
+Happy ghosting!
 
 # Developers
 
@@ -36,7 +57,6 @@ To install all the dependencies, run `npm install`. Now you can run `node serb.j
 - static (Some miscellaneous files that the server sends)
 - userdata (Data for all users that connect to the server, plus some default data)
 
-
 ## Patcher
 
 The patcher is written in C# using .NET Framework 4.0. While the patcher is running, it patches all unpatched processes named "HITMAN2.EXE", once every second.
@@ -53,23 +73,10 @@ The included .sln or .csproj files should be openable with visual studio. Nothin
 All code included in this project is licensed under the zlib license.
 A copy of the zlib license can be found in the LICENSE file
 
-# Players
-_Update: dx12 version works without problems now!_
+# Credits
 
-To use this software, download the patcher [here](https://gitlab.com/grappigegovert/localghost/-/jobs/artifacts/master/download?job=build_patcher).
-Open the patcher and enter the IP address or domain name of the server you want to connect to.
-Make sure the patcher is running while you start the game.
+Coded for the most part by @grappigegovert, with contributions from:
+ - @hardIware
+ - @Notex
 
-## Public servers : 
-
-| Host | Region |
-| ------ | ------ |
-| gm.hitmaps.com | Eastern US |
-| gm.hitmanstat.us  | EU |
-| gm.notex.app | Western US |
-
-If you don't want to use a public server, you or your opponent will have to host one. Install NodeJS and follow [Server:Set-up](#set-up) to start the server. You'll have to port-forward port 80 for other players to be able to connect. Other players can then enter [your IP address](https://ident.me/) in the patcher to connect to your server.
-
-It should be obvious, but two players have to be connected to the same server to play a match together.
-
-Happy ghosting!
+Check out the [Contributors tab for more info](https://gitlab.com/grappigegovert/localghost/-/graphs/master)
