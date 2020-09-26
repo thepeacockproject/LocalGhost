@@ -31,12 +31,14 @@ namespace Hitman2Patcher
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
 			this.label1 = new System.Windows.Forms.Label();
-			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.listView1 = new System.Windows.Forms.ListView();
 			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.label2 = new System.Windows.Forms.Label();
 			this.button1 = new System.Windows.Forms.Button();
+			this.comboBox1 = new System.Windows.Forms.ComboBox();
+			this.linkLabel1 = new System.Windows.Forms.LinkLabel();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -48,28 +50,18 @@ namespace Hitman2Patcher
 			this.label1.TabIndex = 0;
 			this.label1.Text = "Server address:";
 			// 
-			// textBox1
-			// 
-			this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.textBox1.Location = new System.Drawing.Point(127, 12);
-			this.textBox1.MaxLength = 150;
-			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(219, 22);
-			this.textBox1.TabIndex = 1;
-			this.textBox1.Text = "localhost";
-			// 
 			// listView1
 			// 
 			this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1});
+			this.columnHeader1});
 			this.listView1.FullRowSelect = true;
 			this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-			this.listView1.Location = new System.Drawing.Point(0, 68);
+			this.listView1.HideSelection = false;
+			this.listView1.Location = new System.Drawing.Point(-1, 68);
 			this.listView1.Name = "listView1";
-			this.listView1.Size = new System.Drawing.Size(411, 88);
+			this.listView1.Size = new System.Drawing.Size(411, 125);
 			this.listView1.TabIndex = 2;
 			this.listView1.UseCompatibleStateImageBehavior = false;
 			this.listView1.View = System.Windows.Forms.View.Details;
@@ -98,20 +90,45 @@ namespace Hitman2Patcher
 			this.button1.UseVisualStyleBackColor = true;
 			this.button1.Click += new System.EventHandler(this.button1_Click);
 			// 
+			// comboBox1
+			// 
+			this.comboBox1.FormattingEnabled = true;
+			this.comboBox1.Items.AddRange(new object[] {
+			"gm.hitmaps.com - Eastern US",
+			"gm.notex.app - Western US",
+			"gm.hitmanstat.us - EU"});
+			this.comboBox1.Location = new System.Drawing.Point(127, 12);
+			this.comboBox1.MaxLength = 150;
+			this.comboBox1.Name = "comboBox1";
+			this.comboBox1.Size = new System.Drawing.Size(219, 24);
+			this.comboBox1.TabIndex = 5;
+			// 
+			// linkLabel1
+			// 
+			this.linkLabel1.AutoSize = true;
+			this.linkLabel1.Location = new System.Drawing.Point(152, 208);
+			this.linkLabel1.Name = "linkLabel1";
+			this.linkLabel1.Size = new System.Drawing.Size(251, 17);
+			this.linkLabel1.TabIndex = 6;
+			this.linkLabel1.TabStop = true;
+			this.linkLabel1.Text = "LocalGhost - Made by grappigegovert";
+			this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(411, 156);
+			this.ClientSize = new System.Drawing.Size(411, 239);
+			this.Controls.Add(this.linkLabel1);
+			this.Controls.Add(this.comboBox1);
 			this.Controls.Add(this.button1);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.listView1);
-			this.Controls.Add(this.textBox1);
 			this.Controls.Add(this.label1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.Name = "Form1";
-			this.ShowIcon = false;
 			this.Text = "Hitman 2 patcher";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
 			this.ResumeLayout(false);
@@ -122,11 +139,12 @@ namespace Hitman2Patcher
 		#endregion
 
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.TextBox textBox1;
 		private System.Windows.Forms.ListView listView1;
 		private System.Windows.Forms.ColumnHeader columnHeader1;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Button button1;
+		private System.Windows.Forms.ComboBox comboBox1;
+		private System.Windows.Forms.LinkLabel linkLabel1;
 	}
 }
 

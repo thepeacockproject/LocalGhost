@@ -46,15 +46,20 @@ namespace Hitman2Patcher
 			timer.Interval = 1000;
 			timer.Tick += timer_Tick;
 			timer.Enabled = true;
+			comboBox1.Text = "localhost";
+
 			log("Patcher ready");
+			log("Select a server and start hitman 2");
 			if (File.Exists("patcher.conf"))
-			try
 			{
-				textBox1.Text = File.ReadAllText("patcher.conf");
-			}
-			catch (Exception)
-			{
-				// whatever, just use the default address
+				try
+				{
+					comboBox1.Text = File.ReadAllText("patcher.conf");
+				}
+				catch (Exception)
+				{
+					// whatever, just use the default address
+				}
 			}
 		}
 
@@ -83,7 +88,7 @@ namespace Hitman2Patcher
 
 		private void log(String msg)
 		{
-			listView1.Items.Insert(0, msg);
+			listView1.Items.Insert(0, String.Format("[{0:HH:mm:ss}] - {1}", DateTime.Now, msg));
 		}
 
 		private void patch(Process process, Hitman2Version v)
@@ -92,7 +97,7 @@ namespace Hitman2Patcher
 			IntPtr b = process.MainModule.BaseAddress;
 			int byteswritten;
 			uint oldprotectflags;
-			byte[] newurl = Encoding.ASCII.GetBytes(textBox1.Text).Concat(new byte[] { 0x00 }).ToArray();
+			byte[] newurl = Encoding.ASCII.GetBytes(getSelectedServerHostname()).Concat(new byte[] { 0x00 }).ToArray();
 			byte[] http = Encoding.ASCII.GetBytes("http://{0}").Concat(new byte[] { 0x00 }).ToArray();
 			bool success = true;
 
@@ -117,6 +122,7 @@ namespace Hitman2Patcher
 			if (success)
 			{
 				log(String.Format("Sucessfully patched processid {0}", process.Id));
+				log(String.Format("Injected server : {0}", getSelectedServerHostname()));
 				patchedprocesses.Add(process.Id);
 			}
 			else
@@ -143,7 +149,24 @@ namespace Hitman2Patcher
 
 		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			File.WriteAllText("patcher.conf", textBox1.Text);
+			File.WriteAllText("patcher.conf", getSelectedServerHostname());
+		}
+
+		private string getSelectedServerHostname()
+		{
+			var value = comboBox1.Text.Split('-')[0].Trim();
+
+			if(string.IsNullOrEmpty(value))
+			{
+				value = "localhost";
+			}
+
+			return value;
+		}
+
+		private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			Process.Start("https://gitlab.com/grappigegovert/localghost");
 		}
 	}
 }
