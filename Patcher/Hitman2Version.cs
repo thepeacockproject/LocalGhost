@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// Copyright (C) 2020 grappigegovert <grappigegovert@hotmail.com>
+// Licensed under the zlib license. See LICENSE for more info
+
+using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace Hitman2Patcher
 {

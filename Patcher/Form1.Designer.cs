@@ -39,6 +39,7 @@ namespace Hitman2Patcher
 			this.button1 = new System.Windows.Forms.Button();
 			this.comboBox1 = new System.Windows.Forms.ComboBox();
 			this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+			this.button2 = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -59,7 +60,7 @@ namespace Hitman2Patcher
 			this.listView1.FullRowSelect = true;
 			this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
 			this.listView1.HideSelection = false;
-			this.listView1.Location = new System.Drawing.Point(-1, 68);
+			this.listView1.Location = new System.Drawing.Point(0, 68);
 			this.listView1.Name = "listView1";
 			this.listView1.Size = new System.Drawing.Size(411, 125);
 			this.listView1.TabIndex = 2;
@@ -108,17 +109,28 @@ namespace Hitman2Patcher
 			this.linkLabel1.AutoSize = true;
 			this.linkLabel1.Location = new System.Drawing.Point(152, 208);
 			this.linkLabel1.Name = "linkLabel1";
-			this.linkLabel1.Size = new System.Drawing.Size(251, 17);
+			this.linkLabel1.Size = new System.Drawing.Size(247, 17);
 			this.linkLabel1.TabIndex = 6;
 			this.linkLabel1.TabStop = true;
 			this.linkLabel1.Text = "LocalGhost - Made by grappigegovert";
 			this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+			// 
+			// button2
+			// 
+			this.button2.Location = new System.Drawing.Point(12, 202);
+			this.button2.Name = "button2";
+			this.button2.Size = new System.Drawing.Size(109, 28);
+			this.button2.TabIndex = 7;
+			this.button2.Text = "Start Hitman 2";
+			this.button2.UseVisualStyleBackColor = true;
+			this.button2.Click += new System.EventHandler(this.button2_Click);
 			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(411, 239);
+			this.Controls.Add(this.button2);
 			this.Controls.Add(this.linkLabel1);
 			this.Controls.Add(this.comboBox1);
 			this.Controls.Add(this.button1);
@@ -145,6 +157,7 @@ namespace Hitman2Patcher
 		private System.Windows.Forms.Button button1;
 		private System.Windows.Forms.ComboBox comboBox1;
 		private System.Windows.Forms.LinkLabel linkLabel1;
+		private System.Windows.Forms.Button button2;
 	}
 }
 
