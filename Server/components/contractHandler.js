@@ -12,6 +12,10 @@ const eventHandler = require('./eventHandler.js');
 const app = express.Router();
 
 app.post('/GetForPlay2', express.json(), extractToken, async (req, res) => {
+    if (!/^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/.test(req.body.id)) {
+        res.status(400).end();
+        return; // user sent some nasty info
+    }
     readFile(path.join('contractdata', `${req.body.id}.json`)).then(contractfile => {
         const contractData = JSON.parse(contractfile);
         const contractSesh = {
