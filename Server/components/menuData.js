@@ -289,40 +289,14 @@ app.get('/multiplayer', extractToken, async (req, res) => { // /multiplayer?game
     });
 });
 
-app.get('/missionendready', (req, res) => {
-    // TODO: test if this works
-    res.json({
-        template: {
-            "controller": "group",
-            "id": "mission_rewards",
-            "selectable": false,
-            "pressable": false,
-            "children": [{
-                "view": "menu3.MissionRewardPage",
-                "selectable": false,
-                "pressable": false,
-                "data": {
-                    "loading": true
-                }
-            }],
-            "post-load-action": {
-                "link": {
-                    "page": "missionend",
-                    "clearhistory": true,
-                    "args": {
-                        "url": "missionend",
-                        "contractSessionId": "$.contractSessionId",
-                        "masteryUnlockableId": "$arg MasteryUnlockableId"
-                    }
-                }
-            }
-        },
-        data: {
-            contractSessionId: req.query.contractSessionId,
-            missionEndReady: true,
-            retryCount: 1,
-        },
-    });
+app.get('/missionendready', async (req, res) => {
+    let missionendready = JSON.parse(await readFile(path.join('menudata', 'menudata', 'missionendready.json'))); // template
+    missionendready.data = {
+        contractSessionId: req.query.contractSessionId,
+        missionEndReady: true,
+        retryCount: 1,
+    };
+    res.json(missionendready);
 });
 
 app.post('/multiplayermatchstatsready', (req, res) => {
