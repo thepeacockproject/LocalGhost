@@ -6,7 +6,7 @@ const path = require('path');
 const { writeFile, readFile } = require('atomically');
 
 
-const { extractToken } = require ('./utils.js');
+const { extractToken, MaxPlayerLevel } = require ('./utils.js');
 
 const app = express.Router();
 
@@ -19,7 +19,11 @@ app.post('/ProfileService/GetPlatformEntitlements', (req, res) => {
 
 app.post('/AuthenticationService/GetBlobOfflineCacheDatabaseDiff', (req, res) => {
     // Which menu files should be loaded from the server?
-   res.json(['menusystem/pages/hub/dashboard/dashboard.json', 'menusystem/pages/hub/hub_content.json']);
+   res.json([
+       'menusystem/pages/hub/dashboard/dashboard.json',
+       'menusystem/pages/hub/hub_content.json',
+       'menusystem/pages/hub/dashboard/category_escalation/result.json',
+    ]);
 });
 
 app.post('/ProfileService/UpdateUserSaveFileTable', (req, res) => {
@@ -136,7 +140,7 @@ app.post('/HubPagesService/GetChallengeTreeFor', extractToken, express.json(), (
             PlayerProfile: {
                 Version: 1,
                 XpPerLevel: 6000,
-                MaxLevel: 5000,
+                MaxLevel: MaxPlayerLevel,
             }
         }
     });

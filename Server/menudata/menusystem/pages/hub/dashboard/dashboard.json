@@ -56,7 +56,7 @@
           {
             "view": "menu3.basic.ItemTileSmall",
             "row": 1.5,
-            "col": 4,
+            "col": 6,
             "nrows": 1.5,
             "ncols": 2,
             "data": {
@@ -96,7 +96,7 @@
           {
             "view": "menu3.basic.ItemTileSmall",
             "row": 0,
-            "col": 4,
+            "col": 6,
             "nrows": 1.5,
             "ncols": 2,
             "data": {
@@ -134,6 +134,71 @@
                   "children": []
                 }
               }
+            }
+          },
+          {
+            "view": "menu3.basic.ItemTileSmall",
+            "row": 0,
+            "col": 4,
+            "nrows": 1.5,
+            "ncols": 2,
+            "data": {
+              "header": "Current Server",
+              "title": "$.ServerTile.title",
+              "icon": "$.ServerTile.icon",
+              "image": "$res $.ServerTile.image"
+            },
+            "actions": {
+              "accept": {
+                "$if $isnullorempty $.ServerTile.url": {
+                  "$then": { },
+                  "$else": {
+                    "open-url": {
+                      "url": "$.ServerTile.url"
+                    }
+                  }
+                }
+              },
+              "select": {
+                "replace-children": {
+                  "target": "headline_container",
+                  "children": [
+                    {
+                      "view": "menu3.basic.HeadlineElement",
+                      "selectable": false,
+                      "pressable": false,
+                      "data": {
+                        "header": "$.ServerTile.select.header",
+                        "title": "$.ServerTile.select.title",
+                        "typeicon": "$.ServerTile.select.icon"
+                      }
+                    }
+                  ]
+                }
+              },
+              "deselect": {
+                "replace-children": {
+                  "target": "headline_container",
+                  "children": []
+                }
+              }
+            }
+          },
+          {
+            "$each $.DashboardData": {
+              "controller": "container",
+              "row": 1.5,
+              "col": 4,
+              "nrows": 1.5,
+              "ncols": 2,
+              "usechilddimensions": true,
+              "children": [
+                {
+                  "$include": {
+                    "$path": "menusystem/pages/hub/dashboard/category_escalation/loadasync.json"
+                  }
+                }
+              ]
             }
           }
         ]

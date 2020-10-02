@@ -6,18 +6,90 @@ const path = require('path');
 const uuid = require('uuid');
 const { readFile } = require('atomically');
 
-const { extractToken } = require('./utils.js');
+const { extractToken, MaxPlayerLevel, xpRequiredForLevel, maxLevelForLocation } = require('./utils.js');
+const { resolveProfiles } = require('./profileHandler.js');
 
 const app = express.Router();
 
 // /profiles/page/
 
-app.get('/Hub', extractToken, async (req, res) => {
-    // TODO: send some actual data (not needed for current menu layout)
-    const userdata = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
+app.get('/dashboard/Dashboard_Category_Escalation/10000000-0000-0000-0000-000000000000/ContractList/25739126-6a40-4b0b-b9a6-5da1b737190b/dataonly', extractToken, async (req, res) => {
+    const userData = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
+    const repoData = JSON.parse(await readFile(path.join('userdata', 'allunlockables.json')));
+    let contractIds = [];
+    await readFile(path.join('menudata', 'featuredContracts.json')).then(file => {
+        contractIds = JSON.parse(file);
+    }).catch(err => {
+        if (err.code != 'ENOENT') {
+            console.error(err);
+        } // use empty array if no featuredContracts.json exists
+    });
+    const contracts = (await Promise.allSettled(contractIds.map(id => {
+        return readFile(path.join('contractdata', `${id}.json`)).then(file => {
+            return generateUserCentric(JSON.parse(file), userData, repoData);
+        });
+    }))).map(outcome => {
+        if (outcome.status == 'fulfilled') {
+            return outcome.value;
+        } else {
+            if (outcome.reason.code == 'ENOENT') {
+                console.error(`Attempted to resolve unknown contract: ${path.basename(outcome.reason.path, '.json')}`);
+                return null;
+            } else {
+                console.error(outcome.reason);
+                return null;
+            }
+        }
+    }).filter(data => data); // filter out nulls
+
     res.json({
         template: null,
         data: {
+            Item: {
+                Id: '25739126-6a40-4b0b-b9a6-5da1b737190b',
+                Type: 'ContractList',
+                Title: 'ContractList',
+                Date: '2020-01-01T00:00:00.0000000Z',
+                Data: contracts.length > 0 ? contracts : null,
+            },
+        },
+    })
+});
+
+app.get('/Hub', extractToken, async (req, res) => {
+    const userdata = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
+    const serverTile = await readFile(path.join('menudata', 'serverTile.json')).then(file => {
+        return JSON.parse(file);
+    }).catch(async err => {
+        if (err.code != 'ENOENT') {
+            throw err;
+        }
+        return JSON.parse(await readFile(path.join('menudata', 'serverTile.template.json'))); // use template if no custom serverTile.json exists
+    });
+    res.json({
+        template: null,
+        data: {
+            ServerTile: serverTile,
+            DashboardData: [{
+                Id: '25739126-6a40-4b0b-b9a6-5da1b737190b',
+                Type: 'ContractList',
+                Title: 'UI_HEADLINE_PLAY_CONTRACT_ATTACK',
+                Text: 'UI_CONTRACT_LOTUS_GROUP_TITLE',
+                Date: '2020-01-01T00:00:00.0000000Z',
+                SubscriptionId: '10000000-0000-0000-0000-000000000000',
+                Priority: 40.0,
+                Properties: {
+                    ContractId: '25739126-6a40-4b0b-b9a6-5da1b737190b',
+                    DashboardCategory: 'Dashboard_Category_Escalation',
+                },
+            }], // TODO
+            DestinationsData: [], // TODO
+            CreateContractTutorial: {}, // TODO
+            LocationsData: {}, // TODO
+            ProfileData: {}, // TODO
+            StoryData: [], // TODO
+            FilterData: [], // TODO
+            StoreData: {}, // TODO
             IOIAccountStatus: {
                 IsConfirmed: true,
                 LinkedEmail: 'mail@example.com',
@@ -31,7 +103,7 @@ app.get('/Hub', extractToken, async (req, res) => {
             PlayerProfileXpData: {
                 XP: userdata.Extensions.progression.PlayerProfileXP.Total,
                 Level: userdata.Extensions.progression.PlayerProfileXP.ProfileLevel,
-                MaxLevel: 5000,
+                MaxLevel: MaxPlayerLevel,
             },
         },
     });
@@ -167,10 +239,7 @@ app.get('/stashpoint', extractToken, async (req, res) => {
         ShowSlotName: req.query.slotname,
     }
     if (contractdata) {
-        stashdata.data.UserCentric = {
-            Contract: contractdata,
-            Data: {}, // TODO: Location data
-        }
+        stashdata.data.UserCentric = generateUserCentric(contractData, userData)
     }
     res.json(stashdata);
 });
@@ -267,5 +336,48 @@ app.post('/multiplayermatchstatsready', (req, res) => {
         },
     });
 });
+
+async function generateUserCentric(contractData, userData, repoData) {
+    const repo = repoData || JSON.parse(await readFile(path.join('userdata', 'allunlockables.json')));
+    const sublocation = repo.find(entry => entry.Id == contractData.Metadata.Location);
+    sublocation.DisplayNameLocKey = `UI_${sublocation.Id}_NAME`;
+    const maxlevel = maxLevelForLocation(sublocation.Properties.ProgressionKey);
+    const locationProgression = userData.Extensions.progression.Locations[sublocation.Properties.ProgressionKey.toLowerCase()];
+    return {
+        Contract: contractData,
+        Data: {
+            IsLocked: sublocation.Properties.IsLocked,
+            LockedReason: '',
+            LocationLevel: locationProgression.Level,
+            LocationMaxLevel: maxlevel,
+            LocationCompletion: (locationProgression.Level == maxlevel) ? 1 :
+                (locationProgression.Xp - xpRequiredForLevel(locationProgression.Level)) /
+                (xpRequiredForLevel(locationProgression.Level + 1) - xpRequiredForLevel(locationProgression.Level)),
+            LocationXpLeft: (locationProgression.Level == maxlevel) ? 0 : xpRequiredForLevel(locationProgression.Level + 1) - locationProgression.Xp,
+            LocationHideProgression: false, // ?
+            ElusiveContractState: '', // ?
+            IsFeatured: false,
+            LastPlayedAt: '2020-01-01T00:00:00.0000000Z', // ISO timestamp
+            LocationId: sublocation.Id,
+            ParentLocationId: sublocation.Properties.ParentLocation,
+            CompletionData: {
+                Level: locationProgression.Level,
+                MaxLevel: maxLevelForLocation(sublocation.Properties.ProgressionKey),
+                XP: locationProgression.Xp,
+                Completion: (locationProgression.Level == maxlevel) ? 1 :
+                    (locationProgression.Xp - xpRequiredForLevel(locationProgression.Level)) /
+                    (xpRequiredForLevel(locationProgression.Level + 1) - xpRequiredForLevel(locationProgression.Level)),
+                XpLeft: (locationProgression.Level == maxlevel) ? 0 : xpRequiredForLevel(locationProgression.Level + 1) - locationProgression.Xp,
+                Id: sublocation.Properties.ParentLocation,
+                SubLocationId: sublocation.Id,
+                HideProgression: false,
+                IsLocationProgression: true,
+                Name: null,
+            },
+            DlcName: sublocation.Properties.DlcName,
+            DlcImage: sublocation.Properties.DlcImage
+        }
+    };
+}
 
 module.exports = app;
