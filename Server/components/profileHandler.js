@@ -67,25 +67,31 @@ app.post('/ProfileService/UpdateExtensions', extractToken, express.json(), async
     res.json(req.body.extensionsData);
 });
 
-app.post('/ProfileService/ResolveProfiles', express.json(), async (req, res) => {
-    res.json((await Promise.all(req.body.profileIDs.map(async id => {
+async function resolveProfiles(profileIDs) {
+    return (await Promise.allSettled(profileIDs.map(id => {
         if (!/^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/.test(id)) {
-            return null; // user sent some nasty info
+            return Promise.reject('Tried to resolve malformed profile id');
         }
-        return await readFile(path.join('userdata', 'users', `${id}.json`)).then(file => {
-            let userdata = JSON.parse(file);
+        return readFile(path.join('userdata', 'users', `${id}.json`));
+    }))).map(outcome => {
+        if (outcome.status == 'fulfilled') {
+            let userdata = JSON.parse(outcome.value);
             userdata.Extensions = {};
             return userdata;
-        }).catch(err => {
-            if (err.code == 'ENOENT') {
-                console.error(`Attempted to resolve unknown profile: ${id}`);
+        } else {
+            if (outcome.reason.code == 'ENOENT') {
+                console.error(`Attempted to resolve unknown profile: ${path.basename(outcome.reason.path, '.json')}`);
                 return null;
             } else {
-                console.error(err);
+                console.error(outcome.reason);
                 return null;
             }
-        })
-    }))).filter(data => data)); // filter out nulls
+        }
+    }).filter(data => data); // filter out nulls
+}
+
+app.post('/ProfileService/ResolveProfiles', express.json(), async (req, res) => {
+    res.json(await resolveProfiles(req.body.profileIDs));
 });
 
 app.post('/ProfileService/GetFriendsCount', extractToken, async (req, res) => {
@@ -136,4 +142,7 @@ app.post('/HubPagesService/GetChallengeTreeFor', extractToken, express.json(), (
     });
 });
 
-module.exports = app;
+module.exports = {
+    router: app,
+    resolveProfiles
+};

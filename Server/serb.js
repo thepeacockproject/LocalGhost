@@ -207,7 +207,7 @@ app.use('/authentication/api/userchannel/EventsService/', eventHandler.router);
 
 app.use('/authentication/api/userchannel/ContractsService/', contractHandler);
 
-app.use('/authentication/api/userchannel/', profileHandler);
+app.use('/authentication/api/userchannel/', profileHandler.router);
 
 app.use('/resources-7-17/', menuSystem);
 
