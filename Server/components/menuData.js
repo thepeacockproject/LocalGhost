@@ -39,7 +39,6 @@ app.get('/Hub', extractToken, async (req, res) => {
 
 app.get('/SafehouseCategory', extractToken, async (req, res) => {
     const inventory = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`))).Extensions.inventory;
-    inventory.push(...JSON.parse(await readFile(path.join('menudata', 'menudata', 'emotes.json'))));
     let safehousedata = {
         template: null,
         data: {

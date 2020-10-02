@@ -120,7 +120,10 @@ app.post('/oauth/token', async (req, res) => {
         userdata.LinkedAccounts.steam = req.body.steam_userid;
         userdata.SteamId = req.body.steam_userid;
         // add all unlockables to player's inventory
-        const allunlockables = JSON.parse(await readFile(path.join('userdata', 'allunlockables.json')));
+        const allunlockables = JSON.parse(await readFile(path.join('userdata', 'allunlockables.json')))
+            .filter(u => u.Type != 'location') // locations not in inventory
+            .concat(JSON.parse(await readFile(path.join('userdata', 'emotes.json')))); // add emotes to inventory
+        // TODO: challengemultiplier type unlockables - (only used for sniper gamemode?)
         userdata.Extensions.inventory = allunlockables.map(unlockable => {
             unlockable.GameAsset = null;
             unlockable.DisplayNameLocKey = `UI_${unlockable.Id}_NAME`;
