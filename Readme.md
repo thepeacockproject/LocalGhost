@@ -27,11 +27,25 @@ _These servers are kindly provided by members of the community. I am not respons
 | gm.hitmanstat.us  | EU |
 | gm.notex.app | Western US |
 
-If you don't want to use a public server, you or your opponent will have to host one. Install NodeJS and follow [Server:Set-up](#set-up) to start the server. You'll have to port-forward port 80 for other players to be able to connect. Other players can then enter [your IP address](https://ident.me/) in the patcher to connect to your server.
+If you don't want to use a public server, you or your opponent will have to host one. Install NodeJS and follow [Server hosters](#server-hosters) to start the server. You'll have to port-forward port 80 for other players to be able to connect. Other players can then enter [your IP address](https://ident.me/) in the patcher to connect to your server.
 
 It should be obvious, but two players have to be connected to the same server to play a match together.
 
 Happy ghosting!
+
+# Server hosters
+
+To run a server, NodeJS version 12 or higher is needed.
+
+First, you have to install all dependencies by running `npm install`. This is only needed once (or after some updates).
+You can now start the server by running `node serb.js` or `npm start`.
+It is possible to run the server on a different port than port 80 by setting the `PORT` environment variable.
+
+### Custom tiles
+In the menudata folder, there are two json files, `serverTile.template.json` and `featuredContracts.template.json`. These can be copied to `serverTile.json` and `featuredContracts.json` respectively and edited to suit your needs.
+
+`serverTile.json` controls the 'Current Server' livetile in the menu, and `featuredContracts.json` is a list of contractIds for contracts you want to display in the menu. Note that any contract you list here must have its contract data saved in the contractdata folder.
+
 
 # Developers
 
@@ -41,7 +55,7 @@ The server is written in NodeJS and serves as replacement for all http(s) server
 Without the patcher, the first connection the game makes is to `config.hitman.io` which serves some json that contains all other domains the game should use.
 This server returns json that makes the game connect to the same domain for all requests.
 
-To run the server, you need NodeJS installed. (Tested in NodeJS v12, but higher probably also works)
+To run the server, you need NodeJS installed. (v12 or up)
 
 ### Set-up
 To install all the dependencies, run `npm install`. Now you can run `node serb.js` to start the server.
