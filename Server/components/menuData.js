@@ -289,6 +289,176 @@ app.get('/multiplayer', extractToken, async (req, res) => { // /multiplayer?game
     });
 });
 
+app.get('/Planning', extractToken, async (req, res) => {
+    const userData = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
+    const repo = JSON.parse(await readFile(path.join('userdata', 'allunlockables.json')));
+    readFile(path.join('contractdata', `${req.query.contractid}.json`)).then(async contractfile => {
+        const contractData = JSON.parse(contractfile);
+        const creatorProfile = (await resolveProfiles([contractData.Metadata.CreatorUserId]))[0];
+        const sublocation = repo.find(entry => entry.Id == contractData.Metadata.Location);
+        sublocation.DisplayNameLocKey = `UI_${sublocation.Id}_NAME`;
+        res.json({
+            template: null,
+            data: {
+                Contract: contractData,
+                ElusiveContractState: '',
+                UserCentric: await generateUserCentric(contractData, userData, repo),
+                IsFirstInGroup: true, // escalation related?
+                Creator: creatorProfile,
+                UserContract: creatorProfile.DevId != 'IOI',
+                UnlockedEntrances: userData.Extensions.inventory.filter(item => item.Unlockable.Type == 'access')
+                    .map(i => i.Unlockable.Properties.RepositoryId)
+                    .filter(id => id),
+                UnlockedAgencyPickups: userData.Extensions.inventory.filter(item => item.Unlockable.Type == 'agencypickup')
+                    .map(i => i.Unlockable.Properties.RepositoryId)
+                    .filter(id => id),
+                Objectives: contractData.Data.Objectives.map(objective => {
+                    if (objective.SuccessEvent && objective.SuccessEvent.EventName == 'Kill') {
+                        return {
+                            Type: 'kill',
+                            Properties: {
+                                Id: objective.SuccessEvent.EventValues.RepositoryId,
+                                Conditions: [], // TODO?
+                            },
+                        };
+                    } else if (objective.Type == 'statemachine' && objective.Definition.States && objective.Definition.States.Start
+                        && objective.Definition.States.Start.Kill) {
+                        const a = objective.Defintion.States.Start.Kill.filter(kill => kill.Transition == 'Success');
+                        if (a.length != 1) {
+                            return []; // More than one kill leads to a success: this is no simple kill objective
+                        }
+                        const index = a[0].Condition.$eq.indexOf('$Value.RepositoryId');
+                        if (index == -1) {
+                            return []; // Kill does not check killed target id (?)
+                        }
+                        let targetId = a[0].Condition.$eq[1 - index];
+                        if (targetId.startsWith('$')) {
+                            return []; // TODO: get target id from dynamic variables
+                        }
+                        return {
+                            Type: 'kill',
+                            Properties: {
+                                Id: targetId,
+                                Conditions: [], // TODO?
+                            }
+                        }
+                    } else if (objective.HUDTemplate && objective.ObjectiveType && !objective.ExcludeFromScoring && !objective.Activation) {
+                        return {
+                            Type: objective.ObjectiveType,
+                            Properties: {
+                                BriefingText: objective.BriefingText,
+                                LongBriefingText: objective.LongBriefingText || objective.BriefingText,
+                                Image: objective.Image,
+                                BriefingName: objective.BriefingName,
+                                DisplayAsKill: objective.DisplayAsKillObjective || false,
+                                ObjectivesCategory: objective.Category,
+                                ForceShowOnLoadingScreen: objective.ForceShowOnLoadingScreen || false,
+                            },
+                        };
+                    }
+                    return null;
+                }).filter(objective => objective), // filter nulls
+                GroupData: {},
+                Entrances: [], // TODO
+                Location: sublocation,
+                LoadoutData: [
+                    {
+                        SlotName: 'carriedweapon',
+                        SlotId: '0',
+                        Recommended: null,
+                    },
+                    {
+                        SlotName: 'carrieditem',
+                        SlotId: '1',
+                        Recommended: null,
+                    },
+                    {
+                        SlotName: 'concealedweapon',
+                        SlotId: '2',
+                        Recommended: {
+                            item: userData.Extensions.inventory.find(item => item.Unlockable.Id == 'FIREARMS_HERO_PISTOL_TACTICAL_ICA_19'),
+                            type: 'concealedweapon',
+                        },
+                    },
+                    {
+                        SlotName: 'disguise',
+                        SlotId: '3',
+                        Recommended: {
+                            item: userData.Extensions.inventory.find(item => item.Unlockable.Id == 'TOKEN_OUTFIT_HITMANSUIT'),
+                            type: 'disguise',
+                        },
+                    },
+                    {
+                        SlotName: 'gear',
+                        SlotId: '4',
+                        Recommended: {
+                            item: userData.Extensions.inventory.find(item => item.Unlockable.Id == 'TOKEN_FIBERWIRE'),
+                            type: 'gear',
+                        },
+                    },
+                    {
+                        SlotName: 'gear',
+                        SlotId: '5',
+                        Recommended: {
+                            item: userData.Extensions.inventory.find(item => item.Unlockable.Id == 'PROP_TOOL_COIN'),
+                            type: 'gear',
+                        },
+                    },
+                    {
+                        SlotName: 'stashpoint',
+                        SlotId: '6',
+                        Recommended: null,
+                    }
+                ], // TODO
+                LimitedLoadoutUnlockLevel: 0, // ?
+                CharacterLoadoutData: null,
+                ChallengeData: {
+                    Children: [], // TODO
+                },
+                Currency: {
+                    Balance: 0,
+                },
+                PaymentDetails: { // ?
+                    Currency: 'Merces',
+                    Amount: 0,
+                    MaximumDeduction: 85,
+                    Bonuses: null,
+                    Expenses: null,
+                    Entrance: null,
+                    Pickup: null,
+                    SideMission: null
+                },
+                OpportunityData: [], // TODO
+                PlayerProfileXpData: {
+                    XP: userData.Extensions.progression.PlayerProfileXP.Total,
+                    Level: userData.Extensions.progression.PlayerProfileXP.ProfileLevel,
+                    MaxLevel: MaxPlayerLevel,
+                },
+            },
+        });
+    }).catch(err => {
+        if (err.code == 'ENOENT') {
+            console.error(`Requested /Planning for unknown contract: ${path.basename(err.path, '.json')}`);
+            res.status(404).end();
+        } else {
+            console.error(err);
+            res.status(500).end();
+        }
+    });
+});
+
+app.get('/leaderboardsview', extractToken, async (req, res) => {
+    res.json(JSON.parse(await readFile(path.join('menudata', 'menudata', 'leaderboardsview.json')))); // stripped template
+});
+
+app.get('/selectagencypickup', extractToken, (req, res) => {
+    res.status(404).end(); // TODO
+});
+
+app.get('/selectentrance', extractToken, (req, res) => {
+    res.status(404).end(); // TODO
+});
+
 app.get('/missionendready', async (req, res) => {
     let missionendready = JSON.parse(await readFile(path.join('menudata', 'menudata', 'missionendready.json'))); // template
     missionendready.data = {
