@@ -3,6 +3,7 @@ This project consists of two parts: a patcher, and a server.
 
 The server acts as a replacement of the IOI servers that Hitman usually connects to, and the patcher patches the game so it actually connects to this server instead of the official servers.
 - [Info for players](#players)
+- [Info for server hosters](#server-hosters)
 - [Info for developers](#developers)
 
 Things of note:
