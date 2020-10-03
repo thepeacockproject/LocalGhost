@@ -188,27 +188,27 @@ app.get('/stashpoint', extractToken, async (req, res) => {
     // /stashpoint?contractid=c1d015b4-be08-4e44-808e-ada0f387656f&slotid=3&slotname=disguise3&stashpoint=&allowlargeitems=true&allowcontainers=true
     // /stashpoint?contractid=&slotid=3&slotname=disguise&stashpoint=&allowlargeitems=true&allowcontainers=false
     // /stashpoint?contractid=5b5f8aa4-ecb4-4a0a-9aff-98aa1de43dcc&slotid=6&slotname=stashpoint6&stashpoint=28b03709-d1f0-4388-b207-f03611eafb64&allowlargeitems=true&allowcontainers=false
-    const stashdata = JSON.parse(await readFile(path.join('menudata', 'menudata', 'stashpoint.json'))); // template only
-    const userdata = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
-    let contractdata;
+    const stashData = JSON.parse(await readFile(path.join('menudata', 'menudata', 'stashpoint.json'))); // template only
+    const userData = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
+    let contractData;
     await readFile(path.join('contractdata', `${req.query.contractid}.json`)).then(contractfile => {
-        contractdata = req.query.contractid ? JSON.parse(contractfile).Contract : null;
+        contractData = req.query.contractid ? JSON.parse(contractfile) : null;
     }).catch(err => {
         if (err.code != 'ENOENT') {
             throw err; // rethrow if error is something else than a non-existant file
         }
-        contractdata = null;
+        contractData = null;
     })
 
     if (req.query.slotname.endsWith(req.query.slotid.toString())) {
         req.query.slotname = req.query.slotname.slice(0, -req.query.slotid.toString().length); // weird
     }
 
-    stashdata.data = {
+    stashData.data = {
         SlotId: req.query.slotid,
         LoadoutItemsData: {
             SlotId: req.query.slotid,
-            Items: userdata.Extensions.inventory.filter(item => {
+            Items: userData.Extensions.inventory.filter(item => {
                 return (!req.query.slotname || req.query.slotname.startsWith('stashpoint') || item.Unlockable.Properties.LoadoutSlot == req.query.slotname)
                     && (req.query.allowcontainers || !item.Unlockable.Properties.IsContainer)
                     && (req.query.allowlargeitems || item.Unlockable.Properties.LoadoutSlot != 'carriedweapon'); // not sure about this one
@@ -238,10 +238,10 @@ app.get('/stashpoint', extractToken, async (req, res) => {
         },
         ShowSlotName: req.query.slotname,
     }
-    if (contractdata) {
-        stashdata.data.UserCentric = generateUserCentric(contractData, userData)
+    if (contractData) {
+        stashData.data.UserCentric = await generateUserCentric(contractData, userData)
     }
-    res.json(stashdata);
+    res.json(stashData);
 });
 
 app.get('/multiplayerpresets', extractToken, async (req, res) => { // /multiplayerpresets?gamemode=versus&disguiseUnlockableId=TOKEN_OUTFIT_HOT_SUMMER_SUIT
@@ -320,7 +320,7 @@ async function generateUserCentric(contractData, userData, repoData) {
     return {
         Contract: contractData,
         Data: {
-            IsLocked: sublocation.Properties.IsLocked,
+            IsLocked: sublocation.Properties.IsLocked || false,
             LockedReason: '',
             LocationLevel: locationProgression.Level,
             LocationMaxLevel: maxlevel,
