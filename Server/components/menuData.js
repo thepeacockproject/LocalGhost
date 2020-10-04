@@ -315,58 +315,7 @@ app.get('/Planning', extractToken, async (req, res) => {
                 UnlockedAgencyPickups: userData.Extensions.inventory.filter(item => item.Unlockable.Type == 'agencypickup')
                     .map(i => i.Unlockable.Properties.RepositoryId)
                     .filter(id => id),
-                Objectives: contractData.Data.Objectives.map(objective => {
-                    if (objective.SuccessEvent && objective.SuccessEvent.EventName == 'Kill') {
-                        return {
-                            Type: 'kill',
-                            Properties: {
-                                Id: objective.SuccessEvent.EventValues.RepositoryId,
-                                Conditions: [], // TODO?
-                            },
-                        };
-                    } else if (objective.Type == 'statemachine' && objective.Definition.States && objective.Definition.States.Start
-                        && objective.Definition.States.Start.Kill) {
-                        const a = Array.isArray(objective.Definition.States.Start.Kill) ?
-                            objective.Definition.States.Start.Kill.filter(kill => kill.Transition == 'Success') :
-                            (objective.Definition.States.Start.Kill.Transition == 'Success' ? [objective.Definition.States.Start.Kill] : []);
-
-                        if (a.length == 1) {
-                            const index = a[0].Condition.$eq.indexOf('$Value.RepositoryId');
-                            if (index == -1) {
-                                return null; // Kill does not check killed target id (?)
-                            }
-                            let targetId = a[0].Condition.$eq[1 - index];
-                            if (targetId.startsWith('$')) {
-                                return null; // TODO: get target id from dynamic variables
-                            }
-
-                            return { // Custom objective is actually a simple kill objective
-                                Type: 'kill',
-                                Properties: {
-                                    Id: targetId,
-                                    Conditions: [], // TODO?
-                                }
-                            }
-                        }
-                        // else: This is no simple kill objective: fall through to next block
-                    }
-                    if (objective.HUDTemplate && objective.ObjectiveType && !objective.ExcludeFromScoring && !objective.Activation) {
-                        return {
-                            Type: objective.ObjectiveType,
-                            Properties: {
-                                BriefingText: objective.BriefingText,
-                                LongBriefingText: objective.LongBriefingText || objective.BriefingText,
-                                Image: objective.Image,
-                                BriefingName: objective.BriefingName,
-                                DisplayAsKill: objective.DisplayAsKillObjective || false,
-                                ObjectivesCategory: objective.Category,
-                                ForceShowOnLoadingScreen: objective.ForceShowOnLoadingScreen || false,
-                            },
-                        };
-                    }
-                    return null;
-                }).filter(objective => objective), // filter nulls
-                // TODO: Create objectives for each gamechanger, sort objectives according to Metadata.GroupObjectiveDisplayOrder
+                Objectives: mapObjectives(contractData.Data.Objectives),
                 GroupData: {},
                 Entrances: [], // TODO
                 Location: sublocation,
@@ -455,6 +404,61 @@ app.get('/Planning', extractToken, async (req, res) => {
         }
     });
 });
+
+function mapObjectives(Objectives, GroupObjectiveDisplayOrder) {
+    return Objectives.map(objective => {
+        if (objective.SuccessEvent && objective.SuccessEvent.EventName == 'Kill') {
+            return {
+                Type: 'kill',
+                Properties: {
+                    Id: objective.SuccessEvent.EventValues.RepositoryId,
+                    Conditions: [], // TODO?
+                },
+            };
+        } else if (objective.Type == 'statemachine' && objective.Definition.States && objective.Definition.States.Start
+            && objective.Definition.States.Start.Kill) {
+            const a = Array.isArray(objective.Definition.States.Start.Kill) ?
+                objective.Definition.States.Start.Kill.filter(kill => kill.Transition == 'Success') :
+                (objective.Definition.States.Start.Kill.Transition == 'Success' ? [objective.Definition.States.Start.Kill] : []);
+
+            if (a.length == 1) {
+                const index = a[0].Condition.$eq.indexOf('$Value.RepositoryId');
+                if (index == -1) {
+                    return null; // Kill does not check killed target id (?)
+                }
+                let targetId = a[0].Condition.$eq[1 - index];
+                if (targetId.startsWith('$')) {
+                    return null; // TODO: get target id from dynamic variables
+                }
+
+                return { // Custom objective is actually a simple kill objective
+                    Type: 'kill',
+                    Properties: {
+                        Id: targetId,
+                        Conditions: [], // TODO?
+                    }
+                }
+            }
+            // else: This is no simple kill objective: fall through to next block
+        }
+        if (objective.HUDTemplate && objective.ObjectiveType && !objective.ExcludeFromScoring && !objective.Activation) {
+            return {
+                Type: objective.ObjectiveType,
+                Properties: {
+                    BriefingText: objective.BriefingText,
+                    LongBriefingText: objective.LongBriefingText || objective.BriefingText,
+                    Image: objective.Image,
+                    BriefingName: objective.BriefingName,
+                    DisplayAsKill: objective.DisplayAsKillObjective || false,
+                    ObjectivesCategory: objective.Category,
+                    ForceShowOnLoadingScreen: objective.ForceShowOnLoadingScreen || false,
+                },
+            };
+        }
+        return null;
+    }).filter(objective => objective);
+    // TODO: Create objectives for each gamechanger, sort objectives according to Metadata.GroupObjectiveDisplayOrder
+}
 
 app.get('/leaderboardsview', extractToken, async (req, res) => {
     res.json(JSON.parse(await readFile(path.join('menudata', 'menudata', 'leaderboardsview.json')))); // stripped template
