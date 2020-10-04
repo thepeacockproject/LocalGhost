@@ -253,12 +253,15 @@ app.get('/multiplayerpresets', extractToken, async (req, res) => { // /multiplay
     multiplayerPresets.data.LoadoutData = await getLoadoutData(req.jwt.unique_name, req.query.disguiseUnlockableId);
     // TODO: completion data for locations
     res.json(multiplayerPresets); // presets + user data for locations + contract details + loadout
-})
+});
 
 async function getLoadoutData(userId, disguiseUnlockableId) {
     const allunlockables = JSON.parse(await readFile(path.join('userdata', 'allunlockables.json')));
     const userInventory = JSON.parse(await readFile(path.join('userdata', 'users', `${userId}.json`))).Extensions.inventory;
     let unlockable = allunlockables.find(unlockable => unlockable.Id == disguiseUnlockableId);
+    if (!unlockable) {
+        unlockable = allunlockables.find(unlockable => unlockable.Id == 'TOKEN_OUTFIT_HITMANSUIT');
+    }
     unlockable.GameAsset = null;
     unlockable.DisplayNameLocKey = `UI_${unlockable.Id}_NAME`;
     return Array.of({
