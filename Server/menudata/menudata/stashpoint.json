@@ -374,7 +374,12 @@
                                 "id": "$formatstring {$.by}_container",
                                 "view": "menu3.basic.SubCategoryElement",
                                 "data": {
-                                  "title": "$loc $formatstring UI_ITEM_SUBTYPE_IN_PLURAL_{$.by}"
+                                  "title": {
+                                    "$if $eqs ($loc $formatstring UI_ITEM_SUBTYPE_IN_PLURAL_{$.by},$formatstring ['UI_ITEM_SUBTYPE_IN_PLURAL_{$.by}'])": {
+                                      "$then": "$formatstring {$.by}s",
+                                      "$else": "$loc $formatstring UI_ITEM_SUBTYPE_IN_PLURAL_{$.by}"
+                                    }
+                                  }
                                 },
                                 "buttons": [
                                   {
@@ -451,13 +456,33 @@
                                                   "title": "$.LocalizedReproItem.name",
                                                   "image": "$.LocalizedReproItem.image",
                                                   "rarity": "$.LocalizedReproItem.rarity",
-                                                  "icon": "$.Item.Unlockable.Subtype",
+                                                  "icon": {
+                                                    "$if $eqs ($loc $formatstring UI_ITEM_SUBTYPE_{$.Item.Unlockable.Subtype},$formatstring ['UI_ITEM_SUBTYPE_{$.Item.Unlockable.Subtype}'])": {
+                                                      "$then": {
+                                                        "$switch $.Item.Unlockable.Type": [
+                                                          {
+                                                            "case": "disguise",
+                                                            "return": "disguise"
+                                                          },
+                                                          {
+                                                            "default": "$.Item.Unlockable.Type"
+                                                          }
+                                                        ]
+                                                      },
+                                                      "$else": "$.Item.Unlockable.Subtype"
+                                                    }
+                                                  },
                                                   "perks": "$.LocalizedReproItem.perks",
                                                   "itemcount": "$.LocalizedReproItem.itemcount",
                                                   "header": {
                                                     "$if $isinloadout $.LocalizedReproItem.repositoryid": {
                                                       "$then": "$loc UI_MENU_PAGE_LOADOUT_ALREADY_IN_USE",
-                                                      "$else": "$loc $formatstring UI_ITEM_SUBTYPE_{$.Item.Unlockable.Subtype}"
+                                                      "$else": {
+                                                        "$if $eqs ($loc $formatstring UI_ITEM_SUBTYPE_{$.Item.Unlockable.Subtype},$formatstring ['UI_ITEM_SUBTYPE_{$.Item.Unlockable.Subtype}'])": {
+                                                          "$then": "$.Item.Unlockable.Subtype",
+                                                          "$else": "$loc $formatstring UI_ITEM_SUBTYPE_{$.Item.Unlockable.Subtype}"
+                                                        }
+                                                      }
                                                     }
                                                   }
                                                 },
