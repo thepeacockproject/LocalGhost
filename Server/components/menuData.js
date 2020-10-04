@@ -315,7 +315,7 @@ app.get('/Planning', extractToken, async (req, res) => {
                 UnlockedAgencyPickups: userData.Extensions.inventory.filter(item => item.Unlockable.Type == 'agencypickup')
                     .map(i => i.Unlockable.Properties.RepositoryId)
                     .filter(id => id),
-                Objectives: mapObjectives(contractData.Data.Objectives),
+                Objectives: mapObjectives(contractData.Data.Objectives, contractData.Metadata.GroupObjectiveDisplayOrder),
                 GroupData: {},
                 Entrances: [], // TODO
                 Location: sublocation,
@@ -406,15 +406,16 @@ app.get('/Planning', extractToken, async (req, res) => {
 });
 
 function mapObjectives(Objectives, GroupObjectiveDisplayOrder) {
-    return Objectives.map(objective => {
+    const result = new Map();
+    for (const objective of Objectives) {
         if (objective.SuccessEvent && objective.SuccessEvent.EventName == 'Kill') {
-            return {
+            result.set(objective.Id, {
                 Type: 'kill',
                 Properties: {
                     Id: objective.SuccessEvent.EventValues.RepositoryId,
                     Conditions: [], // TODO?
                 },
-            };
+            });
         } else if (objective.Type == 'statemachine' && objective.Definition.States && objective.Definition.States.Start
             && objective.Definition.States.Start.Kill) {
             const a = Array.isArray(objective.Definition.States.Start.Kill) ?
@@ -423,26 +424,25 @@ function mapObjectives(Objectives, GroupObjectiveDisplayOrder) {
 
             if (a.length == 1) {
                 const index = a[0].Condition.$eq.indexOf('$Value.RepositoryId');
-                if (index == -1) {
-                    return null; // Kill does not check killed target id (?)
-                }
-                let targetId = a[0].Condition.$eq[1 - index];
-                if (targetId.startsWith('$')) {
-                    return null; // TODO: get target id from dynamic variables
-                }
-
-                return { // Custom objective is actually a simple kill objective
-                    Type: 'kill',
-                    Properties: {
-                        Id: targetId,
-                        Conditions: [], // TODO?
+                if (index != -1) {
+                    let targetId = a[0].Condition.$eq[1 - index];
+                    if (targetId.startsWith('$')) {
+                        continue; // TODO: get target id from dynamic variables
                     }
+
+                    result.set(objective.Id, { // Custom objective is actually a simple kill objective
+                        Type: 'kill',
+                        Properties: {
+                            Id: targetId,
+                            Conditions: [], // TODO?
+                        }
+                    });
                 }
             }
             // else: This is no simple kill objective: fall through to next block
         }
         if (objective.HUDTemplate && objective.ObjectiveType && !objective.ExcludeFromScoring && !objective.Activation) {
-            return {
+            result.set(objective.Id, {
                 Type: objective.ObjectiveType,
                 Properties: {
                     BriefingText: objective.BriefingText,
@@ -453,11 +453,23 @@ function mapObjectives(Objectives, GroupObjectiveDisplayOrder) {
                     ObjectivesCategory: objective.Category,
                     ForceShowOnLoadingScreen: objective.ForceShowOnLoadingScreen || false,
                 },
-            };
+            });
         }
-        return null;
-    }).filter(objective => objective);
-    // TODO: Create objectives for each gamechanger, sort objectives according to Metadata.GroupObjectiveDisplayOrder
+        // objective not shown on planning screen
+    }
+    // TODO: Create objectives for each gamechanger
+
+    const sortedResult = [];
+    for (const { Id, IsNew } of GroupObjectiveDisplayOrder || Objectives) {
+        const objective = result.get(Id);
+        if (objective) {
+            if (IsNew) {
+                objective.Properties.IsNew = true;
+            }
+            sortedResult.push(objective);
+        }
+    }
+    return sortedResult;
 }
 
 app.get('/leaderboardsview', extractToken, async (req, res) => {
