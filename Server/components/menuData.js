@@ -323,26 +323,31 @@ app.get('/Planning', extractToken, async (req, res) => {
                         };
                     } else if (objective.Type == 'statemachine' && objective.Definition.States && objective.Definition.States.Start
                         && objective.Definition.States.Start.Kill) {
-                        const a = objective.Defintion.States.Start.Kill.filter(kill => kill.Transition == 'Success');
-                        if (a.length != 1) {
-                            return []; // More than one kill leads to a success: this is no simple kill objective
-                        }
-                        const index = a[0].Condition.$eq.indexOf('$Value.RepositoryId');
-                        if (index == -1) {
-                            return []; // Kill does not check killed target id (?)
-                        }
-                        let targetId = a[0].Condition.$eq[1 - index];
-                        if (targetId.startsWith('$')) {
-                            return []; // TODO: get target id from dynamic variables
-                        }
-                        return {
-                            Type: 'kill',
-                            Properties: {
-                                Id: targetId,
-                                Conditions: [], // TODO?
+                        const a = Array.isArray(objective.Definition.States.Start.Kill) ?
+                            objective.Definition.States.Start.Kill.filter(kill => kill.Transition == 'Success') :
+                            (objective.Definition.States.Start.Kill.Transition == 'Success' ? [objective.Definition.States.Start.Kill] : []);
+
+                        if (a.length == 1) {
+                            const index = a[0].Condition.$eq.indexOf('$Value.RepositoryId');
+                            if (index == -1) {
+                                return null; // Kill does not check killed target id (?)
+                            }
+                            let targetId = a[0].Condition.$eq[1 - index];
+                            if (targetId.startsWith('$')) {
+                                return null; // TODO: get target id from dynamic variables
+                            }
+
+                            return { // Custom objective is actually a simple kill objective
+                                Type: 'kill',
+                                Properties: {
+                                    Id: targetId,
+                                    Conditions: [], // TODO?
+                                }
                             }
                         }
-                    } else if (objective.HUDTemplate && objective.ObjectiveType && !objective.ExcludeFromScoring && !objective.Activation) {
+                        // else: This is no simple kill objective: fall through to next block
+                    }
+                    if (objective.HUDTemplate && objective.ObjectiveType && !objective.ExcludeFromScoring && !objective.Activation) {
                         return {
                             Type: objective.ObjectiveType,
                             Properties: {
@@ -358,6 +363,7 @@ app.get('/Planning', extractToken, async (req, res) => {
                     }
                     return null;
                 }).filter(objective => objective), // filter nulls
+                // TODO: Create objectives for each gamechanger, sort objectives according to Metadata.GroupObjectiveDisplayOrder
                 GroupData: {},
                 Entrances: [], // TODO
                 Location: sublocation,
@@ -408,7 +414,7 @@ app.get('/Planning', extractToken, async (req, res) => {
                         SlotName: 'stashpoint',
                         SlotId: '6',
                         Recommended: null,
-                    }
+                    },
                 ], // TODO
                 LimitedLoadoutUnlockLevel: 0, // ?
                 CharacterLoadoutData: null,
