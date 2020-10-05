@@ -116,6 +116,115 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary"
   },
+
+  {
+    "Id": "174898dc-3f20-4dd8-8dd0-7709576360a3",
+    "Name": "UI_GAMECHANGERS_PARIS_PATROL_GUARD_SUPER_ENFORCERS_NAME",
+    "Description": "UI_GAMECHANGERS_PARIS_PATROL_GUARD_SUPER_ENFORCERS_DESC",
+    "LongDescription": "UI_GAMECHANGERS_PARIS_PATROL_GUARD_SUPER_ENFORCERS_DESC",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Paris_SuperEnforcers_PatrolGuards.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "secondary"
+  },
+  {
+    "Id": "ba550fb7-47f0-488d-9c37-accbaaf44e36",
+    "Name": "UI_GAMECHANGERS_PARIS_ALL_CAMERAS_NAME",
+    "Description": "UI_GAMECHANGERS_PARIS_ALL_CAMERAS_DESC",
+    "LongDescription": "UI_GAMECHANGERS_PARIS_ALL_CAMERAS_DESC",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Global_BigBrother.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "primary"
+  },
+  {
+    "Id": "ab91b785-7914-4790-96f9-130eea842084",
+    "Name": "UI_GAMECHANGERS_GLOBAL_HOT_DISGUISE_NAME",
+    "Description": "UI_GAMECHANGERS_PARIS_AUCTION_STAFF_TIMER_DESC",
+    "LongDescription": "",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Paris_Hot_Disguise_Palace_Staff.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "primary"
+  },
+  {
+    "Id": "6a35dcfc-819e-4734-a127-052e7b7347b6",
+    "Name": "UI_GAMECHANGERS_SAPIENZA_MANSION_MINEFIELD_NAME",
+    "Description": "UI_GAMECHANGERS_SAPIENZA_MANSION_MINEFIELD_DESC",
+    "LongDescription": "UI_GAMECHANGERS_SAPIENZA_MANSION_MINEFIELD_DESC",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Sapienza_MansionMinefield.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "secondary"
+  },
+  {
+    "Id": "dd95efe2-2b38-41e7-958e-d99187118310",
+    "Name": "UI_GAMECHANGERS_SAPIENZA_BOAT_EXIT_NAME",
+    "Description": "UI_GAMECHANGERS_SAPIENZA_BOAT_EXIT_DESC",
+    "LongDescription": "UI_GAMECHANGERS_SAPIENZA_BOAT_EXIT_DESC",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Sapienza_BoatExit.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "secondary"
+  },
+  {
+    "Id": "eb114db1-c4da-437e-9a8c-fa2abf0d9495",
+    "Name": "UI_GAMECHANGERS_SAPIENZA_PLAGUE_DOCTOR_KATANA_OCTOPUS_NAME",
+    "Description": "UI_GAMECHANGERS_SAPIENZA_PLAGUE_DOCTOR_KATANA_OCTOPUS_DESC",
+    "LongDescription": "UI_GAMECHANGERS_SAPIENZA_PLAGUE_DOCTOR_KATANA_OCTOPUS_DESC",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Sapienza_Octopus_Plague_Katana.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "primary"
+  },
+  {
+    "Id": "98cff1e9-af18-421a-adc1-0b040d136250",
+    "Name": "UI_GAMECHANGERS_MARRAKESH_ALL_CAMERAS_NAME",
+    "Description": "UI_GAMECHANGERS_MARRAKESH_ALL_CAMERAS_DESC",
+    "LongDescription": "UI_GAMECHANGERS_MARRAKESH_ALL_CAMERAS_DESC",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Global_BigBrother.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "primary"
+  },
+  {
+    "Id": "54b9eb44-e020-4739-8ece-3985a347d5e0",
+    "Name": "UI_GAMECHANGERS_HOKKAIDO_COWBOY_DOUBLE_KILL_NAME",
+    "Description": "UI_GAMECHANGERS_HOKKAIDO_COWBOY_DOUBLE_KILL_OBJ",
+    "LongDescription": "UI_GAMECHANGERS_HOKKAIDO_COWBOY_DOUBLE_KILL_OBJ",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Hokkaido_Striker_Double.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "primary"
+  },
+  {
+    "Id": "93867f64-4b76-46d8-a3be-1ac47a38735c",
+    "Name": "UI_GAMECHANGERS_HOKKAIDO_TRESPASSERS_NAME",
+    "Description": "UI_GAMECHANGERS_HOKKAIDO_TRESPASSERS_DESC",
+    "LongDescription": "UI_GAMECHANGERS_HOKKAIDO_TRESPASSERS_DESC",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Hokkaido_Trespassers.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "primary"
+  },
+  {
+    "Id": "83a2f372-a66e-4173-9387-8f210ec27ecd",
+    "Name": "UI_GAMECHANGERS_FLAMINGO_ADDITIONAL_ENFORCERS_NAME",
+    "Description": "UI_GAMECHANGERS_FLAMINGO_ADDITIONAL_ENFORCERS_DESC",
+    "LongDescription": "UI_GAMECHANGERS_FLAMINGO_ADDITIONAL_ENFORCERS_DESC",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Miami_Additional_Enforcers.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "secondary"
+  },
+  {
+    "Id": "9e866396-be8a-47cd-ae4f-1183d34728d9",
+    "Name": "UI_GAMECHANGERS_MIAMI_MEDIC_DO_NOT_GET_SPOTTED_NAME",
+    "Description": "UI_GAMECHANGERS_MIAMI_MEDIC_DO_NOT_GET_SPOTTED_DESC",
+    "LongDescription": "UI_GAMECHANGERS_MIAMI_MEDIC_DO_NOT_GET_SPOTTED_DESC",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Miami_Hide_In_Crowd.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "primary"
+  },
+  {
+    "Id": "aa165461-41c8-4f22-b56a-14fa00dafb67",
+    "Name": "UI_GAMECHANGERS_MIAMI_KEEP_FLAMINGO_DISGUISE_NAME",
+    "Description": "UI_GAMECHANGERS_MIAMI_KEEP_FLAMINGO_DISGUISE_DESC",
+    "LongDescription": "UI_GAMECHANGERS_MIAMI_KEEP_FLAMINGO_DISGUISE_DESC",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Miami_KeepFlamingo.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "primary"
+  },
   {
     "Id": "d19d5e28-0a3b-49fd-992e-3f738064632a",
     "Name": "UI_GAMECHANGERS_MIAMI_AQUARIUM_NAME",
