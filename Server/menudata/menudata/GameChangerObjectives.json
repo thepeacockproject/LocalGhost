@@ -1,0 +1,128 @@
+[
+  {
+    "Id": "91cf5610-e7ea-4665-9c7b-4b3d5a18a37d",
+    "Name": "UI_GAMECHANGERS_GLOBAL_KILL_STREAK_30_SEC_2_TARGETS_NAME",
+    "Description": "UI_GAMECHANGERS_GLOBAL_KILL_STREAK_30_SEC_3_TARGETS_DESC",
+    "LongDescription": "UI_GAMECHANGERS_GLOBAL_KILL_STREAK_30_SEC_3_TARGETS_DESC",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Global_KillStreak.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "primary"
+  },
+  {
+    "Id": "6f31593d-5a6c-4bab-bcfb-e97cc7053019",
+    "Name": "UI_GAMECHANGERS_GLOBAL_KILL_STREAK_30_SEC_2_TARGETS_NAME",
+    "Description": "UI_GAMECHANGERS_GLOBAL_KILL_STREAK_30_SEC_3_TARGETS_DESC",
+    "LongDescription": "UI_GAMECHANGERS_GLOBAL_KILL_STREAK_30_SEC_3_TARGETS_DESC",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Global_KillStreak.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "primary"
+  },
+  {
+    "Id": "113ba9e8-4fa5-4ab0-b613-05b97e39e600",
+    "Name": "UI_GAMECHANGERS_GLOBAL_NO_AGILITY_NAME",
+    "Description": "UI_GAMECHANGERS_GLOBAL_NO_AGILITY_DESC",
+    "LongDescription": "UI_GAMECHANGERS_GLOBAL_NO_AGILITY_DESC",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Global_NoAgility.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "primary"
+  },
+  {
+    "Id": "da07626c-0aa3-463a-92ff-8e7adbbf6230",
+    "Name": "UI_GAMECHANGERS_GLOBAL_NO_UNCONSCIOUS_NAME",
+    "Description": "UI_GAMECHANGERS_GLOBAL_NO_UNCONSCIOUS_DESC",
+    "LongDescription": "UI_GAMECHANGERS_GLOBAL_NO_UNCONSCIOUS_DESC",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Global_NoPacifications.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "primary"
+  },
+  {
+    "Id": "113ba9e8-4fa5-4ab0-b613-05b97e39e600",
+    "Name": "UI_GAMECHANGERS_GLOBAL_NO_AGILITY_NAME",
+    "Description": "UI_GAMECHANGERS_GLOBAL_NO_AGILITY_DESC",
+    "LongDescription": "UI_GAMECHANGERS_GLOBAL_NO_AGILITY_DESC",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Global_NoAgility.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "primary"
+  },
+  {
+    "Id": "07b1bc1d-f52b-4004-a760-846c4bc3f172",
+    "Name": "UI_GAMECHANGERS_GLOBAL_NO_DISGUISE_CHANGE_NAME",
+    "Description": "UI_GAMECHANGERS_GLOBAL_NO_DISGUISE_CHANGE_DESC",
+    "LongDescription": "UI_GAMECHANGERS_GLOBAL_NO_DISGUISE_CHANGE_DESC",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Global_NoDisguiseChange.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "primary"
+  },
+  {
+    "Id": "63055f1a-bcd2-4e0f-8caf-b446f01d02f3",
+    "Name": "UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_NO_DISGUISE_CHANGES_PRIMARY_NAME",
+    "Description": "UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_NO_DISGUISE_CHANGES_PRIMARY_DESC",
+    "LongDescription": "UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_NO_DISGUISE_CHANGES_PRIMARY_DESC",
+    "TileImage": "images/contractconditions/condition_contract_no_disguise_changes.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "primary"
+  },
+  {
+    "Id": "61d70ece-aa00-4840-9479-c9f6cd5e9e95",
+    "Name": "UI_GAMECHANGERS_GLOBAL_NO_AGENCY_PICKUP_NAME",
+    "Description": "UI_GAMECHANGERS_GLOBAL_NO_AGENCY_PICKUP_DESC",
+    "LongDescription": "UI_GAMECHANGERS_GLOBAL_NO_AGENCY_PICKUP_DESC",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Global_No_Agency_Pickup.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "secondary"
+  },
+  {
+    "Id": "0cf5e693-35ec-457e-a004-da4672b90376",
+    "Name": "UI_GAMECHANGERS_GLOBAL_WILD_CARD_OBJECTIVES_NAME",
+    "Description": "UI_GAMECHANGERS_GLOBAL_WILD_CARD_OBJECTIVES_DESC",
+    "LongDescription": "UI_GAMECHANGERS_GLOBAL_WILD_CARD_OBJECTIVES_DESC",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Global_Wild_Card_Objectives.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "secondary"
+  },
+  {
+    "Id": "659cf12d-aa20-48ff-b8d9-bffd148e4797",
+    "Name": "UI_GAMECHANGERS_GLOBAL_WILD_CARD_OBJECTIVES_NAME",
+    "Description": "UI_GAMECHANGERS_GLOBAL_WILD_CARD_LEVEL_DESC",
+    "LongDescription": "UI_GAMECHANGERS_GLOBAL_WILD_CARD_LEVEL_DESC",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Global_Wild_Card_Objectives.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "primary"
+  },
+  {
+    "Id": "51c8a014-dcc6-4714-a843-0295f9718c7a",
+    "Name": "UI_GAMECHANGERS_GLOBAL_WILD_CARD_LEVEL_NAME",
+    "Description": "UI_GAMECHANGERS_GLOBAL_WILD_CARD_LEVEL_DESC",
+    "LongDescription": "UI_GAMECHANGERS_GLOBAL_WILD_CARD_LEVEL_DESC",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Global_Wild_Card_Level.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "secondary"
+  },
+  {
+    "Id": "572cd180-99db-40a8-9090-7736ef36aa23",
+    "Name": "UI_GAMECHANGERS_GLOBAL_ELIMINATE_W_NON_SILENCED_BALLISTICS_NAME",
+    "Description": "UI_GAMECHANGERS_GLOBAL_ELIMINATE_W_NON_SILENCED_BALLISTICS_DESC",
+    "LongDescription": "UI_GAMECHANGERS_GLOBAL_ELIMINATE_W_NON_SILENCED_BALLISTICS_DESC",
+    "TileImage": "images/ContractConditions/Condition_Killmethod_Shotgun.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "secondary"
+  },
+  {
+    "Id": "c2da52c5-ff3e-41cd-a175-4ed9267f6c95",
+    "Name": "UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_HIDE_ALL_BODIES_PRIMARY_NAME",
+    "Description": "UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_HIDE_ALL_BODIES_PRIMARY_DESC",
+    "LongDescription": "UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_HIDE_ALL_BODIES_PRIMARY_DESC",
+    "TileImage": "images/contractconditions/condition_contrac_hide_all_bodies.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "primary"
+  },
+  {
+    "Id": "d19d5e28-0a3b-49fd-992e-3f738064632a",
+    "Name": "UI_GAMECHANGERS_MIAMI_AQUARIUM_NAME",
+    "Description": "UI_GAMECHANGERS_MIAMI_AQUARIUM_DESC",
+    "LongDescription": "UI_GAMECHANGERS_MIAMI_AQUARIUM_DESC",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Miami_Aquarium.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "primary"
+  }
+]

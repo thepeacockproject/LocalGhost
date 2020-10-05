@@ -315,7 +315,7 @@ app.get('/Planning', extractToken, async (req, res) => {
                 UnlockedAgencyPickups: userData.Extensions.inventory.filter(item => item.Unlockable.Type == 'agencypickup')
                     .map(i => i.Unlockable.Properties.RepositoryId)
                     .filter(id => id),
-                Objectives: mapObjectives(contractData.Data.Objectives, contractData.Metadata.GroupObjectiveDisplayOrder),
+                Objectives: await mapObjectives(contractData.Data.Objectives, contractData.Data.GameChangers, contractData.Metadata.GroupObjectiveDisplayOrder),
                 GroupData: {},
                 Entrances: [], // TODO
                 Location: sublocation,
@@ -405,7 +405,7 @@ app.get('/Planning', extractToken, async (req, res) => {
     });
 });
 
-function mapObjectives(Objectives, GroupObjectiveDisplayOrder) {
+async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrder) {
     const result = new Map();
     for (const objective of Objectives) {
         if (objective.SuccessEvent && objective.SuccessEvent.EventName == 'Kill') {
@@ -422,7 +422,7 @@ function mapObjectives(Objectives, GroupObjectiveDisplayOrder) {
                 objective.Definition.States.Start.Kill.filter(kill => kill.Transition == 'Success') :
                 (objective.Definition.States.Start.Kill.Transition == 'Success' ? [objective.Definition.States.Start.Kill] : []);
 
-            if (a.length == 1) {
+            if (a.length == 1 && a[0].Condition.$eq) { // TODO: check more complex structures, see e359075e-a510-4b7c-a461-477b789ca7e4
                 const index = a[0].Condition.$eq.indexOf('$Value.RepositoryId');
                 if (index != -1) {
                     let targetId = a[0].Condition.$eq[1 - index];
@@ -457,7 +457,19 @@ function mapObjectives(Objectives, GroupObjectiveDisplayOrder) {
         }
         // objective not shown on planning screen
     }
-    // TODO: Create objectives for each gamechanger
+    if (GameChangers && GameChangers.length > 0) {
+        const gameChangerObjectives = await readFile(path.join('menudata', 'menudata', 'GameChangerObjectives.json'));
+        for (const gamechanger of GameChangers) {
+            const objective = gameChangerObjectives.find(obj => obj.Id == gamechanger);
+            if (objective) {
+                result.set(gamechanger, {
+                    Type: 'gamechanger',
+                    Properties: objective,
+                });
+            }
+        }
+    }
+
 
     const sortedResult = [];
     for (const { Id, IsNew } of GroupObjectiveDisplayOrder || Objectives) {
