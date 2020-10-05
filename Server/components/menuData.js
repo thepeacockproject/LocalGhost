@@ -305,7 +305,7 @@ app.get('/Planning', extractToken, async (req, res) => {
             template: null,
             data: {
                 Contract: contractData,
-                ElusiveContractState: '',
+                ElusiveContractState: 'not_completed', // TODO? ['completed', 'not_completed', 'time_ran_out', 'failed'], empty string for non elusives
                 UserCentric: await generateUserCentric(contractData, userData, repo),
                 IsFirstInGroup: true, // escalation related?
                 Creator: creatorProfile,
@@ -543,7 +543,8 @@ async function generateUserCentric(contractData, userData, repoData) {
             LocationHideProgression: false, // ?
             ElusiveContractState: '', // ?
             IsFeatured: false,
-            LastPlayedAt: '2020-01-01T00:00:00.0000000Z', // ISO timestamp
+            //LastPlayedAt: '2020-01-01T00:00:00.0000000Z', // ISO timestamp
+            Completed: false, // relevant for featured contracts
             LocationId: sublocation.Id,
             ParentLocationId: sublocation.Properties.ParentLocation,
             CompletionData: {
