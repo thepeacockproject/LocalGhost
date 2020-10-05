@@ -209,9 +209,14 @@ app.get('/stashpoint', extractToken, async (req, res) => {
         LoadoutItemsData: {
             SlotId: req.query.slotid,
             Items: userData.Extensions.inventory.filter(item => {
-                return (!req.query.slotname || req.query.slotname.startsWith('stashpoint') || item.Unlockable.Properties.LoadoutSlot == req.query.slotname)
-                    && (req.query.allowcontainers || !item.Unlockable.Properties.IsContainer)
-                    && (req.query.allowlargeitems || item.Unlockable.Properties.LoadoutSlot != 'carriedweapon'); // not sure about this one
+                return item.Unlockable.Properties.LoadoutSlot // only display items
+                    && (!req.query.slotname
+                        || ((/^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/.test(req.query.slotid) // container
+                            || req.query.slotname == 'stashpoint') // stashpoint
+                            && item.Unlockable.Properties.LoadoutSlot != 'disguise') // container or stashpoint => display all items
+                        || item.Unlockable.Properties.LoadoutSlot == req.query.slotname) // else: display items for requested slot
+                    && (req.query.allowcontainers == 'true' || !item.Unlockable.Properties.IsContainer)
+                    && (req.query.allowlargeitems == 'true' || item.Unlockable.Properties.LoadoutSlot != 'carriedweapon'); // not sure about this one
                 // TODO: filter for specific stashpoints?
             }).map(item => ({
                 Item: item,
