@@ -1,0 +1,477 @@
+{
+  "assembly:/_pro/scenes/missions/hokkaido/_scene_mission_snowcrane.entity": [
+    "85ef518f-0e94-4e5e-9fd2-66fb84d2d0bb",
+    "fedf6cd3-d076-4037-b7d8-1449726b4c0a",
+    "be6045fd-26ab-4a3b-a6ce-b1ccdf405d09",
+    "a786fc74-b379-41f4-a4ac-ce970ee88b2c",
+    "2fc483c8-500c-4475-ba5d-e2cdd6ccc64c",
+    "0e7dd303-c9bb-42cc-aca0-70499931d098",
+    "bdc80464-31dd-440d-ad79-2767b923a0a4",
+    "74b1ad25-06cd-41a2-9cf5-9dd5dac7345d",
+    "df752dfa-623d-4750-83a6-8b4aba1d8e08"
+  ],
+  "assembly:/_pro/scenes/missions/marrakesh/_scene_python_hellebore.entity": [
+    "94755a4f-3b10-4c17-b8ac-ea973a8b8157",
+    "a20e45b9-172c-49e6-84a2-04da840bf90f"
+  ],
+  "assembly:/_pro/scenes/missions/colombia/scene_hippo_calluna.entity": [
+    "d7013244-6f19-4895-bad8-3d75ceedd6fa",
+    "4b344092-e910-4c2f-80c8-9f2501e411bb",
+    "a96c518b-07d7-4b31-bef4-147c9e0ec93a",
+    "0c848791-ae6e-4442-8bd9-9717e95d2a56",
+    "494b9470-402f-4902-8770-46a470097ad7",
+    "2c2a5173-db6c-40d8-9520-67b895aac2cc",
+    "18bcd289-eada-499d-821b-64d232da4cda",
+    "37d5b96b-2c27-4d1b-a7e4-2fa290e6d2d6"
+  ],
+  "assembly:/_pro/scenes/missions/opulent/mission_stingray/scene_stingray_arcticthyme.entity": [
+    "d8894bef-3ab0-4b7f-80ef-da0649e11f28"
+  ],
+  "assembly:/_pro/scenes/missions/mumbai/scene_kingcobra.entity": [
+    "c7596e36-43ae-4e03-aa66-84f6a88f0cd3",
+    "f4659b56-65c3-4f4f-8f20-11d09af2f2d2",
+    "37af536b-3f36-49ed-986a-9d55f4481ed4",
+    "f1bb66b5-b446-4a00-a951-af7310e28566",
+    "774b7dec-ce57-4318-9dbd-f6d7fa39ef1d",
+    "724b24ef-e87f-4060-b7ed-5c315fb0f29f",
+    "8b1c3ba0-9c91-4b3e-96f9-7d3c8632b7c2",
+    "5e6a6e2c-ee2c-40a7-9de5-d7fb8fbd8dcd",
+    "0e33bbeb-2c77-419a-be0c-ce9c3627d543",
+    "a95703cb-091b-4d05-a2ee-3a70ade13590",
+    "51145d77-882e-4be0-a471-73704497aa8b",
+    "86a3857f-dad7-45ac-818b-d933e5c8dfd9",
+    "cc3ebf7d-0fcf-40bc-9b55-1e2426e66edd",
+    "37dda555-cdf2-4444-8de2-4659d371be4c"
+  ],
+  "assembly:/_pro/scenes/missions/theark/_scene_magpie_pansy.entity": [
+    "c8cc6525-fc26-41af-99f2-fb5d2e7fae29",
+    "0df05e9f-78ef-4ce7-b627-b9d1ad55f607",
+    "3e8a184c-8af6-453d-8a87-de59b51c58a3",
+    "95af0d95-bc0d-402e-acb3-ea918a791300",
+    "f6a11cec-cd25-4a4d-80cd-e9939cc081c1",
+    "5272ff2c-98d1-4ae5-a406-d98aed51578b",
+    "5e30a7b9-7e06-464e-b2eb-1aa23635f500",
+    "9c35b39c-53ca-4d5c-8ec4-90d1fc5a4bb0",
+    "42bfbe45-85c8-4555-b1fb-256b7006ee06"
+  ],
+  "assembly:/_pro/scenes/missions/colombia/scene_hippo_rafflesia.entity": [
+    "bd73b983-9f48-4d2d-9340-5368603edb99",
+    "4b344092-e910-4c2f-80c8-9f2501e411bb",
+    "a96c518b-07d7-4b31-bef4-147c9e0ec93a",
+    "0c848791-ae6e-4442-8bd9-9717e95d2a56",
+    "494b9470-402f-4902-8770-46a470097ad7",
+    "efae3d00-e6cb-421e-936d-589afd6be8ec",
+    "2c2a5173-db6c-40d8-9520-67b895aac2cc",
+    "18bcd289-eada-499d-821b-64d232da4cda",
+    "37d5b96b-2c27-4d1b-a7e4-2fa290e6d2d6"
+  ],
+  "assembly:/_pro/scenes/missions/colombia/scene_hippo.entity": [
+    "4b344092-e910-4c2f-80c8-9f2501e411bb",
+    "a96c518b-07d7-4b31-bef4-147c9e0ec93a",
+    "0c848791-ae6e-4442-8bd9-9717e95d2a56",
+    "494b9470-402f-4902-8770-46a470097ad7",
+    "efae3d00-e6cb-421e-936d-589afd6be8ec",
+    "2c2a5173-db6c-40d8-9520-67b895aac2cc",
+    "18bcd289-eada-499d-821b-64d232da4cda",
+    "37d5b96b-2c27-4d1b-a7e4-2fa290e6d2d6"
+  ],
+  "assembly:/_pro/scenes/missions/thefacility/_scene_mission_polarbear_002_for_escalation_.entity": [
+    "f9117020-f3a2-4945-a92a-d617d639d9ad"
+  ],
+  "assembly:/_pro/scenes/missions/coastaltown/scene_ebola.entity": [
+    "c113315d-ffcc-4878-9e70-bb35aadf0211",
+    "1c386bb9-aead-42c0-b604-ad560056ddf4",
+    "4970aae5-e4c1-4d5c-a66a-0fc06616211b",
+    "c27f76ca-ed71-4b2d-9b9d-693875df830c",
+    "a72bd197-f996-4e3b-b494-11f62296a2b3",
+    "a28dd5e3-1f1d-408d-9387-945641c32218"
+  ],
+  "assembly:/_pro/scenes/missions/sheep/scene_opuntia.entity": [
+    "0f79ca01-ef05-47d4-9efc-936da5b6cafb"
+  ],
+  "assembly:/_pro/scenes/missions/coastaltown/mission01.entity": [
+    "249659f3-8989-4ffc-b727-4902e954605f",
+    "8fd339e1-ea06-4aee-bd65-0c89b34e4e7e",
+    "1021798e-cec1-4b43-ba33-69b7d53da867",
+    "a73d92c4-cd4b-4bd2-9485-943aa613a79c",
+    "495222ec-e8c9-416a-a41f-4bdfc3e6b80e",
+    "c113315d-ffcc-4878-9e70-bb35aadf0211",
+    "1c386bb9-aead-42c0-b604-ad560056ddf4",
+    "4970aae5-e4c1-4d5c-a66a-0fc06616211b",
+    "c27f76ca-ed71-4b2d-9b9d-693875df830c",
+    "a72bd197-f996-4e3b-b494-11f62296a2b3"
+  ],
+  "assembly:/_pro/scenes/missions/paris/_scene_whiterussian_01.entity": [
+    "67aec874-287f-4c82-9e01-3dbd7683faac",
+    "3bdb62b5-15ef-4eb6-94b1-7f2e0cdf1d31",
+    "04834714-406b-444e-b0d8-2f1054c1f8b5",
+    "c6765d3e-4031-4778-a5c5-a6d875131ea4",
+    "aa4cdd0b-8fcf-4160-a049-c15a19c82af1",
+    "943b8f1f-10c4-4dbf-a67e-25ed343290f5",
+    "be610298-cbe8-47ce-9e90-951d2aae6f39",
+    "d76ae2ee-05ea-4f2b-a9c7-62efa6422628"
+  ],
+  "assembly:/_pro/scenes/missions/sheep/scene_sheep.entity": [
+    "78477425-7330-4092-ad71-6548e07ccc93",
+    "40e5cc64-9aba-4f1a-9d37-a2e558e118b6",
+    "0f13f00b-abb4-4cdd-bd9d-748514b941d5"
+  ],
+  "assembly:/_pro/scenes/missions/coastaltown/_scene_mission_mamba.entity": [
+    "594366fe-ccfd-4da5-8374-9501c3616e99"
+  ],
+  "assembly:/_pro/scenes/missions/paris/_scene_paris.entity": [
+    "74062d4a-3386-44b8-83e0-1d0348e5976f",
+    "67aec874-287f-4c82-9e01-3dbd7683faac",
+    "3bdb62b5-15ef-4eb6-94b1-7f2e0cdf1d31",
+    "aa4cdd0b-8fcf-4160-a049-c15a19c82af1",
+    "c6765d3e-4031-4778-a5c5-a6d875131ea4",
+    "943b8f1f-10c4-4dbf-a67e-25ed343290f5",
+    "be610298-cbe8-47ce-9e90-951d2aae6f39",
+    "04834714-406b-444e-b0d8-2f1054c1f8b5",
+    "d76ae2ee-05ea-4f2b-a9c7-62efa6422628"
+  ],
+  "assembly:/_pro/scenes/missions/thefacility/_scene_mission_polarbear_module_002.entity": [
+    "d095f91d-0a30-4afc-8025-50a74cfb4fc6"
+  ],
+  "assembly:/_pro/scenes/missions/marrakesh/_scene_spider.entity": [
+    "52598840-4d4d-46de-9446-5f9c64760105",
+    "de8c6844-9d28-4cfc-a165-baa3373ae811",
+    "80b8188c-1783-413a-aff6-516c0ab27ffc",
+    "565614ab-213e-4277-8429-950267941d5e",
+    "f8aeef13-b522-4351-bc80-810159e629af",
+    "66ff5ba4-8ebc-4526-8e05-cdb8a055a4c8",
+    "70f9c93c-57fa-4d61-9cb8-6fcaa0651b0e",
+    "035838e6-a288-4d1a-a1ae-fba484a7c545",
+    "6d84301a-5780-41db-8c6d-479b471c03bb"
+  ],
+  "assembly:/_pro/scenes/missions/bangkok/_scene_mission_tiger.entity": [
+    "3aa4388f-6f87-44a4-b3dc-ac015bf65264",
+    "61f8efe4-7e9e-4add-b69e-bf40213209c2",
+    "c2302bad-8e77-4d72-88c2-36ac1ad8c1b4",
+    "57e5073f-b4e6-4717-a8db-cbc94cb51087",
+    "83f4f967-71bb-48a1-bc53-1e472a9a1b3e",
+    "3d59f7ff-11b5-4498-925d-d3a2ea148a4e",
+    "b33ae290-5ea1-4229-b41f-680a76d40320",
+    "9ddbd515-2519-4c16-98aa-0f87af5d8ef5"
+  ],
+  "assembly:/_pro/scenes/missions/marrakesh/_scene_mission_spider.entity": [
+    "52598840-4d4d-46de-9446-5f9c64760105",
+    "de8c6844-9d28-4cfc-a165-baa3373ae811",
+    "80b8188c-1783-413a-aff6-516c0ab27ffc",
+    "565614ab-213e-4277-8429-950267941d5e",
+    "f8aeef13-b522-4351-bc80-810159e629af",
+    "66ff5ba4-8ebc-4526-8e05-cdb8a055a4c8",
+    "70f9c93c-57fa-4d61-9cb8-6fcaa0651b0e",
+    "035838e6-a288-4d1a-a1ae-fba484a7c545",
+    "6d84301a-5780-41db-8c6d-479b471c03bb"
+  ],
+  "assembly:/_pro/scenes/missions/hokkaido/_scene_snowcrane.entity": [
+    "85ef518f-0e94-4e5e-9fd2-66fb84d2d0bb",
+    "fedf6cd3-d076-4037-b7d8-1449726b4c0a",
+    "be6045fd-26ab-4a3b-a6ce-b1ccdf405d09",
+    "a786fc74-b379-41f4-a4ac-ce970ee88b2c",
+    "2fc483c8-500c-4475-ba5d-e2cdd6ccc64c",
+    "0e7dd303-c9bb-42cc-aca0-70499931d098",
+    "bdc80464-31dd-440d-ad79-2767b923a0a4",
+    "74b1ad25-06cd-41a2-9cf5-9dd5dac7345d",
+    "df752dfa-623d-4750-83a6-8b4aba1d8e08"
+  ],
+  "assembly:/_pro/scenes/missions/paris/_scene_tutorial_contractcreationparis.entity": [
+    "74062d4a-3386-44b8-83e0-1d0348e5976f",
+    "67aec874-287f-4c82-9e01-3dbd7683faac",
+    "3bdb62b5-15ef-4eb6-94b1-7f2e0cdf1d31",
+    "aa4cdd0b-8fcf-4160-a049-c15a19c82af1",
+    "c6765d3e-4031-4778-a5c5-a6d875131ea4",
+    "943b8f1f-10c4-4dbf-a67e-25ed343290f5",
+    "be610298-cbe8-47ce-9e90-951d2aae6f39",
+    "04834714-406b-444e-b0d8-2f1054c1f8b5",
+    "d76ae2ee-05ea-4f2b-a9c7-62efa6422628"
+  ],
+  "assembly:/_pro/scenes/missions/bangkok/scene_zika.entity": [
+    "3aa4388f-6f87-44a4-b3dc-ac015bf65264",
+    "61f8efe4-7e9e-4add-b69e-bf40213209c2",
+    "c2302bad-8e77-4d72-88c2-36ac1ad8c1b4",
+    "57e5073f-b4e6-4717-a8db-cbc94cb51087",
+    "83f4f967-71bb-48a1-bc53-1e472a9a1b3e",
+    "3d59f7ff-11b5-4498-925d-d3a2ea148a4e",
+    "b33ae290-5ea1-4229-b41f-680a76d40320",
+    "213d36c0-a6af-4533-90da-2c815f6ec927"
+  ],
+  "assembly:/_pro/scenes/missions/paris/_scene_tequilasunrise_01.entity": [
+    "67aec874-287f-4c82-9e01-3dbd7683faac",
+    "3bdb62b5-15ef-4eb6-94b1-7f2e0cdf1d31",
+    "04834714-406b-444e-b0d8-2f1054c1f8b5",
+    "c6765d3e-4031-4778-a5c5-a6d875131ea4",
+    "aa4cdd0b-8fcf-4160-a049-c15a19c82af1",
+    "943b8f1f-10c4-4dbf-a67e-25ed343290f5",
+    "be610298-cbe8-47ce-9e90-951d2aae6f39",
+    "d76ae2ee-05ea-4f2b-a9c7-62efa6422628"
+  ],
+  "assembly:/_pro/scenes/missions/coastaltown/_scene_mission_copperhead.entity": [
+    "da717656-934e-4783-8c36-65bf486cfdfa"
+  ],
+  "assembly:/_pro/scenes/missions/theark/scene_magpie.entity": [
+    "0df05e9f-78ef-4ce7-b627-b9d1ad55f607",
+    "3e8a184c-8af6-453d-8a87-de59b51c58a3",
+    "95af0d95-bc0d-402e-acb3-ea918a791300",
+    "f6a11cec-cd25-4a4d-80cd-e9939cc081c1",
+    "5272ff2c-98d1-4ae5-a406-d98aed51578b",
+    "5e30a7b9-7e06-464e-b2eb-1aa23635f500",
+    "9c35b39c-53ca-4d5c-8ec4-90d1fc5a4bb0",
+    "42bfbe45-85c8-4555-b1fb-256b7006ee06"
+  ],
+  "assembly:/_pro/scenes/missions/mumbai/scene_mongoose.entity": [
+    "c7596e36-43ae-4e03-aa66-84f6a88f0cd3",
+    "f4659b56-65c3-4f4f-8f20-11d09af2f2d2",
+    "37af536b-3f36-49ed-986a-9d55f4481ed4",
+    "f1bb66b5-b446-4a00-a951-af7310e28566",
+    "774b7dec-ce57-4318-9dbd-f6d7fa39ef1d",
+    "724b24ef-e87f-4060-b7ed-5c315fb0f29f",
+    "8b1c3ba0-9c91-4b3e-96f9-7d3c8632b7c2",
+    "5e6a6e2c-ee2c-40a7-9de5-d7fb8fbd8dcd",
+    "0e33bbeb-2c77-419a-be0c-ce9c3627d543",
+    "a95703cb-091b-4d05-a2ee-3a70ade13590",
+    "51145d77-882e-4be0-a471-73704497aa8b",
+    "86a3857f-dad7-45ac-818b-d933e5c8dfd9",
+    "cc3ebf7d-0fcf-40bc-9b55-1e2426e66edd"
+  ],
+  "assembly:/_pro/scenes/missions/colorado_2/scene_rabies.entity": [
+    "237e7963-574a-48c8-8d8a-e415b30f5643"
+  ],
+  "assembly:/_pro/scenes/missions/coastaltown/_scene_copperhead.entity": [
+    "da717656-934e-4783-8c36-65bf486cfdfa"
+  ],
+  "assembly:/_pro/scenes/missions/theark/_scene_magpie_lotus.entity": [
+    "aaa819f7-908e-4bc9-99e4-ebcbc29524a2",
+    "0df05e9f-78ef-4ce7-b627-b9d1ad55f607",
+    "3e8a184c-8af6-453d-8a87-de59b51c58a3",
+    "95af0d95-bc0d-402e-acb3-ea918a791300",
+    "f6a11cec-cd25-4a4d-80cd-e9939cc081c1",
+    "5272ff2c-98d1-4ae5-a406-d98aed51578b",
+    "5e30a7b9-7e06-464e-b2eb-1aa23635f500",
+    "9c35b39c-53ca-4d5c-8ec4-90d1fc5a4bb0",
+    "42bfbe45-85c8-4555-b1fb-256b7006ee06"
+  ],
+  "assembly:/_pro/scenes/missions/skunk/scene_skunk.entity": [
+    "896cf183-d974-4d45-a819-2f04466d95e2",
+    "e0dcccd6-7e08-48ba-a1f0-aec0f83fedb5",
+    "03adcb04-2c83-4024-b472-5ae71ced41f9",
+    "5877bd62-5609-4211-9fc5-ee7b5ce5984a",
+    "e8d12fac-221f-4b1d-9cad-fec2bd161c04",
+    "9034bf0a-6efa-4dec-bb99-5b342804af86"
+  ],
+  "assembly:/_pro/scenes/missions/bangkok/_scene_tiger.entity": [
+    "3aa4388f-6f87-44a4-b3dc-ac015bf65264",
+    "61f8efe4-7e9e-4add-b69e-bf40213209c2",
+    "c2302bad-8e77-4d72-88c2-36ac1ad8c1b4",
+    "57e5073f-b4e6-4717-a8db-cbc94cb51087",
+    "83f4f967-71bb-48a1-bc53-1e472a9a1b3e",
+    "3d59f7ff-11b5-4498-925d-d3a2ea148a4e",
+    "b33ae290-5ea1-4229-b41f-680a76d40320",
+    "9ddbd515-2519-4c16-98aa-0f87af5d8ef5"
+  ],
+  "assembly:/_pro/scenes/missions/greedy/mission_raccoon/scene_raccoon_basic.entity": [
+    "8df094e1-e4c9-4673-9341-f18594b31fa7",
+    "6dffa391-45c7-4254-8be5-96908d959023",
+    "8d92827f-3231-4933-b9cd-130e0e9806f5",
+    "735d751e-7c3d-4587-819b-d2d3c3a506f2",
+    "88937389-1e8f-46b7-9fa1-c39ca0aa4349",
+    "087cc56d-6317-4ce1-8f6a-bc2798ee4f3a"
+  ],
+  "assembly:/_pro/scenes/missions/miami/scene_flamingo.entity": [
+    "3e84bc0c-c1a9-4bec-90bf-cfbdb9818ec7",
+    "35a2bcb1-ecfc-4a6b-95f6-68d275408055",
+    "f1de2373-eebe-4448-808a-8c2764b2c931",
+    "d8952ad4-57ae-42e1-8fec-dd87ade02328",
+    "5004306e-0ee5-458d-87cc-2d71922fff3d",
+    "35010bb4-b766-4958-9922-92183e90445d",
+    "9b806cc8-f363-442b-8747-29690bc2e27b",
+    "7af4fe74-90a3-48f1-abb1-e6688554cb25",
+    "fc234ee7-51a5-4915-a6a9-23b1bcd7ef57",
+    "b42bb297-a449-4caf-8fbf-b6b7088c82dc",
+    "27cc83fa-5fb3-4763-85a4-c584efc90e5e"
+  ],
+  "assembly:/_pro/scenes/missions/miami/scene_et_sambuca.entity": [
+    "3e84bc0c-c1a9-4bec-90bf-cfbdb9818ec7",
+    "35a2bcb1-ecfc-4a6b-95f6-68d275408055",
+    "360a61e0-1471-4c14-84ca-f4729c1198d4",
+    "d8952ad4-57ae-42e1-8fec-dd87ade02328",
+    "5004306e-0ee5-458d-87cc-2d71922fff3d",
+    "35010bb4-b766-4958-9922-92183e90445d",
+    "9b806cc8-f363-442b-8747-29690bc2e27b",
+    "7af4fe74-90a3-48f1-abb1-e6688554cb25",
+    "fc234ee7-51a5-4915-a6a9-23b1bcd7ef57",
+    "b42bb297-a449-4caf-8fbf-b6b7088c82dc",
+    "27cc83fa-5fb3-4763-85a4-c584efc90e5e"
+  ],
+  "assembly:/_pro/scenes/missions/thefacility/_scene_mission_polarbear_002_contracts_creation_tutorial.entity": [
+    "c57c4853-67a2-4498-8ea3-a1a535453e48"
+  ],
+  "assembly:/_pro/scenes/missions/coastaltown/_scene_octopus.entity": [
+    "249659f3-8989-4ffc-b727-4902e954605f",
+    "8fd339e1-ea06-4aee-bd65-0c89b34e4e7e",
+    "1021798e-cec1-4b43-ba33-69b7d53da867",
+    "a73d92c4-cd4b-4bd2-9485-943aa613a79c",
+    "495222ec-e8c9-416a-a41f-4bdfc3e6b80e",
+    "c113315d-ffcc-4878-9e70-bb35aadf0211",
+    "1c386bb9-aead-42c0-b604-ad560056ddf4",
+    "4970aae5-e4c1-4d5c-a66a-0fc06616211b",
+    "c27f76ca-ed71-4b2d-9b9d-693875df830c",
+    "a72bd197-f996-4e3b-b494-11f62296a2b3"
+  ],
+  "assembly:/_pro/scenes/missions/paris/_scene_paris_torenia.entity": [
+    "74062d4a-3386-44b8-83e0-1d0348e5976f",
+    "67aec874-287f-4c82-9e01-3dbd7683faac",
+    "3bdb62b5-15ef-4eb6-94b1-7f2e0cdf1d31",
+    "aa4cdd0b-8fcf-4160-a049-c15a19c82af1",
+    "c6765d3e-4031-4778-a5c5-a6d875131ea4",
+    "943b8f1f-10c4-4dbf-a67e-25ed343290f5",
+    "be610298-cbe8-47ce-9e90-951d2aae6f39",
+    "04834714-406b-444e-b0d8-2f1054c1f8b5",
+    "461d35f5-55f5-4b07-884c-1fc1af3d1dc0"
+  ],
+  "assembly:/_pro/scenes/missions/greedy/mission_raccoon/scene_raccoon_basic_dandelion.entity": [
+    "bc264812-2baf-46dc-91a6-4153b73336f6"
+  ],
+  "assembly:/_pro/scenes/missions/marrakesh/_scene_python.entity": [
+    "a20e45b9-172c-49e6-84a2-04da840bf90f"
+  ],
+  "assembly:/_pro/scenes/missions/hokkaido/_scene_flu.entity": [
+    "85ef518f-0e94-4e5e-9fd2-66fb84d2d0bb",
+    "fedf6cd3-d076-4037-b7d8-1449726b4c0a",
+    "be6045fd-26ab-4a3b-a6ce-b1ccdf405d09",
+    "a786fc74-b379-41f4-a4ac-ce970ee88b2c",
+    "2fc483c8-500c-4475-ba5d-e2cdd6ccc64c",
+    "0e7dd303-c9bb-42cc-aca0-70499931d098",
+    "bdc80464-31dd-440d-ad79-2767b923a0a4",
+    "74b1ad25-06cd-41a2-9cf5-9dd5dac7345d",
+    "df752dfa-623d-4750-83a6-8b4aba1d8e08",
+    "faf13436-43ec-4d49-9d6f-decf29011642"
+  ],
+  "assembly:/_pro/scenes/missions/skunk/scene_gartersnake.entity": [
+    "896cf183-d974-4d45-a819-2f04466d95e2",
+    "e0dcccd6-7e08-48ba-a1f0-aec0f83fedb5",
+    "03adcb04-2c83-4024-b472-5ae71ced41f9",
+    "5877bd62-5609-4211-9fc5-ee7b5ce5984a",
+    "e8d12fac-221f-4b1d-9cad-fec2bd161c04",
+    "9034bf0a-6efa-4dec-bb99-5b342804af86"
+  ],
+  "assembly:/_pro/scenes/missions/paris/_scene_fashionshowhit_01.entity": [
+    "74062d4a-3386-44b8-83e0-1d0348e5976f",
+    "67aec874-287f-4c82-9e01-3dbd7683faac",
+    "3bdb62b5-15ef-4eb6-94b1-7f2e0cdf1d31",
+    "aa4cdd0b-8fcf-4160-a049-c15a19c82af1",
+    "c6765d3e-4031-4778-a5c5-a6d875131ea4",
+    "943b8f1f-10c4-4dbf-a67e-25ed343290f5",
+    "be610298-cbe8-47ce-9e90-951d2aae6f39",
+    "04834714-406b-444e-b0d8-2f1054c1f8b5",
+    "d76ae2ee-05ea-4f2b-a9c7-62efa6422628"
+  ],
+  "assembly:/_pro/scenes/missions/colorado_2/_scene_mission_bull.entity": [
+    "e5c0d1a4-72b0-4cc0-857d-8bb155ea09f4",
+    "370b4106-96f2-4a04-9bc6-029b86b301aa",
+    "6c943798-8ca7-42cc-861a-becdb32017da",
+    "0cd2b917-eb26-4f19-90c2-a5e16eb18cef",
+    "1d3a5b4a-5573-4e2d-8a98-d1c881cbd13e",
+    "bd0cc571-e4a3-41f1-9b9b-608cdecc09c1",
+    "53ce9bb6-ef1c-4f17-8951-5b501fb941d4",
+    "f8ff0b17-b9f5-41ce-b7b1-db8bf6c47f4a"
+  ],
+  "assembly:/_pro/scenes/missions/thefacility/_scene_polarbear_005.entity": [
+    "2a48ddc7-859a-445c-8f53-fb3b1e642f42"
+  ],
+  "assembly:/_pro/scenes/missions/miami/scene_cottonmouth.entity": [
+    "3e84bc0c-c1a9-4bec-90bf-cfbdb9818ec7",
+    "35a2bcb1-ecfc-4a6b-95f6-68d275408055",
+    "f1de2373-eebe-4448-808a-8c2764b2c931",
+    "d8952ad4-57ae-42e1-8fec-dd87ade02328",
+    "5004306e-0ee5-458d-87cc-2d71922fff3d",
+    "35010bb4-b766-4958-9922-92183e90445d",
+    "9b806cc8-f363-442b-8747-29690bc2e27b",
+    "7af4fe74-90a3-48f1-abb1-e6688554cb25",
+    "fc234ee7-51a5-4915-a6a9-23b1bcd7ef57",
+    "b42bb297-a449-4caf-8fbf-b6b7088c82dc",
+    "27cc83fa-5fb3-4763-85a4-c584efc90e5e"
+  ],
+  "assembly:/_pro/scenes/missions/marrakesh/_scene_mission_python.entity": [
+    "a20e45b9-172c-49e6-84a2-04da840bf90f"
+  ],
+  "assembly:/_pro/scenes/missions/paris/_scene_fashionshowhit_amd.entity": [
+    "74062d4a-3386-44b8-83e0-1d0348e5976f",
+    "67aec874-287f-4c82-9e01-3dbd7683faac",
+    "3bdb62b5-15ef-4eb6-94b1-7f2e0cdf1d31",
+    "aa4cdd0b-8fcf-4160-a049-c15a19c82af1",
+    "c6765d3e-4031-4778-a5c5-a6d875131ea4",
+    "943b8f1f-10c4-4dbf-a67e-25ed343290f5",
+    "be610298-cbe8-47ce-9e90-951d2aae6f39",
+    "04834714-406b-444e-b0d8-2f1054c1f8b5",
+    "d76ae2ee-05ea-4f2b-a9c7-62efa6422628"
+  ],
+  "assembly:/_pro/scenes/missions/colorado_2/_scene_bull.entity": [
+    "e5c0d1a4-72b0-4cc0-857d-8bb155ea09f4",
+    "370b4106-96f2-4a04-9bc6-029b86b301aa",
+    "6c943798-8ca7-42cc-861a-becdb32017da",
+    "0cd2b917-eb26-4f19-90c2-a5e16eb18cef",
+    "1d3a5b4a-5573-4e2d-8a98-d1c881cbd13e",
+    "bd0cc571-e4a3-41f1-9b9b-608cdecc09c1",
+    "53ce9bb6-ef1c-4f17-8951-5b501fb941d4",
+    "f8ff0b17-b9f5-41ce-b7b1-db8bf6c47f4a"
+  ],
+  "assembly:/_pro/scenes/missions/thefacility/_scene_mission_polarbear_module_002_b.entity": [
+    "59739ad0-bc5e-4106-9b30-253f07b15b9a"
+  ],
+  "assembly:/_pro/scenes/missions/thefacility/_scene_mission_polarbear_module_005.entity": [
+    "2a48ddc7-859a-445c-8f53-fb3b1e642f42"
+  ],
+  "assembly:/_pro/scenes/missions/hokkaido/_scene_snowcrane_tumbleweed.entity": [
+    "82461a54-f864-4041-972d-33ea82d444f7",
+    "85ef518f-0e94-4e5e-9fd2-66fb84d2d0bb",
+    "fedf6cd3-d076-4037-b7d8-1449726b4c0a",
+    "be6045fd-26ab-4a3b-a6ce-b1ccdf405d09",
+    "a786fc74-b379-41f4-a4ac-ce970ee88b2c",
+    "2fc483c8-500c-4475-ba5d-e2cdd6ccc64c",
+    "0e7dd303-c9bb-42cc-aca0-70499931d098",
+    "bdc80464-31dd-440d-ad79-2767b923a0a4",
+    "74b1ad25-06cd-41a2-9cf5-9dd5dac7345d",
+    "df752dfa-623d-4750-83a6-8b4aba1d8e08"
+  ],
+  "assembly:/_pro/scenes/missions/coastaltown/_scene_mamba.entity": [
+    "594366fe-ccfd-4da5-8374-9501c3616e99"
+  ],
+  "assembly:/_pro/scenes/missions/colombia/scene_anaconda.entity": [
+    "4b344092-e910-4c2f-80c8-9f2501e411bb",
+    "a96c518b-07d7-4b31-bef4-147c9e0ec93a",
+    "0c848791-ae6e-4442-8bd9-9717e95d2a56",
+    "494b9470-402f-4902-8770-46a470097ad7",
+    "efae3d00-e6cb-421e-936d-589afd6be8ec",
+    "2c2a5173-db6c-40d8-9520-67b895aac2cc",
+    "18bcd289-eada-499d-821b-64d232da4cda",
+    "37d5b96b-2c27-4d1b-a7e4-2fa290e6d2d6",
+    "783a0cba-fdc5-44e3-85a3-e16e14d3cd04"
+  ],
+  "assembly:/_pro/scenes/missions/sheep/scene_adonis.entity": [
+    "78477425-7330-4092-ad71-6548e07ccc93",
+    "40e5cc64-9aba-4f1a-9d37-a2e558e118b6",
+    "0f13f00b-abb4-4cdd-bd9d-748514b941d5",
+    "d08b7d6d-9b1f-4131-bb44-4ebd2cdb1cec"
+  ],
+  "assembly:/_pro/scenes/missions/hokkaido/scene_mamushi.entity": [
+    "85ef518f-0e94-4e5e-9fd2-66fb84d2d0bb",
+    "fedf6cd3-d076-4037-b7d8-1449726b4c0a",
+    "a786fc74-b379-41f4-a4ac-ce970ee88b2c",
+    "2fc483c8-500c-4475-ba5d-e2cdd6ccc64c",
+    "0e7dd303-c9bb-42cc-aca0-70499931d098",
+    "bdc80464-31dd-440d-ad79-2767b923a0a4",
+    "74b1ad25-06cd-41a2-9cf5-9dd5dac7345d",
+    "df752dfa-623d-4750-83a6-8b4aba1d8e08",
+    "aca2b971-d13e-4291-9a4d-c48605ad5566"
+  ],
+  "assembly:/_pro/scenes/missions/opulent/mission_stingray/scene_stingray_basic.entity": [
+    "7c0ea7df-ea2b-4b10-8398-5f2667dd7c40",
+    "544329a2-d961-461d-a254-a1712ecca3bb",
+    "0cf9b2b4-e440-40d8-a466-a2e374b9f6af",
+    "59224315-c825-42ce-a121-ee0d09558431",
+    "272a52f4-e93e-4d73-8d39-612594bd1013",
+    "6fbe6552-8e48-4971-824a-62cac516638e"
+  ]
+}

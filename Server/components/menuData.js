@@ -498,12 +498,64 @@ app.get('/leaderboardsview', extractToken, async (req, res) => {
     res.json(JSON.parse(await readFile(path.join('menudata', 'menudata', 'leaderboardsview.json')))); // stripped template
 });
 
-app.get('/selectagencypickup', extractToken, (req, res) => {
-    res.status(404).end(); // TODO
+app.get('/selectagencypickup', extractToken, async (req, res) => {
+    let selectagencypickup = JSON.parse(await readFile(path.join('menudata', 'menudata', 'selectagencypickup.json'))); // template
+    const userData = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
+    const pickupData = JSON.parse(await readFile(path.join('menudata', 'menudata', 'AgencyPickups.json')));
+    readFile(path.join('contractdata', `${req.query.contractId}.json`)).then(async contractfile => {
+        const contractData = JSON.parse(contractfile);
+        const pickupsInScene = pickupData[contractData.Metadata.ScenePath.toLowerCase()];
+        const unlockedAgencyPickups = userData.Extensions.inventory.filter(item => item.Unlockable.Type == 'agencypickup')
+            .map(i => i.Unlockable)
+            .filter(unlockable => unlockable.Properties.RepositoryId);
+
+        selectagencypickup.data = {
+            Unlocked: unlockedAgencyPickups.map(unlockable => unlockable.Properties.RepositoryId),
+            Contract: contractData,
+            OrderedUnlocks: unlockedAgencyPickups.filter(unlockable => pickupsInScene.includes(unlockable.Properties.RepositoryId))
+                .sort((a, b) => a.Properties.UnlockOrder - b.Properties.UnlockOrder),
+            UserCentric: generateUserCentric(contractData, userData),
+        };
+        res.json(selectagencypickup);
+    }).catch(err => {
+        if (err.code == 'ENOENT') {
+            console.error(`Requested /selectagencypickup for unknown contract: ${path.basename(err.path, '.json')}`);
+            res.status(404).end();
+        } else {
+            console.error(err);
+            res.status(500).end();
+        }
+    });
 });
 
-app.get('/selectentrance', extractToken, (req, res) => {
-    res.status(404).end(); // TODO
+app.get('/selectentrance', extractToken, async (req, res) => {
+    let selectentrance = JSON.parse(await readFile(path.join('menudata', 'menudata', 'selectentrance.json'))); // template
+    const userData = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
+    const entranceData = JSON.parse(await readFile(path.join('menudata', 'menudata', 'Entrances.json')));
+    readFile(path.join('contractdata', `${req.query.contractId}.json`)).then(async contractfile => {
+        const contractData = JSON.parse(contractfile);
+        const entrancesInScene = entranceData[contractData.Metadata.ScenePath.toLowerCase()];
+        const unlockedEntrances = userData.Extensions.inventory.filter(item => item.Unlockable.Type == 'access')
+            .map(i => i.Unlockable)
+            .filter(unlockable => unlockable.Properties.RepositoryId);
+
+        selectentrance.data = {
+            Unlocked: unlockedEntrances.map(unlockable => unlockable.Properties.RepositoryId),
+            Contract: contractData,
+            OrderedUnlocks: unlockedEntrances.filter(unlockable => entrancesInScene.includes(unlockable.Properties.RepositoryId))
+                .sort((a, b) => a.Properties.UnlockOrder - b.Properties.UnlockOrder),
+            UserCentric: generateUserCentric(contractData, userData),
+        };
+        res.json(selectentrance);
+    }).catch(err => {
+        if (err.code == 'ENOENT') {
+            console.error(`Requested /selectentrance for unknown contract: ${path.basename(err.path, '.json')}`);
+            res.status(404).end();
+        } else {
+            console.error(err);
+            res.status(500).end();
+        }
+    });
 });
 
 app.get('/missionendready', async (req, res) => {
