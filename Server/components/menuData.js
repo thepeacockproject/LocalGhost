@@ -297,7 +297,8 @@ app.get('/Planning', extractToken, async (req, res) => {
     const repo = JSON.parse(await readFile(path.join('userdata', 'allunlockables.json')));
     readFile(path.join('contractdata', `${req.query.contractid}.json`)).then(async contractfile => {
         const contractData = JSON.parse(contractfile);
-        const creatorProfile = (await resolveProfiles([contractData.Metadata.CreatorUserId]))[0];
+        const creatorProfile = (await resolveProfiles([contractData.Metadata.CreatorUserId]))[0]
+            || (await resolveProfiles(['fadb923c-e6bb-4283-a537-eb4d1150262e']))[0]; // use IOI profile if profile not found
         const sublocation = repo.find(entry => entry.Id == contractData.Metadata.Location);
         sublocation.DisplayNameLocKey = `UI_${sublocation.Id}_NAME`;
         res.json({
@@ -417,7 +418,7 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
                 },
             });
         } else if (objective.Type == 'statemachine' && objective.Definition.States && objective.Definition.States.Start
-            && objective.Definition.States.Start.Kill) {
+            && objective.Definition.States.Start.Kill) { // This objective can possibly be displayed as a simple kill objective
             const a = Array.isArray(objective.Definition.States.Start.Kill) ?
                 objective.Definition.States.Start.Kill.filter(kill => kill.Transition == 'Success') :
                 (objective.Definition.States.Start.Kill.Transition == 'Success' ? [objective.Definition.States.Start.Kill] : []);
@@ -441,7 +442,7 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
             }
             // else: This is no simple kill objective: fall through to next block
         }
-        if (objective.HUDTemplate && objective.ObjectiveType && !objective.ExcludeFromScoring && !objective.Activation) {
+        if (objective.HUDTemplate && objective.ObjectiveType && !objective.Activation) {
             result.set(objective.Id, {
                 Type: objective.ObjectiveType,
                 Properties: {
@@ -458,7 +459,7 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
         // objective not shown on planning screen
     }
     if (GameChangers && GameChangers.length > 0) {
-        const gameChangerObjectives = await readFile(path.join('menudata', 'menudata', 'GameChangerObjectives.json'));
+        const gameChangerObjectives = JSON.parse(await readFile(path.join('menudata', 'menudata', 'GameChangerObjectives.json')));
         for (const gamechanger of GameChangers) {
             const objective = gameChangerObjectives.find(obj => obj.Id == gamechanger);
             if (objective) {
@@ -475,6 +476,10 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
     for (const { Id, IsNew } of GroupObjectiveDisplayOrder || Objectives) {
         const objective = result.get(Id);
         if (objective) {
+            if (!GroupObjectiveDisplayOrder && objective.ExcludeFromScoring) {
+                continue; // Do not show objectives with 'ExcludeFromScoring: true' if no custom sorting is present
+            }
+
             if (IsNew) {
                 objective.Properties.IsNew = true;
             }
