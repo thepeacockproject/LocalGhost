@@ -464,13 +464,13 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
         // objective not shown on planning screen
     }
     if (GameChangers && GameChangers.length > 0) {
-        const gameChangerObjectives = JSON.parse(await readFile(path.join('menudata', 'menudata', 'GameChangerObjectives.json')));
+        const gameChangerData = JSON.parse(await readFile(path.join('menudata', 'menudata', 'GameChangerProperties.json')));
         for (const gamechangerId of GameChangers) {
-            const objective = gameChangerObjectives[gamechangerId];
-            if (objective) {
+            const gameChangerProps = gameChangerData[gamechangerId];
+            if (gameChangerProps) {
                 result.set(gamechangerId, {
                     Type: 'gamechanger',
-                    Properties: objective,
+                    Properties: gameChangerProps,
                 });
             }
         }
