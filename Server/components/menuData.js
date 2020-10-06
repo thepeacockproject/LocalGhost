@@ -645,11 +645,14 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
         const gameChangerData = JSON.parse(await readFile(path.join('menudata', 'menudata', 'GameChangerProperties.json')));
         for (const gamechangerId of GameChangers) {
             const gameChangerProps = gameChangerData[gamechangerId];
-            if (gameChangerProps) {
+            if (gameChangerProps && !gameChangerProps.isHidden) {
                 if (!gameChangerProps.LongDescription) {
                     gameChangerProps.LongDescription = gameChangerProps.Description;
                 }
                 gameChangerProps.Id = gamechangerId;
+                delete gameChangerProps.isHidden;
+                delete gameChangerProps.Resource;
+                delete gameChangerProps.Objectives;
                 result.set(gamechangerId, {
                     Type: 'gamechanger',
                     Properties: gameChangerProps,
