@@ -465,10 +465,10 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
     }
     if (GameChangers && GameChangers.length > 0) {
         const gameChangerObjectives = JSON.parse(await readFile(path.join('menudata', 'menudata', 'GameChangerObjectives.json')));
-        for (const gamechanger of GameChangers) {
-            const objective = gameChangerObjectives.find(obj => obj.Id == gamechanger);
+        for (const gamechangerId of GameChangers) {
+            const objective = gameChangerObjectives[gamechangerId];
             if (objective) {
-                result.set(gamechanger, {
+                result.set(gamechangerId, {
                     Type: 'gamechanger',
                     Properties: objective,
                 });
