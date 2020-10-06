@@ -478,10 +478,10 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
 
 
     const sortedResult = [];
-    for (const { Id, IsNew } of GroupObjectiveDisplayOrder || Objectives) {
+    for (const { Id, IsNew, ExcludeFromScoring } of GroupObjectiveDisplayOrder || Objectives) {
         const objective = result.get(Id);
         if (objective) {
-            if (!GroupObjectiveDisplayOrder && objective.ExcludeFromScoring) {
+            if (!GroupObjectiveDisplayOrder && ExcludeFromScoring) {
                 continue; // Do not show objectives with 'ExcludeFromScoring: true' if no custom sorting is present
             }
 
