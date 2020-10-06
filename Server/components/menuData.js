@@ -468,6 +468,10 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
         for (const gamechangerId of GameChangers) {
             const gameChangerProps = gameChangerData[gamechangerId];
             if (gameChangerProps) {
+                if (!gameChangerProps.LongDescription) {
+                    gameChangerProps.LongDescription = gameChangerProps.Description;
+                }
+                gameChangerProps.Id = gamechangerId;
                 result.set(gamechangerId, {
                     Type: 'gamechanger',
                     Properties: gameChangerProps,
