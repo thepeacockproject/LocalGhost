@@ -23,6 +23,8 @@ app.post('/AuthenticationService/GetBlobOfflineCacheDatabaseDiff', (req, res) =>
        'menusystem/pages/hub/dashboard/dashboard.json',
        'menusystem/pages/hub/hub_content.json',
        'menusystem/pages/hub/dashboard/category_escalation/result.json',
+       'menusystem/pages/result/versusresult_content.json',
+       'menusystem/pages/multiplayer/content/lobbyslim.json',
     ]);
 });
 
