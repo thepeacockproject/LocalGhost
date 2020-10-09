@@ -631,7 +631,7 @@ async function generateUserCentric(contractData, userData, repoData) {
 
 app.post('/multiplayermatchstats', (req, res) => {
     const sessionDetails = contractSessions.get(req.query.contractSessionId);
-    if (sessionDetails) { // contract session not found
+    if (!sessionDetails) { // contract session not found
         res.status(404).end();
         return;
     }
