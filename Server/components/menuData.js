@@ -579,8 +579,8 @@ app.post('/multiplayermatchstatsready', (req, res) => {
         template: null,
         data: {
             contractSessionId: req.query.contractSessionId,
-            isReady: contractSessions.has(req.query.contractSessionId),
-            retryCount: 3 - req.query.retryCount, // TODO: test
+            isReady: true,
+            retryCount: 1,
         },
     });
 });
@@ -631,9 +631,18 @@ async function generateUserCentric(contractData, userData, repoData) {
 
 app.post('/multiplayermatchstats', (req, res) => {
     const sessionDetails = contractSessions.get(req.query.contractSessionId);
+    if (sessionDetails) { // contract session not found
+        res.status(404).end();
+        return;
+    }
     const scores = [calculateMpScore(sessionDetails)];
     for(const opponentId in sessionDetails.ghost.Opponents) {
-        scores.push(calculateMpScore(contractSessions.get(sessionDetails.ghost.Opponents[opponentId])));
+        const opponentSessionDetails = contractSessions.get(sessionDetails.ghost.Opponents[opponentId]);
+        if (opponentSessionDetails) {
+            scores.push(calculateMpScore(opponentSessionDetails));
+        } else { // opponent contract session not found
+            scores.push({});
+        }
     }
     res.json({
         template: null,
