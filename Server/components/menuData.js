@@ -8,6 +8,7 @@ const { readFile } = require('atomically');
 
 const { extractToken, MaxPlayerLevel, xpRequiredForLevel, maxLevelForLocation } = require('./utils.js');
 const { resolveProfiles } = require('./profileHandler.js');
+const { contractSessions } = require('./eventHandler.js');
 
 const app = express.Router();
 
@@ -578,8 +579,8 @@ app.post('/multiplayermatchstatsready', (req, res) => {
         template: null,
         data: {
             contractSessionId: req.query.contractSessionId,
-            isReady: true,
-            retryCount: 1,
+            isReady: contractSessions.has(req.query.contractSessionId),
+            retryCount: 3 - req.query.retryCount, // TODO: test
         },
     });
 });
@@ -626,6 +627,42 @@ async function generateUserCentric(contractData, userData, repoData) {
             DlcImage: sublocation.Properties.DlcImage
         }
     };
+}
+
+app.post('/multiplayermatchstats', (req, res) => {
+    const sessionDetails = contractSessions.get(req.query.contractSessionId);
+    const scores = [calculateMpScore(sessionDetails)];
+    for(const opponentId in sessionDetails.ghost.Opponents) {
+        scores.push(calculateMpScore(contractSessions.get(sessionDetails.ghost.Opponents[opponentId])));
+    }
+    res.json({
+        template: null,
+        data: {
+            Players: scores,
+        },
+    });
+});
+
+function calculateMpScore(sessionDetails) {
+    return {
+        Header: {
+            GameMode: "Ghost",
+            Result: sessionDetails.ghost.IsWinner ? 'Win' : 'Loss', // TODO: opponent left?
+        },
+        Metadata: {},
+        Data: {
+            Score: sessionDetails.ghost.Score,
+            OpponentScore: sessionDetails.ghost.OpponentScore,
+            PacifiedNpcs: sessionDetails.pacifications.size,
+            DisguisesUsed: sessionDetails.disguisesUsed.size,
+            DisguisesRuined: sessionDetails.disguisesRuined.size, // custom
+            BodiesHidden: sessionDetails.bodiesHidden.size,
+            UnnoticedKills: sessionDetails.ghost.unnoticedKills,
+            KilledNpcs: sessionDetails.npcKills.size + sessionDetails.crowdNpcKills,
+            Deaths: sessionDetails.ghost.deaths,
+            Duration: sessionDetails.duration,
+        }
+    }
 }
 
 module.exports = app;

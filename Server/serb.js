@@ -222,6 +222,8 @@ app.all('*', (req, res) => {
     res.status(404).end()
 });
 
+setInterval(eventHandler.cleanupOldSessions, 1000 * 60 * 10).unref(); // cleanup old sessions every 10 minutes
+
 const httpServer = http.createServer(app);
 
 httpServer.listen(process.env.PORT || 80);

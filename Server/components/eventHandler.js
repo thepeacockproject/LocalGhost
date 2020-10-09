@@ -3,7 +3,7 @@
 
 const express = require('express');
 
-const { extractToken } = require ('./utils.js');
+const { extractToken } = require('./utils.js');
 
 const app = express.Router();
 
@@ -16,7 +16,7 @@ function encodePushMessage(timestamp, message) {
     let msglength = Buffer.byteLength(msgstr, 'utf8');
     let totallength = msglength + 8 + 80; // using a fixed length of 8 for the timestamp for now...
     totallength += 4 - (totallength % 4); // pad to nearest multiple of 4
-    let output  = Buffer.alloc(totallength);
+    let output = Buffer.alloc(totallength);
     let offset = 0;
 
     offset = output.writeUInt32LE(totallength, offset);
@@ -79,7 +79,7 @@ function enqueuePushMessage(userid, message) {
 function enqueueEvent(userid, event) {
     let userQueue;
     let time = process.hrtime.bigint().toString();
-    event.CreatedAt = new Date().toISOString().slice(0,-1);
+    event.CreatedAt = new Date().toISOString().slice(0, -1);
     event.Token = time.toString();
     if (userQueue = eventQueue.get(userid)) {
         userQueue.push({
@@ -93,6 +93,31 @@ function enqueueEvent(userid, event) {
         }];
         eventQueue.set(userid, userQueue);
     }
+}
+
+let contractSessions = new Map();
+function newSession(sessionId) {
+    timestamp = new Date();
+
+    contractSessions.set(sessionId, {
+        sessionStart: timestamp,
+        lastUpdate: timestamp,
+        duration: 0,
+        ghost: {
+            Opponents: [],
+            deaths: 0,
+            unnoticedKills: 0,
+            Score: 0,
+            OpponentScore: 0,
+        },
+        crowdNpcKills: 0,
+        targetKills: new Set(),
+        npcKills: new Set(),
+        bodiesHidden: new Set(),
+        pacifications: new Set(),
+        disguisesUsed: new Set(),
+        disguisesRuined: new Set(),
+    });
 }
 
 app.post('/SaveAndSynchronizeEvents4', extractToken, express.json(), (req, res) => {
@@ -137,31 +162,67 @@ app.post('/SaveEvents2', extractToken, express.json(), (req, res) => {
 function saveEvents(userId, events) {
     let response = [];
     events.forEach(event => {
+        const session = contractSessions.get(event.ContractSessionId);
+        if (!session) { // session does not exist
+            res.status(400).end();
+            return;
+        }
+        session.duration = event.Timestamp;
+        session.lastUpdate = new Date();
+
         // Todo: handle more events
         if (event.Name == 'Ghost_PlayerDied') {
-
+            session.ghost.deaths += 1;
         } else if (event.Name == 'Ghost_TargetUnnoticed') {
-
+            session.ghost.unnoticedKills += 1;
         } else if (event.Name == 'Kill') {
-            if (!event.Value.IsTarget) {
-                // +1 NPC kill
-            }
-        } else if (event.Name == 'Pacify') {
-            // event.Value.RepositoryId
-        } else if (event.Name == 'BodyHidden') {
+            session.pacifications.delete(event.Value.RepositoryId);
 
+            if (event.Value.IsTarget) {
+                session.targetKills.add(event.Value.RepositoryId);
+            } else {
+                session.npcKills.add(event.Value.RepositoryId);
+            }
+        } else if (event.Name == 'CrowdNPC_Died') {
+            session.crowdNpcKills += 1;
+        } else if (event.Name == 'Pacify') {
+            session.pacifications.add(event.Value.RepositoryId);
+        } else if (event.Name == 'BodyHidden') {
+            session.bodiesHidden.add(event.Value.RepositoryId);
         } else if (event.Name == 'Disguise') {
-            
+            session.disguisesUsed.add(event.Value);
         } else if (event.Name == 'ContractStart') {
-            // event.Value.ConnectedSessions
+            session.disguisesUsed.add(event.Value.Disguise);
+        } else if (event.Name == 'Opponents') {
+            session.ghost.Opponents = event.Value.ConnectedSessions;
+        } else if (event.Name == 'MatchOver') {
+            session.ghost.Score = event.Value.MyScore;
+            session.ghost.OpponentScore = event.Value.OpponentScore;
+            session.ghost.IsWinner = event.Value.IsWinner;
+            session.ghost.IsDraw = event.Value.IsDraw;
+        } else if (event.Name == 'DisguiseBlown') {
+            session.disguisesRuined.add(event.Value);
+        } else if (event.Name == 'BrokenDisguiseCleared') {
+            session.disguisesRuined.delete(event.Value);
         }
         response.push(process.hrtime.bigint().toString());
     });
     return response;
 }
 
+function cleanupOldSessions() {
+    for (const [sessionId, sessionDetails] of contractSessions) {
+        if (new Date() - sessionDetails.lastUpdate > 1000 * 60 * 60) { // if session has not received an event in the past hour
+            contractSessions.delete(sessionId);
+        }
+    }
+}
+
 module.exports = {
     router: app,
     enqueuePushMessage,
     enqueueEvent,
+    contractSessions,
+    newSession,
+    cleanupOldSessions,
 };

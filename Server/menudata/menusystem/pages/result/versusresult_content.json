@@ -290,14 +290,19 @@
                   "$then": {
                     "stats": [
                       {
+                        "name": "$loc UI_MENU_MATCH_STATS_UNNOTICED_KILLS",
+                        "player1": "{$.MatchStats.Players[0]}.Data.UnnoticedKills",
+                        "player2": "{$.MatchStats.Players[1]}.Data.UnnoticedKills"
+                      },
+                      {
                         "name": "$loc UI_MENU_MATCH_STATS_PACIFIED_NPCS",
                         "player1": "{$.MatchStats.Players[0]}.Data.PacifiedNpcs",
                         "player2": "{$.MatchStats.Players[1]}.Data.PacifiedNpcs"
                       },
                       {
-                        "name": "$loc UI_MENU_MATCH_STATS_DISGUISES_USED",
-                        "player1": "{$.MatchStats.Players[0]}.Data.DisguisesUsed",
-                        "player2": "{$.MatchStats.Players[1]}.Data.DisguisesUsed"
+                        "name": "$loc UI_MENU_MATCH_STATS_NPC_KILLS",
+                        "player1": "{$.MatchStats.Players[0]}.Data.KilledNpcs",
+                        "player2": "{$.MatchStats.Players[1]}.Data.KilledNpcs"
                       },
                       {
                         "name": "$loc UI_MENU_MATCH_STATS_BODIES_HIDDEN",
@@ -305,14 +310,14 @@
                         "player2": "{$.MatchStats.Players[1]}.Data.BodiesHidden"
                       },
                       {
-                        "name": "$loc UI_MENU_MATCH_STATS_UNNOTICED_KILLS",
-                        "player1": "{$.MatchStats.Players[0]}.Data.UnnoticedKills",
-                        "player2": "{$.MatchStats.Players[1]}.Data.UnnoticedKills"
+                        "name": "$loc UI_MENU_MATCH_STATS_DISGUISES_USED",
+                        "player1": "{$.MatchStats.Players[0]}.Data.DisguisesUsed",
+                        "player2": "{$.MatchStats.Players[1]}.Data.DisguisesUsed"
                       },
                       {
-                        "name": "$loc UI_MENU_MATCH_STATS_NPC_KILLS",
-                        "player1": "{$.MatchStats.Players[0]}.Data.KilledNpcs",
-                        "player2": "{$.MatchStats.Players[1]}.Data.KilledNpcs"
+                        "name": "Disguises Ruined",
+                        "player1": "{$.MatchStats.Players[0]}.Data.DisguisesRuined",
+                        "player2": "{$.MatchStats.Players[1]}.Data.DisguisesRuined"
                       },
                       {
                         "name": "$loc UI_MENU_MATCH_STATS_DEATHS",
