@@ -168,7 +168,14 @@ namespace Hitman2Patcher
 
 		private void button2_Click(object sender, EventArgs e)
 		{
-			Process.Start("steam://run/863550");
+			if (Process.GetProcessesByName("steam").Length > 0)
+			{
+				Process.Start("steam://run/863550");
+			}
+			else
+			{
+				MessageBox.Show("Please launch steam first, before using this button.");
+			}
 		}
 	}
 }
