@@ -193,7 +193,7 @@ app.head('/resources-7-17/dynamic_resources_pc_release_rpkg', (req, res) => {
 });
 
 app.get('/files/onlineconfig.json', (req, res) => {
-    res.sendFile('static/onlineconfig.json', {
+    res.sendFile(path.join('static', 'onlineconfig.json'), {
         root: '.',
         headers: {
             'Content-Type': 'application/octet-stream',
