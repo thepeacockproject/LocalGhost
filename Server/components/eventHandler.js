@@ -164,7 +164,6 @@ function saveEvents(userId, events) {
     events.forEach(event => {
         const session = contractSessions.get(event.ContractSessionId);
         if (!session) { // session does not exist
-            res.status(400).end();
             return;
         }
         session.duration = event.Timestamp;
