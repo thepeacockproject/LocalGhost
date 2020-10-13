@@ -6,7 +6,7 @@ const path = require('path');
 const { writeFile, readFile } = require('atomically');
 
 
-const { extractToken, MaxPlayerLevel } = require ('./utils.js');
+const { extractToken, MaxPlayerLevel } = require('./utils.js');
 
 const app = express.Router();
 
@@ -19,12 +19,12 @@ app.post('/ProfileService/GetPlatformEntitlements', (req, res) => {
 
 app.post('/AuthenticationService/GetBlobOfflineCacheDatabaseDiff', (req, res) => {
     // Which menu files should be loaded from the server?
-   res.json([
-       'menusystem/pages/hub/dashboard/dashboard.json',
-       'menusystem/pages/hub/hub_content.json',
-       'menusystem/pages/hub/dashboard/category_escalation/result.json',
-       'menusystem/pages/result/versusresult_content.json',
-       'menusystem/pages/multiplayer/content/lobbyslim.json',
+    res.json([
+        'menusystem/pages/hub/dashboard/dashboard.json',
+        'menusystem/pages/hub/hub_content.json',
+        'menusystem/pages/hub/dashboard/category_escalation/result.json',
+        'menusystem/pages/result/versusresult_content.json',
+        'menusystem/pages/multiplayer/content/lobbyslim.json',
     ]);
 });
 
@@ -124,24 +124,38 @@ app.post('/GamePersistentDataService/SaveData', extractToken, express.json(), as
     res.json(null);
 })
 
-app.post('/ChallengesService/GetActiveChallengesAndProgression', extractToken, express.json(), (req, res) => {
-    // TODO
-    res.json([]);
+app.post('/ChallengesService/GetActiveChallengesAndProgression', extractToken, express.json(), async (req, res) => {
+    const challenges = [];
+    challenges.push(...JSON.parse(await readFile(path.join('challenges', 'global.json')))); // TODO: more challenges
+    // TODO: location specific challenges
+
+    for (const challenge of challenges) { // TODO: actual completion data
+        challenge.Progression = {
+            ChallengeId: challenge.Challenge.Id,
+            ProfileId: req.jwt.unique_name,
+            Completed: false,
+            State: {},
+            ETag: `W/\"datetime'${encodeURIComponent(new Date().toISOString())}'\"`,
+            CompletedAt: null,
+            MustBeSaved: false
+        };
+    }
+
+    res.json(challenges);
 });
 
 app.post('/HubPagesService/GetChallengeTreeFor', extractToken, express.json(), (req, res) => {
-    // TODO
     res.json({
         Data: {
-            Children: [],
+            Children: [], // TODO: Challenges for location
         },
         LevelsDefinition: {
-            Location: [
+            Location: [ // TODO: xp required for each level in location
                 0
             ],
             PlayerProfile: {
                 Version: 1,
-                XpPerLevel: 6000,
+                XpPerLevel: 6000, // TODO: make dynamic?
                 MaxLevel: MaxPlayerLevel,
             }
         }
