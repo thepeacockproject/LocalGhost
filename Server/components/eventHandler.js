@@ -120,7 +120,7 @@ function newSession(sessionId) {
     });
 }
 
-app.post('/SaveAndSynchronizeEvents4', extractToken, express.json(), (req, res) => {
+app.post('/SaveAndSynchronizeEvents4', extractToken, express.json({ limit: '5Mb' }), (req, res) => {
     if (req.body.userId != req.jwt.unique_name) {
         res.status(403).send(); // Trying to save events for other user
     }
@@ -151,7 +151,7 @@ app.post('/SaveAndSynchronizeEvents4', extractToken, express.json(), (req, res) 
     });
 });
 
-app.post('/SaveEvents2', extractToken, express.json(), (req, res) => {
+app.post('/SaveEvents2', extractToken, express.json({ limit: '5Mb' }), (req, res) => {
     if (req.jwt.unique_name != req.body.userId) {
         res.status(403).send(); // Trying to save events for other user
         return;
