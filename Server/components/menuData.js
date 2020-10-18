@@ -425,26 +425,107 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
             });
         } else if (objective.Type == 'statemachine' && objective.Definition.States && objective.Definition.States.Start
             && objective.Definition.States.Start.Kill) { // This objective can possibly be displayed as a simple kill objective
-            const a = Array.isArray(objective.Definition.States.Start.Kill) ?
-                objective.Definition.States.Start.Kill.filter(kill => kill.Transition == 'Success') :
-                (objective.Definition.States.Start.Kill.Transition == 'Success' ? [objective.Definition.States.Start.Kill] : []);
 
-            if (a.length == 1 && a[0].Condition.$eq) { // TODO: check more complex structures, see e359075e-a510-4b7c-a461-477b789ca7e4
-                const index = a[0].Condition.$eq.indexOf('$Value.RepositoryId');
-                if (index != -1) {
-                    let targetId = a[0].Condition.$eq[1 - index];
-                    if (targetId.startsWith('$')) {
-                        continue; // TODO: get target id from dynamic variables
-                    }
-
-                    result.set(objective.Id, { // Custom objective is actually a simple kill objective
-                        Type: 'kill',
-                        Properties: {
-                            Id: targetId,
-                            Conditions: [], // TODO?
-                        }
-                    });
+            let simpleKill = false;
+            let conditionsRequired = false;
+            let failsWithoutConditions = false;
+            let targetId;
+            let Conditions = objective.TargetConditions ? objective.TargetConditions.map(condition => {
+                switch (condition.Type) {
+                    case 'weapontype':
+                        return {
+                            Type: condition.Type,
+                            RepositoryId: condition.RepositoryId,
+                            HardCondition: condition.HardCondition,
+                            ObjectiveId: uuid.NIL,
+                            KillMethod: '',
+                        };
+                    case 'killmethod':
+                        return {
+                            Type: condition.Type,
+                            RepositoryId: uuid.NIL,
+                            HardCondition: condition.HardCondition,
+                            ObjectiveId: uuid.NIL,
+                            KillMethod: condition.KillMethod,
+                        };
                 }
+            }) : [];
+
+            for (const event in objective.Definition.States.Start) {
+                const eventActions = Array.isArray(objective.Definition.States.Start[event]) ?
+                    objective.Definition.States.Start[event] : [objective.Definition.States.Start[event]]; // can be array or object -> make array if object
+                if (event == 'Kill') {
+                    for (const eventAction of eventActions) {
+                        if (eventAction.Transition == 'Success') {
+                            // TODO: check more complex structures, see e359075e-a510-4b7c-a461-477b789ca7e4
+                            let andConditions = (eventAction.Condition.$eq && [eventAction.Condition]) || eventAction.Condition.$and;
+                            if (andConditions && andConditions.length > 0) {
+                                for (const condition of andConditions) {
+                                    if (condition.$eq) {
+                                        const repoStrIndex = condition.$eq.indexOf('$Value.RepositoryId');
+                                        const killItemCatStrIndex = condition.$eq.indexOf('$Value.KillItemCategory');
+                                        if (repoStrIndex != -1) { // killed target id is checked
+                                            if (targetId && targetId != condition.$eq[1 - repoStrIndex]) {
+                                                // TargetId checked against different ids (?) -> no simple kill
+                                                simpleKill = false;
+                                                break;
+                                            }
+                                            targetId = condition.$eq[1 - repoStrIndex];
+                                            if (targetId.startsWith('$')) {
+                                                simpleKill = false; // TODO?: get target id from dynamic variables
+                                                break;
+                                            } else {
+                                                simpleKill = true;
+                                            }
+                                        } else if (killItemCatStrIndex != -1) { // kill item category is checked
+                                            conditionsRequired = true;
+                                        }
+                                    } else if (condition.$any && condition.$any.in == '$Value.DamageEvents') {
+                                        // some check is done on the damage events
+                                        conditionsRequired = true;
+                                    }
+                                }
+                            }
+                        } else if (eventAction.Transition == 'Failure' && objective.TargetConditions) {
+                            let condition = eventAction.Condition.$eq && eventAction.Condition;
+                            if (eventAction.Condition.$and && eventAction.Condition.$and.length == 1) { // single value in $and block
+                                condition = eventAction.Condition.$and[0];
+                            }
+                            if (condition && condition.$eq) {
+                                const index = condition.$eq.indexOf('$Value.RepositoryId');
+                                if (index != -1) {
+                                    targetId = condition.$eq[1 - index];
+                                    if (targetId.startsWith('$')) {
+                                        simpleKill = false; // TODO?: get target id from dynamic variables
+                                        break;
+                                    } else {
+                                        // Objective fails if regular kill
+                                        failsWithoutConditions = true;
+                                    }
+                                }
+                            }
+                        } else if (eventAction.Transition) {
+                            // Transition to other state than success -> no simple kill
+                            simpleKill = false;
+                            break;
+                        }
+                    }
+                } else {
+                    if (eventActions.some(eventAction => eventAction.Transition)) {
+                        simpleKill = false; // some other event than kill can transition to other state -> no simple kill
+                        break;
+                    }
+                }
+            }
+
+            if (simpleKill && targetId && ((Conditions.length > 0 == conditionsRequired) && (conditionsRequired == failsWithoutConditions))) {
+                result.set(objective.Id, { // Custom objective is actually a simple kill objective
+                    Type: 'kill',
+                    Properties: {
+                        Id: targetId,
+                        Conditions: Conditions, // TODO?
+                    }
+                });
             }
             // else: This is no simple kill objective: fall through to next block
         }
@@ -636,7 +717,7 @@ app.post('/multiplayermatchstats', (req, res) => {
         return;
     }
     const scores = [calculateMpScore(sessionDetails)];
-    for(const opponentId in sessionDetails.ghost.Opponents) {
+    for (const opponentId in sessionDetails.ghost.Opponents) {
         const opponentSessionDetails = contractSessions.get(sessionDetails.ghost.Opponents[opponentId]);
         if (opponentSessionDetails) {
             scores.push(calculateMpScore(opponentSessionDetails));
