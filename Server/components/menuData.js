@@ -412,6 +412,115 @@ app.get('/Planning', extractToken, async (req, res) => {
     });
 });
 
+app.get('/leaderboardsview', extractToken, async (req, res) => {
+    res.json(JSON.parse(await readFile(path.join('menudata', 'menudata', 'leaderboardsview.json')))); // stripped template
+});
+
+app.get('/selectagencypickup', extractToken, async (req, res) => {
+    let selectagencypickup = JSON.parse(await readFile(path.join('menudata', 'menudata', 'selectagencypickup.json'))); // template
+    const userData = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
+    const pickupData = JSON.parse(await readFile(path.join('menudata', 'menudata', 'AgencyPickups.json')));
+    readFile(path.join('contractdata', `${req.query.contractId}.json`)).then(async contractfile => {
+        const contractData = JSON.parse(contractfile);
+        const pickupsInScene = pickupData[contractData.Metadata.ScenePath.toLowerCase()];
+        const unlockedAgencyPickups = userData.Extensions.inventory.filter(item => item.Unlockable.Type == 'agencypickup')
+            .map(i => i.Unlockable)
+            .filter(unlockable => unlockable.Properties.RepositoryId);
+
+        selectagencypickup.data = {
+            Unlocked: unlockedAgencyPickups.map(unlockable => unlockable.Properties.RepositoryId),
+            Contract: contractData,
+            OrderedUnlocks: unlockedAgencyPickups.filter(unlockable => pickupsInScene.includes(unlockable.Properties.RepositoryId))
+                .sort((a, b) => a.Properties.UnlockOrder - b.Properties.UnlockOrder),
+            UserCentric: generateUserCentric(contractData, userData),
+        };
+        res.json(selectagencypickup);
+    }).catch(err => {
+        if (err.code == 'ENOENT') {
+            console.error(`Requested /selectagencypickup for unknown contract: ${path.basename(err.path, '.json')}`);
+            res.status(404).end();
+        } else {
+            console.error(err);
+            res.status(500).end();
+        }
+    });
+});
+
+app.get('/selectentrance', extractToken, async (req, res) => {
+    let selectentrance = JSON.parse(await readFile(path.join('menudata', 'menudata', 'selectentrance.json'))); // template
+    const userData = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
+    const entranceData = JSON.parse(await readFile(path.join('menudata', 'menudata', 'Entrances.json')));
+    readFile(path.join('contractdata', `${req.query.contractId}.json`)).then(async contractfile => {
+        const contractData = JSON.parse(contractfile);
+        const entrancesInScene = entranceData[contractData.Metadata.ScenePath.toLowerCase()];
+        const unlockedEntrances = userData.Extensions.inventory.filter(item => item.Unlockable.Type == 'access')
+            .map(i => i.Unlockable)
+            .filter(unlockable => unlockable.Properties.RepositoryId);
+
+        selectentrance.data = {
+            Unlocked: unlockedEntrances.map(unlockable => unlockable.Properties.RepositoryId),
+            Contract: contractData,
+            OrderedUnlocks: unlockedEntrances.filter(unlockable => entrancesInScene.includes(unlockable.Properties.RepositoryId))
+                .sort((a, b) => a.Properties.UnlockOrder - b.Properties.UnlockOrder),
+            UserCentric: generateUserCentric(contractData, userData),
+        };
+        res.json(selectentrance);
+    }).catch(err => {
+        if (err.code == 'ENOENT') {
+            console.error(`Requested /selectentrance for unknown contract: ${path.basename(err.path, '.json')}`);
+            res.status(404).end();
+        } else {
+            console.error(err);
+            res.status(500).end();
+        }
+    });
+});
+
+app.get('/missionendready', async (req, res) => {
+    let missionendready = JSON.parse(await readFile(path.join('menudata', 'menudata', 'missionendready.json'))); // template
+    missionendready.data = {
+        contractSessionId: req.query.contractSessionId,
+        missionEndReady: true,
+        retryCount: 1,
+    };
+    res.json(missionendready);
+});
+
+app.post('/multiplayermatchstatsready', (req, res) => {
+    // TODO: keep track of match stats return em with /multiplayermatchstats
+    res.json({
+        template: null,
+        data: {
+            contractSessionId: req.query.contractSessionId,
+            isReady: true,
+            retryCount: 1,
+        },
+    });
+});
+
+app.post('/multiplayermatchstats', (req, res) => {
+    const sessionDetails = contractSessions.get(req.query.contractSessionId);
+    if (!sessionDetails) { // contract session not found
+        res.status(404).end();
+        return;
+    }
+    const scores = [calculateMpScore(sessionDetails)];
+    for (const opponentId in sessionDetails.ghost.Opponents) {
+        const opponentSessionDetails = contractSessions.get(sessionDetails.ghost.Opponents[opponentId]);
+        if (opponentSessionDetails) {
+            scores.push(calculateMpScore(opponentSessionDetails));
+        } else { // opponent contract session not found
+            scores.push({});
+        }
+    }
+    res.json({
+        template: null,
+        data: {
+            Players: scores,
+        },
+    });
+});
+
 async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrder) {
     const result = new Map();
     for (const objective of Objectives) {
@@ -580,92 +689,6 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
     return sortedResult;
 }
 
-app.get('/leaderboardsview', extractToken, async (req, res) => {
-    res.json(JSON.parse(await readFile(path.join('menudata', 'menudata', 'leaderboardsview.json')))); // stripped template
-});
-
-app.get('/selectagencypickup', extractToken, async (req, res) => {
-    let selectagencypickup = JSON.parse(await readFile(path.join('menudata', 'menudata', 'selectagencypickup.json'))); // template
-    const userData = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
-    const pickupData = JSON.parse(await readFile(path.join('menudata', 'menudata', 'AgencyPickups.json')));
-    readFile(path.join('contractdata', `${req.query.contractId}.json`)).then(async contractfile => {
-        const contractData = JSON.parse(contractfile);
-        const pickupsInScene = pickupData[contractData.Metadata.ScenePath.toLowerCase()];
-        const unlockedAgencyPickups = userData.Extensions.inventory.filter(item => item.Unlockable.Type == 'agencypickup')
-            .map(i => i.Unlockable)
-            .filter(unlockable => unlockable.Properties.RepositoryId);
-
-        selectagencypickup.data = {
-            Unlocked: unlockedAgencyPickups.map(unlockable => unlockable.Properties.RepositoryId),
-            Contract: contractData,
-            OrderedUnlocks: unlockedAgencyPickups.filter(unlockable => pickupsInScene.includes(unlockable.Properties.RepositoryId))
-                .sort((a, b) => a.Properties.UnlockOrder - b.Properties.UnlockOrder),
-            UserCentric: generateUserCentric(contractData, userData),
-        };
-        res.json(selectagencypickup);
-    }).catch(err => {
-        if (err.code == 'ENOENT') {
-            console.error(`Requested /selectagencypickup for unknown contract: ${path.basename(err.path, '.json')}`);
-            res.status(404).end();
-        } else {
-            console.error(err);
-            res.status(500).end();
-        }
-    });
-});
-
-app.get('/selectentrance', extractToken, async (req, res) => {
-    let selectentrance = JSON.parse(await readFile(path.join('menudata', 'menudata', 'selectentrance.json'))); // template
-    const userData = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
-    const entranceData = JSON.parse(await readFile(path.join('menudata', 'menudata', 'Entrances.json')));
-    readFile(path.join('contractdata', `${req.query.contractId}.json`)).then(async contractfile => {
-        const contractData = JSON.parse(contractfile);
-        const entrancesInScene = entranceData[contractData.Metadata.ScenePath.toLowerCase()];
-        const unlockedEntrances = userData.Extensions.inventory.filter(item => item.Unlockable.Type == 'access')
-            .map(i => i.Unlockable)
-            .filter(unlockable => unlockable.Properties.RepositoryId);
-
-        selectentrance.data = {
-            Unlocked: unlockedEntrances.map(unlockable => unlockable.Properties.RepositoryId),
-            Contract: contractData,
-            OrderedUnlocks: unlockedEntrances.filter(unlockable => entrancesInScene.includes(unlockable.Properties.RepositoryId))
-                .sort((a, b) => a.Properties.UnlockOrder - b.Properties.UnlockOrder),
-            UserCentric: generateUserCentric(contractData, userData),
-        };
-        res.json(selectentrance);
-    }).catch(err => {
-        if (err.code == 'ENOENT') {
-            console.error(`Requested /selectentrance for unknown contract: ${path.basename(err.path, '.json')}`);
-            res.status(404).end();
-        } else {
-            console.error(err);
-            res.status(500).end();
-        }
-    });
-});
-
-app.get('/missionendready', async (req, res) => {
-    let missionendready = JSON.parse(await readFile(path.join('menudata', 'menudata', 'missionendready.json'))); // template
-    missionendready.data = {
-        contractSessionId: req.query.contractSessionId,
-        missionEndReady: true,
-        retryCount: 1,
-    };
-    res.json(missionendready);
-});
-
-app.post('/multiplayermatchstatsready', (req, res) => {
-    // TODO: keep track of match stats return em with /multiplayermatchstats
-    res.json({
-        template: null,
-        data: {
-            contractSessionId: req.query.contractSessionId,
-            isReady: true,
-            retryCount: 1,
-        },
-    });
-});
-
 async function generateUserCentric(contractData, userData, repoData) {
     const repo = repoData || JSON.parse(await readFile(path.join('userdata', 'allunlockables.json')));
     const sublocation = repo.find(entry => entry.Id == contractData.Metadata.Location);
@@ -709,29 +732,6 @@ async function generateUserCentric(contractData, userData, repoData) {
         }
     };
 }
-
-app.post('/multiplayermatchstats', (req, res) => {
-    const sessionDetails = contractSessions.get(req.query.contractSessionId);
-    if (!sessionDetails) { // contract session not found
-        res.status(404).end();
-        return;
-    }
-    const scores = [calculateMpScore(sessionDetails)];
-    for (const opponentId in sessionDetails.ghost.Opponents) {
-        const opponentSessionDetails = contractSessions.get(sessionDetails.ghost.Opponents[opponentId]);
-        if (opponentSessionDetails) {
-            scores.push(calculateMpScore(opponentSessionDetails));
-        } else { // opponent contract session not found
-            scores.push({});
-        }
-    }
-    res.json({
-        template: null,
-        data: {
-            Players: scores,
-        },
-    });
-});
 
 function calculateMpScore(sessionDetails) {
     return {
