@@ -539,26 +539,13 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
             let conditionsRequired = false;
             let failsWithoutConditions = false;
             let targetId;
-            let Conditions = objective.TargetConditions ? objective.TargetConditions.map(condition => {
-                switch (condition.Type) {
-                    case 'weapontype':
-                        return {
-                            Type: condition.Type,
-                            RepositoryId: condition.RepositoryId,
-                            HardCondition: condition.HardCondition,
-                            ObjectiveId: uuid.NIL,
-                            KillMethod: '',
-                        };
-                    case 'killmethod':
-                        return {
-                            Type: condition.Type,
-                            RepositoryId: uuid.NIL,
-                            HardCondition: condition.HardCondition,
-                            ObjectiveId: uuid.NIL,
-                            KillMethod: condition.KillMethod,
-                        };
-                }
-            }) : [];
+            let Conditions = objective.TargetConditions ? objective.TargetConditions.map(condition => ({
+                Type: condition.Type,
+                RepositoryId: condition.RepositoryId || uuid.NIL,
+                HardCondition: condition.HardCondition || false,
+                ObjectiveId: condition.ObjectiveId || uuid.NIL,
+                KillMethod: condition.KillMethod || '',
+            })) : [];
 
             for (const event in objective.Definition.States.Start) {
                 const eventActions = Array.isArray(objective.Definition.States.Start[event]) ?
