@@ -614,7 +614,7 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
                 }
             }
 
-            if (simpleKill && targetId && ((Conditions.length > 0 == conditionsRequired) && (conditionsRequired == failsWithoutConditions))) {
+            if (simpleKill && targetId && (!conditionsRequired || Conditions.length > 0) && (conditionsRequired == failsWithoutConditions)) {
                 result.set(objective.Id, { // Custom objective is actually a simple kill objective
                     Type: 'kill',
                     Properties: {
