@@ -730,7 +730,7 @@ function calculateMpScore(sessionDetails) {
         Data: {
             Score: sessionDetails.ghost.Score,
             OpponentScore: sessionDetails.ghost.OpponentScore,
-            PacifiedNpcs: sessionDetails.pacifications.size,
+            PacifiedNpcs: [...sessionDetails.pacifications].filter(id => !sessionDetails.npcKills.has(id) && !sessionDetails.targetKills.has(id)).length,
             DisguisesUsed: sessionDetails.disguisesUsed.size,
             DisguisesRuined: sessionDetails.disguisesRuined.size, // custom
             BodiesHidden: sessionDetails.bodiesHidden.size,

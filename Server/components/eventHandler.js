@@ -175,8 +175,6 @@ function saveEvents(userId, events) {
         } else if (event.Name == 'Ghost_TargetUnnoticed') {
             session.ghost.unnoticedKills += 1;
         } else if (event.Name == 'Kill') {
-            session.pacifications.delete(event.Value.RepositoryId);
-
             if (event.Value.IsTarget) {
                 session.targetKills.add(event.Value.RepositoryId);
             } else {
