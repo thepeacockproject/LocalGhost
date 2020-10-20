@@ -553,13 +553,13 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
                 if (event == 'Kill') {
                     for (const eventAction of eventActions) {
                         if (eventAction.Transition == 'Success') {
-                            // TODO: check more complex structures, see e359075e-a510-4b7c-a461-477b789ca7e4
                             let andConditions = (eventAction.Condition.$eq && [eventAction.Condition]) || eventAction.Condition.$and;
                             if (andConditions && andConditions.length > 0) {
                                 for (const condition of andConditions) {
                                     if (condition.$eq) {
                                         const repoStrIndex = condition.$eq.indexOf('$Value.RepositoryId');
                                         const killItemCatStrIndex = condition.$eq.indexOf('$Value.KillItemCategory');
+                                        const disguiseRepoStrIndex = condition.$eq.indexOf('$Value.OutfitRepositoryId');
                                         if (repoStrIndex != -1) { // killed target id is checked
                                             if (targetId && targetId != condition.$eq[1 - repoStrIndex]) {
                                                 // TargetId checked against different ids (?) -> no simple kill
@@ -573,7 +573,8 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
                                             } else {
                                                 simpleKill = true;
                                             }
-                                        } else if (killItemCatStrIndex != -1) { // kill item category is checked
+                                        } else if (killItemCatStrIndex != -1 // kill item category is checked
+                                            || disguiseRepoStrIndex != -1) { // disguise id is checked
                                             conditionsRequired = true;
                                         }
                                     } else if (condition.$any && condition.$any.in == '$Value.DamageEvents') {
