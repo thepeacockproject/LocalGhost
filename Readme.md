@@ -9,8 +9,8 @@ The server acts as a replacement of the IOI servers that Hitman usually connects
 Things of note:
 
 - While using this, there is no connection at all to any IOI server (I think). This means you will not have your regular progression data, and right now, no progression at all. To still have some freedom in suit selection, all unlockable disguises are made available.
-- The server sends a modified main menu, so the only thing available will be ghost mode and the options screen.
-- The server currently does not keep track of any match stats, so the end screen will not show any.
+- The server sends a modified main menu, so the only thing available will be ghost mode, the options screen and possibly custom contracts.
+- The mission end screen is not implemented and will show you a 'This menu is not available' error, which you can just click away.
 - Matchmaking is not (yet) implemented. Inviting is the way to go.
 
 # Players
