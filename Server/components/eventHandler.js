@@ -117,6 +117,9 @@ function newSession(sessionId) {
         pacifications: new Set(),
         disguisesUsed: new Set(),
         disguisesRuined: new Set(),
+        spottedBy: new Set(),
+        witnesses: new Set(),
+        recording: 'NOT_SPOTTED',
     });
 }
 
@@ -201,6 +204,16 @@ function saveEvents(userId, events) {
             session.disguisesRuined.add(event.Value);
         } else if (event.Name == 'BrokenDisguiseCleared') {
             session.disguisesRuined.delete(event.Value);
+        } else if (event.Name == 'Spotted') {
+            session.spottedBy.add(...event.Value);
+        } else if (event.Name == 'Witnesses') {
+            session.witnesses.add(...event.Value);
+        } else if (event.Name == 'SecuritySystemRecorder') {
+            if (event.Value.event == 'spotted' && session.recording != 'ERASED') {
+                session.recording = 'SPOTTED';
+            } else if (event.Value.event == 'destroyed' || event.Value.event == 'erased') {
+                session.recording = 'ERASED';
+            }
         }
         response.push(process.hrtime.bigint().toString());
     });
