@@ -72,7 +72,7 @@
           "PreviouslySeenStaging": null,
           "Level": 1
         },
-        "location_bangkok":  {
+        "location_bangkok": {
           "Xp": 0,
           "PreviouslySeenXp": 0,
           "LastCompletedChallenge": "00000000-0000-0000-0000-000000000000",
@@ -373,7 +373,12 @@
         "VideoShown_briefing_ebola": true,
         "VideoShown_briefing_rabies": true,
         "VideoShown_briefing_flu": true,
-        "VideoShown_briefing_copperhead": true
+        "VideoShown_briefing_copperhead": true,
+        "VideoShown_briefing_mamba": true,
+        "VideoShown_briefing_anaconda": true,
+        "VideoShown_briefing_kingcobra": true,
+        "VideoShown_briefing_gartersnake": true,
+        "VideoShown_briefing_seagull_stoneknight": true
       },
       "EpilogueSeen": {}
     },
