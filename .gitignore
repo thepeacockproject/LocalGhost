@@ -26,6 +26,10 @@ Server/contractdata/**
 # except for the two ghost mode contracts
 !Server/contractdata/c854d9c7-8991-42db-a2e4-3cf93e645e81.json
 !Server/contractdata/d5ad70f4-7dbb-4b2b-b183-061778a51468.json
+# and the three sniper contracts
+!Server/contractdata/ff9f46cf-00bd-4c12-b887-eac491c3a96d.json
+!Server/contractdata/00e57709-e049-44c9-a2c3-7655e19884fb.json
+!Server/contractdata/25b20d86-bb5a-4ebd-b6bb-81ed2779c180.json
 
 # no custom server data
 Server/menudata/serverTile.json

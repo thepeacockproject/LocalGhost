@@ -132,7 +132,7 @@
               }
             }
           }
-        },        
+        },
         {
           "$if $not $isnull $.@global.CurrentBackgroundImage": {
             "$then": {
@@ -193,6 +193,11 @@
                   }
                 }
               ]
+            },
+            {
+              "$include": {
+                "$path": "menusystem/pages/hub/gamemodes/gamemodesoverview.json"
+              }
             },
             {
               "$include": {

@@ -326,7 +326,7 @@ app.get('/Planning', extractToken, async (req, res) => {
                 GroupData: {},
                 Entrances: [], // TODO
                 Location: sublocation,
-                LoadoutData: [
+                LoadoutData: contractData.Metadata.CharacterSetup ? null : [
                     {
                         SlotName: 'carriedweapon',
                         SlotId: '0',
@@ -521,6 +521,74 @@ app.post('/multiplayermatchstats', (req, res) => {
     });
 });
 
+app.get('/hitscategory', extractToken, async (req, res) => {
+    if (req.query.mode != 'dataonly') {
+        // TODO?
+        res.status(500).end();
+        return;
+    }
+    const userData = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
+    const repoData = JSON.parse(await readFile(path.join('userdata', 'allunlockables.json')));
+    let contractIds = [];
+    if (req.query.type == 'Sniper') {
+        contractIds = [
+            'ff9f46cf-00bd-4c12-b887-eac491c3a96d',
+            '00e57709-e049-44c9-a2c3-7655e19884fb',
+            '25b20d86-bb5a-4ebd-b6bb-81ed2779c180',
+        ];
+    } else {
+        // TODO
+    }
+
+    const UserCentricContracts = (await Promise.allSettled(contractIds.map(id => {
+        return readFile(path.join('contractdata', `${id}.json`)).then(file => {
+            return generateUserCentric(JSON.parse(file), userData, repoData);
+        });
+    }))).map(outcome => {
+        if (outcome.status == 'fulfilled') {
+            return outcome.value;
+        } else {
+            if (outcome.reason.code == 'ENOENT') {
+                console.error(`Attempted to resolve unknown contract: ${path.basename(outcome.reason.path, '.json')}`);
+                return null;
+            } else {
+                console.error(outcome.reason);
+                return null;
+            }
+        }
+    }).filter(data => data); // filter out nulls
+
+    res.json({
+        template: null,
+        data: {
+            Category: req.query.type,
+            Data: {
+                Type: req.query.type,
+                Hits: UserCentricContracts.map(userCentric => {
+                    const sublocation = repoData.find(entry => entry.Id == userCentric.Contract.Metadata.Location);
+                    const location = repoData.find(entry => entry.Id == sublocation.Properties.ParentLocation);
+                    return {
+                        Id: userCentric.Contract.Metadata.Id,
+                        UserCentricContract: userCentric,
+                        Location: location,
+                        SubLocation: sublocation,
+                        ChallengesCompleted: 0,
+                        ChallengesTotal: 0,
+                        LocationLevel: 1,
+                        LocationMaxLevel: 1,
+                        LocationCompletion: 1,
+                        LocationXPLeft: 0,
+                        LocationHideProgression: true,
+                    };
+                }),
+                Page: 0,
+                HasMore: false,
+            },
+            CurrentSubType: req.query.type,
+        },
+    });
+});
+
 async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrder) {
     const result = new Map();
     for (const objective of Objectives) {
@@ -683,6 +751,15 @@ async function generateUserCentric(contractData, userData, repoData) {
     sublocation.DisplayNameLocKey = `UI_${sublocation.Id}_NAME`;
     const maxlevel = maxLevelForLocation(sublocation.Properties.ProgressionKey);
     const locationProgression = userData.Extensions.progression.Locations[sublocation.Properties.ProgressionKey.toLowerCase()];
+    let hideProgression = false;
+    if (!locationProgression) {
+        hideProgression = true;
+        maxlevel = 1;
+        locationProgression = {
+            Level: 1,
+            Xp: 0,
+        }
+    }
     return {
         Contract: contractData,
         Data: {
@@ -694,7 +771,7 @@ async function generateUserCentric(contractData, userData, repoData) {
                 (locationProgression.Xp - xpRequiredForLevel(locationProgression.Level)) /
                 (xpRequiredForLevel(locationProgression.Level + 1) - xpRequiredForLevel(locationProgression.Level)),
             LocationXpLeft: (locationProgression.Level == maxlevel) ? 0 : xpRequiredForLevel(locationProgression.Level + 1) - locationProgression.Xp,
-            LocationHideProgression: false, // ?
+            LocationHideProgression: hideProgression, // ?
             ElusiveContractState: '', // ?
             IsFeatured: false,
             //LastPlayedAt: '2020-01-01T00:00:00.0000000Z', // ISO timestamp TODO
