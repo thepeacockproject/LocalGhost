@@ -25,7 +25,7 @@ app.get('/dashboard/Dashboard_Category_Escalation/10000000-0000-0000-0000-000000
             console.error(err);
         } // use empty array if no featuredContracts.json exists
     });
-    const contracts = (await Promise.allSettled(contractIds.map(id => {
+    const UserCentricContracts = (await Promise.allSettled(contractIds.map(id => {
         return readFile(path.join('contractdata', `${id}.json`)).then(file => {
             return generateUserCentric(JSON.parse(file), userData, repoData);
         });
@@ -51,7 +51,7 @@ app.get('/dashboard/Dashboard_Category_Escalation/10000000-0000-0000-0000-000000
                 Type: 'ContractList',
                 Title: 'ContractList',
                 Date: '2020-01-01T00:00:00.0000000Z',
-                Data: contracts.length > 0 ? contracts : null,
+                Data: UserCentricContracts.length > 0 ? UserCentricContracts : null,
             },
         },
     })
@@ -697,13 +697,13 @@ async function generateUserCentric(contractData, userData, repoData) {
             LocationHideProgression: false, // ?
             ElusiveContractState: '', // ?
             IsFeatured: false,
-            //LastPlayedAt: '2020-01-01T00:00:00.0000000Z', // ISO timestamp
+            //LastPlayedAt: '2020-01-01T00:00:00.0000000Z', // ISO timestamp TODO
             Completed: false, // relevant for featured contracts
             LocationId: sublocation.Id,
             ParentLocationId: sublocation.Properties.ParentLocation,
             CompletionData: {
                 Level: locationProgression.Level,
-                MaxLevel: maxLevelForLocation(sublocation.Properties.ProgressionKey),
+                MaxLevel: maxlevel,
                 XP: locationProgression.Xp,
                 Completion: (locationProgression.Level == maxlevel) ? 1 :
                     (locationProgression.Xp - xpRequiredForLevel(locationProgression.Level)) /
