@@ -326,7 +326,7 @@ app.get('/Planning', extractToken, async (req, res) => {
                 GroupData: {},
                 Entrances: [], // TODO
                 Location: sublocation,
-                LoadoutData: contractData.Metadata.CharacterSetup ? null : [
+                LoadoutData: contractData.Metadata.Type == 'sniper' ? null : [
                     {
                         SlotName: 'carriedweapon',
                         SlotId: '0',
