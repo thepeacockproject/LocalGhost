@@ -572,8 +572,8 @@ app.get('/hitscategory', extractToken, async (req, res) => {
                         UserCentricContract: userCentric,
                         Location: location,
                         SubLocation: sublocation,
-                        ChallengesCompleted: 0,
-                        ChallengesTotal: 0,
+                        ChallengesCompleted: 0, // TODO: challenges
+                        ChallengesTotal: 0, // TODO
                         LocationLevel: 1,
                         LocationMaxLevel: 1,
                         LocationCompletion: 1,
