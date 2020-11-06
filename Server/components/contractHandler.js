@@ -44,7 +44,7 @@ app.post('/GetForPlay2', express.json(), extractToken, async (req, res) => {
         });
 
         res.json(contractSesh);
-        eventHandler.newSession(contractSesh.ContractSessionId);
+        eventHandler.newSession(contractSesh.ContractSessionId, contractSesh.Contract.Metadata.Id, req.jwt.unique_name);
     }).catch(err => {
         if (err.code == 'ENOENT') {
             console.error(`Requested unknown contract: ${path.basename(err.path, '.json')}`);

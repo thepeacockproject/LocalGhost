@@ -96,12 +96,16 @@ function enqueueEvent(userid, event) {
 }
 
 let contractSessions = new Map();
-function newSession(sessionId) {
+function newSession(sessionId, contractId, userId) {
     timestamp = new Date();
 
     contractSessions.set(sessionId, {
         sessionStart: timestamp,
         lastUpdate: timestamp,
+        contractId: contractId,
+        userId: userId,
+        timerStart: 0,
+        timerEnd: 0,
         duration: 0,
         ghost: {
             Opponents: [],
@@ -119,7 +123,12 @@ function newSession(sessionId) {
         disguisesRuined: new Set(),
         spottedBy: new Set(),
         witnesses: new Set(),
+        bodiesFoundBy: new Set(),
+        killsNoticedBy: new Set(),
+        completedObjectives: new Set(),
         recording: 'NOT_SPOTTED',
+        lastAccident: 0,
+        lastKill: {},
     });
 }
 
@@ -166,11 +175,18 @@ function saveEvents(userId, events) {
     let response = [];
     events.forEach(event => {
         const session = contractSessions.get(event.ContractSessionId);
-        if (!session) { // session does not exist
-            return;
+        if (!session || session.contractId != event.ContractId || session.userId != userId) {
+            return; // session does not exist or contractid/userid doesn't match
         }
         session.duration = event.Timestamp;
         session.lastUpdate = new Date();
+
+        if (session.timerEnd != 0 && event.Timestamp > session.timerEnd) {
+            // Do not handle events that occur after exiting the level
+            // Todo: ExitInventory, ContractEnd, etc. will probably end up here.
+            response.push(process.hrtime.bigint().toString());
+            return;
+        }
 
         // Todo: handle more events
         if (event.Name == 'Ghost_PlayerDied') {
@@ -178,6 +194,15 @@ function saveEvents(userId, events) {
         } else if (event.Name == 'Ghost_TargetUnnoticed') {
             session.ghost.unnoticedKills += 1;
         } else if (event.Name == 'Kill') {
+            // Todo?: check for event.Value.KillContext == 1
+            if (session.lastKill.timestamp == event.Timestamp) {
+                session.lastKill.repositoryIds.push(event.Value.RepositoryId);
+            } else {
+                session.lastKill = {
+                    timestamp: event.Timestamp,
+                    repositoryIds: [event.Value.RepositoryId],
+                };
+            }
             if (event.Value.IsTarget) {
                 session.targetKills.add(event.Value.RepositoryId);
             } else {
@@ -213,6 +238,21 @@ function saveEvents(userId, events) {
                 session.recording = 'SPOTTED';
             } else if (event.Value.event == 'destroyed' || event.Value.event == 'erased') {
                 session.recording = 'ERASED';
+            }
+        } else if (event.Name == 'IntroCutEnd') {
+            session.timerStart = event.Timestamp;
+        } else if (event.Name == 'exit_gate') {
+            session.timerEnd = event.Timestamp;
+        } else if (event.Name == 'ObjectiveCompleted') {
+            session.completedObjectives.add(event.Value.Id);
+        } else if (event.Name == 'AccidentBodyFound') {
+            session.lastAccident = event.Timestamp;
+        } else if (event.Name == 'MurderedBodySeen') {
+            if (event.Timestamp != session.lastAccident) {
+                session.bodiesFoundBy.add(event.Value.Witness);
+                if (event.Timestamp == session.lastKill.timestamp) {
+                    session.killsNoticedBy.add(event.Value.Witness);
+                }
             }
         }
         response.push(process.hrtime.bigint().toString());
