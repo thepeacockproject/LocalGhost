@@ -60,10 +60,17 @@ function maxLevelForLocation(location) {
     return 1;
 }
 
+function getLocationCompletion(location, locationProgression) {
+    return (locationProgression.Level == maxLevelForLocation(location)) ? 1 :
+        (locationProgression.Xp - xpRequiredForLevel(locationProgression.Level)) /
+        (xpRequiredForLevel(locationProgression.Level + 1) - xpRequiredForLevel(locationProgression.Level));
+}
+
 module.exports = {
     extractToken,
     ServerVer,
     MaxPlayerLevel,
     xpRequiredForLevel,
     maxLevelForLocation,
+    getLocationCompletion,
 };
