@@ -9,6 +9,7 @@ const { readFile } = require('atomically');
 const { extractToken, MaxPlayerLevel, xpRequiredForLevel, maxLevelForLocation } = require('./utils.js');
 const { resolveProfiles } = require('./profileHandler.js');
 const { contractSessions } = require('./eventHandler.js');
+const scoreHandler = require('./scoreHandler.js');
 
 const app = express.Router();
 
@@ -588,6 +589,8 @@ app.get('/hitscategory', extractToken, async (req, res) => {
         },
     });
 });
+
+app.get('/missionend', extractToken, scoreHandler.missionend);
 
 async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrder) {
     const result = new Map();
