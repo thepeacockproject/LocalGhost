@@ -225,6 +225,7 @@ function saveEvents(userId, events) {
             session.ghost.OpponentScore = event.Value.OpponentScore;
             session.ghost.IsWinner = event.Value.IsWinner;
             session.ghost.IsDraw = event.Value.IsDraw;
+            session.timerEnd = event.Timestamp;
         } else if (event.Name == 'DisguiseBlown') {
             session.disguisesRuined.add(event.Value);
         } else if (event.Name == 'BrokenDisguiseCleared') {
