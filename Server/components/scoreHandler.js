@@ -9,6 +9,10 @@ const { contractSessions } = require('./eventHandler.js');
 
 async function missionend(req, res) {
     const sessionDetails = contractSessions.get(req.query.contractSessionId);
+    if (!sessionDetails) { // contract session not found
+        res.status(404).end();
+        return;
+    }
     if (sessionDetails.userId != req.jwt.unique_name) { // requested score for other user's session
         res.status(401).end();
         return;
@@ -19,10 +23,6 @@ async function missionend(req, res) {
     const sublocation = repo.find(entry => entry.Id == contractData.Metadata.Location);
     const maxlevel = maxLevelForLocation(sublocation.Properties.ProgressionKey);
     const locationProgression = userData.Extensions.progression.Locations[sublocation.Properties.ProgressionKey.toLowerCase()];
-    if (!sessionDetails) { // contract session not found
-        res.status(404).end();
-        return;
-    }
 
     let nonTargetKills = sessionDetails.npcKills.size + sessionDetails.crowdNpcKills;
 
@@ -43,7 +43,19 @@ async function missionend(req, res) {
                 Level: userData.Extensions.progression.PlayerProfileXP.ProfileLevel,
                 XPGain: 0,
             },
-            Challenges: [], // TODO
+            Challenges: [
+                {
+                    "ChallengeId": "d4ace567-1bb0-4d24-8bdc-bab36628c1cc",
+                    "ChallengeTags": [],
+                    "ChallengeName": "ui_prop_tool_wrench_rusty_name",
+                    "ChallengeImageUrl": "images/unlockables/item_perspective_4d2ecde8-79db-44b1-8f60-7a1a648f7d09_0.jpg",
+                    "ChallengeDescription": "Placeholder challenge",
+                    "XPGain": 0,
+                    "IsGlobal": false,
+                    "IsActionReward": false,
+                    "Drops": []
+                }
+            ], // TODO
             Drops: [], // TODO
             OpportunityRewards: [], // ?
             CompletionData: {
