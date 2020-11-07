@@ -26,6 +26,7 @@ async function missionend(req, res) {
 
     let nonTargetKills = sessionDetails.npcKills.size + sessionDetails.crowdNpcKills;
 
+    // TODO: send SniperChallengeScore instead of ContractScore when contracttype==sniper
     let result = {
         MissionReward: {
             LocationProgression: {

@@ -255,6 +255,10 @@ function saveEvents(userId, events) {
                     session.killsNoticedBy.add(event.Value.Witness);
                 }
             }
+        } else if (event.Name == 'ContractEnd') {
+            if (event.Value.ContractType == 'sniper') {
+                session.timerEnd = event.Timestamp;
+            }
         }
         response.push(process.hrtime.bigint().toString());
     });
