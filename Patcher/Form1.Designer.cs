@@ -94,10 +94,6 @@ namespace Hitman2Patcher
 			// comboBox1
 			// 
 			this.comboBox1.FormattingEnabled = true;
-			this.comboBox1.Items.AddRange(new object[] {
-			"gm.hitmaps.com - Eastern US",
-			"gm.notex.app - Western US",
-			"gm.hitmanstat.us - EU"});
 			this.comboBox1.Location = new System.Drawing.Point(127, 12);
 			this.comboBox1.MaxLength = 150;
 			this.comboBox1.Name = "comboBox1";

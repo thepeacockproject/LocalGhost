@@ -35,6 +35,13 @@ namespace Hitman2Patcher
 		Timer timer;
 		HashSet<int> patchedprocesses = new HashSet<int>();
 
+		private static readonly Dictionary<string, string> publicServers = new Dictionary<string, string>
+		{
+			{"gm.hitmaps.com - Eastern US", "gm.hitmaps.com"},
+			{"gm.notex.app - Western US", "gm.notex.app"},
+			{"gm.hitmanstat.us - EU", "gm.hitmanstat.us"}
+		};
+
 		public Form1()
 		{
 			InitializeComponent();
@@ -44,6 +51,7 @@ namespace Hitman2Patcher
 			timer.Tick += timer_Tick;
 			timer.Enabled = true;
 			comboBox1.Text = "localhost";
+			comboBox1.Items.AddRange(publicServers.Keys.ToArray<object>());
 
 			log("Patcher ready");
 			log("Select a server and start hitman 2");
@@ -119,7 +127,7 @@ namespace Hitman2Patcher
 			if (success)
 			{
 				log(String.Format("Sucessfully patched processid {0}", process.Id));
-				log(String.Format("Injected server : {0}", getSelectedServerHostname()));
+				log(String.Format("Injected server: {0}", getSelectedServerHostname()));
 				patchedprocesses.Add(process.Id);
 			}
 			else
@@ -151,14 +159,19 @@ namespace Hitman2Patcher
 
 		private string getSelectedServerHostname()
 		{
-			var value = comboBox1.Text.Split('-')[0].Trim();
+			string hostname;
 
-			if(string.IsNullOrEmpty(value))
+			if (!publicServers.TryGetValue(comboBox1.Text, out hostname))
 			{
-				value = "localhost";
+				hostname = comboBox1.Text;
 			}
 
-			return value;
+			if(string.IsNullOrEmpty(hostname))
+			{
+				hostname = "localhost";
+			}
+
+			return hostname;
 		}
 
 		private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
