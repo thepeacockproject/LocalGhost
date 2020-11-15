@@ -41,8 +41,8 @@ namespace Hitman2Patcher
 		{
 			IntPtr hProcess = OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION,
 				false, process.Id);
-			Hitman2Version v = Hitman2Version.getVersion(process);
 			IntPtr b = process.MainModule.BaseAddress;
+			Hitman2Version v = Hitman2Version.getVersion(getTimestamp(hProcess, b));
 			int byteswritten;
 			uint oldprotectflags;
 			byte[] newurl = Encoding.ASCII.GetBytes(patchOptions.CustomConfigDomain).Concat(new byte[] { 0x00 }).ToArray();
@@ -128,6 +128,16 @@ namespace Hitman2Patcher
 			public bool SetCustomConfigDomain;
 			public string CustomConfigDomain;
 			public bool UseHttp;
+		}
+
+		public static UInt32 getTimestamp(IntPtr hProcess, IntPtr baseAddress)
+		{
+			byte[] buffer = new byte[4];
+			int bytesread;
+			ReadProcessMemory(hProcess, baseAddress + 0x3C, buffer, 4, out bytesread);
+			int NTHeaderOffset = BitConverter.ToInt32(buffer, 0);
+			ReadProcessMemory(hProcess, baseAddress + NTHeaderOffset + 0x8, buffer, 4, out bytesread);
+			return BitConverter.ToUInt32(buffer, 0);
 		}
 	}
 }

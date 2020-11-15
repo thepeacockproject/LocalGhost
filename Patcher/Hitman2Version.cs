@@ -2,6 +2,7 @@
 // Licensed under the zlib license. See LICENSE for more info
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -42,32 +43,39 @@ namespace Hitman2Patcher
 			}
 		}
 
-		public static Hitman2Version getVersion(Process process)
+		private static string versionStringFromTimestamp(UInt32 timestamp)
 		{
-			string foldername = Path.GetFileName(Path.GetDirectoryName(process.MainModule.FileName)).ToLower();
-			if (foldername == "retail")
+			switch (timestamp)
 			{
-				switch (process.MainModule.FileVersionInfo.FileVersion)
-				{
-					case "2.72.0.0":
-						return v2_72_0_dx11;
-				}
+				case 0x5EE9D065:
+					return "2.72.0.0-h4_dx11";
+				case 0x5EE9D095:
+					return "2.72.0.0-h4_dx12";
+				default:
+					return "unknown";
 			}
-			else if (foldername == "dx12retail")
+		}
+
+		public static Hitman2Version getVersion(UInt32 timestamp, string versionString = "")
+		{
+			if (versionString == "")
 			{
-				switch (process.MainModule.FileVersionInfo.FileVersion)
-				{
-					case "2.72.0.0":
-						return v2_72_0_dx12;
-				}
+				versionString = versionStringFromTimestamp(timestamp);
 			}
+
+			Hitman2Version version;
+			if (versionMap.TryGetValue(versionString, out version))
+			{
+				return version;
+			}
+
 			throw new NotImplementedException();
 		}
 
 		private static readonly byte[] http = Encoding.ASCII.GetBytes("http://{0}\0").ToArray();
 		private static readonly byte[] https = Encoding.ASCII.GetBytes("https://{0}\0").ToArray();
 
-		public static Hitman2Version v2_72_0_dx11 = new Hitman2Version()
+		public static Hitman2Version v2_72_0_h4_dx11 = new Hitman2Version()
 		{
 			certpin = new[] { new Patch(0x0F33363, "75", "EB", MemProtection.PAGE_EXECUTE_READ) },
 			authheader = new[]
@@ -83,7 +91,7 @@ namespace Hitman2Patcher
 			}
 		};
 
-		public static Hitman2Version v2_72_0_dx12 = new Hitman2Version()
+		public static Hitman2Version v2_72_0_h4_dx12 = new Hitman2Version()
 		{
 			certpin = new[] { new Patch(0x0F32EC3, "75", "EB", MemProtection.PAGE_EXECUTE_READ) },
 			authheader = new[]
@@ -97,6 +105,12 @@ namespace Hitman2Patcher
 				new Patch(0x18486B8, https, http, MemProtection.PAGE_READONLY),
 				new Patch(0x0B4E8C4, "0C", "0B", MemProtection.PAGE_EXECUTE_READ)
 			}
+		};
+
+		private static Dictionary<string, Hitman2Version> versionMap = new Dictionary<string, Hitman2Version>()
+		{
+			{"2.72.0.0-h4_dx11", v2_72_0_h4_dx11},
+			{"2.72.0.0-h4_dx12", v2_72_0_h4_dx12},
 		};
 	}
 }
