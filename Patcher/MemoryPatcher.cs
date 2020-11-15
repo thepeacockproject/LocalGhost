@@ -8,6 +8,18 @@ using System.Text;
 
 namespace Hitman2Patcher
 {
+	// from https://docs.microsoft.com/en-us/windows/win32/memory/memory-protection-constants
+	public enum MemProtection
+	{
+		PAGE_EXECUTE = 0x00000010,
+		PAGE_EXECUTE_READ = 0x00000020,
+		PAGE_EXECUTE_READWRITE = 0x00000040,
+		PAGE_EXECUTE_WRITECOPY = 0x00000080,
+		PAGE_NOACCESS = 0x00000001,
+		PAGE_READONLY = 0x00000002,
+		PAGE_READWRITE = 0x00000004
+	}
+
 	class MemoryPatcher
 	{
 		[DllImport("kernel32", SetLastError = true)]
@@ -19,24 +31,23 @@ namespace Hitman2Patcher
 		[DllImport("kernel32.dll", SetLastError = true)]
 		static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr address, [Out] byte[] buffer, uint size, out int numberOfBytesRead);
 		[DllImport("kernel32.dll")]
-		static extern bool VirtualProtectEx(IntPtr hProcess, IntPtr lpAddress, uint dwSize, uint flNewProtect, out uint lpflOldProtect);
+		static extern bool VirtualProtectEx(IntPtr hProcess, IntPtr lpAddress, uint dwSize, MemProtection flNewProtect, out uint lpflOldProtect);
 
 		private const uint PROCESS_VM_READ = 0x0010; //Required to read memory in a process using ReadProcessMemory.
 		private const uint PROCESS_VM_WRITE = 0x0020; // Required to write to memory in a process using WriteProcessMemory.
 		private const uint PROCESS_VM_OPERATION = 0x0008; // Required to perform an operation on the address space of a process using VirtualProtectEx
-		private const uint PAGE_EXECUTE_READWRITE = 0x40;
-		private const uint PAGE_READWRITE = 0x04;
 
 		public static bool Patch(Process process, Options patchOptions)
 		{
-			IntPtr hProcess = OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION, false, process.Id);
+			IntPtr hProcess = OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION,
+				false, process.Id);
 			Hitman2Version v = Hitman2Version.getVersion(process);
 			IntPtr b = process.MainModule.BaseAddress;
 			int byteswritten;
 			uint oldprotectflags;
 			byte[] newurl = Encoding.ASCII.GetBytes(patchOptions.CustomConfigDomain).Concat(new byte[] { 0x00 }).ToArray();
-			byte[] http = Encoding.ASCII.GetBytes("http://{0}").Concat(new byte[] { 0x00 }).ToArray();
 			bool success = true;
+			List<Hitman2Version.Patch> patches = new List<Hitman2Version.Patch>();
 
 			if (!IsReadyForPatching(hProcess, b, v))
 			{
@@ -46,26 +57,44 @@ namespace Hitman2Patcher
 
 			if (patchOptions.DisableCertPinning)
 			{
-				success &= VirtualProtectEx(hProcess, b + v.certpin, 1, PAGE_EXECUTE_READWRITE, out oldprotectflags);
-				success &= WriteProcessMemory(hProcess, b + v.certpin, new byte[] { 0xEB }, 1, out byteswritten); // bypass cert pinning
+				patches.AddRange(v.certpin);
 			}
 			if (patchOptions.AlwaysSendAuthHeader)
 			{
-				success &= VirtualProtectEx(hProcess, b + v.auth1, 0x200, PAGE_EXECUTE_READWRITE, out oldprotectflags);
-				success &= WriteProcessMemory(hProcess, b + v.auth1, new byte[] {0xEB}, 1, out byteswritten); // send auth header for all protocols
-				success &= WriteProcessMemory(hProcess, b + v.auth2, new byte[] {0x90, 0x90, 0x90, 0x90, 0x90, 0x90}, 6,
-					out byteswritten); // always send auth header
+				patches.AddRange(v.authheader);
 			}
 			if (patchOptions.SetCustomConfigDomain)
 			{
-				success &= WriteProcessMemory(hProcess, b + v.url, newurl, (uint)newurl.Length, out byteswritten); // (setting current)
+				patches.AddRange(v.configdomain);
 			}
 			if (patchOptions.UseHttp)
 			{
-				success &= VirtualProtectEx(hProcess, b + v.protocol1, 0x20, PAGE_READWRITE, out oldprotectflags);
-				success &= WriteProcessMemory(hProcess, b + v.protocol1, http, (uint)http.Length, out byteswritten); // replace https with http
-				success &= VirtualProtectEx(hProcess, b + v.protocol2, 1, PAGE_EXECUTE_READWRITE, out oldprotectflags);
-				success &= WriteProcessMemory(hProcess, b + v.protocol2, new byte[] {(byte)http.Length}, 1, out byteswritten);
+				patches.AddRange(v.protocol);
+			}
+
+			foreach(Hitman2Version.Patch patch in patches)
+			{
+				byte[] dataToWrite = patch.patch;
+				if (patch.customPatch == "configdomain")
+				{
+					dataToWrite = newurl;
+				}
+
+				if (patch.defaultProtection == MemProtection.PAGE_EXECUTE_READ)
+				{
+					success &= VirtualProtectEx(hProcess, b + patch.offset, (uint)dataToWrite.Length,
+						MemProtection.PAGE_EXECUTE_READWRITE, out oldprotectflags);
+				}
+				else if (patch.defaultProtection == MemProtection.PAGE_READONLY)
+				{
+					success &= VirtualProtectEx(hProcess, b + patch.offset, (uint)dataToWrite.Length,
+						MemProtection.PAGE_READWRITE, out oldprotectflags);
+				}
+
+				success &= WriteProcessMemory(hProcess, b + patch.offset, dataToWrite, (uint)dataToWrite.Length, out byteswritten);
+
+				success &= VirtualProtectEx(hProcess, b + patch.offset, (uint)dataToWrite.Length,
+					patch.defaultProtection, out oldprotectflags);
 			}
 
 			CloseHandle(hProcess);
@@ -80,11 +109,16 @@ namespace Hitman2Patcher
 		{
 			byte[] buffer = { 0 };
 			int bytesread;
-			if (!ReadProcessMemory(hProcess, baseAddress + version.url, buffer, 1, out bytesread))
+			bool ready = true;
+			foreach (Hitman2Version.Patch p in version.configdomain.Where(p => p.customPatch == "configdomain"))
 			{
-				throw new Win32Exception(Marshal.GetLastWin32Error());
+				if (!ReadProcessMemory(hProcess, baseAddress + p.offset, buffer, 1, out bytesread))
+				{
+					throw new Win32Exception(Marshal.GetLastWin32Error());
+				}
+				ready &= buffer[0] != 0;
 			}
-			return buffer[0] != 0;
+			return ready;
 		}
 
 		public struct Options
