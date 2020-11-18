@@ -20,7 +20,7 @@ namespace Hitman2Patcher
 		PAGE_READWRITE = 0x00000004
 	}
 
-	class MemoryPatcher
+	public class MemoryPatcher
 	{
 		[DllImport("kernel32", SetLastError = true)]
 		private static extern IntPtr OpenProcess(uint dwDesiredAccess, bool bInheritHandle, int dwProcessId);
@@ -42,7 +42,7 @@ namespace Hitman2Patcher
 			IntPtr hProcess = OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION,
 				false, process.Id);
 			IntPtr b = process.MainModule.BaseAddress;
-			Hitman2Version v = Hitman2Version.getVersion(getTimestamp(hProcess, b));
+			Hitman2Version v = Hitman2Version.getVersion(getTimestamp(hProcess, b), patchOptions.ForcedVersion);
 			int byteswritten;
 			uint oldprotectflags;
 			byte[] newurl = Encoding.ASCII.GetBytes(patchOptions.CustomConfigDomain).Concat(new byte[] { 0x00 }).ToArray();
@@ -128,6 +128,7 @@ namespace Hitman2Patcher
 			public bool SetCustomConfigDomain;
 			public string CustomConfigDomain;
 			public bool UseHttp;
+			public string ForcedVersion;
 		}
 
 		public static UInt32 getTimestamp(IntPtr hProcess, IntPtr baseAddress)

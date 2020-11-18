@@ -11,7 +11,7 @@ using System.Text;
 
 namespace Hitman2Patcher
 {
-	class Hitman2Version
+	public class Hitman2Version
 	{
 		public Patch[] certpin, authheader, configdomain, protocol;
 
@@ -150,5 +150,10 @@ namespace Hitman2Patcher
 			{"2.72.0.0-h5_dx11", v2_72_0_h5_dx11},
 			{"2.72.0.0-h5_dx12", v2_72_0_h5_dx12},
 		};
+
+		public static IEnumerable<string> Versions
+		{
+			get { return versionMap.Keys; }
+		}
 	}
 }

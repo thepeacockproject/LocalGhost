@@ -33,22 +33,19 @@ namespace Hitman2Patcher
 			timer.Interval = 1000;
 			timer.Tick += timer_Tick;
 			timer.Enabled = true;
-			comboBox1.Text = "localhost";
-			comboBox1.Items.AddRange(publicServers.Keys.ToArray<object>());
+
+			try
+			{
+				currentSettings = Settings.getFromFile("patcher.conf");
+			}
+			catch (Exception)
+			{
+				currentSettings = new Settings();
+			}
 
 			log("Patcher ready");
 			log("Select a server and start hitman 2");
-			if (File.Exists("patcher.conf"))
-			{
-				try
-				{
-					comboBox1.Text = File.ReadAllText("patcher.conf");
-				}
-				catch (Exception)
-				{
-					// whatever, just use the default address
-				}
-			}
+			
 		}
 
 		void timer_Tick(object sender, EventArgs e)
@@ -59,17 +56,13 @@ namespace Hitman2Patcher
 				if (!patchedprocesses.Contains(process.Id))
 					try
 					{
-						if (MemoryPatcher.Patch(process, new MemoryPatcher.Options
-						{
-							DisableCertPinning = false,
-							AlwaysSendAuthHeader = true,
-							SetCustomConfigDomain = true,
-							CustomConfigDomain = getSelectedServerHostname(),
-							UseHttp = true
-						}))
+						if (MemoryPatcher.Patch(process, currentSettings.patchOptions))
 						{
 							log(String.Format("Sucessfully patched processid {0}", process.Id));
-							log(String.Format("Injected server: {0}", getSelectedServerHostname()));
+							if (currentSettings.patchOptions.SetCustomConfigDomain)
+							{
+								log(String.Format("Injected server: {0}", getSelectedServerHostname()));
+							}
 							patchedprocesses.Add(process.Id);
 						}
 						// else: process not yet ready for patching, try again next timer tick
@@ -99,7 +92,7 @@ namespace Hitman2Patcher
 
 		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			File.WriteAllText("patcher.conf", getSelectedServerHostname());
+			currentSettings.saveToFile("patcher.conf");
 		}
 
 		private string getSelectedServerHostname()
@@ -133,6 +126,51 @@ namespace Hitman2Patcher
 			else
 			{
 				MessageBox.Show("Please launch steam first, before using this button.");
+			}
+		}
+
+		private void button3_Click(object sender, EventArgs e)
+		{
+			OptionsForm optionsForm = new OptionsForm(currentSettings);
+			DialogResult result = optionsForm.ShowDialog();
+			if (result == DialogResult.OK)
+			{
+				currentSettings = optionsForm.settings;
+			}
+		}
+
+		private Settings _currentSettings;
+		private Settings currentSettings
+		{
+			get
+			{
+				if (_currentSettings.patchOptions.SetCustomConfigDomain)
+				{
+					_currentSettings.patchOptions.CustomConfigDomain = comboBox1.Text;
+				}
+				return _currentSettings;
+			}
+			set
+			{
+				_currentSettings = value;
+				if (value.patchOptions.SetCustomConfigDomain)
+				{
+					comboBox1.Text = value.patchOptions.CustomConfigDomain;
+					comboBox1.Enabled = true;
+				}
+				else
+				{
+					comboBox1.Text = "custom domain disabled";
+					comboBox1.Enabled = false;
+				}
+
+				comboBox1.Items.Clear();
+				comboBox1.Items.AddRange(publicServers.Keys.ToArray<object>());
+				if (value.showTestingDomains)
+				{
+					comboBox1.Items.Add("localhost");
+					comboBox1.Items.Add("config.hitman.io");
+				}
 			}
 		}
 	}
