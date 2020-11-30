@@ -25,6 +25,8 @@ namespace Hitman2Patcher
 			{"gm.hitmanstat.us - EU", "gm.hitmanstat.us"}
 		};
 
+		private static readonly Dictionary<string, string> publicServersReverse = publicServers.ToDictionary(kvp => kvp.Value, kvp => kvp.Key);
+
 		public Form1()
 		{
 			InitializeComponent();
@@ -112,6 +114,18 @@ namespace Hitman2Patcher
 			return hostname;
 		}
 
+		private void setSelectedServerHostname(string input)
+		{
+			string result;
+
+			if (!publicServersReverse.TryGetValue(input, out result))
+			{
+				result = input;
+			}
+
+			comboBox1.Text = result;
+		}
+
 		private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			Process.Start("https://gitlab.com/grappigegovert/localghost");
@@ -146,7 +160,7 @@ namespace Hitman2Patcher
 			{
 				if (_currentSettings.patchOptions.SetCustomConfigDomain)
 				{
-					_currentSettings.patchOptions.CustomConfigDomain = comboBox1.Text;
+					_currentSettings.patchOptions.CustomConfigDomain = getSelectedServerHostname();
 				}
 				return _currentSettings;
 			}
@@ -155,12 +169,12 @@ namespace Hitman2Patcher
 				_currentSettings = value;
 				if (value.patchOptions.SetCustomConfigDomain)
 				{
-					comboBox1.Text = value.patchOptions.CustomConfigDomain;
+					setSelectedServerHostname(value.patchOptions.CustomConfigDomain);
 					comboBox1.Enabled = true;
 				}
 				else
 				{
-					comboBox1.Text = "custom domain disabled";
+					setSelectedServerHostname("custom domain disabled");
 					comboBox1.Enabled = false;
 				}
 
