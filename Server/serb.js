@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 const path = require('path');
 const uuid = require('uuid');
 const { writeFile, readFile } = require('atomically');
+const md5File = require('md5-file');
 
 const { extractToken, ServerVer } = require('./components/utils.js');
 const profileHandler = require('./components/profileHandler.js');
@@ -184,12 +185,21 @@ app.get('/authentication/api/configuration/Init?*', extractToken, (req, res) => 
 });
 
 
-app.head('/resources-7-17/dynamic_resources_pc_release_rpkg', (req, res) => {
-    res.header('Content-Length', '1243589');
-    res.header('Content-Type', 'application/octet-stream');
-    res.header('Content-MD5', 'lz1iZqwrWXdcPDFE2vVx/g==');
-    res.header('Last-Modified', 'Tue, 19 Nov 2019 13:13:13 GMT');
-    res.send();
+app.get('/resources-7-17/dynamic_resources_pc_release_rpkg', (req, res) => {
+    md5File(path.join('menudata', 'dynamic_resources_pc_release_rpkg.rpkg')).then(hash => {
+        res.sendFile(path.join('menudata', 'dynamic_resources_pc_release_rpkg.rpkg'), {
+            root: '.',
+            headers: {
+                'Content-Type': 'application/octet-stream',
+                'Content-MD5': Buffer.from(hash, 'hex').toString('base64'),
+            },
+        });
+    }).catch(err => {
+        if (err.code != 'ENOENT') {
+            console.error(err);
+        }
+        res.status(200).end();
+    });
 });
 
 app.get('/files/onlineconfig.json', (req, res) => {
