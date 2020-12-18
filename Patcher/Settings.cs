@@ -24,6 +24,7 @@ namespace Hitman2Patcher
 				SetCustomConfigDomain = true,
 				CustomConfigDomain = "localhost",
 				UseHttp = true,
+				DisableForceOfflineOnFailedDynamicResources = true,
 				ForcedVersion = ""
 			};
 			this.showTestingDomains = false;
@@ -37,6 +38,7 @@ namespace Hitman2Patcher
 			lines.Add(String.Format("SetCustomConfigDomain={0}", patchOptions.SetCustomConfigDomain));
 			lines.Add(String.Format("CustomConfigDomain={0}", patchOptions.CustomConfigDomain));
 			lines.Add(String.Format("UseHttp={0}", patchOptions.UseHttp));
+			lines.Add(String.Format("DisableForceOfflineOnFailedDynamicResources={0}", patchOptions.DisableForceOfflineOnFailedDynamicResources));
 			lines.Add(String.Format("forcedVersion={0}", patchOptions.ForcedVersion));
 			lines.Add(String.Format("showTestingDomains={0}", showTestingDomains));
 
@@ -77,6 +79,9 @@ namespace Hitman2Patcher
 								break;
 							case "UseHttp":
 								result.patchOptions.UseHttp = Boolean.Parse(linecontents[1]);
+								break;
+							case "DisableForceOfflineOnFailedDynamicResources":
+								result.patchOptions.DisableForceOfflineOnFailedDynamicResources = Boolean.Parse(linecontents[1]);
 								break;
 							case "forcedVersion":
 								result.patchOptions.ForcedVersion = Hitman2Version.Versions.Contains(linecontents[1]) ? linecontents[1] : "";

@@ -74,6 +74,10 @@ namespace Hitman2Patcher
 			{
 				patches.AddRange(v.protocol);
 			}
+			if (patchOptions.DisableForceOfflineOnFailedDynamicResources)
+			{
+				patches.AddRange(v.dynres_noforceoffline);
+			}
 
 			foreach(Hitman2Version.Patch patch in patches)
 			{
@@ -131,6 +135,7 @@ namespace Hitman2Patcher
 			public bool SetCustomConfigDomain;
 			public string CustomConfigDomain;
 			public bool UseHttp;
+			public bool DisableForceOfflineOnFailedDynamicResources;
 			public string ForcedVersion;
 		}
 

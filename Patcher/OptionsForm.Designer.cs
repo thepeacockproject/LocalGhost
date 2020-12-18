@@ -34,6 +34,7 @@ namespace Hitman2Patcher
 			this.buttonSave = new System.Windows.Forms.Button();
 			this.buttonCancel = new System.Windows.Forms.Button();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.checkBoxNoForceOffline = new System.Windows.Forms.CheckBox();
 			this.checkBoxHttp = new System.Windows.Forms.CheckBox();
 			this.checkBoxSetDomain = new System.Windows.Forms.CheckBox();
 			this.checkBoxAuthHead = new System.Windows.Forms.CheckBox();
@@ -48,7 +49,7 @@ namespace Hitman2Patcher
 			// buttonSave
 			// 
 			this.buttonSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.buttonSave.Location = new System.Drawing.Point(280, 132);
+			this.buttonSave.Location = new System.Drawing.Point(280, 156);
 			this.buttonSave.Name = "buttonSave";
 			this.buttonSave.Size = new System.Drawing.Size(81, 32);
 			this.buttonSave.TabIndex = 0;
@@ -59,7 +60,7 @@ namespace Hitman2Patcher
 			// buttonCancel
 			// 
 			this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.buttonCancel.Location = new System.Drawing.Point(367, 132);
+			this.buttonCancel.Location = new System.Drawing.Point(367, 156);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(75, 32);
 			this.buttonCancel.TabIndex = 1;
@@ -71,16 +72,27 @@ namespace Hitman2Patcher
 			// 
 			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+			this.groupBox1.Controls.Add(this.checkBoxNoForceOffline);
 			this.groupBox1.Controls.Add(this.checkBoxHttp);
 			this.groupBox1.Controls.Add(this.checkBoxSetDomain);
 			this.groupBox1.Controls.Add(this.checkBoxAuthHead);
 			this.groupBox1.Controls.Add(this.checkBoxCertPin);
 			this.groupBox1.Location = new System.Drawing.Point(12, 12);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(252, 130);
+			this.groupBox1.Size = new System.Drawing.Size(252, 154);
 			this.groupBox1.TabIndex = 2;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Patch options";
+			// 
+			// checkBoxNoForceOffline
+			// 
+			this.checkBoxNoForceOffline.AutoSize = true;
+			this.checkBoxNoForceOffline.Location = new System.Drawing.Point(6, 129);
+			this.checkBoxNoForceOffline.Name = "checkBoxNoForceOffline";
+			this.checkBoxNoForceOffline.Size = new System.Drawing.Size(241, 21);
+			this.checkBoxNoForceOffline.TabIndex = 4;
+			this.checkBoxNoForceOffline.Text = "Make dynamic resources optional";
+			this.checkBoxNoForceOffline.UseVisualStyleBackColor = true;
 			// 
 			// checkBoxHttp
 			// 
@@ -126,7 +138,7 @@ namespace Hitman2Patcher
 			// 
 			this.checkBoxTestingDomains.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkBoxTestingDomains.AutoSize = true;
-			this.checkBoxTestingDomains.Location = new System.Drawing.Point(18, 148);
+			this.checkBoxTestingDomains.Location = new System.Drawing.Point(18, 172);
 			this.checkBoxTestingDomains.Name = "checkBoxTestingDomains";
 			this.checkBoxTestingDomains.Size = new System.Drawing.Size(248, 21);
 			this.checkBoxTestingDomains.TabIndex = 3;
@@ -170,7 +182,7 @@ namespace Hitman2Patcher
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(454, 176);
+			this.ClientSize = new System.Drawing.Size(454, 200);
 			this.Controls.Add(this.checkBoxForceVersion);
 			this.Controls.Add(this.comboBoxVersion);
 			this.Controls.Add(this.buttonReset);
@@ -203,5 +215,6 @@ namespace Hitman2Patcher
 		private System.Windows.Forms.Button buttonReset;
 		private System.Windows.Forms.ComboBox comboBoxVersion;
 		private System.Windows.Forms.CheckBox checkBoxForceVersion;
+		private System.Windows.Forms.CheckBox checkBoxNoForceOffline;
 	}
 }

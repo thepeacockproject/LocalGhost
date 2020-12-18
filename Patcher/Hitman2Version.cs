@@ -13,7 +13,7 @@ namespace Hitman2Patcher
 {
 	public class Hitman2Version
 	{
-		public Patch[] certpin, authheader, configdomain, protocol;
+		public Patch[] certpin, authheader, configdomain, protocol, dynres_noforceoffline;
 
 		private Hitman2Version()
 		{
@@ -92,7 +92,8 @@ namespace Hitman2Patcher
 			{
 				new Patch(0x182D598, https, http, MemProtection.PAGE_READONLY),
 				new Patch(0x0B4ED64, "0C", "0B", MemProtection.PAGE_EXECUTE_READ)
-			}
+			},
+			dynres_noforceoffline = new[] { new Patch(0x2BBC548, "01", "00", MemProtection.PAGE_READWRITE) }
 		};
 
 		public static Hitman2Version v2_72_0_h4_dx12 = new Hitman2Version()
@@ -108,7 +109,8 @@ namespace Hitman2Patcher
 			{
 				new Patch(0x18486B8, https, http, MemProtection.PAGE_READONLY),
 				new Patch(0x0B4E8C4, "0C", "0B", MemProtection.PAGE_EXECUTE_READ)
-			}
+			},
+			dynres_noforceoffline = new[] { new Patch(0x2BDAB48, "01", "00", MemProtection.PAGE_EXECUTE_READWRITE) }
 		};
 
 		public static Hitman2Version v2_72_0_h5_dx11 = new Hitman2Version()
@@ -116,7 +118,8 @@ namespace Hitman2Patcher
 			certpin = new[] { new Patch(0x0F32FAE, "0F85", "90E9", MemProtection.PAGE_EXECUTE_READ) },
 			authheader = v2_72_0_h4_dx11.authheader,
 			configdomain = v2_72_0_h4_dx11.configdomain,
-			protocol = v2_72_0_h4_dx11.protocol
+			protocol = v2_72_0_h4_dx11.protocol,
+			dynres_noforceoffline = v2_72_0_h4_dx11.dynres_noforceoffline
 		};
 
 		public static Hitman2Version v2_72_0_h5_dx12 = new Hitman2Version()
@@ -124,7 +127,8 @@ namespace Hitman2Patcher
 			certpin = new[] { new Patch(0x0F32B0E, "0F85", "90E9", MemProtection.PAGE_EXECUTE_READ) },
 			authheader = v2_72_0_h4_dx12.authheader,
 			configdomain = v2_72_0_h4_dx12.configdomain,
-			protocol = v2_72_0_h4_dx12.protocol
+			protocol = v2_72_0_h4_dx12.protocol,
+			dynres_noforceoffline = v2_72_0_h4_dx12.dynres_noforceoffline
 		};
 
 		private static Dictionary<string, Hitman2Version> versionMap = new Dictionary<string, Hitman2Version>()
