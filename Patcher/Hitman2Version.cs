@@ -114,33 +114,17 @@ namespace Hitman2Patcher
 		public static Hitman2Version v2_72_0_h5_dx11 = new Hitman2Version()
 		{
 			certpin = new[] { new Patch(0x0F32FAE, "0F85", "90E9", MemProtection.PAGE_EXECUTE_READ) },
-			authheader = new[]
-			{
-				new Patch(0x0B5A1F8, "75", "EB", MemProtection.PAGE_EXECUTE_READ),
-				new Patch(0x0B5A21C, "0F8486000000", "909090909090", MemProtection.PAGE_EXECUTE_READ)
-			},
-			configdomain = new[] { new Patch(0x2BBBC08, "", "", MemProtection.PAGE_READWRITE, "configdomain") },
-			protocol = new[]
-			{
-				new Patch(0x182D598, https, http, MemProtection.PAGE_READONLY),
-				new Patch(0x0B4ED64, "0C", "0B", MemProtection.PAGE_EXECUTE_READ)
-			}
+			authheader = v2_72_0_h4_dx11.authheader,
+			configdomain = v2_72_0_h4_dx11.configdomain,
+			protocol = v2_72_0_h4_dx11.protocol
 		};
 
 		public static Hitman2Version v2_72_0_h5_dx12 = new Hitman2Version()
 		{
 			certpin = new[] { new Patch(0x0F32B0E, "0F85", "90E9", MemProtection.PAGE_EXECUTE_READ) },
-			authheader = new[]
-			{
-				new Patch(0x0B59D58, "75", "EB", MemProtection.PAGE_EXECUTE_READ),
-				new Patch(0x0B59D7C, "0F8486000000", "909090909090", MemProtection.PAGE_EXECUTE_READ)
-			},
-			configdomain = new[] { new Patch(0x2BDA208, "", "", MemProtection.PAGE_READWRITE, "configdomain") },
-			protocol = new[]
-			{
-				new Patch(0x18486B8, https, http, MemProtection.PAGE_READONLY),
-				new Patch(0x0B4E8C4, "0C", "0B", MemProtection.PAGE_EXECUTE_READ)
-			}
+			authheader = v2_72_0_h4_dx12.authheader,
+			configdomain = v2_72_0_h4_dx12.configdomain,
+			protocol = v2_72_0_h4_dx12.protocol
 		};
 
 		private static Dictionary<string, Hitman2Version> versionMap = new Dictionary<string, Hitman2Version>()
