@@ -198,7 +198,13 @@ app.get('/resources-7-17/dynamic_resources_pc_release_rpkg', (req, res) => {
         if (err.code != 'ENOENT') {
             console.error(err);
         }
-        res.status(200).end();
+        res.sendFile(path.join('menudata', 'dummy_resources.rpkg'), {
+            root: '.',
+            headers: {
+                'Content-Type': 'application/octet-stream',
+                'Content-MD5': '3+BKedpHBtLvt2lupu0Qrw==',
+            },
+        });
     });
 });
 

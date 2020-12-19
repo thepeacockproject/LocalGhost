@@ -30,3 +30,4 @@ Server/contractdata/**
 # no custom server data
 Server/menudata/serverTile.json
 Server/menudata/featuredContracts.json
+Server/menudata/dynamic_resources_pc_release_rpkg.rpkg
