@@ -11,6 +11,32 @@ using System.Text;
 
 namespace Hitman2Patcher
 {
+	public class Patch
+	{
+		public static readonly byte[] http = Encoding.ASCII.GetBytes("http://{0}\0").ToArray();
+		public static readonly byte[] https = Encoding.ASCII.GetBytes("https://{0}\0").ToArray();
+
+		public int offset;
+		public byte[] original, patch;
+		public string customPatch;
+		public MemProtection defaultProtection;
+
+		public Patch(int offset, byte[] original, byte[] patch, MemProtection defaultProtection, string customPatch = "")
+		{
+			this.offset = offset;
+			this.original = original;
+			this.patch = patch;
+			this.defaultProtection = defaultProtection;
+			this.customPatch = customPatch;
+		}
+
+		public Patch(int offset, string original, string patch, MemProtection defaultProtection, string customPatch = "")
+			: this(offset, SoapHexBinary.Parse(original).Value, SoapHexBinary.Parse(patch).Value, defaultProtection, customPatch)
+		{
+
+		}
+	}
+
 	public class Hitman2Version
 	{
 		public Patch[] certpin, authheader, configdomain, protocol, dynres_noforceoffline;
@@ -18,29 +44,6 @@ namespace Hitman2Patcher
 		private Hitman2Version()
 		{
 
-		}
-
-		public class Patch
-		{
-			public int offset;
-			public byte[] original, patch;
-			public string customPatch;
-			public MemProtection defaultProtection;
-
-			public Patch(int offset, byte[] original, byte[] patch, MemProtection defaultProtection, string customPatch = "")
-			{
-				this.offset = offset;
-				this.original = original;
-				this.patch = patch;
-				this.defaultProtection = defaultProtection;
-				this.customPatch = customPatch;
-			}
-
-			public Patch(int offset, string original, string patch, MemProtection defaultProtection, string customPatch = "")
-				: this(offset, SoapHexBinary.Parse(original).Value, SoapHexBinary.Parse(patch).Value, defaultProtection, customPatch)
-			{
-
-			}
 		}
 
 		private static string versionStringFromTimestamp(UInt32 timestamp)
@@ -76,9 +79,6 @@ namespace Hitman2Patcher
 			throw new NotImplementedException();
 		}
 
-		private static readonly byte[] http = Encoding.ASCII.GetBytes("http://{0}\0").ToArray();
-		private static readonly byte[] https = Encoding.ASCII.GetBytes("https://{0}\0").ToArray();
-
 		public static Hitman2Version v2_72_0_h4_dx11 = new Hitman2Version()
 		{
 			certpin = new[] { new Patch(0x0F33363, "75", "EB", MemProtection.PAGE_EXECUTE_READ) },
@@ -90,7 +90,7 @@ namespace Hitman2Patcher
 			configdomain = new[] { new Patch(0x2BBBC08, "", "", MemProtection.PAGE_READWRITE, "configdomain") },
 			protocol = new[]
 			{
-				new Patch(0x182D598, https, http, MemProtection.PAGE_READONLY),
+				new Patch(0x182D598, Patch.https, Patch.http, MemProtection.PAGE_READONLY),
 				new Patch(0x0B4ED64, "0C", "0B", MemProtection.PAGE_EXECUTE_READ)
 			},
 			dynres_noforceoffline = new[] { new Patch(0x2BBC548, "01", "00", MemProtection.PAGE_READWRITE) }
@@ -107,7 +107,7 @@ namespace Hitman2Patcher
 			configdomain = new[] { new Patch(0x2BDA208, "", "", MemProtection.PAGE_READWRITE, "configdomain") },
 			protocol = new[]
 			{
-				new Patch(0x18486B8, https, http, MemProtection.PAGE_READONLY),
+				new Patch(0x18486B8, Patch.https, Patch.http, MemProtection.PAGE_READONLY),
 				new Patch(0x0B4E8C4, "0C", "0B", MemProtection.PAGE_EXECUTE_READ)
 			},
 			dynres_noforceoffline = new[] { new Patch(0x2BDAB48, "01", "00", MemProtection.PAGE_EXECUTE_READWRITE) }

@@ -50,7 +50,7 @@ namespace Hitman2Patcher
 			uint oldprotectflags;
 			byte[] newurl = Encoding.ASCII.GetBytes(patchOptions.CustomConfigDomain).Concat(new byte[] { 0x00 }).ToArray();
 			bool success = true;
-			List<Hitman2Version.Patch> patches = new List<Hitman2Version.Patch>();
+			List<Patch> patches = new List<Patch>();
 
 			if (!IsReadyForPatching(hProcess, b, v))
 			{
@@ -79,7 +79,7 @@ namespace Hitman2Patcher
 				patches.AddRange(v.dynres_noforceoffline);
 			}
 
-			foreach(Hitman2Version.Patch patch in patches)
+			foreach(Patch patch in patches)
 			{
 				byte[] dataToWrite = patch.patch;
 				if (patch.customPatch == "configdomain")
@@ -117,7 +117,7 @@ namespace Hitman2Patcher
 			byte[] buffer = { 0 };
 			int bytesread;
 			bool ready = true;
-			foreach (Hitman2Version.Patch p in version.configdomain.Where(p => p.customPatch == "configdomain"))
+			foreach (Patch p in version.configdomain.Where(p => p.customPatch == "configdomain"))
 			{
 				if (!ReadProcessMemory(hProcess, baseAddress + p.offset, buffer, 1, out bytesread))
 				{
