@@ -3436,6 +3436,17 @@
     ],
     "Objectives": []
   },
+  "ed42fdc0-267e-4752-add2-ad942114d500": {
+    "Name": "UI_GAMECHANGERS_SKUNK_DING_DONG_DITCH_NAME",
+    "Description": "UI_GAMECHANGERS_SKUNK_DING_DONG_DITCH_DESC",
+    "TileImage": null,
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "IsHidden": null,
+    "Resource": [
+      "assembly:/_PRO/Scenes/Missions/Skunk/Gamechangers_DingDongDitch.brick"
+    ],
+    "Objectives": []
+  },
   "abf09e23-299d-410c-a185-6188f687224b": {
     "Name": "",
     "Description": "disables constant glow on magpie",
