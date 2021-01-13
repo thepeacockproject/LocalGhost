@@ -16,12 +16,25 @@ app.post('/GetForPlay2', express.json(), extractToken, async (req, res) => {
         res.status(400).end();
         return; // user sent some nasty info
     }
-    readFile(path.join('contractdata', `${req.body.id}.json`)).then(contractfile => {
+    readFile(path.join('contractdata', `${req.body.id}.json`)).then(async contractfile => {
         const contractData = JSON.parse(contractfile);
         const contractSesh = {
             Contract: contractData,
             ContractSessionId: `${process.hrtime.bigint().toString()}-${uuid.v4()}`,
         };
+        if (contractData.Data.GameChangers && contractData.Data.GameChangers.length > 0) {
+            const gameChangerData = JSON.parse(await readFile(path.join('menudata', 'menudata', 'GameChangerProperties.json')));
+            contractData.Data.GameChangerReferences = [];
+            for(const gameChangerId of contractData.Data.GameChangers) {
+                const gameChanger = gameChangerData[gameChangerId];
+                gameChanger.Id = gameChangerId;
+                delete gameChanger.ObjectivesCategory;
+
+                contractData.Data.GameChangerReferences.push(gameChanger);
+                contractData.Data.Bricks.push(...gameChanger.Resource);
+                contractData.Data.Objectives.push(...gameChanger.Objectives);
+            }
+        }
 
         eventHandler.enqueueEvent(req.jwt.unique_name, {
             Version: ServerVer,
@@ -53,7 +66,6 @@ app.post('/GetForPlay2', express.json(), extractToken, async (req, res) => {
             console.error(err);
             res.status(500).end();
         }
-        
     });
 });
 
