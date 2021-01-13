@@ -28,7 +28,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get('/config/pc-prod/7_17_0', (req, res) => {
+app.get('/config/pc-prod/:serverVersion(\\d+_\\d+_\\d+)', (req, res) => {
     readFile('static/config.json').then((configfile) => {
         let config = JSON.parse(configfile);
         let serverhost = req.hostname;
