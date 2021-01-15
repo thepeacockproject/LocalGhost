@@ -1669,7 +1669,6 @@
   "25760ea6-958b-4aab-97d4-b539c5b025c8": {
     "Name": "UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_NO_MISSED_SHOTS_PRIMARY_NAME",
     "Description": "UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_NO_MISSED_SHOTS_PRIMARY_DESC",
-    "LongDescription": "UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_NO_MISSED_SHOTS_PRIMARY_DESC",
     "TileImage": "images/contractconditions/condition_contrac_no_missed_shots.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
@@ -1699,6 +1698,46 @@
             },
             "Success": {
               "FirstMissedShot": {
+                "Transition": "Failure"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "ce154566-a4ba-43c5-be4e-79240ce0f3f9": {
+    "Name": "UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_NO_PACIFICATIONS_PRIMARY_NAME",
+    "Description": "UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_NO_PACIFICATIONS_PRIMARY_DESC",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Global_NoPacifications.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "primary",
+    "IsHidden": null,
+    "Resource": [],
+    "Objectives": [
+      {
+        "Id": "674eacc5-0748-49dc-8ecd-2963a4e23db1",
+        "Category": "primary",
+        "OnActive": {
+          "IfCompleted": {
+            "Visible": false
+          }
+        },
+        "BriefingText": "$loc UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_NO_PACIFICATIONS_PRIMARY_FAIL",
+        "HUDTemplate": {
+          "display": "$loc UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_NO_PACIFICATIONS_PRIMARY_OBJ"
+        },
+        "Type": "statemachine",
+        "Definition": {
+          "Scope": "session",
+          "States": {
+            "Start": {
+              "-": {
+                "Transition": "Success"
+              }
+            },
+            "Success": {
+              "Pacify": {
                 "Transition": "Failure"
               }
             }
@@ -2968,6 +3007,42 @@
       "assembly:/_pro/scenes/missions/miami/escalation_crinum.brick"
     ],
     "Objectives": []
+  },
+  "c8e2616d-720a-4a58-bfaa-13c034a4fb6b": {
+    "Name": "UI_GAMECHANGERS_MIAMI_STICKY_FOOD_VENDOR_NAME",
+    "Description": "UI_GAMECHANGERS_MIAMI_STICKY_FOOD_VENDOR_DESC",
+    "TileImage": "images/contracts/gamechangers/gamechanger_miami_sticky_food_vendor.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "primary",
+    "IsHidden": null,
+    "Resource": [
+      "assembly:/_pro/scenes/missions/miami/gamechanger__flamingo__sticky_food_vendor.brick"
+    ],
+    "Objectives": [
+      {
+        "Id": "7fbe515b-4c8f-4f91-a092-a167f7bdf3d6",
+        "Category": "primary",
+        "ExcludeFromScoring": true,
+        "OnActive": {
+          "IfCompleted": {
+            "Visible": false
+          }
+        },
+        "BriefingText": "$loc UI_GAMECHANGERS_MIAMI_STICKY_FOOD_VENDOR_FAIL",
+        "Type": "statemachine",
+        "Definition": {
+          "Scope": "session",
+          "States": {
+            "Start": {
+              "Transition": "Success",
+              "FoodVendorDisguiseChanged": {
+                "Transition": "Failure"
+              }
+            }
+          }
+        }
+      }
+    ]
   },
   "015467e5-4e7f-435b-9efd-69aaa7b851e9": {
     "Name": "",
