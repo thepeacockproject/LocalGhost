@@ -27,6 +27,11 @@ app.post('/GetForPlay2', express.json(), extractToken, async (req, res) => {
             contractData.Data.GameChangerReferences = [];
             for(const gameChangerId of contractData.Data.GameChangers) {
                 const gameChanger = gameChangerData[gameChangerId];
+                if (!gameChanger) {
+                    console.error(`Encountered unknown gamechanger id: ${gameChangerId}`);
+                    res.status(500);
+                    continue;
+                }
                 gameChanger.Id = gameChangerId;
                 delete gameChanger.ObjectivesCategory;
 
