@@ -32,6 +32,9 @@ app.get('/config/pc-prod/:serverVersion(\\d+_\\d+_\\d+)', (req, res) => {
     readFile('static/config.json').then((configfile) => {
         let config = JSON.parse(configfile);
         let serverhost = req.hostname;
+        if (req.params.serverVersion.startsWith('6')) {
+            config.Versions[0].GAME_VER = "6.74.0";
+        }
         config.Versions[0].ISSUER_ID = req.query.issuer;
         config.Versions[0].SERVER_VER.Metrics.MetricsServerHost = `http://${serverhost}`;
         config.Versions[0].SERVER_VER.Authentication.AuthenticationHost = `http://${serverhost}`;
@@ -68,58 +71,82 @@ app.post('/oauth/token', async (req, res) => {
             "refresh_token": uuid.v4(),
         });
     }
-    if (req.body.grant_type != 'external_steam' || !req.body.steam_userid) {
-        res.status(501).end();
+    
+    let external_platform, external_userid, external_users_folder;
+
+    if (req.body.grant_type == 'external_steam') {
+        if (!/^\d{1,20}$/.test(req.body.steam_userid)) {
+            res.status(400).end(); // invalid steam user id
+            return;
+        }
+        external_platform = 'steam';
+        external_userid = req.body.steam_userid;
+        external_users_folder = 'steamids';
+    } else if (req.body.grant_type == 'external_epic') {
+        if (!/^[\da-f]{32}$/.test(req.body.epic_userid)) {
+            res.status(400).end(); // invalid epic user id
+            return;
+        }
+        external_platform = 'epic';
+        external_userid = req.body.epic_userid;
+        external_users_folder = 'epicids';
+    } else {
+        res.status(501).end(); // unsupported auth method
         return;
     }
 
-    if (!/^\d{1,20}$/.test(req.body.steam_userid) ||
-        req.body.pId && !/^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/.test(req.body.pId)) {
-        res.status(400).end(); // user sent some nasty info
+    if (req.body.pId && !/^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/.test(req.body.pId)) {
+        res.status(400).end(); // pId is not a GUID
         return;
     }
 
 
     if (!req.body.pId) { // if no profile id supplied
-        await readFile(path.join('userdata', 'steamids', `${req.body.steam_userid}.json`)).then(data => { // get profile id from steam id
+        await readFile(path.join('userdata', external_users_folder, `${external_userid}.json`)).then(data => { // get profile id from external id
             // TODO: check legit server response
             req.body.pId = data;
         }).catch(async err => {
             if (err.code != 'ENOENT') {
                 throw err; // rethrow if error is something else than a non-existant file
             }
-            // steamid has no profile associated: create new profile and link steam id to it
+            // external id has no profile associated: create new profile and link external id to it
             req.body.pId = uuid.v4();
-            await writeFile(path.join('userdata', 'steamids', `${req.body.steam_userid}.json`), req.body.pId, { fsyncWait: false });
+            await writeFile(path.join('userdata', external_users_folder, `${external_userid}.json`), req.body.pId, { fsyncWait: false });
         });
     } else { // if a profile id is supplied
-        readFile(path.join('userdata', 'steamids', `${req.body.steam_userid}.json`)).then(pId => { // read profile id linked to supplied steam id
-            if (pId != req.body.pId) { // requested steam id is linked to different profile id
+        readFile(path.join('userdata', external_users_folder, `${external_userid}.json`)).then(pId => { // read profile id linked to supplied external id
+            if (pId != req.body.pId) { // requested external id is linked to different profile id
                 // TODO: check legit server response
             }
         }).catch(async err => {
             if (err.code != 'ENOENT') {
                 throw err; // rethrow if error is something else than a non-existant file
             }
-            // steamid is not yet linked to this profile
-            await writeFile(path.join('userdata', 'steamids', `${req.body.steam_userid}.json`), req.body.pId, { fsyncWait: false }); // link it
+            // external id is not yet linked to this profile
+            await writeFile(path.join('userdata', external_users_folder, `${external_userid}.json`), req.body.pId, { fsyncWait: false }); // link it
         })
     }
 
     await readFile(path.join('userdata', 'users', `${req.body.pId}.json`)).then(data => {
         let userdata = JSON.parse(data);
-        if (userdata.LinkedAccounts.steam != req.body.steam_userid) { // requested profile id is linked to different steam id
+        if (userdata.LinkedAccounts[external_platform] != external_userid) { // requested profile id is linked to different external id
             // TODO: check legit server response
+            // TODO: handle multiple external links
         }
     }).catch(async err => {
         if (err.code != 'ENOENT') {
             throw err; // rethrow if error is something else than a non-existant file
         }
+        // User does not exist, create new profile from default:
 
         let userdata = JSON.parse(await readFile(path.join('userdata', 'default.json')));
         userdata.Id = req.body.pId;
-        userdata.LinkedAccounts.steam = req.body.steam_userid;
-        userdata.SteamId = req.body.steam_userid;
+        userdata.LinkedAccounts[external_platform] = external_userid;
+        if (external_platform == 'steam') {
+            userdata.SteamId = req.body.steam_userid;
+        } else if (external_platform == 'epic') {
+            userdata.EpicId = req.body.epic_userid;
+        }
         // add all unlockables to player's inventory
         const allunlockables = JSON.parse(await readFile(path.join('userdata', 'allunlockables.json')))
             .filter(u => u.Type != 'location') // locations not in inventory
@@ -142,16 +169,17 @@ app.post('/oauth/token', async (req, res) => {
         await writeFile(path.join('userdata', 'users', `${req.body.pId}.json`), JSON.stringify(userdata), { fsyncWait: false });
     });
 
+    // Format here follows steam_external, Epic jwt has some different fields
     const userinfo = {
-        'auth:method': 'external_steam',
+        'auth:method': req.body.grant_type,
         roles: 'user',
         sub: req.body.pId,
         unique_name: req.body.pId,
-        userid: req.body.steam_userid,
-        platform: 'steam',
+        userid: external_userid,
+        platform: external_platform,
         locale: req.body.locale,
         rgn: req.body.rgn,
-        pis: req.body.steam_appid,
+        pis: external_platform == 'steam' ? req.body.steam_appid : 'egp_io_interactive_hitman_the_complete_first_season',
         cntry: req.body.locale,
     };
     const authOptions = {

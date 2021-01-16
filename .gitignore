@@ -21,6 +21,11 @@ Server/userdata/steamids/**
 # but keep the folder
 !Server/userdata/steamids/.gitkeep
 
+# no epicid => profileid bindings
+Server/userdata/epicids/**
+# but keep the folder
+!Server/userdata/epicids/.gitkeep
+
 # no contract data
 Server/contractdata/**
 # except for the two ghost mode contracts
