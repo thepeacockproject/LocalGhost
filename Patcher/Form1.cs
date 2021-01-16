@@ -52,7 +52,8 @@ namespace Hitman2Patcher
 
 		void timer_Tick(object sender, EventArgs e)
 		{
-			Process[] hitmans = Process.GetProcessesByName("HITMAN2");
+			IEnumerable<Process> hitmans = Process.GetProcessesByName("HITMAN")
+				.Concat(Process.GetProcessesByName("HITMAN2"));
 			foreach (Process process in hitmans)
 			{
 				if (!patchedprocesses.Contains(process.Id))
