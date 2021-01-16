@@ -84,6 +84,7 @@ namespace Hitman2Patcher
 
 		static Hitman2Version()
 		{
+			v1_15.addVersions();
 			v1_16.addVersions();
 			v2_13.addVersions();
 			v2_71.addVersions();
