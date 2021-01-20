@@ -1,0 +1,31 @@
+﻿// Copyright (C) 2021 grappigegovert <grappigegovert@hotmail.com>
+// Licensed under the zlib license. See LICENSE for more info
+
+namespace Hitman2Patcher
+{
+	public static class v3_10
+	{
+		public static void addVersions()
+		{
+			Hitman2Version.addVersion("3.10.0.0_dx12", 0x5FFECE18, v3_10_0_dx12);
+		}
+
+		private static Hitman2Version v3_10_0_dx12 = new Hitman2Version()
+		{
+			certpin = new[] { new Patch(0x0C9E55E, "0F85", "90E9", MemProtection.PAGE_EXECUTE_READ) },
+			authheader = new[]
+			{
+				new Patch(0x0A10837, "75", "EB", MemProtection.PAGE_EXECUTE_READ),
+				new Patch(0x0A1085B, "0F8482000000", "909090909090", MemProtection.PAGE_EXECUTE_READ)
+			},
+			configdomain = new[] { new Patch(0x2AAB688, "", "", MemProtection.PAGE_READWRITE, "configdomain") },
+			protocol = new[]
+			{
+				new Patch(0x194BB20, Patch.https, Patch.http, MemProtection.PAGE_READONLY),
+				new Patch(0x0A05694, "0C", "0B", MemProtection.PAGE_EXECUTE_READ),
+				new Patch(0x0A34850, "0C", "0B", MemProtection.PAGE_EXECUTE_READ)
+			},
+			dynres_noforceoffline = new[] { new Patch(0x2AAC008, "01", "00", MemProtection.PAGE_EXECUTE_READWRITE) }
+		};
+	}
+}
