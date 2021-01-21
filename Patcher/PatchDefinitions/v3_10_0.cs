@@ -8,6 +8,7 @@ namespace Hitman2Patcher
 		public static void addVersions()
 		{
 			Hitman2Version.addVersion("3.10.0.0_dx12", 0x5FFECE18, v3_10_0_dx12);
+			Hitman2Version.addVersion("3.10.0.0-h1_dx12", 0x60084611, v3_10_0_h1_dx12);
 		}
 
 		private static Hitman2Version v3_10_0_dx12 = new Hitman2Version()
@@ -27,5 +28,7 @@ namespace Hitman2Patcher
 			},
 			dynres_noforceoffline = new[] { new Patch(0x2AAC008, "01", "00", MemProtection.PAGE_EXECUTE_READWRITE) }
 		};
+
+		private static Hitman2Version v3_10_0_h1_dx12 = v3_10_0_dx12;
 	}
 }
