@@ -22,6 +22,14 @@ app.post('/AuthenticationService/GetBlobOfflineCacheDatabaseDiff', (req, res) =>
     ]);
 });
 
+app.post('/ProfileService/UpdateUserSaveFileTable', (req, res) => {
+    res.json('null');
+});
+
+app.post('/ProfileService/SynchronizeOfflineUnlockables', (req, res) => {
+    res.json('null'); // TODO: write to inventory somewhere?
+});
+
 module.exports = {
     router: app,
 };

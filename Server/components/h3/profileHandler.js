@@ -19,7 +19,7 @@ app.post('/AuthenticationService/GetBlobOfflineCacheDatabaseDiff', (req, res) =>
     // Which menu files should be loaded from the server?
     res.json([
         'menusystem/pages/hub/dashboard/dashboard.json',
-        'menusystem/pages/hub/hub_content.json',
+        'menusystem/pages/hub/hub_page.json',
         'menusystem/pages/hub/dashboard/category_escalation/result.json',
         'menusystem/pages/result/versusresult_content.json',
         'menusystem/pages/multiplayer/content/lobbyslim.json',
@@ -27,11 +27,24 @@ app.post('/AuthenticationService/GetBlobOfflineCacheDatabaseDiff', (req, res) =>
 });
 
 app.post('/ProfileService/UpdateUserSaveFileTable', (req, res) => {
-    res.json('null');
+    res.status(204).end();
+});
+
+app.post('/ProfileService/UpdateProfileStats', express.json(), async (req, res) => {
+    if (req.jwt.unique_name != req.body.id) {
+        res.status(403).end(); // data submitted for different profile id
+    }
+    let userdata = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
+    
+    userdata.Gamertag = req.body.gamerTag;
+    userdata.Extensions.achievements = req.body.achievements;
+
+    writeFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`), JSON.stringify(userdata), { fsyncWait: false });
+    res.status(204).end();
 });
 
 app.post('/ProfileService/SynchronizeOfflineUnlockables', (req, res) => {
-    res.json('null'); // TODO: write to inventory somewhere?
+    res.status(204).end();
 });
 
 app.post('/ProfileService/GetUserConfig', (req, res) => {
@@ -71,6 +84,22 @@ app.post('/ProfileService/UpdateExtensions', extractToken, express.json(), async
     res.json(req.body.extensionsData);
 });
 
+app.post('/ProfileService/SynchroniseGameStats', extractToken, express.json(), async (req, res) => {
+    if (req.body.profileId != req.jwt.unique_name) { // data requested for different profile id
+        res.status(403).end();
+        return;
+    }
+    let userdata = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
+
+    userdata.Extensions.gamepersistentdata.__stats = req.body.localStats;
+
+    writeFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`), JSON.stringify(userdata), { fsyncWait: false });
+    res.json({
+        Inventory: userdata.Extensions.inventory,
+        Stats: req.body.localStats,
+    });
+});
+
 async function resolveProfiles(profileIDs) {
     return (await Promise.allSettled(profileIDs.map(id => {
         if (!/^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/.test(id)) {
@@ -96,6 +125,23 @@ async function resolveProfiles(profileIDs) {
 
 app.post('/ProfileService/ResolveProfiles', express.json(), async (req, res) => {
     res.json(await resolveProfiles(req.body.profileIDs));
+});
+
+app.post('/ProfileService/ResolveGamerTags', express.json(), async (req, res) => {
+    // Todo?: not sure how this works
+    let profiles = await resolveProfiles(req.body.profileIds);
+    let result = {};
+    for (const profile of profiles) {
+        if (profile.LinkedAccounts.dev) {
+            result.dev = result.dev || {};
+            result.dev[profile.Id] = null;
+        } else if (profile.Gamertag){
+            result.steam = result.steam || {};
+            result.steam[profile.Id] = profile.Gamertag;
+        }
+    }
+    
+    res.json(result);
 });
 
 app.post('/ProfileService/GetFriendsCount', extractToken, async (req, res) => {
