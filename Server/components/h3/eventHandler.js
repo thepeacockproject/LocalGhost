@@ -3,7 +3,7 @@
 
 const express = require('express');
 
-const { extractToken } = require('./utils.js');
+const { extractToken } = require('../utils.js');
 
 const app = express.Router();
 

@@ -1,4 +1,4 @@
-// Copyright (C) 2020 grappigegovert <grappigegovert@hotmail.com>
+// Copyright (C) 2020-2021 grappigegovert <grappigegovert@hotmail.com>
 // Licensed under the zlib license. See LICENSE for more info
 
 const express = require('express');
@@ -6,16 +6,14 @@ const path = require('path');
 const { writeFile, readFile } = require('atomically');
 
 
-const { extractToken, MaxPlayerLevel } = require('./utils.js');
+const { extractToken, MaxPlayerLevel } = require('../utils.js');
+const { getEntitlements } = require('./platformEntitlements.js');
 
 const app = express.Router();
 
 // /authentication/api/userchannel/
 
-app.post('/ProfileService/GetPlatformEntitlements', (req, res) => {
-    // Steam AppIDs of Hitman2 and its DLCs
-    res.json(["863550", "950540", "950550", "950551", "950552", "950553", "950554", "950555", "950556", "950557", "950558", "950559", "950560", "950561", "950562", "953090", "953091", "953092", "953093", "953094", "953095", "953096", "957690", "957691", "957692", "957693", "957694", "957695", "957696", "957697", "957698", "957730", "957731", "957733", "957735", "960831", "960832", "972340", "977941"]);
-});
+app.post('/ProfileService/GetPlatformEntitlements', express.json(), getEntitlements);
 
 app.post('/AuthenticationService/GetBlobOfflineCacheDatabaseDiff', (req, res) => {
     // Which menu files should be loaded from the server?

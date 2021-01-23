@@ -4,7 +4,7 @@
 const path = require('path');
 const { readFile } = require('atomically');
 
-const { xpRequiredForLevel, maxLevelForLocation, getLocationCompletion } = require('./utils.js');
+const { xpRequiredForLevel, maxLevelForLocation, getLocationCompletion } = require('../utils.js');
 const { contractSessions } = require('./eventHandler.js');
 
 async function missionend(req, res) {

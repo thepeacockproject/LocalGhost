@@ -1,4 +1,4 @@
-// Copyright (C) 2020 grappigegovert <grappigegovert@hotmail.com>
+// Copyright (C) 2020-2021 grappigegovert <grappigegovert@hotmail.com>
 // Licensed under the zlib license. See LICENSE for more info
 
 const express = require('express');
@@ -6,7 +6,7 @@ const path = require('path');
 const uuid = require('uuid');
 const { readFile } = require('atomically');
 
-const { extractToken, MaxPlayerLevel, xpRequiredForLevel, maxLevelForLocation } = require('./utils.js');
+const { extractToken, MaxPlayerLevel, xpRequiredForLevel, maxLevelForLocation } = require('../utils.js');
 const { resolveProfiles } = require('./profileHandler.js');
 const { contractSessions } = require('./eventHandler.js');
 const scoreHandler = require('./scoreHandler.js');
@@ -19,7 +19,7 @@ app.get('/dashboard/Dashboard_Category_Escalation/10000000-0000-0000-0000-000000
     const userData = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
     const repoData = JSON.parse(await readFile(path.join('userdata', 'allunlockables.json')));
     let contractIds = [];
-    await readFile(path.join('menudata', 'featuredContracts.json')).then(file => {
+    await readFile(path.join('menudata', 'h3', 'featuredContracts.json')).then(file => {
         contractIds = JSON.parse(file);
     }).catch(err => {
         if (err.code != 'ENOENT') {
@@ -60,13 +60,13 @@ app.get('/dashboard/Dashboard_Category_Escalation/10000000-0000-0000-0000-000000
 
 app.get('/Hub', extractToken, async (req, res) => {
     const userdata = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
-    const serverTile = await readFile(path.join('menudata', 'serverTile.json')).then(file => {
+    const serverTile = await readFile(path.join('menudata', 'h3', 'serverTile.json')).then(file => {
         return JSON.parse(file);
     }).catch(async err => {
         if (err.code != 'ENOENT') {
             throw err;
         }
-        return JSON.parse(await readFile(path.join('menudata', 'serverTile.template.json'))); // use template if no custom serverTile.json exists
+        return JSON.parse(await readFile(path.join('menudata', 'h3', 'serverTile.template.json'))); // use template if no custom serverTile.json exists
     });
     res.json({
         template: null,
@@ -190,7 +190,7 @@ app.get('/stashpoint', extractToken, async (req, res) => {
     // /stashpoint?contractid=c1d015b4-be08-4e44-808e-ada0f387656f&slotid=3&slotname=disguise3&stashpoint=&allowlargeitems=true&allowcontainers=true
     // /stashpoint?contractid=&slotid=3&slotname=disguise&stashpoint=&allowlargeitems=true&allowcontainers=false
     // /stashpoint?contractid=5b5f8aa4-ecb4-4a0a-9aff-98aa1de43dcc&slotid=6&slotname=stashpoint6&stashpoint=28b03709-d1f0-4388-b207-f03611eafb64&allowlargeitems=true&allowcontainers=false
-    const stashData = JSON.parse(await readFile(path.join('menudata', 'menudata', 'stashpoint.json'))); // template only
+    const stashData = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'stashpoint.json'))); // template only
     const userData = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
     let contractData;
     await readFile(path.join('contractdata', `${req.query.contractid}.json`)).then(contractfile => {
@@ -255,7 +255,7 @@ app.get('/multiplayerpresets', extractToken, async (req, res) => { // /multiplay
     if (req.query.gamemode != 'versus') { // not sure what happens here
         next();
     }
-    let multiplayerPresets = JSON.parse(await readFile(path.join('menudata', 'menudata', 'multiplayerpresets.json')));
+    let multiplayerPresets = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'multiplayerpresets.json')));
 
     multiplayerPresets.data.LoadoutData = await getLoadoutData(req.jwt.unique_name, req.query.disguiseUnlockableId);
     // TODO: completion data for locations
@@ -414,13 +414,13 @@ app.get('/Planning', extractToken, async (req, res) => {
 });
 
 app.get('/leaderboardsview', extractToken, async (req, res) => {
-    res.json(JSON.parse(await readFile(path.join('menudata', 'menudata', 'leaderboardsview.json')))); // stripped template
+    res.json(JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'leaderboardsview.json')))); // stripped template
 });
 
 app.get('/selectagencypickup', extractToken, async (req, res) => {
-    let selectagencypickup = JSON.parse(await readFile(path.join('menudata', 'menudata', 'selectagencypickup.json'))); // template
+    let selectagencypickup = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'selectagencypickup.json'))); // template
     const userData = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
-    const pickupData = JSON.parse(await readFile(path.join('menudata', 'menudata', 'AgencyPickups.json')));
+    const pickupData = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'AgencyPickups.json')));
     readFile(path.join('contractdata', `${req.query.contractId}.json`)).then(async contractfile => {
         const contractData = JSON.parse(contractfile);
         const pickupsInScene = pickupData[contractData.Metadata.ScenePath.toLowerCase()];
@@ -448,9 +448,9 @@ app.get('/selectagencypickup', extractToken, async (req, res) => {
 });
 
 app.get('/selectentrance', extractToken, async (req, res) => {
-    let selectentrance = JSON.parse(await readFile(path.join('menudata', 'menudata', 'selectentrance.json'))); // template
+    let selectentrance = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'selectentrance.json'))); // template
     const userData = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
-    const entranceData = JSON.parse(await readFile(path.join('menudata', 'menudata', 'Entrances.json')));
+    const entranceData = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'Entrances.json')));
     readFile(path.join('contractdata', `${req.query.contractId}.json`)).then(async contractfile => {
         const contractData = JSON.parse(contractfile);
         const entrancesInScene = entranceData[contractData.Metadata.ScenePath.toLowerCase()];
@@ -478,7 +478,7 @@ app.get('/selectentrance', extractToken, async (req, res) => {
 });
 
 app.get('/missionendready', async (req, res) => {
-    let missionendready = JSON.parse(await readFile(path.join('menudata', 'menudata', 'missionendready.json'))); // template
+    let missionendready = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'missionendready.json'))); // template
     missionendready.data = {
         contractSessionId: req.query.contractSessionId,
         missionEndReady: true,
@@ -646,7 +646,7 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
         // objective not shown on planning screen
     }
     if (GameChangers && GameChangers.length > 0) {
-        const gameChangerData = JSON.parse(await readFile(path.join('menudata', 'menudata', 'GameChangerProperties.json')));
+        const gameChangerData = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'GameChangerProperties.json')));
         for (const gamechangerId of GameChangers) {
             const gameChangerProps = gameChangerData[gamechangerId];
             if (gameChangerProps && !gameChangerProps.isHidden) {

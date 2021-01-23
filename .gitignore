@@ -33,6 +33,6 @@ Server/contractdata/**
 !Server/contractdata/d5ad70f4-7dbb-4b2b-b183-061778a51468.json
 
 # no custom server data
-Server/menudata/serverTile.json
-Server/menudata/featuredContracts.json
-Server/menudata/dynamic_resources_pc_release_rpkg.rpkg
+Server/menudata/*/serverTile.json
+Server/menudata/*/featuredContracts.json
+Server/menudata/*/dynamic_resources_pc_release_rpkg.rpkg

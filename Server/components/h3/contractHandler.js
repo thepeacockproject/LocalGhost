@@ -1,4 +1,4 @@
-// Copyright (C) 2020 grappigegovert <grappigegovert@hotmail.com>
+// Copyright (C) 2020-2021 grappigegovert <grappigegovert@hotmail.com>
 // Licensed under the zlib license. See LICENSE for more info
 
 const express = require('express');
@@ -6,7 +6,7 @@ const path = require('path');
 const uuid = require('uuid');
 const { readFile } = require('atomically');
 
-const { extractToken, ServerVer } = require('./utils.js');
+const { extractToken, ServerVer } = require('../utils.js');
 const eventHandler = require('./eventHandler.js');
 
 const app = express.Router();
@@ -23,7 +23,7 @@ app.post('/GetForPlay2', express.json(), extractToken, async (req, res) => {
             ContractSessionId: `${process.hrtime.bigint().toString()}-${uuid.v4()}`,
         };
         if (contractData.Data.GameChangers && contractData.Data.GameChangers.length > 0) {
-            const gameChangerData = JSON.parse(await readFile(path.join('menudata', 'menudata', 'GameChangerProperties.json')));
+            const gameChangerData = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'GameChangerProperties.json')));
             contractData.Data.GameChangerReferences = [];
             for(const gameChangerId of contractData.Data.GameChangers) {
                 const gameChanger = gameChangerData[gameChangerId];
