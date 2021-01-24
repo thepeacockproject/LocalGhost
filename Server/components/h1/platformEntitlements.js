@@ -19,11 +19,10 @@ function GetPlatformEntitlements(req, res) {
             '664270', // Hitman - Japanese V/O Pack
         ]);
     } else if (req.body.issuerId == '3c06b15a8a2845c0b725d4f952fe00aa') { // Hitman 1 epic namespace
-        // Epic ids of Hitman 1 and its DLCs ?
-        // Probably incomplete
+        // Epic ids of Hitman 1 and its DLCs
         res.json([
-            '0a73eaedcac84bd28b567dbec764c5cb', // Hitman 1 standard edition?
-            '81aecb49a60b47478e61e1cbd68d63c5', // Hitman 1 GOTY?
+            '0a73eaedcac84bd28b567dbec764c5cb', // Hitman 1 standard edition
+            '81aecb49a60b47478e61e1cbd68d63c5', // Hitman 1 GOTY upgrade
         ]);
     }
 }
