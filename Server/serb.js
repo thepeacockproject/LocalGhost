@@ -87,6 +87,10 @@ app.post('/oauth/token', async (req, res) => {
             return;
         }
         const epic_token = jwt.decode(req.body.access_token);
+        if (!epic_token || !epic_token.appid) {
+            res.status(400).end(); // invalid epic access token
+            return;
+        }
         epic_appid = epic_token.appid;
 
         external_platform = 'epic';
@@ -263,7 +267,7 @@ app.use(express.Router().use('/resources-:serverVersion(\\d+-\\d+)/', (req, res,
 
 
 app.use(express.Router().use((req, res, next) => {
-    switch(req.serverVersion) {
+    switch (req.serverVersion) {
         case '6-74':
             next();
             break;
@@ -271,7 +275,7 @@ app.use(express.Router().use((req, res, next) => {
             next('router');
     }
 }).use(h1router), express.Router().use((req, res, next) => {
-    switch(req.serverVersion) {
+    switch (req.serverVersion) {
         case '6-74':
         case '7-17':
             next();
@@ -280,7 +284,7 @@ app.use(express.Router().use((req, res, next) => {
             next('router');
     }
 }).use(h2router), express.Router().use((req, res, next) => {
-    switch(req.serverVersion) {
+    switch (req.serverVersion) {
         case '6-74':
         case '7-17':
         case '8-1':
