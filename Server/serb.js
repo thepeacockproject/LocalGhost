@@ -245,20 +245,20 @@ app.get('/', (req, res) => {
 });
 
 
-
+// set req.serverVersion
 app.use(express.Router().use('/resources-:serverVersion(\\d+-\\d+)/', (req, res, next) => {
-    req.serverVersion = req.params.serverVersion;
+    req.serverVersion = req.params.serverVersion; // set serverVersion from url (e.g. /resources/7-17/)
     next('router');
 }).use(extractToken, (req, res, next) => {
-    switch (req.jwt.pis) {
-        case 'egp_io_interactive_hitman_the_complete_first_season':
-        case '236870':
+    switch (req.jwt.pis) { // set ServerVersion from jwt (appid from login token)
+        case 'egp_io_interactive_hitman_the_complete_first_season': // hitman 1 epic
+        case '236870': // hitman 1 steam appid
             req.serverVersion = '6-74';
             break;
-        case '863550':
+        case '863550': // hitman 2 steam appid
             req.serverVersion = '7-17';
             break;
-        case 'fghi4567xQOCheZIin0pazB47qGUvZw4':
+        case 'fghi4567xQOCheZIin0pazB47qGUvZw4': // hitman 3 epic
             req.serverVersion = '8-1';
             break;
     }
@@ -269,29 +269,29 @@ app.use(express.Router().use('/resources-:serverVersion(\\d+-\\d+)/', (req, res,
 app.use(express.Router().use((req, res, next) => {
     switch (req.serverVersion) {
         case '6-74':
-            next();
+            next(); // continue along h1router
             break;
         default:
-            next('router');
+            next('router'); // go to next router
     }
 }).use(h1router), express.Router().use((req, res, next) => {
     switch (req.serverVersion) {
         case '6-74':
         case '7-17':
-            next();
+            next(); // continue along h2router
             break;
         default:
-            next('router');
+            next('router'); // go to next router
     }
 }).use(h2router), express.Router().use((req, res, next) => {
     switch (req.serverVersion) {
         case '6-74':
         case '7-17':
         case '8-1':
-            next();
+            next(); // continue along h3router
             break;
         default:
-            next('router');
+            next('router'); // go to next router (unhandled)
     }
 }).use(h3router));
 
