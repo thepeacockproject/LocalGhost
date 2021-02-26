@@ -10,7 +10,6 @@ const app = express.Router();
 // /resources-6-74/
 
 app.get('/dynamic_resources_pc_release_rpkg', (req, res) => {
-    // Todo: create h1 dummy resources
     md5File(path.join('menudata', 'h1', 'dynamic_resources_pc_release_rpkg.rpkg')).then(hash => {
         res.sendFile(path.join('menudata', 'h1', 'dynamic_resources_pc_release_rpkg.rpkg'), {
             root: '.',
