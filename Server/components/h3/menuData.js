@@ -16,8 +16,8 @@ const app = express.Router();
 // /profiles/page/
 
 app.get('/dashboard/Dashboard_Category_Escalation/10000000-0000-0000-0000-000000000000/ContractList/25739126-6a40-4b0b-b9a6-5da1b737190b/dataonly', extractToken, async (req, res) => {
-    const userData = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
-    const repoData = JSON.parse(await readFile(path.join('userdata', 'allunlockables.json')));
+    const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
+    const repoData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'allunlockables.json')));
     let contractIds = [];
     await readFile(path.join('menudata', 'h3', 'featuredContracts.json')).then(file => {
         contractIds = JSON.parse(file);
@@ -28,7 +28,7 @@ app.get('/dashboard/Dashboard_Category_Escalation/10000000-0000-0000-0000-000000
     });
     const contracts = (await Promise.allSettled(contractIds.map(id => {
         return readFile(path.join('contractdata', `${id}.json`)).then(file => {
-            return generateUserCentric(JSON.parse(file), userData, repoData);
+            return generateUserCentric(JSON.parse(file), userData, req.gameVersion, repoData);
         });
     }))).map(outcome => {
         if (outcome.status == 'fulfilled') {
@@ -59,7 +59,7 @@ app.get('/dashboard/Dashboard_Category_Escalation/10000000-0000-0000-0000-000000
 });
 
 app.get('/Hub', extractToken, async (req, res) => {
-    const userdata = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
+    const userdata = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
     const serverTile = await readFile(path.join('menudata', 'h3', 'serverTile.json')).then(file => {
         return JSON.parse(file);
     }).catch(async err => {
@@ -112,7 +112,7 @@ app.get('/Hub', extractToken, async (req, res) => {
 });
 
 app.get('/SafehouseCategory', extractToken, async (req, res) => {
-    const inventory = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`))).Extensions.inventory;
+    const inventory = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`))).Extensions.inventory;
     let safehousedata = {
         template: null,
         data: {
@@ -191,7 +191,7 @@ app.get('/stashpoint', extractToken, async (req, res) => {
     // /stashpoint?contractid=&slotid=3&slotname=disguise&stashpoint=&allowlargeitems=true&allowcontainers=false
     // /stashpoint?contractid=5b5f8aa4-ecb4-4a0a-9aff-98aa1de43dcc&slotid=6&slotname=stashpoint6&stashpoint=28b03709-d1f0-4388-b207-f03611eafb64&allowlargeitems=true&allowcontainers=false
     const stashData = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'stashpoint.json'))); // template only
-    const userData = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
+    const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
     let contractData;
     await readFile(path.join('contractdata', `${req.query.contractid}.json`)).then(contractfile => {
         contractData = req.query.contractid ? JSON.parse(contractfile) : null;
@@ -246,7 +246,7 @@ app.get('/stashpoint', extractToken, async (req, res) => {
         ShowSlotName: req.query.slotname,
     }
     if (contractData) {
-        stashData.data.UserCentric = await generateUserCentric(contractData, userData)
+        stashData.data.UserCentric = await generateUserCentric(contractData, userData, req.gameVersion)
     }
     res.json(stashData);
 });
@@ -257,14 +257,14 @@ app.get('/multiplayerpresets', extractToken, async (req, res) => { // /multiplay
     }
     let multiplayerPresets = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'multiplayerpresets.json')));
 
-    multiplayerPresets.data.LoadoutData = await getLoadoutData(req.jwt.unique_name, req.query.disguiseUnlockableId);
+    multiplayerPresets.data.LoadoutData = await getLoadoutData(req.jwt.unique_name, req.query.disguiseUnlockableId, req.gameVersion);
     // TODO: completion data for locations
     res.json(multiplayerPresets); // presets + user data for locations + contract details + loadout
 });
 
-async function getLoadoutData(userId, disguiseUnlockableId) {
-    const allunlockables = JSON.parse(await readFile(path.join('userdata', 'allunlockables.json')));
-    const userInventory = JSON.parse(await readFile(path.join('userdata', 'users', `${userId}.json`))).Extensions.inventory;
+async function getLoadoutData(userId, disguiseUnlockableId, gameVersion) {
+    const allunlockables = JSON.parse(await readFile(path.join('userdata', gameVersion, 'allunlockables.json')));
+    const userInventory = JSON.parse(await readFile(path.join('userdata', gameVersion, 'users', `${userId}.json`))).Extensions.inventory;
     let unlockable = allunlockables.find(unlockable => unlockable.Id == disguiseUnlockableId);
     if (!unlockable) {
         unlockable = allunlockables.find(unlockable => unlockable.Id == 'TOKEN_OUTFIT_HITMANSUIT');
@@ -294,18 +294,18 @@ app.get('/multiplayer', extractToken, async (req, res) => { // /multiplayer?game
     res.json({
         template: null,
         data: {
-            LoadoutData: await getLoadoutData(req.jwt.unique_name, req.query.disguiseUnlockableId),
+            LoadoutData: await getLoadoutData(req.jwt.unique_name, req.query.disguiseUnlockableId, req.gameVersion),
         }
     });
 });
 
 app.get('/Planning', extractToken, async (req, res) => {
-    const userData = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
-    const repo = JSON.parse(await readFile(path.join('userdata', 'allunlockables.json')));
+    const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
+    const repo = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'allunlockables.json')));
     readFile(path.join('contractdata', `${req.query.contractid}.json`)).then(async contractfile => {
         const contractData = JSON.parse(contractfile);
-        const creatorProfile = (await resolveProfiles([contractData.Metadata.CreatorUserId]))[0]
-            || (await resolveProfiles(['fadb923c-e6bb-4283-a537-eb4d1150262e']))[0]; // use IOI profile if profile not found
+        const creatorProfile = (await resolveProfiles([contractData.Metadata.CreatorUserId], req.gameVersion))[0]
+            || (await resolveProfiles(['fadb923c-e6bb-4283-a537-eb4d1150262e'], req.gameVersion))[0]; // use IOI profile if profile not found
         const sublocation = repo.find(entry => entry.Id == contractData.Metadata.Location);
         sublocation.DisplayNameLocKey = `UI_${sublocation.Id}_NAME`;
         res.json({
@@ -313,7 +313,7 @@ app.get('/Planning', extractToken, async (req, res) => {
             data: {
                 Contract: contractData,
                 ElusiveContractState: 'not_completed', // TODO? ['completed', 'not_completed', 'time_ran_out', 'failed'], empty string for non elusives
-                UserCentric: await generateUserCentric(contractData, userData, repo),
+                UserCentric: await generateUserCentric(contractData, userData, req.gameVersion, repo),
                 IsFirstInGroup: true, // escalation related?
                 Creator: creatorProfile,
                 UserContract: creatorProfile.DevId != 'IOI',
@@ -419,7 +419,7 @@ app.get('/leaderboardsview', extractToken, async (req, res) => {
 
 app.get('/selectagencypickup', extractToken, async (req, res) => {
     let selectagencypickup = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'selectagencypickup.json'))); // template
-    const userData = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
+    const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
     const pickupData = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'AgencyPickups.json')));
     readFile(path.join('contractdata', `${req.query.contractId}.json`)).then(async contractfile => {
         const contractData = JSON.parse(contractfile);
@@ -433,7 +433,7 @@ app.get('/selectagencypickup', extractToken, async (req, res) => {
             Contract: contractData,
             OrderedUnlocks: unlockedAgencyPickups.filter(unlockable => pickupsInScene.includes(unlockable.Properties.RepositoryId))
                 .sort((a, b) => a.Properties.UnlockOrder - b.Properties.UnlockOrder),
-            UserCentric: generateUserCentric(contractData, userData),
+            UserCentric: generateUserCentric(contractData, userData, req.gameVersion),
         };
         res.json(selectagencypickup);
     }).catch(err => {
@@ -449,7 +449,7 @@ app.get('/selectagencypickup', extractToken, async (req, res) => {
 
 app.get('/selectentrance', extractToken, async (req, res) => {
     let selectentrance = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'selectentrance.json'))); // template
-    const userData = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
+    const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
     const entranceData = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'Entrances.json')));
     readFile(path.join('contractdata', `${req.query.contractId}.json`)).then(async contractfile => {
         const contractData = JSON.parse(contractfile);
@@ -463,7 +463,7 @@ app.get('/selectentrance', extractToken, async (req, res) => {
             Contract: contractData,
             OrderedUnlocks: unlockedEntrances.filter(unlockable => entrancesInScene.includes(unlockable.Properties.RepositoryId))
                 .sort((a, b) => a.Properties.UnlockOrder - b.Properties.UnlockOrder),
-            UserCentric: generateUserCentric(contractData, userData),
+            UserCentric: generateUserCentric(contractData, userData, req.gameVersion),
         };
         res.json(selectentrance);
     }).catch(err => {
@@ -683,8 +683,8 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
     return sortedResult;
 }
 
-async function generateUserCentric(contractData, userData, repoData) {
-    const repo = repoData || JSON.parse(await readFile(path.join('userdata', 'allunlockables.json')));
+async function generateUserCentric(contractData, userData, gameVersion, repoData) {
+    const repo = repoData || JSON.parse(await readFile(path.join('userdata', gameVersion, 'allunlockables.json')));
     const sublocation = repo.find(entry => entry.Id == contractData.Metadata.Location);
     sublocation.DisplayNameLocKey = `UI_${sublocation.Id}_NAME`;
     const maxlevel = maxLevelForLocation(sublocation.Properties.ProgressionKey);

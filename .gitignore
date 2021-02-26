@@ -12,19 +12,19 @@ Server/.vscode/
 Server/node_modules/
 
 # no user profile data
-Server/userdata/users/**
+Server/userdata/*/users/**
 # except IOI profile
-!Server/userdata/users/fadb923c-e6bb-4283-a537-eb4d1150262e.json
+!Server/userdata/*/users/fadb923c-e6bb-4283-a537-eb4d1150262e.json
 
 # no steamid => profileid bindings
-Server/userdata/steamids/**
+Server/userdata/*/steamids/**
 # but keep the folder
-!Server/userdata/steamids/.gitkeep
+!Server/userdata/*/steamids/.gitkeep
 
 # no epicid => profileid bindings
-Server/userdata/epicids/**
+Server/userdata/*/epicids/**
 # but keep the folder
-!Server/userdata/epicids/.gitkeep
+!Server/userdata/*/epicids/.gitkeep
 
 # no contract data
 Server/contractdata/**

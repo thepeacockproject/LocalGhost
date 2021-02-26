@@ -7,7 +7,7 @@ const md5File = require('md5-file');
 
 const app = express.Router();
 
-// /resources-8-1/
+// /resources-8-2/
 
 app.get('/dynamic_resources_pc_release_rpkg', (req, res) => {
     // TODO: create new dummy resources for h3

@@ -66,6 +66,32 @@ function getLocationCompletion(location, locationProgression) {
         (xpRequiredForLevel(locationProgression.Level + 1) - xpRequiredForLevel(locationProgression.Level));
 }
 
+function getGameVersionFromJWTPis(pis) {
+    switch (pis) { // set ServerVersion from jwt (appid from login token)
+        case 'egp_io_interactive_hitman_the_complete_first_season': // hitman 1 epic
+        case '236870': // hitman 1 steam appid
+            return 'h1';
+        case '863550': // hitman 2 steam appid
+            return 'h2';
+        case 'fghi4567xQOCheZIin0pazB47qGUvZw4': // hitman 3 epic
+            return 'h3';
+    }
+    console.error(`Could not get version from jwt pis: ${pis}`);
+    return 'h3';
+}
+
+function getGameVersionFromServerVersion(serverVersion) {
+    if (serverVersion.startsWith('6')) {
+        return 'h1';
+    } else if (serverVersion.startsWith('7')) {
+        return 'h2';
+    } else if (serverVersion.startsWith('8')) {
+        return 'h3';
+    }
+    console.error(`Could not get version from server version: ${serverVersion}`);
+    return 'h3';
+}
+
 module.exports = {
     extractToken,
     ServerVer,
@@ -73,4 +99,6 @@ module.exports = {
     xpRequiredForLevel,
     maxLevelForLocation,
     getLocationCompletion,
+    getGameVersionFromJWTPis,
+    getGameVersionFromServerVersion,
 };

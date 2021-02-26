@@ -17,10 +17,10 @@ async function missionend(req, res) {
         res.status(401).end();
         return;
     }
-    const repo = JSON.parse(await readFile(path.join('userdata', 'allunlockables.json')));
-    const userData = JSON.parse(await readFile(path.join('userdata', 'users', `${req.jwt.unique_name}.json`)));
+    const unlockables = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'allunlockables.json')));
+    const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
     const contractData = JSON.parse(await readFile(path.join('contractdata', `${sessionDetails.contractId}.json`)));
-    const sublocation = repo.find(entry => entry.Id == contractData.Metadata.Location);
+    const sublocation = unlockables.find(entry => entry.Id == contractData.Metadata.Location);
     const maxlevel = maxLevelForLocation(sublocation.Properties.ProgressionKey);
     const locationProgression = userData.Extensions.progression.Locations[sublocation.Properties.ProgressionKey.toLowerCase()];
 

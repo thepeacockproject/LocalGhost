@@ -8,7 +8,7 @@ const path = require('path');
 const uuid = require('uuid');
 const { writeFile, readFile } = require('atomically');
 
-const { extractToken, ServerVer } = require('./components/utils.js');
+const { extractToken, ServerVer, getGameVersionFromJWTPis, getGameVersionFromServerVersion } = require('./components/utils.js');
 const h1router = require('./components/h1router.js');
 const h2router = require('./components/h2router.js');
 const h3router = require('./components/h3router.js');
@@ -31,7 +31,7 @@ app.get('/config/pc-prod/:serverVersion(\\d+_\\d+_\\d+)', (req, res) => {
         if (req.params.serverVersion.startsWith('6')) {
             config.Versions[0].GAME_VER = "6.74.0";
         } else if (req.params.serverVersion.startsWith('8')) {
-            config.Versions[0].GAME_VER = '8.1.0';
+            config.Versions[0].GAME_VER = '8.2.0';
         }
         config.Versions[0].ISSUER_ID = req.query.issuer;
         config.Versions[0].SERVER_VER.Metrics.MetricsServerHost = `http://${serverhost}`;
@@ -101,6 +101,8 @@ app.post('/oauth/token', async (req, res) => {
         return;
     }
 
+    const gameVersion = getGameVersionFromJWTPis(external_platform == 'steam' ? req.body.steam_appid : epic_appid);
+
     if (req.body.pId && !/^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/.test(req.body.pId)) {
         res.status(400).end(); // pId is not a GUID
         return;
@@ -108,7 +110,7 @@ app.post('/oauth/token', async (req, res) => {
 
 
     if (!req.body.pId) { // if no profile id supplied
-        await readFile(path.join('userdata', external_users_folder, `${external_userid}.json`)).then(data => { // get profile id from external id
+        await readFile(path.join('userdata', gameVersion, external_users_folder, `${external_userid}.json`)).then(data => { // get profile id from external id
             // TODO: check legit server response
             req.body.pId = data;
         }).catch(async err => {
@@ -117,10 +119,10 @@ app.post('/oauth/token', async (req, res) => {
             }
             // external id has no profile associated: create new profile and link external id to it
             req.body.pId = uuid.v4();
-            await writeFile(path.join('userdata', external_users_folder, `${external_userid}.json`), req.body.pId, { fsyncWait: false });
+            await writeFile(path.join('userdata', gameVersion, external_users_folder, `${external_userid}.json`), req.body.pId, { fsyncWait: false });
         });
     } else { // if a profile id is supplied
-        readFile(path.join('userdata', external_users_folder, `${external_userid}.json`)).then(pId => { // read profile id linked to supplied external id
+        readFile(path.join('userdata', gameVersion, external_users_folder, `${external_userid}.json`)).then(pId => { // read profile id linked to supplied external id
             if (pId != req.body.pId) { // requested external id is linked to different profile id
                 // TODO: check legit server response
             }
@@ -129,11 +131,11 @@ app.post('/oauth/token', async (req, res) => {
                 throw err; // rethrow if error is something else than a non-existant file
             }
             // external id is not yet linked to this profile
-            await writeFile(path.join('userdata', external_users_folder, `${external_userid}.json`), req.body.pId, { fsyncWait: false }); // link it
+            await writeFile(path.join('userdata', gameVersion, external_users_folder, `${external_userid}.json`), req.body.pId, { fsyncWait: false }); // link it
         })
     }
 
-    await readFile(path.join('userdata', 'users', `${req.body.pId}.json`)).then(data => {
+    await readFile(path.join('userdata', gameVersion, 'users', `${req.body.pId}.json`)).then(data => {
         let userdata = JSON.parse(data);
         if (userdata.LinkedAccounts[external_platform] != external_userid) { // requested profile id is linked to different external id
             // TODO: check legit server response
@@ -145,7 +147,7 @@ app.post('/oauth/token', async (req, res) => {
         }
         // User does not exist, create new profile from default:
 
-        let userdata = JSON.parse(await readFile(path.join('userdata', 'default.json')));
+        let userdata = JSON.parse(await readFile(path.join('userdata', gameVersion, 'default.json')));
         userdata.Id = req.body.pId;
         userdata.LinkedAccounts[external_platform] = external_userid;
         if (external_platform == 'steam') {
@@ -154,9 +156,9 @@ app.post('/oauth/token', async (req, res) => {
             userdata.EpicId = req.body.epic_userid;
         }
         // add all unlockables to player's inventory
-        const allunlockables = JSON.parse(await readFile(path.join('userdata', 'allunlockables.json')))
+        const allunlockables = JSON.parse(await readFile(path.join('userdata', gameVersion, 'allunlockables.json')))
             .filter(u => u.Type != 'location') // locations not in inventory
-            .concat(JSON.parse(await readFile(path.join('userdata', 'emotes.json')))); // add emotes to inventory
+            .concat(JSON.parse(await readFile(path.join('userdata', gameVersion, 'emotes.json')))); // add emotes to inventory
         // TODO: challengemultiplier type unlockables - (only used for sniper gamemode?)
         userdata.Extensions.inventory = allunlockables.map(unlockable => {
             unlockable.GameAsset = null;
@@ -172,7 +174,7 @@ app.post('/oauth/token', async (req, res) => {
         for (const unlockable of userdata.Extensions.inventory) {
             unlockable.ProfileId = req.body.pId;
         }
-        await writeFile(path.join('userdata', 'users', `${req.body.pId}.json`), JSON.stringify(userdata), { fsyncWait: false });
+        await writeFile(path.join('userdata', gameVersion, 'users', `${req.body.pId}.json`), JSON.stringify(userdata), { fsyncWait: false });
     });
 
     // Format here follows steam_external, Epic jwt has some different fields
@@ -215,7 +217,7 @@ app.get('/authentication/api/configuration/Init?*', extractToken, (req, res) => 
             resourcedir = 'resources-7-17';
             break;
         case 'fghi4567xQOCheZIin0pazB47qGUvZw4':
-            resourcedir = 'resources-8-1';
+            resourcedir = 'resources-8-2';
             break;
     }
     res.json({
@@ -248,6 +250,7 @@ app.get('/', (req, res) => {
 // set req.serverVersion
 app.use(express.Router().use('/resources-:serverVersion(\\d+-\\d+)/', (req, res, next) => {
     req.serverVersion = req.params.serverVersion; // set serverVersion from url (e.g. /resources/7-17/)
+    req.gameVersion = getGameVersionFromServerVersion(req.serverVersion);
     next('router');
 }).use(extractToken, (req, res, next) => {
     switch (req.jwt.pis) { // set ServerVersion from jwt (appid from login token)
@@ -259,9 +262,10 @@ app.use(express.Router().use('/resources-:serverVersion(\\d+-\\d+)/', (req, res,
             req.serverVersion = '7-17';
             break;
         case 'fghi4567xQOCheZIin0pazB47qGUvZw4': // hitman 3 epic
-            req.serverVersion = '8-1';
+            req.serverVersion = '8-2';
             break;
     }
+    req.gameVersion = getGameVersionFromServerVersion(req.serverVersion);
     next();
 }));
 
@@ -287,7 +291,7 @@ app.use(express.Router().use((req, res, next) => {
     switch (req.serverVersion) {
         case '6-74':
         case '7-17':
-        case '8-1':
+        case '8-2':
             next(); // continue along h3router
             break;
         default:
