@@ -687,7 +687,7 @@ async function generateUserCentric(contractData, userData, gameVersion, repoData
     const repo = repoData || JSON.parse(await readFile(path.join('userdata', gameVersion, 'allunlockables.json')));
     const sublocation = repo.find(entry => entry.Id == contractData.Metadata.Location);
     sublocation.DisplayNameLocKey = `UI_${sublocation.Id}_NAME`;
-    const maxlevel = maxLevelForLocation(sublocation.Properties.ProgressionKey);
+    const maxlevel = maxLevelForLocation(sublocation.Properties.ProgressionKey, gameVersion);
     const locationProgression = userData.Extensions.progression.Locations[sublocation.Properties.ProgressionKey.toLowerCase()];
     return {
         Contract: contractData,
@@ -709,7 +709,7 @@ async function generateUserCentric(contractData, userData, gameVersion, repoData
             ParentLocationId: sublocation.Properties.ParentLocation,
             CompletionData: {
                 Level: locationProgression.Level,
-                MaxLevel: maxLevelForLocation(sublocation.Properties.ProgressionKey),
+                MaxLevel: maxlevel,
                 XP: locationProgression.Xp,
                 Completion: (locationProgression.Level == maxlevel) ? 1 :
                     (locationProgression.Xp - xpRequiredForLevel(locationProgression.Level)) /

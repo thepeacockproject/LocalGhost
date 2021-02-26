@@ -21,7 +21,7 @@ async function missionend(req, res) {
     const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
     const contractData = JSON.parse(await readFile(path.join('contractdata', `${sessionDetails.contractId}.json`)));
     const sublocation = unlockables.find(entry => entry.Id == contractData.Metadata.Location);
-    const maxlevel = maxLevelForLocation(sublocation.Properties.ProgressionKey);
+    const maxlevel = maxLevelForLocation(sublocation.Properties.ProgressionKey, req.gameVersion);
     const locationProgression = userData.Extensions.progression.Locations[sublocation.Properties.ProgressionKey.toLowerCase()];
 
     let nonTargetKills = sessionDetails.npcKills.size + sessionDetails.crowdNpcKills;

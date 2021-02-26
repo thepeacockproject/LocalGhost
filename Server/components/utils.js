@@ -32,30 +32,62 @@ function xpRequiredForLevel(level) {
     return level * 6000 - 6000;
 }
 
-function maxLevelForLocation(location) {
-    switch (location.toUpperCase()) {
-        case 'LOCATION_PARIS':
-        case 'LOCATION_PARENT_COASTALTOWN':
-        case 'LOCATION_MARRAKECH':
-        case 'LOCATION_COLORADO':
-        case 'LOCATION_BANGKOK':
-        case 'LOCATION_HOKKAIDO':
-        case 'LOCATION_MIAMI':
-        case 'LOCATION_COLOMBIA':
-        case 'LOCATION_MUMBAI':
-        case 'LOCATION_NORTHSEA':
-        case 'LOCATION_OPULENT':
-        case 'LOCATION_AUSTRIA':
-        case 'LOCATION_SALTY':
-        case 'LOCATION_CAGED':
-            return 20;
-        case 'LOCATION_GREEDY':
-        case 'LOCATION_NORTHAMERICA':
-            return 15;
-        case 'LOCATION_NEWZEALAND':
-            return 5;
-        case 'LOCATION_ICA_FACILITY':
-            return 1;
+function maxLevelForLocation(location, gameVersion) {
+    if (gameVersion == 'h3') {
+        switch (location.toUpperCase()) {
+            case 'LOCATION_PARIS':
+            case 'LOCATION_PARENT_COASTALTOWN':
+            case 'LOCATION_MARRAKECH':
+            case 'LOCATION_COLORADO':
+            case 'LOCATION_BANGKOK':
+            case 'LOCATION_HOKKAIDO':
+            case 'LOCATION_MIAMI':
+            case 'LOCATION_COLOMBIA':
+            case 'LOCATION_MUMBAI':
+            case 'LOCATION_NORTHAMERICA':
+            case 'LOCATION_NORTHSEA':
+            case 'LOCATION_GREEDY':
+            case 'LOCATION_OPULENT':
+            case 'LOCATION_AUSTRIA':
+            case 'LOCATION_SALTY':
+            case 'LOCATION_CAGED':
+            case 'LOCATION_GOLDEN':
+            case 'LOCATION_ANCESTRAL':
+            case 'LOCATION_EDGY':
+            case 'LOCATION_WET':
+            case 'LOCATION_ELEGANT':
+                return 20;
+            case 'LOCATION_NEWZEALAND':
+            case 'LOCATION_TRAPPED':
+                return 5;
+            case 'LOCATION_ICA_FACILITY':
+                return 1;
+        }
+    } else {
+        switch (location.toUpperCase()) {
+            case 'LOCATION_PARIS':
+            case 'LOCATION_PARENT_COASTALTOWN':
+            case 'LOCATION_MARRAKECH':
+            case 'LOCATION_COLORADO':
+            case 'LOCATION_BANGKOK':
+            case 'LOCATION_HOKKAIDO':
+            case 'LOCATION_MIAMI':
+            case 'LOCATION_COLOMBIA':
+            case 'LOCATION_MUMBAI':
+            case 'LOCATION_NORTHSEA':
+            case 'LOCATION_OPULENT':
+            case 'LOCATION_AUSTRIA':
+            case 'LOCATION_SALTY':
+            case 'LOCATION_CAGED':
+                return 20;
+            case 'LOCATION_GREEDY':
+            case 'LOCATION_NORTHAMERICA':
+                return 15;
+            case 'LOCATION_NEWZEALAND':
+                return 5;
+            case 'LOCATION_ICA_FACILITY':
+                return 1;
+        }
     }
     return 1;
 }
