@@ -26,7 +26,7 @@ app.get('/dynamic_resources_pc_release_rpkg', (req, res) => {
             root: '.',
             headers: {
                 'Content-Type': 'application/octet-stream',
-                'Content-MD5': '3+BKedpHBtLvt2lupu0Qrw==',
+                'Content-MD5': 'sKdapJtENwg93lOPRcPG6A==',
             },
         });
     });
