@@ -433,7 +433,7 @@ app.get('/selectagencypickup', extractToken, async (req, res) => {
             Contract: contractData,
             OrderedUnlocks: unlockedAgencyPickups.filter(unlockable => pickupsInScene.includes(unlockable.Properties.RepositoryId))
                 .sort((a, b) => a.Properties.UnlockOrder - b.Properties.UnlockOrder),
-            UserCentric: generateUserCentric(contractData, userData, req.gameVersion),
+            UserCentric: await generateUserCentric(contractData, userData, req.gameVersion),
         };
         res.json(selectagencypickup);
     }).catch(err => {
@@ -463,7 +463,7 @@ app.get('/selectentrance', extractToken, async (req, res) => {
             Contract: contractData,
             OrderedUnlocks: unlockedEntrances.filter(unlockable => entrancesInScene.includes(unlockable.Properties.RepositoryId))
                 .sort((a, b) => a.Properties.UnlockOrder - b.Properties.UnlockOrder),
-            UserCentric: generateUserCentric(contractData, userData, req.gameVersion),
+            UserCentric: await generateUserCentric(contractData, userData, req.gameVersion),
         };
         res.json(selectentrance);
     }).catch(err => {
