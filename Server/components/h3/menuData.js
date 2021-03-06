@@ -302,11 +302,16 @@ app.get('/multiplayer', extractToken, async (req, res) => { // /multiplayer?game
 app.get('/Planning', extractToken, async (req, res) => {
     const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
     const repo = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'allunlockables.json')));
+    const entranceData = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'Entrances.json')));
     readFile(path.join('contractdata', `${req.query.contractid}.json`)).then(async contractfile => {
         const contractData = JSON.parse(contractfile);
         const creatorProfile = (await resolveProfiles([contractData.Metadata.CreatorUserId], req.gameVersion))[0]
             || (await resolveProfiles(['fadb923c-e6bb-4283-a537-eb4d1150262e'], req.gameVersion))[0]; // use IOI profile if profile not found
         const sublocation = repo.find(entry => entry.Id == contractData.Metadata.Location);
+        const entrancesInScene = entranceData[contractData.Metadata.ScenePath.toLowerCase()];
+        const unlockedEntrances = userData.Extensions.inventory.filter(item => item.Unlockable.Type == 'access')
+            .map(i => i.Unlockable)
+            .filter(unlockable => unlockable.Properties.RepositoryId);
         sublocation.DisplayNameLocKey = `UI_${sublocation.Id}_NAME`;
         res.json({
             template: null,
@@ -325,7 +330,8 @@ app.get('/Planning', extractToken, async (req, res) => {
                     .filter(id => id),
                 Objectives: await mapObjectives(contractData.Data.Objectives, contractData.Data.GameChangers, contractData.Metadata.GroupObjectiveDisplayOrder),
                 GroupData: {},
-                Entrances: [], // TODO
+                Entrances: unlockedEntrances.filter(unlockable => entrancesInScene.includes(unlockable.Properties.RepositoryId))
+                    .sort((a, b) => a.Properties.UnlockOrder - b.Properties.UnlockOrder),
                 Location: sublocation,
                 LoadoutData: [
                     {
@@ -446,6 +452,7 @@ app.get('/selectagencypickup', extractToken, async (req, res) => {
         }
     });
 });
+
 
 app.get('/selectentrance', extractToken, async (req, res) => {
     let selectentrance = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'selectentrance.json'))); // template
