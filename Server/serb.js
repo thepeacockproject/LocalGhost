@@ -33,7 +33,7 @@ app.get('/config/pc-prod/:serverVersion(\\d+_\\d+_\\d+)', (req, res) => {
         } else if (req.params.serverVersion.startsWith('8')) {
             config.Versions[0].GAME_VER = '8.2.0';
         }
-        config.Versions[0].ISSUER_ID = req.query.issuer;
+        config.Versions[0].ISSUER_ID = req.query.issuer || '*';
         config.Versions[0].SERVER_VER.Metrics.MetricsServerHost = `http://${serverhost}`;
         config.Versions[0].SERVER_VER.Authentication.AuthenticationHost = `http://${serverhost}`;
         config.Versions[0].SERVER_VER.Configuration.Url = `http://${serverhost}/files/onlineconfig.json`;
