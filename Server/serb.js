@@ -205,34 +205,6 @@ app.post('/oauth/token', async (req, res) => {
     });
 });
 
-app.get('/authentication/api/configuration/Init?*', extractToken, (req, res) => { // configName=pc-prod&lockedContentDisabled=false&isFreePrologueUser=false&isIntroPackUser=false&isFullExperienceUser=false
-    let serverhost = req.hostname;
-    let resourcedir;
-    switch (req.jwt.pis) {
-        case 'egp_io_interactive_hitman_the_complete_first_season':
-        case '236870':
-            resourcedir = 'resources-6-74';
-            break;
-        case '863550':
-            resourcedir = 'resources-7-17';
-            break;
-        case 'fghi4567xQOCheZIin0pazB47qGUvZw4':
-            resourcedir = 'resources-8-2';
-            break;
-    }
-    res.json({
-        token: `${req.jwt.exp}-${req.jwt.nbf}-${req.jwt.platform}-${req.jwt.userid}`,
-        blobconfig: {
-            bloburl: `http://${serverhost}/${resourcedir}/`,
-            blobsig: '?sv=2018-03-28',
-            blobsigduration: 7200000.0
-        },
-        profileid: req.jwt.unique_name,
-        serverversion: `${ServerVer._Major}.${ServerVer._Minor}.${ServerVer._Build}.${ServerVer._Revision}`,
-        servertimeutc: new Date().toISOString(),
-    });
-});
-
 app.get('/files/onlineconfig.json', (req, res) => {
     res.sendFile(path.join('static', 'onlineconfig.json'), {
         root: '.',
@@ -246,10 +218,11 @@ app.get('/', (req, res) => {
     res.send('pog'); // simple test page
 });
 
+// --- Everything below requires authentication or points to /resources-{serverVersion}/* ---
 
 // set req.serverVersion
 app.use(express.Router().use('/resources-:serverVersion(\\d+-\\d+)/', (req, res, next) => {
-    req.serverVersion = req.params.serverVersion; // set serverVersion from url (e.g. /resources/7-17/)
+    req.serverVersion = req.params.serverVersion; // set serverVersion from url (e.g. /resources-7-17/)
     req.gameVersion = getGameVersionFromServerVersion(req.serverVersion);
     next('router');
 }).use(extractToken, (req, res, next) => {
@@ -269,6 +242,27 @@ app.use(express.Router().use('/resources-:serverVersion(\\d+-\\d+)/', (req, res,
     next();
 }));
 
+function generateBlobConfig(req) {
+    return {
+        bloburl: `http://${req.hostname}/resources-${req.serverVersion}/`,
+        blobsig: '?sv=2018-03-28',
+        blobsigduration: 7200000.0
+    };
+}
+
+app.get('/authentication/api/configuration/Init?*', extractToken, (req, res) => { // configName=pc-prod&lockedContentDisabled=false&isFreePrologueUser=false&isIntroPackUser=false&isFullExperienceUser=false
+    res.json({
+        token: `${req.jwt.exp}-${req.jwt.nbf}-${req.jwt.platform}-${req.jwt.userid}`,
+        blobconfig: generateBlobConfig(req),
+        profileid: req.jwt.unique_name,
+        serverversion: `${ServerVer._Major}.${ServerVer._Minor}.${ServerVer._Build}.${ServerVer._Revision}`,
+        servertimeutc: new Date().toISOString(),
+    });
+});
+
+app.post('/authentication/api/userchannel/AuthenticationService/RenewBlobSignature', extractToken, (req, res) => {
+    res.json(generateBlobConfig(req));
+});
 
 app.use(express.Router().use((req, res, next) => {
     switch (req.serverVersion) {
