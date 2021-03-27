@@ -2975,6 +2975,94 @@
       }
     ]
   },
+  "a6b4c2a1-6da1-45cb-b3dc-a2f86bc3fa5c": {
+    "Name": "UI_GAMECHANGERS_GLOBAL_KILL_STREAK_60_SEC_5_TARGETS_NAME",
+    "Description": "UI_GAMECHANGERS_GLOBAL_KILL_STREAK_60_SEC_5_TARGETS_DESC",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Global_KillStreak.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "primary",
+    "IsHidden": null,
+    "Resource": [],
+    "Objectives": [
+      {
+        "Id": "a1f573f5-c8c2-4828-8d4e-bf24e71f9e4c",
+        "Category": "primary",
+        "OnActive": {
+          "IfCompleted": {
+            "Visible": false
+          }
+        },
+        "BriefingText": "$loc UI_GAMECHANGERS_GLOBAL_CAMERA_MISSION_COUNTDOWN_FAIL",
+        "HUDTemplate": {
+          "display": "$loc UI_BRIEFING_DIAL_TIME"
+        },
+        "Type": "statemachine",
+        "Definition": {
+          "Scope": "session",
+          "Context": {
+            "AmountToKill": 5
+          },
+          "States": {
+            "Start": {
+              "-": {
+                "Transition": "Success"
+              }
+            },
+            "Success": {
+              "Kill": {
+                "Condition": {
+                  "$eq": [
+                    "$Value.IsTarget",
+                    true
+                  ]
+                },
+                "Actions": {
+                  "$dec": "AmountToKill"
+                },
+                "Transition": "CheckCount"
+              }
+            },
+            "CheckCount": {
+              "-": [
+                {
+                  "Condition": {
+                    "$eq": [
+                      "$.AmountToKill",
+                      0
+                    ]
+                  },
+                  "Transition": "Success"
+                },
+                {
+                  "Transition": "InKillStreak"
+                }
+              ]
+            },
+            "InKillStreak": {
+              "$timer": {
+                "Condition": {
+                  "$after": 60
+                },
+                "Transition": "Failure"
+              },
+              "Kill": {
+                "Condition": {
+                  "$eq": [
+                    "$Value.IsTarget",
+                    true
+                  ]
+                },
+                "Actions": {
+                  "$dec": "AmountToKill"
+                },
+                "Transition": "CheckCount"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
   "1d58a82b-ff56-4d88-9d02-8a6a1f9c35b1": {
     "Name": "UI_GAMECHANGERS_MODULE_002_ALL_CAMERAS_NAME",
     "Description": "UI_GAMECHANGERS_MODULE_002_ALL_CAMERAS_DESC",
@@ -7988,5 +8076,15 @@
         }
       }
     ]
+  },
+  "b50b19c2-dacb-4baa-8498-048baa5ee2ec": {
+    "Name": "UI_CONTRACT_NIGHTPHLOX_ADDENTRANCES_NAME",
+    "Description": "UI_CONTRACT_NIGHTPHLOX_ADDENTRANCES_NAME",
+    "TileImage": "images/contracts/Escalation/ContractEscalation_Edgy_Night-Phlox_AddEntrances.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "secondary",
+    "IsHidden": null,
+    "Resource": [],
+    "Objectives": []
   }
 }

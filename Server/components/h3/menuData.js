@@ -6,7 +6,7 @@ const path = require('path');
 const uuid = require('uuid');
 const { readFile } = require('atomically');
 
-const { extractToken, MaxPlayerLevel, xpRequiredForLevel, maxLevelForLocation } = require('../utils.js');
+const { extractToken, MaxPlayerLevel, xpRequiredForLevel, maxLevelForLocation, getTemplate } = require('../utils.js');
 const { resolveProfiles } = require('./profileHandler.js');
 const { contractSessions } = require('./eventHandler.js');
 const scoreHandler = require('./scoreHandler.js');
@@ -15,7 +15,7 @@ const app = express.Router();
 
 // /profiles/page/
 
-app.get('/dashboard/Dashboard_Category_Escalation/10000000-0000-0000-0000-000000000000/ContractList/25739126-6a40-4b0b-b9a6-5da1b737190b/dataonly', extractToken, async (req, res) => {
+app.get('/dashboard/Dashboard_Category_Escalation/10000000-0000-0000-0000-000000000000/ContractList/25739126-6a40-4b0b-b9a6-5da1b737190b/:mode', extractToken, async (req, res) => {
     const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
     const repoData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'allunlockables.json')));
     let contractIds = [];
@@ -45,7 +45,7 @@ app.get('/dashboard/Dashboard_Category_Escalation/10000000-0000-0000-0000-000000
     }).filter(data => data); // filter out nulls
 
     res.json({
-        template: null,
+        template: req.params.mode == 'dataonly' ? null : await getTemplate('dashboard_category'),
         data: {
             Item: {
                 Id: '25739126-6a40-4b0b-b9a6-5da1b737190b',
@@ -69,7 +69,7 @@ app.get('/Hub', extractToken, async (req, res) => {
         return JSON.parse(await readFile(path.join('menudata', 'h3', 'serverTile.template.json'))); // use template if no custom serverTile.json exists
     });
     res.json({
-        template: null,
+        template: await getTemplate('hub', req.gameVersion),
         data: {
             ServerTile: serverTile,
             DashboardData: [{
@@ -196,7 +196,6 @@ app.get('/stashpoint', extractToken, async (req, res) => {
     // /stashpoint?contractid=c1d015b4-be08-4e44-808e-ada0f387656f&slotid=3&slotname=disguise3&stashpoint=&allowlargeitems=true&allowcontainers=true
     // /stashpoint?contractid=&slotid=3&slotname=disguise&stashpoint=&allowlargeitems=true&allowcontainers=false
     // /stashpoint?contractid=5b5f8aa4-ecb4-4a0a-9aff-98aa1de43dcc&slotid=6&slotname=stashpoint6&stashpoint=28b03709-d1f0-4388-b207-f03611eafb64&allowlargeitems=true&allowcontainers=false
-    const stashData = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'stashpoint.json'))); // template only
     const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
     let contractData;
     await readFile(path.join('contractdata', `${req.query.contractid}.json`)).then(contractfile => {
@@ -212,44 +211,47 @@ app.get('/stashpoint', extractToken, async (req, res) => {
         req.query.slotname = req.query.slotname.slice(0, -req.query.slotid.toString().length); // weird
     }
 
-    stashData.data = {
-        SlotId: req.query.slotid,
-        LoadoutItemsData: {
+    const stashData = {
+        template: await getTemplate('stashpoint', req.gameVersion),
+        data: {
             SlotId: req.query.slotid,
-            Items: userData.Extensions.inventory.filter(item => {
-                return item.Unlockable.Properties.LoadoutSlot // only display items
-                    && (!req.query.slotname
-                        || ((/^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/.test(req.query.slotid) // container
-                            || req.query.slotname == 'stashpoint') // stashpoint
-                            && item.Unlockable.Properties.LoadoutSlot != 'disguise') // container or stashpoint => display all items
-                        || item.Unlockable.Properties.LoadoutSlot == req.query.slotname) // else: display items for requested slot
-                    && (req.query.allowcontainers == 'true' || !item.Unlockable.Properties.IsContainer)
-                    && (req.query.allowlargeitems == 'true' || item.Unlockable.Properties.LoadoutSlot != 'carriedweapon'); // not sure about this one
-                // TODO: filter for specific stashpoints?
-            }).map(item => ({
-                Item: item,
-                ItemDetails: {
-                    Capabilities: [],
-                    StatList: item.Unlockable.Properties.Gameplay ? Object.entries(item.Unlockable.Properties.Gameplay).map(([key, value]) => ({
-                        Name: key,
-                        Ratio: value,
-                    })) : [],
-                    PropertyTexts: [],
-                },
+            LoadoutItemsData: {
                 SlotId: req.query.slotid,
-                SlotName: null,
-            })),
-            Page: 0,
-            HasMore: false,
-            HasMoreLeft: false,
-            HasMoreRight: false,
-            OptionalData: {
-                stashpoint: req.query.stashpoint || '',
-                AllowLargeItems: req.query.allowlargeitems, //?? true (null coalescing when) (edit: not needed as it's always sent)
-                AllowContainers: req.query.allowcontainers, //?? true
-            }
-        },
-        ShowSlotName: req.query.slotname,
+                Items: userData.Extensions.inventory.filter(item => {
+                    return item.Unlockable.Properties.LoadoutSlot // only display items
+                        && (!req.query.slotname
+                            || ((/^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/.test(req.query.slotid) // container
+                                || req.query.slotname == 'stashpoint') // stashpoint
+                                && item.Unlockable.Properties.LoadoutSlot != 'disguise') // container or stashpoint => display all items
+                            || item.Unlockable.Properties.LoadoutSlot == req.query.slotname) // else: display items for requested slot
+                        && (req.query.allowcontainers == 'true' || !item.Unlockable.Properties.IsContainer)
+                        && (req.query.allowlargeitems == 'true' || item.Unlockable.Properties.LoadoutSlot != 'carriedweapon'); // not sure about this one
+                    // TODO: filter for specific stashpoints?
+                }).map(item => ({
+                    Item: item,
+                    ItemDetails: {
+                        Capabilities: [],
+                        StatList: item.Unlockable.Properties.Gameplay ? Object.entries(item.Unlockable.Properties.Gameplay).map(([key, value]) => ({
+                            Name: key,
+                            Ratio: value,
+                        })) : [],
+                        PropertyTexts: [],
+                    },
+                    SlotId: req.query.slotid,
+                    SlotName: null,
+                })),
+                Page: 0,
+                HasMore: false,
+                HasMoreLeft: false,
+                HasMoreRight: false,
+                OptionalData: {
+                    stashpoint: req.query.stashpoint || '',
+                    AllowLargeItems: req.query.allowlargeitems, //?? true (null coalescing when) (edit: not needed as it's always sent)
+                    AllowContainers: req.query.allowcontainers, //?? true
+                }
+            },
+            ShowSlotName: req.query.slotname,
+        }
     }
     if (contractData) {
         stashData.data.UserCentric = await generateUserCentric(contractData, userData, req.gameVersion)
@@ -261,7 +263,7 @@ app.get('/multiplayerpresets', extractToken, async (req, res) => { // /multiplay
     if (req.query.gamemode != 'versus') { // not sure what happens here
         next();
     }
-    let multiplayerPresets = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'multiplayerpresets.json')));
+    let multiplayerPresets = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'MultiplayerPresets.json')));
 
     multiplayerPresets.data.LoadoutData = await getLoadoutData(req.jwt.unique_name, req.query.disguiseUnlockableId, req.gameVersion);
     // TODO: completion data for locations
@@ -320,7 +322,7 @@ app.get('/Planning', extractToken, async (req, res) => {
             .filter(unlockable => unlockable.Properties.RepositoryId);
         sublocation.DisplayNameLocKey = `UI_${sublocation.Id}_NAME`;
         res.json({
-            template: null,
+            template: await getTemplate('planning', req.gameVersion),
             data: {
                 Contract: contractData,
                 ElusiveContractState: 'not_completed', // TODO? ['completed', 'not_completed', 'time_ran_out', 'failed'], empty string for non elusives
@@ -426,11 +428,16 @@ app.get('/Planning', extractToken, async (req, res) => {
 });
 
 app.get('/leaderboardsview', extractToken, async (req, res) => {
-    res.json(JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'leaderboardsview.json')))); // stripped template
+    res.json({
+        template: await getTemplate('leaderboardsview', req.gameVersion),
+        data: {
+            LeaderboardUrl: 'leaderboardentries',
+            LeaderboardType: ''
+        }
+    });
 });
 
 app.get('/selectagencypickup', extractToken, async (req, res) => {
-    let selectagencypickup = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'selectagencypickup.json'))); // template
     const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
     const pickupData = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'AgencyPickups.json')));
     readFile(path.join('contractdata', `${req.query.contractId}.json`)).then(async contractfile => {
@@ -440,12 +447,15 @@ app.get('/selectagencypickup', extractToken, async (req, res) => {
             .map(i => i.Unlockable)
             .filter(unlockable => unlockable.Properties.RepositoryId);
 
-        selectagencypickup.data = {
-            Unlocked: unlockedAgencyPickups.map(unlockable => unlockable.Properties.RepositoryId),
-            Contract: contractData,
-            OrderedUnlocks: unlockedAgencyPickups.filter(unlockable => pickupsInScene.includes(unlockable.Properties.RepositoryId))
-                .sort((a, b) => a.Properties.UnlockOrder - b.Properties.UnlockOrder),
-            UserCentric: await generateUserCentric(contractData, userData, req.gameVersion),
+        const selectagencypickup = {
+            template: await getTemplate('selectagencypickup', req.gameVersion),
+            data: {
+                Unlocked: unlockedAgencyPickups.map(unlockable => unlockable.Properties.RepositoryId),
+                Contract: contractData,
+                OrderedUnlocks: unlockedAgencyPickups.filter(unlockable => pickupsInScene.includes(unlockable.Properties.RepositoryId))
+                    .sort((a, b) => a.Properties.UnlockOrder - b.Properties.UnlockOrder),
+                UserCentric: await generateUserCentric(contractData, userData, req.gameVersion),
+            }
         };
         res.json(selectagencypickup);
     }).catch(err => {
@@ -461,7 +471,6 @@ app.get('/selectagencypickup', extractToken, async (req, res) => {
 
 
 app.get('/selectentrance', extractToken, async (req, res) => {
-    let selectentrance = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'selectentrance.json'))); // template
     const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
     const entranceData = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'Entrances.json')));
     readFile(path.join('contractdata', `${req.query.contractId}.json`)).then(async contractfile => {
@@ -471,12 +480,15 @@ app.get('/selectentrance', extractToken, async (req, res) => {
             .map(i => i.Unlockable)
             .filter(unlockable => unlockable.Properties.RepositoryId);
 
-        selectentrance.data = {
-            Unlocked: unlockedEntrances.map(unlockable => unlockable.Properties.RepositoryId),
-            Contract: contractData,
-            OrderedUnlocks: unlockedEntrances.filter(unlockable => entrancesInScene.includes(unlockable.Properties.RepositoryId))
-                .sort((a, b) => a.Properties.UnlockOrder - b.Properties.UnlockOrder),
-            UserCentric: await generateUserCentric(contractData, userData, req.gameVersion),
+        const selectentrance = {
+            template: await getTemplate('selectentrance', req.gameVersion),
+            data: {
+                Unlocked: unlockedEntrances.map(unlockable => unlockable.Properties.RepositoryId),
+                Contract: contractData,
+                OrderedUnlocks: unlockedEntrances.filter(unlockable => entrancesInScene.includes(unlockable.Properties.RepositoryId))
+                    .sort((a, b) => a.Properties.UnlockOrder - b.Properties.UnlockOrder),
+                UserCentric: await generateUserCentric(contractData, userData, req.gameVersion),
+            }
         };
         res.json(selectentrance);
     }).catch(err => {
@@ -491,11 +503,13 @@ app.get('/selectentrance', extractToken, async (req, res) => {
 });
 
 app.get('/missionendready', async (req, res) => {
-    let missionendready = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'missionendready.json'))); // template
-    missionendready.data = {
-        contractSessionId: req.query.contractSessionId,
-        missionEndReady: true,
-        retryCount: 1,
+    const missionendready = {
+        template: await getTemplate('missionendready', req.gameVersion),
+        data: {
+            contractSessionId: req.query.contractSessionId,
+            missionEndReady: true,
+            retryCount: 1,
+        }
     };
     res.json(missionendready);
 });

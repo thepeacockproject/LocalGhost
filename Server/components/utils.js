@@ -2,6 +2,9 @@
 // Licensed under the zlib license. See LICENSE for more info
 
 const jwt = require('jsonwebtoken');
+const path = require('path');
+const { readFile } = require('atomically');
+
 
 const ServerVer = {
     _Major: 7,
@@ -124,6 +127,18 @@ function getGameVersionFromServerVersion(serverVersion) {
     return 'h3';
 }
 
+async function getTemplate(endpoint, gameVersion) {
+    return await readFile(path.join('menudata', gameVersion, 'menudata', 'templates', `${endpoint}.json`)).then(fileData => {
+        let json = JSON.parse(fileData);
+        return JSON.parse(fileData);
+    }).catch(err => {
+        if (err.code != 'ENOENT') { // if other error than non-existant file
+            console.log(err);
+        }
+        return null;
+    });
+}
+
 module.exports = {
     extractToken,
     ServerVer,
@@ -133,4 +148,5 @@ module.exports = {
     getLocationCompletion,
     getGameVersionFromJWTPis,
     getGameVersionFromServerVersion,
+    getTemplate,
 };

@@ -7,6 +7,7 @@ const { readFile } = require('atomically');
 const { xpRequiredForLevel, maxLevelForLocation, getLocationCompletion } = require('../utils.js');
 const { contractSessions } = require('./eventHandler.js');
 
+// /profiles/page/missionend
 async function missionend(req, res) {
     const sessionDetails = contractSessions.get(req.query.contractSessionId);
     if (!sessionDetails) { // contract session not found
