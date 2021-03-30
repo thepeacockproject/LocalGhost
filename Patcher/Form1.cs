@@ -71,9 +71,10 @@ namespace Hitman2Patcher
 						}
 						// else: process not yet ready for patching, try again next timer tick
 					}
-					catch (Win32Exception)
+					catch (Win32Exception err)
 					{
 						log(String.Format("Failed to patch processid {0}: error code {1}", process.Id, Marshal.GetLastWin32Error()));
+						log(err.Message);
 						patchedprocesses.Add(process.Id);
 					}
 					catch (NotImplementedException)
@@ -188,6 +189,11 @@ namespace Hitman2Patcher
 					comboBox1.Items.Add("config.hitman.io");
 				}
 			}
+		}
+
+		private void Form1_Resize(object sender, EventArgs e)
+		{
+			listView1.Columns[0].Width = listView1.Width - 4 - SystemInformation.VerticalScrollBarWidth;
 		}
 	}
 }

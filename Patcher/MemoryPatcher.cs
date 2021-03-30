@@ -49,7 +49,6 @@ namespace Hitman2Patcher
 			int byteswritten;
 			uint oldprotectflags;
 			byte[] newurl = Encoding.ASCII.GetBytes(patchOptions.CustomConfigDomain).Concat(new byte[] { 0x00 }).ToArray();
-			bool success = true;
 			List<Patch> patches = new List<Patch>();
 
 			if (!IsReadyForPatching(hProcess, b, v))
@@ -86,29 +85,41 @@ namespace Hitman2Patcher
 				{
 					dataToWrite = newurl;
 				}
+				MemProtection newmemprotection = MemProtection.PAGE_READWRITE;
+				bool patchmemprotection = true;
 
 				if (patch.defaultProtection == MemProtection.PAGE_EXECUTE_READ)
 				{
-					success &= VirtualProtectEx(hProcess, b + patch.offset, (uint)dataToWrite.Length,
-						MemProtection.PAGE_EXECUTE_READWRITE, out oldprotectflags);
+					newmemprotection = MemProtection.PAGE_EXECUTE_READWRITE;
 				}
 				else if (patch.defaultProtection == MemProtection.PAGE_READONLY)
 				{
-					success &= VirtualProtectEx(hProcess, b + patch.offset, (uint)dataToWrite.Length,
-						MemProtection.PAGE_READWRITE, out oldprotectflags);
+					newmemprotection = MemProtection.PAGE_READWRITE;
+				}
+				else
+				{
+					patchmemprotection = false;
 				}
 
-				success &= WriteProcessMemory(hProcess, b + patch.offset, dataToWrite, (uint)dataToWrite.Length, out byteswritten);
+				if (patchmemprotection && !VirtualProtectEx(hProcess, b + patch.offset, (uint)dataToWrite.Length,
+						newmemprotection, out oldprotectflags))
+				{
+					throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at {0} for offset {1:X}", "vpe1", patch.offset));
+				}
 
-				success &= VirtualProtectEx(hProcess, b + patch.offset, (uint)dataToWrite.Length,
-					patch.defaultProtection, out oldprotectflags);
+				if (!WriteProcessMemory(hProcess, b + patch.offset, dataToWrite, (uint)dataToWrite.Length, out byteswritten))
+				{
+					throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at {0} for offset {1:X}", "wpm", patch.offset));
+				}
+
+				if (patchmemprotection && !VirtualProtectEx(hProcess, b + patch.offset, (uint)dataToWrite.Length,
+						patch.defaultProtection, out oldprotectflags))
+				{
+					throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at {0} for offset {1:X}", "vpe2", patch.offset));
+				}
 			}
 
 			CloseHandle(hProcess);
-			if (!success)
-			{
-				throw new Win32Exception(Marshal.GetLastWin32Error());
-			}
 			return true;
 		}
 
