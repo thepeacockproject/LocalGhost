@@ -10,6 +10,17 @@
     "5314c86b-7173-412b-a0b5-b0d9af2da722",
     "0aec817c-738e-4381-bbd4-a13b5d1c6730"
   ],
+  "assembly:/_pro/scenes/missions/ancestral/scene_smoothsnake.entity": [
+    "5a60147f-9c85-4998-b70f-1441ee7ba9b1",
+    "b38a7610-5f7f-4fcb-ad09-c554c3544367",
+    "3812ea57-e29c-42cb-b93a-ea2d3e6a6806",
+    "feaf524e-f54d-4815-bb2b-afb8f1a39141",
+    "0809cabd-20f1-4fd4-b4fc-9cdc86bdf7cf",
+    "d4ec0c94-02b2-4aae-be9e-cbb5cc7d7e4a",
+    "5314c86b-7173-412b-a0b5-b0d9af2da722",
+    "0aec817c-738e-4381-bbd4-a13b5d1c6730",
+    "384761fe-104c-11e5-bc55-3e819330f945"
+  ],
   "assembly:/_pro/scenes/missions/bangkok/_scene_mission_tiger.entity": [
     "3aa4388f-6f87-44a4-b3dc-ac015bf65264",
     "61f8efe4-7e9e-4add-b69e-bf40213209c2",
@@ -181,6 +192,38 @@
     "8ec50af5-e6b4-47d0-873b-0361cee52a05",
     "71de2f76-3f3e-43a0-b508-4992d32a344e"
   ],
+  "assembly:/_pro/scenes/missions/edgy/mission_fox/scene_fox_cornflower.entity": [
+    "88f47eb3-d914-46d9-99aa-6fb848964c7c",
+    "b1233f2e-83ce-4124-b139-9a7cbaf09e83",
+    "2f255e35-5d23-4b8a-9c5a-885a8c79e18a"
+  ],
+  "assembly:/_pro/scenes/missions/edgy/mission_fox/scene_fox_nightphlox.entity": [
+    "e7ddcb47-1c3f-444c-8300-40baaf0c463c",
+    "1edf1fe3-687f-4588-a3b2-06586b948146",
+    "c704455f-f065-4665-b1b5-b66dfcfd4f00",
+    "b37a535e-ae99-4266-998e-609eee4c9626"
+  ],
+  "assembly:/_pro/scenes/missions/edgy/mission_fox/scene_fox_smilax.entity": [
+    "b4c9da30-44f2-447f-b64f-a8fbaa59b35d",
+    "7bb625a4-bbfe-485f-b970-0e19048831c6"
+  ],
+  "assembly:/_pro/scenes/missions/edgy/mission_fox/scene_fox_smilax_level2.entity": [
+    "b4c9da30-44f2-447f-b64f-a8fbaa59b35d",
+    "0523519e-608e-49fd-bdda-3edc75fd1f77"
+  ],
+  "assembly:/_pro/scenes/missions/edgy/mission_fox/scene_fox_smilax_level3.entity": [
+    "b4c9da30-44f2-447f-b64f-a8fbaa59b35d",
+    "8ec50af5-e6b4-47d0-873b-0361cee52a05"
+  ],
+  "assembly:/_pro/scenes/missions/edgy/mission_fox/scene_grasssnake.entity": [
+    "694656e1-badf-4c20-9ff0-2a052c32aac8",
+    "f223f1f2-f009-4aeb-a6d5-cf0a38dc7262"
+  ],
+  "assembly:/_pro/scenes/missions/edgy/mission_fox/scene_radler.entity": [
+    "000fc136-f098-43a2-b204-26c038a55490",
+    "700603be-2925-4ec4-ae47-572068b801af",
+    "8ec50af5-e6b4-47d0-873b-0361cee52a05"
+  ],
   "assembly:/_pro/scenes/missions/elegant/scene_llama.entity": [
     "930f79a4-48f5-4521-ae7b-78104d11fe30",
     "29b96e56-a29f-4a4d-85b3-24e5be9f35a1",
@@ -190,6 +233,20 @@
     "939ead3c-0602-4144-a8e6-740719d1950f",
     "bfb5f09f-a8c9-4d4e-9787-f7169c09d428",
     "cef7b74a-bd2c-4ee9-94cd-4af5b4613556"
+  ],
+  "assembly:/_pro/scenes/missions/elegant/scene_llama_jacaranda.entity": [
+    "f45b0af4-e50d-477e-bb92-83136b04506f"
+  ],
+  "assembly:/_pro/scenes/missions/elegant/scene_whitedryas.entity": [
+    "88bd6f8f-a8db-437e-9f68-b1373677d03e"
+  ],
+  "assembly:/_pro/scenes/missions/elegant/scene_whitedryas_level2.entity": [
+    "a6a6be09-5827-4d23-b824-709d14c0099c",
+    "930f79a4-48f5-4521-ae7b-78104d11fe30"
+  ],
+  "assembly:/_pro/scenes/missions/elegant/scene_whitedryas_level3.entity": [
+    "930f79a4-48f5-4521-ae7b-78104d11fe30",
+    "939ead3c-0602-4144-a8e6-740719d1950f"
   ],
   "assembly:/_pro/scenes/missions/golden/mission_gecko/scene_gecko_basic.entity": [
     "bc531204-8e82-4550-b2a7-829b047dc6cc",
@@ -206,6 +263,19 @@
     "9e981460-9fd0-4703-8369-baa503a5b366",
     "72a17d68-42b4-4ecd-8582-5d97bd93851b",
     "fb1a7128-8a90-40fe-94d1-bff2e35ef0f5"
+  ],
+  "assembly:/_pro/scenes/missions/golden/mission_gecko/scene_gecko_lunaria.entity": [
+    "991d05b2-7a74-4636-b298-1f2714519d3a",
+    "bc531204-8e82-4550-b2a7-829b047dc6cc"
+  ],
+  "assembly:/_pro/scenes/missions/golden/mission_gecko/scene_gecko_sinstest.entity": [
+    "d941abfd-3f70-49e3-a3da-bc36603ed9b4",
+    "a4e53696-94ca-4eeb-8e82-e235c212897f",
+    "fae63964-9978-4cea-a927-198b4095036c",
+    "9e981460-9fd0-4703-8369-baa503a5b366",
+    "72a17d68-42b4-4ecd-8582-5d97bd93851b",
+    "fb1a7128-8a90-40fe-94d1-bff2e35ef0f5",
+    "43bed210-4415-40ee-8222-2cefaf4dda87"
   ],
   "assembly:/_pro/scenes/missions/greedy/mission_raccoon/scene_raccoon_basic.entity": [
     "8df094e1-e4c9-4673-9341-f18594b31fa7",
@@ -552,10 +622,18 @@
   "assembly:/_pro/scenes/missions/thefacility/_scene_polarbear_005.entity": [
     "2a48ddc7-859a-445c-8f53-fb3b1e642f42"
   ],
+  "assembly:/_pro/scenes/missions/trapped/scene_bellflower.entity": [
+    "756e9e78-e48e-4a0a-8661-356d07446a0e",
+    "4fe8ecc9-7dae-4882-b596-bcccc53725e5",
+    "0cb7c72a-305e-473e-8480-03e7f70ae340"
+  ],
   "assembly:/_pro/scenes/missions/trapped/scene_wolverine.entity": [
     "52464982-e7de-4f69-b60d-e8de2a8b1621",
     "ee4b0060-b322-4bb0-99b5-942e8a20f278",
     "f21b1a1a-bec9-4a06-9a4a-d615e9721e3a"
+  ],
+  "assembly:/_pro/scenes/missions/wet/scene_magnolia.entity": [
+    "3f31c72e-fb07-4c3d-afa6-3c434abdc1b8"
   ],
   "assembly:/_pro/scenes/missions/wet/scene_rat_basic.entity": [
     "d497ce5a-011e-4b40-9d69-341cc8141120",
