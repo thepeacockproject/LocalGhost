@@ -316,7 +316,11 @@ app.get('/Planning', extractToken, async (req, res) => {
         const creatorProfile = (await resolveProfiles([contractData.Metadata.CreatorUserId], req.gameVersion))[0]
             || (await resolveProfiles(['fadb923c-e6bb-4283-a537-eb4d1150262e'], req.gameVersion))[0]; // use IOI profile if profile not found
         const sublocation = repo.find(entry => entry.Id == contractData.Metadata.Location);
-        const entrancesInScene = entranceData[contractData.Metadata.ScenePath.toLowerCase()];
+        let entrancesInScene = entranceData[contractData.Metadata.ScenePath.toLowerCase()];
+        if (!entrancesInScene) {
+            entrancesInScene = [];
+            console.error(`Could not find entrance data for '${contractData.Metadata.ScenePath.toLowerCase()}'`);
+        }
         const unlockedEntrances = userData.Extensions.inventory.filter(item => item.Unlockable.Type == 'access')
             .map(i => i.Unlockable)
             .filter(unlockable => unlockable.Properties.RepositoryId);
@@ -442,7 +446,11 @@ app.get('/selectagencypickup', extractToken, async (req, res) => {
     const pickupData = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'AgencyPickups.json')));
     readFile(path.join('contractdata', `${req.query.contractId}.json`)).then(async contractfile => {
         const contractData = JSON.parse(contractfile);
-        const pickupsInScene = pickupData[contractData.Metadata.ScenePath.toLowerCase()];
+        let pickupsInScene = pickupData[contractData.Metadata.ScenePath.toLowerCase()];
+        if (!pickupsInScene) {
+            pickupsInScene = [];
+            console.error(`Could not find pickup data for '${contractData.Metadata.ScenePath.toLowerCase()}'`);
+        }
         const unlockedAgencyPickups = userData.Extensions.inventory.filter(item => item.Unlockable.Type == 'agencypickup')
             .map(i => i.Unlockable)
             .filter(unlockable => unlockable.Properties.RepositoryId);
