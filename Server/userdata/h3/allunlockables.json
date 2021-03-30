@@ -1212,9 +1212,6 @@
             "CreateContractId": "3f95f6fd-a0f7-4d07-9df4-9736167a6c5e",
             "RequiredResources": [
                 "[assembly:/_PRO/Scenes/Missions/sheep/scene_sheep.entity].entitytemplate"
-            ],
-            "Entitlements": [
-                "H2_LEGACY_STANDARD"
             ]
         },
         "Rarity": null
@@ -1247,9 +1244,6 @@
             "Season": 2,
             "RequiredResources": [
                 "[assembly:/_PRO/Scenes/Missions/sheep/scene_sheep.entity].entitytemplate"
-            ],
-            "Entitlements": [
-                "H2_LEGACY_STANDARD"
             ]
         },
         "Rarity": null
@@ -2672,7 +2666,7 @@
             "LoadoutSlot": "disguise",
             "IsConsumable": false,
             "RepositoryId": "054f443b-824f-4913-8b29-64dfcd82b089",
-            "OrderIndex": 701
+            "OrderIndex": 750
         },
         "Rarity": "common"
     },
@@ -4544,6 +4538,94 @@
         "Rarity": null
     },
     {
+        "Id": "STARTING_LOCATION_MAGNOLIA",
+        "Guid": "66f2f0e3-14ef-487e-8076-9364c083b3bd",
+        "Type": "access",
+        "Subtype": "startinglocation",
+        "ImageId": null,
+        "RMTPrice": -1,
+        "GamePrice": -1,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "IsDroppable": false,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Location": "LOCATION_PARENT_WET",
+            "RepositoryId": "3f31c72e-fb07-4c3d-afa6-3c434abdc1b8",
+            "Equip": [
+                "TOKEN_OUTFIT_WET_HOMELESS"
+            ]
+        },
+        "Rarity": null
+    },
+    {
+        "Id": "STARTING_LOCATION_BELLFLOWER_LEVEL1",
+        "Guid": "247bf2be-5fec-4444-972c-c07c818b4b3f",
+        "Type": "access",
+        "Subtype": "startinglocation",
+        "ImageId": null,
+        "RMTPrice": -1,
+        "GamePrice": -1,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "IsDroppable": false,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Location": "LOCATION_PARENT_TRAPPED",
+            "RepositoryId": "4fe8ecc9-7dae-4882-b596-bcccc53725e5",
+            "Equip": [
+                "TOKEN_OUTFIT_TRAPPED_WOLVERINE_SUIT"
+            ]
+        },
+        "Rarity": null
+    },
+    {
+        "Id": "STARTING_LOCATION_BELLFLOWER_LEVEL2",
+        "Guid": "cf7c315b-8ae9-4add-8c60-00e364d233c4",
+        "Type": "access",
+        "Subtype": "startinglocation",
+        "ImageId": null,
+        "RMTPrice": -1,
+        "GamePrice": -1,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "IsDroppable": false,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Location": "LOCATION_PARENT_TRAPPED",
+            "RepositoryId": "0cb7c72a-305e-473e-8480-03e7f70ae340",
+            "Equip": [
+                "TOKEN_OUTFIT_HERO_WHITE_NINJA_SUIT"
+            ]
+        },
+        "Rarity": null
+    },
+    {
+        "Id": "STARTING_LOCATION_BELLFLOWER_LEVEL3",
+        "Guid": "8e4aa063-6959-4254-8d58-ecbd0afa79c9",
+        "Type": "access",
+        "Subtype": "startinglocation",
+        "ImageId": null,
+        "RMTPrice": -1,
+        "GamePrice": -1,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "IsDroppable": false,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Location": "LOCATION_PARENT_TRAPPED",
+            "RepositoryId": "756e9e78-e48e-4a0a-8661-356d07446a0e",
+            "Equip": [
+                "TOKEN_OUTFIT_HERO_WHITE_NINJA_SUIT"
+            ]
+        },
+        "Rarity": null
+    },
+    {
         "Id": "TOKEN_OUTFIT_NEWZEALAND_HERO_NEWZEALANDSUIT",
         "Guid": "3a4bcbbf-d451-4853-8a85-649120e384df",
         "Type": "disguise",
@@ -4562,7 +4644,7 @@
             "LoadoutSlot": "disguise",
             "IsConsumable": false,
             "RepositoryId": "08022e2c-4954-4b63-b632-3ac50d018292",
-            "OrderIndex": 750
+            "OrderIndex": 752
         },
         "Rarity": "common"
     },
@@ -6828,6 +6910,29 @@
         "Rarity": "common"
     },
     {
+        "Id": "PROP_MELEE_LEATHERBELT_ASYLUM",
+        "Guid": "11dd5291-a437-4201-995a-3bb9a46605d5",
+        "Type": "weapon",
+        "Subtype": "melee",
+        "ImageId": "",
+        "RMTPrice": -1,
+        "GamePrice": -1,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "IsDroppable": false,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Quality": 2,
+            "LoadoutSlot": "gear",
+            "Rarity": "common",
+            "RepositoryId": "14aea5f5-82b8-447e-b7f6-042f24d11a15",
+            "OrderIndex": 720,
+            "AllowUpSync": true
+        },
+        "Rarity": "common"
+    },
+    {
         "Id": "PROP_MELEE_QUICKDRAW",
         "Guid": "44cf0305-bda9-4f48-8226-7b2d69fdf4d7",
         "Type": "weapon",
@@ -7018,9 +7123,33 @@
         "Capabilities": [],
         "Qualities": {},
         "Properties": {
-            "LoadoutSlot": "gear",
+            "LoadoutSlot": "carriedweapon",
             "Rarity": "common",
             "RepositoryId": "4eede7ee-582b-49a4-b438-2418d82671d9",
+            "Quality": "2",
+            "UnlockOrder": 5,
+            "AllowUpSync": true,
+            "OrderIndex": 660
+        },
+        "Rarity": "common"
+    },
+    {
+        "Id": "PROP_MELEE_CANE_GREED",
+        "Guid": "3f621aca-7f55-492e-85af-1569897d0844",
+        "Type": "weapon",
+        "Subtype": "melee",
+        "ImageId": "",
+        "RMTPrice": -1,
+        "GamePrice": -1,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "IsDroppable": false,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "LoadoutSlot": "carriedweapon",
+            "Rarity": "common",
+            "RepositoryId": "8f0931b1-3c3a-40e8-941b-70e85c04e580",
             "Quality": "2",
             "UnlockOrder": 5,
             "AllowUpSync": true,
@@ -7241,6 +7370,27 @@
             "LoadoutSlot": "carriedweapon",
             "Rarity": "common",
             "RepositoryId": "d439fb64-8713-4c54-a3f3-90730dbdf370",
+            "Quality": "1"
+        },
+        "Rarity": "common"
+    },
+    {
+        "Id": "PROP_MELEE_KATANA_WHITE_NINJA",
+        "Guid": "0af3c113-fead-497d-9769-f576f026956d",
+        "Type": "weapon",
+        "Subtype": "melee",
+        "ImageId": "",
+        "RMTPrice": -1,
+        "GamePrice": -1,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "IsDroppable": false,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "LoadoutSlot": "carriedweapon",
+            "Rarity": "common",
+            "RepositoryId": "cdab8f33-0491-497c-91c2-316c77d59e55",
             "Quality": "1"
         },
         "Rarity": "common"
@@ -8803,6 +8953,33 @@
         "Rarity": "common"
     },
     {
+        "Id": "PROP_DEVICE_ICA_SEMTEX_REMOTE_EXPLOSIVE_S3",
+        "Guid": "8f746a74-b466-48a8-8805-7c86e639f313",
+        "Type": "gear",
+        "Subtype": "explosive",
+        "ImageId": null,
+        "RMTPrice": 149,
+        "GamePrice": 149,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "IsDroppable": false,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Quality": 4,
+            "LoadoutSlot": "gear",
+            "Rarity": "common",
+            "GameAssets": [
+                "PROP_DEVICE_ICA_SEMTEX_REMOTE_EXPLOSIVE_S3"
+            ],
+            "RepositoryId": "7488229b-3fa8-4539-90ba-a7bf65798568",
+            "RepositoryAssets": [
+                "7488229b-3fa8-4539-90ba-a7bf65798568"
+            ]
+        },
+        "Rarity": "common"
+    },
+    {
         "Id": "PROP_DEVICE_NAPOLEON_FIGURE_REMOTE_EXPLOSIVE",
         "Guid": "5ebace20-c651-48bf-a971-1414a75b39bf",
         "Type": "gear",
@@ -9347,6 +9524,28 @@
         "Rarity": "common"
     },
     {
+        "Id": "PROP_EMETIC_POISON_PEN_SYRINGE_GURU",
+        "Guid": "5db59ddc-98c5-46ed-8823-0a91fda6ee04",
+        "Type": "gear",
+        "Subtype": "poison",
+        "ImageId": "",
+        "RMTPrice": 149,
+        "GamePrice": 149,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "IsDroppable": false,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Quality": 4,
+            "LoadoutSlot": "gear",
+            "Rarity": "common",
+            "RepositoryId": "83930544-d8db-4020-901f-ea6017764aaa",
+            "UnlockOrder": 10
+        },
+        "Rarity": "common"
+    },
+    {
         "Id": "PROP_MELEE_SYRINGE_SEDATIVE",
         "Guid": "bad108ac-6581-46fe-a37d-9c5d10d52917",
         "Type": "gear",
@@ -9886,6 +10085,27 @@
         "Rarity": "common"
     },
     {
+        "Id": "PROP_GAS_GRENADE_EMETIC_GURU",
+        "Guid": "8a914db9-9df7-4756-8616-b38168fb0db9",
+        "Type": "gear",
+        "Subtype": "tool",
+        "ImageId": "",
+        "RMTPrice": 149,
+        "GamePrice": 149,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "IsDroppable": false,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Quality": 3,
+            "LoadoutSlot": "gear",
+            "Rarity": "common",
+            "RepositoryId": "a49fe9f6-aa5a-4000-8aec-2902ab57b4b7"
+        },
+        "Rarity": "common"
+    },
+    {
         "Id": "PROP_EXPLOSIVE_GRENADE_FLASH",
         "Guid": "077a35eb-bc9b-42b4-b1ea-77fe310ff52c",
         "Type": "gear",
@@ -10176,27 +10396,6 @@
             "LoadoutSlot": "gear",
             "Rarity": "common",
             "RepositoryId": "ed75b407-0e3d-4009-91c3-0fdbaae677c4"
-        },
-        "Rarity": "common"
-    },
-    {
-        "Id": "PROP_MELEE_SYRINGE_SEDATIVE_S2",
-        "Guid": "73cd962d-00ae-44c5-97f5-b09ddeaa99ca",
-        "Type": "gear",
-        "Subtype": "poison",
-        "ImageId": "",
-        "RMTPrice": 149,
-        "GamePrice": 149,
-        "IsPurchasable": false,
-        "IsPublished": true,
-        "IsDroppable": false,
-        "Capabilities": [],
-        "Qualities": {},
-        "Properties": {
-            "Quality": 4,
-            "LoadoutSlot": "gear",
-            "Rarity": "common",
-            "RepositoryId": "c02c1311-1c02-4ea9-9b96-3f2d1e4379f2"
         },
         "Rarity": "common"
     },
@@ -10780,8 +10979,29 @@
         "Rarity": "common"
     },
     {
-        "Id": "FIREARMS_PISTOL_DARTGUN_SICK",
+        "Id": "FIREARMS_PISTOL_DARTGUN_SEDATIVE_ASYLUM",
         "Guid": "6b0f42de-e8b4-4aa5-b25c-72d402c0a150",
+        "Type": "weapon",
+        "Subtype": "pistol",
+        "RMTPrice": -1,
+        "GamePrice": -1,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "IsDroppable": false,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Gameplay": {},
+            "Quality": 4,
+            "Rarity": "common",
+            "LoadoutSlot": "concealedweapon",
+            "RepositoryId": "8762d292-91ce-4385-9f78-dbf845f8366d"
+        },
+        "Rarity": "common"
+    },
+    {
+        "Id": "FIREARMS_PISTOL_DARTGUN",
+        "Guid": "835ad050-6d19-4e94-80b1-f5cec9815ba3",
         "Type": "weapon",
         "Subtype": "pistol",
         "RMTPrice": -1,
@@ -10905,27 +11125,6 @@
             "LoadoutSlot": "concealedweapon",
             "RepositoryId": "cfa664fc-e583-4ad5-ade5-2f746d8656ca",
             "AllowUpSync": true
-        },
-        "Rarity": "common"
-    },
-    {
-        "Id": "FIREARMS_HERO_RIFLE_FUSIL_X2000_STEALTH",
-        "Guid": "c9d8817c-0b45-4cdd-85d0-3bea5a703685",
-        "Type": "weapon",
-        "Subtype": "assaultrifle",
-        "RMTPrice": -1,
-        "GamePrice": -1,
-        "IsPurchasable": false,
-        "IsPublished": true,
-        "IsDroppable": false,
-        "Capabilities": [],
-        "Qualities": {},
-        "Properties": {
-            "Gameplay": {},
-            "Quality": 4,
-            "Rarity": "common",
-            "LoadoutSlot": "carriedweapon",
-            "RepositoryId": "f6f525d2-a28c-4548-825b-f7ce93f6577c"
         },
         "Rarity": "common"
     },
@@ -11550,6 +11749,48 @@
         "Rarity": "common"
     },
     {
+        "Id": "PROP_MELEE_BUTCHERS_SAW",
+        "Guid": "f0c592f9-99b5-4534-8c85-102228ea366b",
+        "Type": "weapon",
+        "Subtype": "melee",
+        "ImageId": "",
+        "RMTPrice": -1,
+        "GamePrice": -1,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "IsDroppable": true,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "LoadoutSlot": "carriedweapon",
+            "Rarity": "common",
+            "RepositoryId": "e51bc878-281a-4711-b8a6-3088ebd1a27e",
+            "Quality": 4
+        },
+        "Rarity": "common"
+    },
+    {
+        "Id": "PROP_MELEE_BUTCHERS_MEATHOOK",
+        "Guid": "7027b3e3-4319-4346-a082-8171ca4e8c51",
+        "Type": "weapon",
+        "Subtype": "melee",
+        "ImageId": "",
+        "RMTPrice": -1,
+        "GamePrice": -1,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "IsDroppable": true,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "LoadoutSlot": "carriedweapon",
+            "Rarity": "common",
+            "RepositoryId": "20f7ee3f-b261-4baa-8965-9b0b9061f27f",
+            "Quality": 4
+        },
+        "Rarity": "common"
+    },
+    {
         "Id": "PROP_MELEE_SNOWBALL",
         "Guid": "50cbd12c-36f8-446c-b140-fc1d6b3d4d35",
         "Type": "weapon",
@@ -11591,6 +11832,28 @@
             "Rarity": "common",
             "LoadoutSlot": "carriedweapon",
             "RepositoryId": "f301f605-007c-4fe1-aa99-a8cd2cae033f"
+        },
+        "Rarity": "common"
+    },
+    {
+        "Id": "FIREARMS_SNIPER_SIEGER_300_WHITE_NINJA",
+        "Guid": "969ce4ac-24e4-4d3a-ba40-419d5160e97f",
+        "Type": "weapon",
+        "Subtype": "sniperrifle",
+        "ImageId": "",
+        "RMTPrice": -1,
+        "GamePrice": -1,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "IsDroppable": false,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Gameplay": {},
+            "Quality": 4,
+            "Rarity": "common",
+            "LoadoutSlot": "carriedweapon",
+            "RepositoryId": "8d22cea9-68db-458d-a8ee-9937128f1729"
         },
         "Rarity": "common"
     },
@@ -13013,6 +13276,123 @@
                 "e942b814-ca60-4f27-971e-9a3141bbdc4d",
                 "e942b814-ca60-4f27-971e-9a3141bbdc4d",
                 "e942b814-ca60-4f27-971e-9a3141bbdc4d"
+            ]
+        },
+        "Rarity": "common"
+    },
+    {
+        "Id": "PROP_TOOL_COMMENDABLE_COIN_H3_REWARD",
+        "Guid": "dda5b8dc-64b6-44ec-bd43-4a4e09d6ed90",
+        "Type": "gear",
+        "Subtype": "distraction",
+        "ImageId": "",
+        "RMTPrice": -1,
+        "GamePrice": -1,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "IsDroppable": false,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Quality": 1,
+            "LoadoutSlot": "gear",
+            "Rarity": "common",
+            "GameAssets": [
+                "PROP_TOOL_GOLD_COIN_REWARD"
+            ],
+            "RepositoryId": "dec4723f-91c3-47ce-9032-5ef07269d93b",
+            "RepositoryAssets": [
+                "dec4723f-91c3-47ce-9032-5ef07269d93b",
+                "dec4723f-91c3-47ce-9032-5ef07269d93b",
+                "dec4723f-91c3-47ce-9032-5ef07269d93b"
+            ]
+        },
+        "Rarity": "common"
+    },
+    {
+        "Id": "PROP_TOOL_OUTSTANDING_COIN_H3_REWARD",
+        "Guid": "b3645156-77e0-42ef-991b-adaaf327b1d1",
+        "Type": "gear",
+        "Subtype": "distraction",
+        "ImageId": "",
+        "RMTPrice": -1,
+        "GamePrice": -1,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "IsDroppable": false,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Quality": 1,
+            "LoadoutSlot": "gear",
+            "Rarity": "common",
+            "GameAssets": [
+                "PROP_TOOL_GOLD_COIN_REWARD"
+            ],
+            "RepositoryId": "b9b0c5f2-41d1-4087-a57b-48a67731b699",
+            "RepositoryAssets": [
+                "b9b0c5f2-41d1-4087-a57b-48a67731b699",
+                "b9b0c5f2-41d1-4087-a57b-48a67731b699",
+                "b9b0c5f2-41d1-4087-a57b-48a67731b699"
+            ]
+        },
+        "Rarity": "common"
+    },
+    {
+        "Id": "PROP_TOOL_SUPPERIOR_COIN_H3_REWARD",
+        "Guid": "5ab110cb-40e6-4b6e-9e1e-6f0f7bcbd78b",
+        "Type": "gear",
+        "Subtype": "distraction",
+        "ImageId": "",
+        "RMTPrice": -1,
+        "GamePrice": -1,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "IsDroppable": false,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Quality": 1,
+            "LoadoutSlot": "gear",
+            "Rarity": "common",
+            "GameAssets": [
+                "PROP_TOOL_GOLD_COIN_REWARD"
+            ],
+            "RepositoryId": "28c542d2-7673-4b9a-ba49-b3c49acc2184",
+            "RepositoryAssets": [
+                "28c542d2-7673-4b9a-ba49-b3c49acc2184",
+                "28c542d2-7673-4b9a-ba49-b3c49acc2184",
+                "28c542d2-7673-4b9a-ba49-b3c49acc2184"
+            ]
+        },
+        "Rarity": "common"
+    },
+    {
+        "Id": "PROP_TOOL_GREED_COIN",
+        "Guid": "bb9e2850-9b3c-43c4-9f00-b04d08825330",
+        "Type": "gear",
+        "Subtype": "distraction",
+        "ImageId": "",
+        "RMTPrice": -1,
+        "GamePrice": -1,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "IsDroppable": false,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Quality": 1,
+            "LoadoutSlot": "gear",
+            "Rarity": "common",
+            "AllowUpSync": true,
+            "GameAssets": [
+                "PROP_TOOL_GREED_COIN"
+            ],
+            "RepositoryId": "2d5657ee-d467-4202-ada5-b00b7dc3bb76",
+            "RepositoryAssets": [
+                "2d5657ee-d467-4202-ada5-b00b7dc3bb76",
+                "2d5657ee-d467-4202-ada5-b00b7dc3bb76",
+                "2d5657ee-d467-4202-ada5-b00b7dc3bb76"
             ]
         },
         "Rarity": "common"
@@ -15279,6 +15659,28 @@
         "Rarity": "common"
     },
     {
+        "Id": "PROP_CONTAINER_SUITCASE_TRAVELER_H3",
+        "Guid": "2362897b-307e-460a-b656-49c49afa82b3",
+        "Type": "gear",
+        "Subtype": "container",
+        "ImageId": "",
+        "RMTPrice": 149,
+        "GamePrice": 149,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "IsDroppable": false,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Quality": 3,
+            "LoadoutSlot": "gear",
+            "IsContainer": true,
+            "Rarity": "common",
+            "RepositoryId": "7b71cf70-ce68-4ad2-b29a-3b2b3bacf11c"
+        },
+        "Rarity": "common"
+    },
+    {
         "Id": "PROP_CONTAINER_SUITCASE_ICA_DELUXE",
         "Guid": "0f837634-5b9a-4369-9d01-8c138d10e3db",
         "Type": "gear",
@@ -15458,6 +15860,29 @@
             "IsContainer": true,
             "Rarity": "common",
             "RepositoryId": "d27e9671-c2cb-4d32-b64f-c401140a4de2",
+            "AllowUpSync": true
+        },
+        "Rarity": "common"
+    },
+    {
+        "Id": "PROP_CONTAINER_SUITCASE_SIEGER300",
+        "Guid": "417357f9-2feb-4a56-9f34-27dc12ac9178",
+        "Type": "gear",
+        "Subtype": "container",
+        "ImageId": "",
+        "RMTPrice": 149,
+        "GamePrice": 149,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "IsDroppable": false,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Quality": 3,
+            "LoadoutSlot": "gear",
+            "IsContainer": true,
+            "Rarity": "common",
+            "RepositoryId": "4c2dfff7-9bb4-4cf0-b749-3916175912b8",
             "AllowUpSync": true
         },
         "Rarity": "common"
@@ -16486,7 +16911,7 @@
             "Rarity": "common",
             "LoadoutSlot": "disguise",
             "RepositoryId": "da1ce1bf-1d1b-4f49-9d0f-73d57f955606",
-            "OrderIndex": 910,
+            "OrderIndex": 904,
             "AllowUpSync": true
         },
         "IsDroppable": false,
@@ -16509,7 +16934,7 @@
             "Rarity": "common",
             "LoadoutSlot": "disguise",
             "RepositoryId": "ae7358ae-ac6d-4217-b86e-efffde5b90dd",
-            "OrderIndex": 900,
+            "OrderIndex": 902,
             "AllowUpSync": true
         },
         "IsDroppable": false,
@@ -16532,7 +16957,168 @@
             "Rarity": "common",
             "LoadoutSlot": "disguise",
             "RepositoryId": "628fc47d-db6d-4522-b50a-514f5dafb419",
-            "OrderIndex": 905,
+            "OrderIndex": 902,
+            "AllowUpSync": true
+        },
+        "IsDroppable": false,
+        "Rarity": "common"
+    },
+    {
+        "Id": "TOKEN_OUTFIT_HERO_GURU_SUIT",
+        "Guid": "2df3c803-8729-4bd1-b10f-4e2afc439c9c",
+        "Type": "disguise",
+        "Subtype": "themed",
+        "ImageId": "",
+        "RMTPrice": 99,
+        "GamePrice": 99,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Quality": 1,
+            "Rarity": "common",
+            "LoadoutSlot": "disguise",
+            "RepositoryId": "a4ef8071-8931-4179-abec-11a2b9ceba36",
+            "OrderIndex": 906,
+            "AllowUpSync": true
+        },
+        "IsDroppable": false,
+        "Rarity": "common"
+    },
+    {
+        "Id": "TOKEN_OUTFIT_HERO_EASTER_SUIT",
+        "Guid": "4c7942ab-5cfc-4398-bf2d-a4e7a8af6aaa",
+        "Type": "disguise",
+        "Subtype": "themed",
+        "ImageId": "",
+        "RMTPrice": 99,
+        "GamePrice": 99,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Quality": 1,
+            "Rarity": "common",
+            "LoadoutSlot": "disguise",
+            "RepositoryId": "16be233a-1eb8-4736-b87f-c2a69a2db14b",
+            "OrderIndex": 907,
+            "AllowUpSync": true
+        },
+        "IsDroppable": false,
+        "Rarity": "common"
+    },
+    {
+        "Id": "TOKEN_OUTFIT_HERO_WHITE_NINJA_SUIT",
+        "Guid": "d0f915f7-54a6-4e81-a5b4-358001e4f5a4",
+        "Type": "disguise",
+        "Subtype": "themed",
+        "ImageId": "",
+        "RMTPrice": 99,
+        "GamePrice": 99,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Quality": 1,
+            "Rarity": "common",
+            "LoadoutSlot": "disguise",
+            "RepositoryId": "44540c7c-fcbb-4de2-8983-523997584ed0",
+            "OrderIndex": 908,
+            "AllowUpSync": true
+        },
+        "IsDroppable": false,
+        "Rarity": "common"
+    },
+    {
+        "Id": "TOKEN_OUTFIT_HERO_BUTCHER_SUIT",
+        "Guid": "9f6e007e-fa93-48ab-98a6-71cd96fc9d89",
+        "Type": "disguise",
+        "Subtype": "themed",
+        "ImageId": "",
+        "RMTPrice": 99,
+        "GamePrice": 99,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Quality": 1,
+            "Rarity": "common",
+            "LoadoutSlot": "disguise",
+            "RepositoryId": "79ef3699-e078-45bf-bdf2-104b7a6cf817",
+            "OrderIndex": 907,
+            "AllowUpSync": true
+        },
+        "IsDroppable": false,
+        "Rarity": "common"
+    },
+    {
+        "Id": "TOKEN_OUTFIT_HERO_ASYLUM_SUIT",
+        "Guid": "09f02352-627f-4f15-bccb-8584d9161b05",
+        "Type": "disguise",
+        "Subtype": "themed",
+        "ImageId": "",
+        "RMTPrice": 99,
+        "GamePrice": 99,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Quality": 1,
+            "Rarity": "common",
+            "LoadoutSlot": "disguise",
+            "RepositoryId": "b262d4bb-6445-43cb-bb7c-fde6fe990aa7",
+            "OrderIndex": 910,
+            "AllowUpSync": true
+        },
+        "IsDroppable": false,
+        "Rarity": "common"
+    },
+    {
+        "Id": "TOKEN_OUTFIT_HERO_EASTER_RAVER_SUIT",
+        "Guid": "c3a71288-0b64-4092-9a70-632e78f38658",
+        "Type": "disguise",
+        "Subtype": "themed",
+        "ImageId": "",
+        "RMTPrice": 99,
+        "GamePrice": 99,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Quality": 1,
+            "Rarity": "common",
+            "LoadoutSlot": "disguise",
+            "RepositoryId": "e21c192f-429b-404a-9be7-bc2d0473ea9d",
+            "OrderIndex": 650,
+            "AllowUpSync": true
+        },
+        "IsDroppable": false,
+        "Rarity": "common"
+    },
+    {
+        "Id": "TOKEN_OUTFIT_HERO_GREED_SUIT",
+        "Guid": "2da79821-6d37-44b9-892e-1d64726c55c9",
+        "Type": "disguise",
+        "Subtype": "themed",
+        "ImageId": "",
+        "RMTPrice": 99,
+        "GamePrice": 99,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Quality": 1,
+            "Rarity": "common",
+            "LoadoutSlot": "disguise",
+            "RepositoryId": "39aea78e-02f7-4bd7-9dab-eb51691c7a7b",
+            "OrderIndex": 900,
             "AllowUpSync": true
         },
         "IsDroppable": false,
@@ -16700,6 +17286,29 @@
         "Rarity": "common"
     },
     {
+        "Id": "TOKEN_OUTFIT_HERO_H3_LEGACYREWARD_SUIT",
+        "Guid": "6e38f68d-b77f-47ec-839c-555394123f41",
+        "Type": "disguise",
+        "Subtype": "classic",
+        "ImageId": "",
+        "RMTPrice": 99,
+        "GamePrice": 99,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Quality": 1,
+            "Rarity": "common",
+            "LoadoutSlot": "disguise",
+            "RepositoryId": "ef223b60-b53a-4c7b-b914-13c3310fc61a",
+            "OrderIndex": 170,
+            "AllowUpSync": true
+        },
+        "IsDroppable": false,
+        "Rarity": "common"
+    },
+    {
         "Id": "TOKEN_OUTFIT_REWARD_HERO_GECKO_SUIT",
         "Guid": "4212bd01-c76d-453a-940f-7ffceb8452bd",
         "Type": "disguise",
@@ -16785,7 +17394,7 @@
             "Rarity": "common",
             "LoadoutSlot": "disguise",
             "RepositoryId": "3c6a9b35-82ac-4e08-8e32-d9fd77cbd7d3",
-            "OrderIndex": 5,
+            "OrderIndex": 937,
             "AllowUpSync": true
         },
         "IsDroppable": false,
@@ -17894,6 +18503,29 @@
         "IsDroppable": false
     },
     {
+        "Id": "TOKEN_OUTFIT_WET_HOMELESS",
+        "Guid": "e7dc2f20-84cf-45e0-9261-e1390ca7f262",
+        "Type": "disguise",
+        "Subtype": "disguise",
+        "ImageId": "",
+        "RMTPrice": 99,
+        "GamePrice": 99,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Quality": 1,
+            "Rarity": "common",
+            "LoadoutSlot": "disguise",
+            "RepositoryId": "ba4e595e-da3b-4902-8622-40889fc088db",
+            "OrderIndex": 599,
+            "AllowUpSync": true
+        },
+        "Rarity": "common",
+        "IsDroppable": false
+    },
+    {
         "Id": "STARTING_LOCATION_EDGY_FOX_DEFAULT",
         "Guid": "33f1f2b3-406d-4574-949b-9c5e34a2ad77",
         "Type": "access",
@@ -18117,6 +18749,236 @@
             "UnlockOrder": 1,
             "Equip": [
                 "TOKEN_OUTFIT_REWARD_HERO_RAVING_SUIT"
+            ]
+        },
+        "Rarity": null
+    },
+    {
+        "Id": "STARTING_LOCATION_EDGY_FOX_NIGHTPHLOX_B1_BAR",
+        "Guid": "c0fdd966-f833-4bc1-b98f-f09b41bc7cac",
+        "Type": "access",
+        "Subtype": "startinglocation",
+        "ImageId": null,
+        "RMTPrice": -1,
+        "GamePrice": -1,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "IsDroppable": false,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Location": "LOCATION_PARENT_EDGY",
+            "UnlockedByDefault": true,
+            "RepositoryId": "b37a535e-ae99-4266-998e-609eee4c9626",
+            "LoadoutSettings": {
+                "GearSlotsEnabledCount": 1,
+                "GearSlotsAllowContainers": false,
+                "ConcealedWeaponSlotEnabled": false
+            },
+            "Equip": [
+                "TOKEN_OUTFIT_FOX_WORKER_BARTENDER"
+            ]
+        },
+        "Rarity": null
+    },
+    {
+        "Id": "STARTING_LOCATION_EDGY_FOX_NIGHTPHLOX_CLUB_ENTRANCE",
+        "Guid": "cf9ab43d-4077-45b0-868b-edee62b1beb7",
+        "Type": "access",
+        "Subtype": "startinglocation",
+        "ImageId": null,
+        "RMTPrice": -1,
+        "GamePrice": -1,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "IsDroppable": false,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Location": "LOCATION_PARENT_EDGY",
+            "UnlockedByDefault": true,
+            "LoadoutSettings": {
+                "GearSlotsEnabledCount": 1,
+                "GearSlotsAllowContainers": false,
+                "ConcealedWeaponSlotEnabled": false
+            },
+            "RepositoryId": "c704455f-f065-4665-b1b5-b66dfcfd4f00",
+            "Equip": [
+                "TOKEN_OUTFIT_REWARD_HERO_RAVING_SUIT"
+            ]
+        },
+        "Rarity": null
+    },
+    {
+        "Id": "STARTING_LOCATION_EDGY_FOX_NIGHTPHLOX_CHILLOUT_AREA",
+        "Guid": "428e4b61-366f-4cd8-aafb-4e0c47edccfa",
+        "Type": "access",
+        "Subtype": "startinglocation",
+        "ImageId": null,
+        "RMTPrice": -1,
+        "GamePrice": -1,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "IsDroppable": false,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Location": "LOCATION_PARENT_EDGY",
+            "UnlockedByDefault": true,
+            "RepositoryId": "1edf1fe3-687f-4588-a3b2-06586b948146",
+            "LoadoutSettings": {
+                "GearSlotsEnabledCount": 1,
+                "GearSlotsAllowContainers": false,
+                "ConcealedWeaponSlotEnabled": false
+            },
+            "Equip": [
+                "TOKEN_OUTFIT_FOX_WORKER_EVENTCREW"
+            ]
+        },
+        "Rarity": null
+    },
+    {
+        "Id": "STARTING_LOCATION_EDGY_FOX_NIGHTPHLOX_DJ_BOOTH",
+        "Guid": "a2edecaa-786b-425c-86ea-7987b6fa7292",
+        "Type": "access",
+        "Subtype": "startinglocation",
+        "ImageId": null,
+        "RMTPrice": -1,
+        "GamePrice": -1,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "IsDroppable": false,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Location": "LOCATION_PARENT_EDGY",
+            "UnlockedByDefault": true,
+            "RepositoryId": "e7ddcb47-1c3f-444c-8300-40baaf0c463c",
+            "LoadoutSettings": {
+                "GearSlotsEnabledCount": 1,
+                "GearSlotsAllowContainers": false,
+                "ConcealedWeaponSlotEnabled": false
+            },
+            "Equip": [
+                "TOKEN_OUTFIT_FOX_WORKER_DJ"
+            ]
+        },
+        "Rarity": null
+    },
+    {
+        "Id": "STARTING_LOCATION_EDGY_FOX_GRASSSNAKE_FORRESTEDGE",
+        "Guid": "9a3beebc-253e-4dc7-be4d-396ccdfb1d1c",
+        "Type": "access",
+        "Subtype": "startinglocation",
+        "ImageId": null,
+        "RMTPrice": -1,
+        "GamePrice": -1,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "IsDroppable": false,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Location": "LOCATION_PARENT_EDGY",
+            "UnlockedByDefault": true,
+            "RepositoryId": "f223f1f2-f009-4aeb-a6d5-cf0a38dc7262",
+            "LoadoutSettings": {},
+            "Equip": []
+        },
+        "Rarity": null
+    },
+    {
+        "Id": "STARTING_LOCATION_EDGY_FOX_GRASSSNAKE_EVENTAREA",
+        "Guid": "1adb9f88-8fe3-4cdd-9b96-14fe4217779b",
+        "Type": "access",
+        "Subtype": "startinglocation",
+        "ImageId": null,
+        "RMTPrice": -1,
+        "GamePrice": -1,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "IsDroppable": false,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Location": "LOCATION_PARENT_EDGY",
+            "UnlockedByDefault": true,
+            "RepositoryId": "694656e1-badf-4c20-9ff0-2a052c32aac8",
+            "LoadoutSettings": {},
+            "Equip": [
+                "TOKEN_OUTFIT_HERO_EASTER_SUIT"
+            ]
+        },
+        "Rarity": null
+    },
+    {
+        "Id": "STARTING_LOCATION_EDGY_FOX_CORNFLOWER_LEVEL1",
+        "Guid": "a549ee76-b67f-4024-82ad-77975598638e",
+        "Type": "access",
+        "Subtype": "startinglocation",
+        "ImageId": null,
+        "RMTPrice": -1,
+        "GamePrice": -1,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "IsDroppable": false,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Location": "LOCATION_PARENT_EDGY",
+            "UnlockedByDefault": true,
+            "RepositoryId": "2f255e35-5d23-4b8a-9c5a-885a8c79e18a",
+            "LoadoutSettings": {},
+            "Equip": [
+                "TOKEN_OUTFIT_HERO_ASYLUM_SUIT"
+            ]
+        },
+        "Rarity": null
+    },
+    {
+        "Id": "STARTING_LOCATION_EDGY_FOX_CORNFLOWER_LEVEL2",
+        "Guid": "766a2ef7-abec-49cb-9420-a178af1bd051",
+        "Type": "access",
+        "Subtype": "startinglocation",
+        "ImageId": null,
+        "RMTPrice": -1,
+        "GamePrice": -1,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "IsDroppable": false,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Location": "LOCATION_PARENT_EDGY",
+            "UnlockedByDefault": true,
+            "RepositoryId": "b1233f2e-83ce-4124-b139-9a7cbaf09e83",
+            "LoadoutSettings": {},
+            "Equip": [
+                "TOKEN_OUTFIT_HERO_ASYLUM_SUIT"
+            ]
+        },
+        "Rarity": null
+    },
+    {
+        "Id": "STARTING_LOCATION_EDGY_FOX_CORNFLOWER_LEVEL3",
+        "Guid": "6471d569-5277-43f9-8a16-9a6c4bf9de0a",
+        "Type": "access",
+        "Subtype": "startinglocation",
+        "ImageId": null,
+        "RMTPrice": -1,
+        "GamePrice": -1,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "IsDroppable": false,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Location": "LOCATION_PARENT_EDGY",
+            "UnlockedByDefault": true,
+            "RepositoryId": "88f47eb3-d914-46d9-99aa-6fb848964c7c",
+            "LoadoutSettings": {},
+            "Equip": [
+                "TOKEN_OUTFIT_HERO_ASYLUM_SUIT"
             ]
         },
         "Rarity": null
@@ -18980,6 +19842,28 @@
         "Rarity": null
     },
     {
+        "Id": "STARTING_LOCATION_ELEGANT_LLAMA_JACARANDA_DOCKS",
+        "Guid": "c140cee4-bc3a-4b65-a1b1-3148c819a165",
+        "Type": "access",
+        "Subtype": "startinglocation",
+        "ImageId": null,
+        "RMTPrice": -1,
+        "GamePrice": -1,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "IsDroppable": false,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Location": "LOCATION_PARENT_ELEGANT",
+            "Equip": [
+                "TOKEN_OUTFIT_ELEGANT_HERO_LLAMASUIT"
+            ],
+            "RepositoryId": "f45b0af4-e50d-477e-bb92-83136b04506f"
+        },
+        "Rarity": null
+    },
+    {
         "Id": "AGENCYPICKUP_ELEGANT_SMALL_BOATHOUSE",
         "Guid": "8742a152-203c-4792-8eaf-6b8dad09d10d",
         "Type": "agencypickup",
@@ -19714,6 +20598,27 @@
         "Properties": {
             "RewardHidden": true,
             "AllowUpSync": true
+        },
+        "Rarity": null
+    },
+    {
+        "Id": "STARTING_LOCATION_GOLDEN_GECKO_SINSTEST_ARMOURY",
+        "Guid": "bd757604-d37c-4271-9f25-4a3c053ccd7d",
+        "Type": "access",
+        "Subtype": "startinglocation",
+        "ImageId": null,
+        "RMTPrice": -1,
+        "GamePrice": -1,
+        "IsPurchasable": false,
+        "IsPublished": true,
+        "IsDroppable": false,
+        "Capabilities": [],
+        "Qualities": {},
+        "Properties": {
+            "Location": "LOCATION_PARENT_GOLDEN",
+            "RepositoryId": "d941abfd-3f70-49e3-a3da-bc36603ed9b4",
+            "Equip": [],
+            "UnlockOrder": 99
         },
         "Rarity": null
     }
