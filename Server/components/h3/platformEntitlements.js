@@ -23,6 +23,13 @@ function GetPlatformEntitlements(req, res) {
             'b4e2e682cecd42b3a7017ee4838b4593', // ? (EiderGoldEditionAudience according to epicdata.info) (included in H3 Deluxe Pre-purchase)
             '1dea1e39a8044a69b4020845afb4bd97', // ? (included in H3 Pre-purchase)
             'feeac4b521734f22ae99e8ac55a5f896', // ? (included in H3 Pre-purchase)
+            '0e8632b4cdfb415e94291d97d727b98d', // Deadly Sins 1: Greed
+            '3f9adc216dde44dda5e829f11740a0a2', // (Deadly Sins 2: Pride?)
+            'aece009ff59441c0b526f8aa69e24cfb', // (Deadly Sins 3: Sloth?)
+            'dfe5aeb89976450ba1e0e2c208b63d33', // (Deadly Sins 4: Lust?)
+            '30107bff80024d1ab291f9cd3bac9fac', // (Deadly Sins 5: Gluttony?)
+            '0403062df0d347619c8dcf043c65c02e', // (Deadly Sins 6: Wrath?)
+            '9e936ed2507a473db6f53ad24d2da587', // (Deadly Sins 7: Envy?)
         ]);
     }
 }
