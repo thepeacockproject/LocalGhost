@@ -8077,6 +8077,55 @@
       }
     ]
   },
+  "b25d2017-f68e-4914-8c3c-19b21dfb18dd": {
+    "Name": "UI_CONTRACT_LUNARIA_COINSCARRYOVER_NAME",
+    "Description": "UI_CONTRACT_LUNARIA_COINSCARRYOVER_DESC",
+    "TileImage": "images/contracts/Escalation/ContractEscalation_Golden_Lunaria_FeedTheFrog.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "secondary",
+    "IsHidden": null,
+    "Resource": [],
+    "Objectives": []
+  },
+  "4fd079b5-4238-453a-84c9-2183f3dc0b7e": {
+    "Name": "UI_CONTRACT_LUNARIA_OBJECTIVES_NAME",
+    "Description": "UI_CONTRACT_LUNARIA_OBJECTIVES_DESC",
+    "TileImage": "images/contracts/Escalation/ContractEscalation_Golden_Lunaria_ObjectivesReveal.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "secondary",
+    "IsHidden": null,
+    "Resource": [],
+    "Objectives": []
+  },
+  "22ccd30e-783e-4d6c-92bf-52c39ebd2ee7": {
+    "Name": "UI_GAMECHANGERS_GOLDEN_DOUBLE_WHAMMY_NAME",
+    "Description": "UI_GAMECHANGERS_GOLDEN_DOUBLE_WHAMMY_DESC",
+    "TileImage": "images/Contracts/Gamechangers/Gamechanger_Golden_Vine_DoubleWhammy.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "secondary",
+    "IsHidden": null,
+    "Resource": [],
+    "Objectives": []
+  },
+  "03dd4b61-5a06-42f4-b3e6-ae2c0092a33b": {
+    "Name": "UI_GAMECHANGERS_GOLDEN_PLACE_BODY_NAME",
+    "Description": "UI_GAMECHANGERS_GOLDEN_PLACE_BODY_DESC",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Golden_Vine_BodyDrop.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "IsHidden": true,
+    "Resource": [],
+    "Objectives": []
+  },
+  "8f2f766d-dd6f-4258-8116-3e16955e5ded": {
+    "Name": "UI_GAMECHANGERS_EDGY_GRASSSNAKE_RABBITSHAVEMOVED_NAME",
+    "Description": "UI_GAMECHANGERS_EDGY_GRASSSNAKE_RABBITSHAVEMOVED_DESC",
+    "TileImage": "Images/Contracts/Gamechangers/Gamechanger_Edgy_Grasssnake_CustomObjective_RabbitsHaveMoved.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "secondary",
+    "IsHidden": null,
+    "Resource": [],
+    "Objectives": []
+  },
   "b50b19c2-dacb-4baa-8498-048baa5ee2ec": {
     "Name": "UI_CONTRACT_NIGHTPHLOX_ADDENTRANCES_NAME",
     "Description": "UI_CONTRACT_NIGHTPHLOX_ADDENTRANCES_NAME",
