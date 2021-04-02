@@ -104,17 +104,20 @@ namespace Hitman2Patcher
 				if (patchmemprotection && !VirtualProtectEx(hProcess, b + patch.offset, (uint)dataToWrite.Length,
 						newmemprotection, out oldprotectflags))
 				{
+					CloseHandle(hProcess);
 					throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at {0} for offset {1:X}", "vpe1", patch.offset));
 				}
 
 				if (!WriteProcessMemory(hProcess, b + patch.offset, dataToWrite, (uint)dataToWrite.Length, out byteswritten))
 				{
+					CloseHandle(hProcess);
 					throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at {0} for offset {1:X}", "wpm", patch.offset));
 				}
 
 				if (patchmemprotection && !VirtualProtectEx(hProcess, b + patch.offset, (uint)dataToWrite.Length,
 						patch.defaultProtection, out oldprotectflags))
 				{
+					CloseHandle(hProcess);
 					throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at {0} for offset {1:X}", "vpe2", patch.offset));
 				}
 			}
