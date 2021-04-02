@@ -1,4 +1,4 @@
-// Copyright (C) 2020 grappigegovert <grappigegovert@hotmail.com>
+// Copyright (C) 2020-2021 grappigegovert <grappigegovert@hotmail.com>
 // Licensed under the zlib license. See LICENSE for more info
 
 const express = require('express');
@@ -8,13 +8,10 @@ const path = require('path');
 const uuid = require('uuid');
 const { writeFile, readFile } = require('atomically');
 
-const { extractToken, ServerVer } = require('./components/utils.js');
-const profileHandler = require('./components/profileHandler.js');
-const menuSystem = require('./components/menuSystem.js');
-const menuData = require('./components/menuData.js');
-const eventHandler = require('./components/eventHandler.js');
-const multiplayerHandler = require('./components/multiplayerHandler.js');
-const contractHandler = require('./components/contractHandler.js');
+const { extractToken, ServerVer, getGameVersionFromJWTPis, getGameVersionFromServerVersion } = require('./components/utils.js');
+const h1router = require('./components/h1router.js');
+const h2router = require('./components/h2router.js');
+const h3router = require('./components/h3router.js');
 
 let app = express();
 
@@ -27,11 +24,16 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get('/config/pc-prod/7_17_0', (req, res) => {
+app.get('/config/pc-prod/:serverVersion(\\d+_\\d+_\\d+)', (req, res) => {
     readFile('static/config.json').then((configfile) => {
         let config = JSON.parse(configfile);
         let serverhost = req.hostname;
-        config.Versions[0].ISSUER_ID = req.query.issuer;
+        if (req.params.serverVersion.startsWith('6')) {
+            config.Versions[0].GAME_VER = "6.74.0";
+        } else if (req.params.serverVersion.startsWith('8')) {
+            config.Versions[0].GAME_VER = '8.2.0';
+        }
+        config.Versions[0].ISSUER_ID = req.query.issuer || '*';
         config.Versions[0].SERVER_VER.Metrics.MetricsServerHost = `http://${serverhost}`;
         config.Versions[0].SERVER_VER.Authentication.AuthenticationHost = `http://${serverhost}`;
         config.Versions[0].SERVER_VER.Configuration.Url = `http://${serverhost}/files/onlineconfig.json`;
@@ -67,62 +69,96 @@ app.post('/oauth/token', async (req, res) => {
             "refresh_token": uuid.v4(),
         });
     }
-    if (req.body.grant_type != 'external_steam' || !req.body.steam_userid) {
-        res.status(501).end();
+
+    let external_platform, external_userid, external_users_folder;
+    let epic_appid;
+
+    if (req.body.grant_type == 'external_steam') {
+        if (!/^\d{1,20}$/.test(req.body.steam_userid)) {
+            res.status(400).end(); // invalid steam user id
+            return;
+        }
+        external_platform = 'steam';
+        external_userid = req.body.steam_userid;
+        external_users_folder = 'steamids';
+    } else if (req.body.grant_type == 'external_epic') {
+        if (!/^[\da-f]{32}$/.test(req.body.epic_userid)) {
+            res.status(400).end(); // invalid epic user id
+            return;
+        }
+        const epic_token = jwt.decode(req.body.access_token);
+        if (!epic_token || !epic_token.appid) {
+            res.status(400).end(); // invalid epic access token
+            return;
+        }
+        epic_appid = epic_token.appid;
+
+        external_platform = 'epic';
+        external_userid = req.body.epic_userid;
+        external_users_folder = 'epicids';
+    } else {
+        res.status(501).end(); // unsupported auth method
         return;
     }
 
-    if (!/^\d{1,20}$/.test(req.body.steam_userid) ||
-        req.body.pId && !/^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/.test(req.body.pId)) {
-        res.status(400).end(); // user sent some nasty info
+    const gameVersion = getGameVersionFromJWTPis(external_platform == 'steam' ? req.body.steam_appid : epic_appid);
+
+    if (req.body.pId && !/^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/.test(req.body.pId)) {
+        res.status(400).end(); // pId is not a GUID
         return;
     }
 
 
     if (!req.body.pId) { // if no profile id supplied
-        await readFile(path.join('userdata', 'steamids', `${req.body.steam_userid}.json`)).then(data => { // get profile id from steam id
+        await readFile(path.join('userdata', gameVersion, external_users_folder, `${external_userid}.json`)).then(data => { // get profile id from external id
             // TODO: check legit server response
             req.body.pId = data;
         }).catch(async err => {
             if (err.code != 'ENOENT') {
                 throw err; // rethrow if error is something else than a non-existant file
             }
-            // steamid has no profile associated: create new profile and link steam id to it
+            // external id has no profile associated: create new profile and link external id to it
             req.body.pId = uuid.v4();
-            await writeFile(path.join('userdata', 'steamids', `${req.body.steam_userid}.json`), req.body.pId, { fsyncWait: false });
+            await writeFile(path.join('userdata', gameVersion, external_users_folder, `${external_userid}.json`), req.body.pId, { fsyncWait: false });
         });
     } else { // if a profile id is supplied
-        readFile(path.join('userdata', 'steamids', `${req.body.steam_userid}.json`)).then(pId => { // read profile id linked to supplied steam id
-            if (pId != req.body.pId) { // requested steam id is linked to different profile id
+        readFile(path.join('userdata', gameVersion, external_users_folder, `${external_userid}.json`)).then(pId => { // read profile id linked to supplied external id
+            if (pId != req.body.pId) { // requested external id is linked to different profile id
                 // TODO: check legit server response
             }
         }).catch(async err => {
             if (err.code != 'ENOENT') {
                 throw err; // rethrow if error is something else than a non-existant file
             }
-            // steamid is not yet linked to this profile
-            await writeFile(path.join('userdata', 'steamids', `${req.body.steam_userid}.json`), req.body.pId, { fsyncWait: false }); // link it
+            // external id is not yet linked to this profile
+            await writeFile(path.join('userdata', gameVersion, external_users_folder, `${external_userid}.json`), req.body.pId, { fsyncWait: false }); // link it
         })
     }
 
-    await readFile(path.join('userdata', 'users', `${req.body.pId}.json`)).then(data => {
+    await readFile(path.join('userdata', gameVersion, 'users', `${req.body.pId}.json`)).then(data => {
         let userdata = JSON.parse(data);
-        if (userdata.LinkedAccounts.steam != req.body.steam_userid) { // requested profile id is linked to different steam id
+        if (userdata.LinkedAccounts[external_platform] != external_userid) { // requested profile id is linked to different external id
             // TODO: check legit server response
+            // TODO: handle multiple external links
         }
     }).catch(async err => {
         if (err.code != 'ENOENT') {
             throw err; // rethrow if error is something else than a non-existant file
         }
+        // User does not exist, create new profile from default:
 
-        let userdata = JSON.parse(await readFile(path.join('userdata', 'default.json')));
+        let userdata = JSON.parse(await readFile(path.join('userdata', gameVersion, 'default.json')));
         userdata.Id = req.body.pId;
-        userdata.LinkedAccounts.steam = req.body.steam_userid;
-        userdata.SteamId = req.body.steam_userid;
+        userdata.LinkedAccounts[external_platform] = external_userid;
+        if (external_platform == 'steam') {
+            userdata.SteamId = req.body.steam_userid;
+        } else if (external_platform == 'epic') {
+            userdata.EpicId = req.body.epic_userid;
+        }
         // add all unlockables to player's inventory
-        const allunlockables = JSON.parse(await readFile(path.join('userdata', 'allunlockables.json')))
+        const allunlockables = JSON.parse(await readFile(path.join('userdata', gameVersion, 'allunlockables.json')))
             .filter(u => u.Type != 'location') // locations not in inventory
-            .concat(JSON.parse(await readFile(path.join('userdata', 'emotes.json')))); // add emotes to inventory
+            .concat(JSON.parse(await readFile(path.join('userdata', gameVersion, 'emotes.json')))); // add emotes to inventory
         // TODO: challengemultiplier type unlockables - (only used for sniper gamemode?)
         userdata.Extensions.inventory = allunlockables.map(unlockable => {
             unlockable.GameAsset = null;
@@ -138,19 +174,20 @@ app.post('/oauth/token', async (req, res) => {
         for (const unlockable of userdata.Extensions.inventory) {
             unlockable.ProfileId = req.body.pId;
         }
-        await writeFile(path.join('userdata', 'users', `${req.body.pId}.json`), JSON.stringify(userdata), { fsyncWait: false });
+        await writeFile(path.join('userdata', gameVersion, 'users', `${req.body.pId}.json`), JSON.stringify(userdata), { fsyncWait: false });
     });
 
+    // Format here follows steam_external, Epic jwt has some different fields
     const userinfo = {
-        'auth:method': 'external_steam',
+        'auth:method': req.body.grant_type,
         roles: 'user',
         sub: req.body.pId,
         unique_name: req.body.pId,
-        userid: req.body.steam_userid,
-        platform: 'steam',
+        userid: external_userid,
+        platform: external_platform,
         locale: req.body.locale,
         rgn: req.body.rgn,
-        pis: req.body.steam_appid,
+        pis: external_platform == 'steam' ? req.body.steam_appid : epic_appid,
         cntry: req.body.locale,
     };
     const authOptions = {
@@ -168,30 +205,6 @@ app.post('/oauth/token', async (req, res) => {
     });
 });
 
-app.get('/authentication/api/configuration/Init?*', extractToken, (req, res) => { // configName=pc-prod&lockedContentDisabled=false&isFreePrologueUser=false&isIntroPackUser=false&isFullExperienceUser=false
-    let serverhost = req.hostname;
-    res.json({
-        token: `${req.jwt.exp}-${req.jwt.nbf}-steam-${req.jwt.userid}`,
-        blobconfig: {
-            bloburl: `http://${serverhost}/resources-7-17/`,
-            blobsig: '?sv=2018-03-28',
-            blobsigduration: 7200000.0
-        },
-        profileid: req.jwt.unique_name,
-        serverversion: `${ServerVer._Major}.${ServerVer._Minor}.${ServerVer._Build}.${ServerVer._Revision}`,
-        servertimeutc: new Date().toISOString(),
-    });
-});
-
-
-app.head('/resources-7-17/dynamic_resources_pc_release_rpkg', (req, res) => {
-    res.header('Content-Length', '1243589');
-    res.header('Content-Type', 'application/octet-stream');
-    res.header('Content-MD5', 'lz1iZqwrWXdcPDFE2vVx/g==');
-    res.header('Last-Modified', 'Tue, 19 Nov 2019 13:13:13 GMT');
-    res.send();
-});
-
 app.get('/files/onlineconfig.json', (req, res) => {
     res.sendFile(path.join('static', 'onlineconfig.json'), {
         root: '.',
@@ -201,28 +214,96 @@ app.get('/files/onlineconfig.json', (req, res) => {
     });
 });
 
-app.use('/authentication/api/userchannel/MultiplayerService/', multiplayerHandler);
-
-app.use('/authentication/api/userchannel/EventsService/', eventHandler.router);
-
-app.use('/authentication/api/userchannel/ContractsService/', contractHandler);
-
-app.use('/authentication/api/userchannel/', profileHandler.router);
-
-app.use('/resources-7-17/', menuSystem);
-
-app.use('/profiles/page/', menuData);
-
 app.get('/', (req, res) => {
     res.send('pog'); // simple test page
 });
 
+// --- Everything below requires authentication or points to /resources-{serverVersion}/* ---
+
+// set req.serverVersion
+app.use(express.Router().use('/resources-:serverVersion(\\d+-\\d+)/', (req, res, next) => {
+    req.serverVersion = req.params.serverVersion; // set serverVersion from url (e.g. /resources-7-17/)
+    req.gameVersion = getGameVersionFromServerVersion(req.serverVersion);
+    next('router');
+}).use(extractToken, (req, res, next) => {
+    switch (req.jwt.pis) { // set ServerVersion from jwt (appid from login token)
+        case 'egp_io_interactive_hitman_the_complete_first_season': // hitman 1 epic
+        case '236870': // hitman 1 steam appid
+            req.serverVersion = '6-74';
+            break;
+        case '863550': // hitman 2 steam appid
+            req.serverVersion = '7-17';
+            break;
+        case 'fghi4567xQOCheZIin0pazB47qGUvZw4': // hitman 3 epic
+            req.serverVersion = '8-2';
+            break;
+    }
+    req.gameVersion = getGameVersionFromServerVersion(req.serverVersion);
+    next();
+}));
+
+function generateBlobConfig(req) {
+    return {
+        bloburl: `http://${req.hostname}/resources-${req.serverVersion}/`,
+        blobsig: '?sv=2018-03-28',
+        blobsigduration: 7200000.0
+    };
+}
+
+app.get('/authentication/api/configuration/Init?*', extractToken, (req, res) => { // configName=pc-prod&lockedContentDisabled=false&isFreePrologueUser=false&isIntroPackUser=false&isFullExperienceUser=false
+    res.json({
+        token: `${req.jwt.exp}-${req.jwt.nbf}-${req.jwt.platform}-${req.jwt.userid}`,
+        blobconfig: generateBlobConfig(req),
+        profileid: req.jwt.unique_name,
+        serverversion: `${ServerVer._Major}.${ServerVer._Minor}.${ServerVer._Build}.${ServerVer._Revision}`,
+        servertimeutc: new Date().toISOString(),
+    });
+});
+
+app.post('/authentication/api/userchannel/AuthenticationService/RenewBlobSignature', extractToken, (req, res) => {
+    res.json(generateBlobConfig(req));
+});
+
+app.use(express.Router().use((req, res, next) => {
+    switch (req.serverVersion) {
+        case '6-74':
+            next(); // continue along h1router
+            break;
+        default:
+            next('router'); // go to next router
+    }
+}).use(h1router), express.Router().use((req, res, next) => {
+    switch (req.serverVersion) {
+        case '6-74':
+        case '7-17':
+            next(); // continue along h2router
+            break;
+        default:
+            next('router'); // go to next router
+    }
+}).use(h2router), express.Router().use((req, res, next) => {
+    switch (req.serverVersion) {
+        case '6-74':
+        case '7-17':
+        case '8-2':
+            next(); // continue along h3router
+            break;
+        default:
+            next('router'); // go to next router (unhandled)
+    }
+}).use(h3router));
+
+
 app.all('*', (req, res) => {
-    console.warn(`unhandled ${req.method} ${req.url}`);
+    console.warn(`unhandled ${req.method} ${req.originalUrl}`);
     res.status(404).end()
 });
 
-setInterval(eventHandler.cleanupOldSessions, 1000 * 60 * 10).unref(); // cleanup old sessions every 10 minutes
+setInterval(function () {
+    h1router.sessionCleanup && h1router.sessionCleanup();
+    h2router.sessionCleanup && h2router.sessionCleanup();
+    h3router.sessionCleanup && h3router.sessionCleanup();
+}, 1000 * 60 * 10).unref(); // cleanup old sessions every 10 minutes
 
 const httpServer = http.createServer(app);
 

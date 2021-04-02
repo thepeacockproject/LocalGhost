@@ -2,60 +2,96 @@
 // Licensed under the zlib license. See LICENSE for more info
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
+using System.Text;
 
 namespace Hitman2Patcher
 {
-	class Hitman2Version
+	public class Patch
 	{
-		public int certpin, auth1, auth2, url, protocol1, protocol2;
+		public static readonly byte[] http = Encoding.ASCII.GetBytes("http://{0}\0").ToArray();
+		public static readonly byte[] https = Encoding.ASCII.GetBytes("https://{0}\0").ToArray();
 
-		private Hitman2Version()
+		public int offset;
+		public byte[] original, patch;
+		public string customPatch;
+		public MemProtection defaultProtection;
+
+		public Patch(int offset, byte[] original, byte[] patch, MemProtection defaultProtection, string customPatch = "")
+		{
+			this.offset = offset;
+			this.original = original;
+			this.patch = patch;
+			this.defaultProtection = defaultProtection;
+			this.customPatch = customPatch;
+		}
+
+		public Patch(int offset, string original, string patch, MemProtection defaultProtection, string customPatch = "")
+			: this(offset, SoapHexBinary.Parse(original).Value, SoapHexBinary.Parse(patch).Value, defaultProtection, customPatch)
 		{
 
 		}
+	}
 
-		public static Hitman2Version getVersion(Process process)
+	public class Hitman2Version
+	{
+		public Patch[] certpin, authheader, configdomain, protocol, dynres_noforceoffline;
+
+		private static Dictionary<uint, string> timestampMap = new Dictionary<uint, string>();
+
+		private static Dictionary<string, Hitman2Version> versionMap = new Dictionary<string, Hitman2Version>();
+
+		public static IEnumerable<string> Versions
 		{
-			string foldername = Path.GetFileName(Path.GetDirectoryName(process.MainModule.FileName)).ToLower();
-			if (foldername == "retail")
-			{
-				switch (process.MainModule.FileVersionInfo.FileVersion)
-				{
-					case "2.72.0.0":
-						return v2_72_0_dx11;
-				}
-			}
-			else if (foldername == "dx12retail")
-			{
-				switch (process.MainModule.FileVersionInfo.FileVersion)
-				{
-					case "2.72.0.0":
-						return v2_72_0_dx12;
-				}
-			}
-			throw new NotImplementedException();		
+			get { return versionMap.Keys; }
 		}
 
-		public static Hitman2Version v2_72_0_dx11 = new Hitman2Version()
+		public static void addVersion(string name, uint timestamp, Hitman2Version patchVersions)
 		{
-			certpin = 0x0F33363,
-			auth1 = 0x0B5A1F8,
-			auth2 = 0x0B5A21C,
-			url = 0x2BBBC08,
-			protocol1 = 0x182D598,
-			protocol2 = 0x0B4ED64
-		};
+			timestampMap.Add(timestamp, name);
+			versionMap.Add(name, patchVersions);
+		}
 
-		public static Hitman2Version v2_72_0_dx12 = new Hitman2Version()
+		private static string versionStringFromTimestamp(UInt32 timestamp)
 		{
-			certpin = 0x0F32EC3,
-			auth1 = 0x0B59D58,
-			auth2 = 0x0B59D7C,
-			url = 0x2BDA208,
-			protocol1 = 0x18486B8,
-			protocol2 = 0x0B4E8C4
-		};
+			string result;
+			if (!timestampMap.TryGetValue(timestamp, out result))
+			{
+				result = "unknown";
+			}
+			return result;
+		}
+
+		public static Hitman2Version getVersion(UInt32 timestamp, string versionString = "")
+		{
+			if (versionString == "")
+			{
+				versionString = versionStringFromTimestamp(timestamp);
+			}
+
+			Hitman2Version version;
+			if (versionMap.TryGetValue(versionString, out version))
+			{
+				return version;
+			}
+
+			throw new NotImplementedException();
+		}
+
+		static Hitman2Version()
+		{
+			v1_15.addVersions();
+			v1_16.addVersions();
+			v2_13.addVersions();
+			v2_71.addVersions();
+			v2_72.addVersions();
+			v3_10.addVersions();
+			v3_11.addVersions();
+			v3_20.addVersions();
+		}
 	}
 }

@@ -63,10 +63,29 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Hitman2Version.cs" />
+    <Compile Include="MemoryPatcher.cs" />
+    <Compile Include="OptionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OptionsForm.Designer.cs">
+      <DependentUpon>OptionsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PatchDefinitions\v1_15.cs" />
+    <Compile Include="PatchDefinitions\v1_16.cs" />
+    <Compile Include="PatchDefinitions\v2_13.cs" />
+    <Compile Include="PatchDefinitions\v2_71.cs" />
+    <Compile Include="PatchDefinitions\v3_20.cs" />
+    <Compile Include="PatchDefinitions\v3_11.cs" />
+    <Compile Include="PatchDefinitions\v3_10.cs" />
+    <Compile Include="PatchDefinitions\v2_72.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OptionsForm.resx">
+      <DependentUpon>OptionsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
