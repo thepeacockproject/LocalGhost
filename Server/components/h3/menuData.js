@@ -19,7 +19,7 @@ app.get('/dashboard/Dashboard_Category_Escalation/10000000-0000-0000-0000-000000
     const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
     const repoData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'allunlockables.json')));
     let contractIds = [];
-    await readFile(path.join('menudata', 'h3', 'featuredContracts.json')).then(file => {
+    await readFile(path.join('menudata', req.gameVersion, 'featuredContracts.json')).then(file => {
         contractIds = JSON.parse(file);
     }).catch(err => {
         if (err.code != 'ENOENT') {
