@@ -558,16 +558,11 @@ app.post('/multiplayermatchstats', (req, res) => {
 });
 
 app.get('/hitscategory', extractToken, async (req, res) => {
-    if (req.query.mode != 'dataonly') {
-        // TODO?
-        res.status(500).end();
-        return;
-    }
     const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
     const repoData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'allunlockables.json')));
     let contractIds = [];
     if (req.query.type == 'Sniper') {
-        contractIds = [
+        contractIds = [ // TODO: not hardcode this
             'ff9f46cf-00bd-4c12-b887-eac491c3a96d',
             '00e57709-e049-44c9-a2c3-7655e19884fb',
             '25b20d86-bb5a-4ebd-b6bb-81ed2779c180',
@@ -595,7 +590,7 @@ app.get('/hitscategory', extractToken, async (req, res) => {
     }).filter(data => data); // filter out nulls
 
     res.json({
-        template: null,
+        template: req.query.mode == 'dataonly' ? null : getTemplate('hitscategory', req.gameVersion),
         data: {
             Category: req.query.type,
             Data: {
@@ -610,10 +605,10 @@ app.get('/hitscategory', extractToken, async (req, res) => {
                         SubLocation: sublocation,
                         ChallengesCompleted: 0, // TODO: challenges
                         ChallengesTotal: 0, // TODO
-                        LocationLevel: 1,
-                        LocationMaxLevel: 1,
-                        LocationCompletion: 1,
-                        LocationXPLeft: 0,
+                        LocationLevel: 1, // TODO
+                        LocationMaxLevel: 1, // TODO
+                        LocationCompletion: 1, // TODO
+                        LocationXPLeft: 0, // TODO
                         LocationHideProgression: true,
                     };
                 }),
