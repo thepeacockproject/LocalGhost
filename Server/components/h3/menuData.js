@@ -562,7 +562,9 @@ app.get('/missionend', extractToken, scoreHandler.missionend);
 async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrder) {
     const result = new Map();
     for (const objective of Objectives) {
-        if (objective.SuccessEvent && objective.SuccessEvent.EventName == 'Kill') {
+        if (objective.SuccessEvent && objective.SuccessEvent.EventName == 'Kill'
+            && objective.SuccessEvent.EventValues
+            && objective.SuccessEvent.EventValues.RepositoryId) {
             result.set(objective.Id, {
                 Type: 'kill',
                 Properties: {
