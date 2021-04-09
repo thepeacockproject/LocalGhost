@@ -13,11 +13,13 @@ const ServerVer = {
     _Revision: 0
 };
 
+const UUIDRegex = /^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/;
+
 function extractToken(req, res, next) {
     let auth = req.header('Authorization') ? req.header('Authorization').split(' ') : [];
     if (auth.length == 2 && auth[0] == "bearer") {
         req.jwt = jwt.decode(auth[1]); // I'm not going to verify the token
-        if (!/^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/.test(req.jwt.unique_name)) {
+        if (!UUIDRegex.test(req.jwt.unique_name)) {
             res.status(400).end(); // user sent some nasty info
             next && next('user tried to send dirty auth header');
             return;
@@ -149,4 +151,5 @@ module.exports = {
     getGameVersionFromJWTPis,
     getGameVersionFromServerVersion,
     getTemplate,
+    UUIDRegex,
 };

@@ -6,7 +6,7 @@ const path = require('path');
 const uuid = require('uuid');
 const { readFile } = require('atomically');
 
-const { extractToken, MaxPlayerLevel, xpRequiredForLevel, maxLevelForLocation, getTemplate } = require('../utils.js');
+const { extractToken, MaxPlayerLevel, xpRequiredForLevel, maxLevelForLocation, getTemplate, UUIDRegex } = require('../utils.js');
 const { resolveProfiles } = require('./profileHandler.js');
 const { contractSessions } = require('./eventHandler.js');
 const scoreHandler = require('./scoreHandler.js');
@@ -15,17 +15,32 @@ const app = express.Router();
 
 // /profiles/page/
 
-app.get('/dashboard/Dashboard_Category_Escalation/10000000-0000-0000-0000-000000000000/ContractList/25739126-6a40-4b0b-b9a6-5da1b737190b/:mode', extractToken, async (req, res) => {
+app.get('/dashboard/Dashboard_Category_:category/:subscriptionId/:type/:id/:mode', extractToken, async (req, res) => {
     const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
     const repoData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'allunlockables.json')));
     let contractIds = [];
-    await readFile(path.join('menudata', req.gameVersion, 'featuredContracts.json')).then(file => {
-        contractIds = JSON.parse(file);
-    }).catch(err => {
-        if (err.code != 'ENOENT') {
-            console.error(err);
-        } // use empty array if no featuredContracts.json exists
-    });
+
+    if (req.params.type == 'ContractList') {
+        if (req.params.subscriptionId == '10000000-0000-0000-0000-000000000000') {
+            await readFile(path.join('menudata', req.gameVersion, 'featuredContracts.json')).then(file => {
+                contractIds = JSON.parse(file);
+            }).catch(err => {
+                if (err.code != 'ENOENT') {
+                    console.error(err);
+                } // use empty array if no featuredContracts.json exists
+            });
+        } else {
+            res.status(404).send('Subscription item not found');
+            return;
+        }
+    } else if (req.params.type == 'Contract') {
+        if (!UUIDRegex.test(req.params.id)) {
+            res.status(400).send('id was not a uuid');
+            return;
+        }
+        contractIds = [req.params.id];
+    }
+
     const contracts = (await Promise.allSettled(contractIds.map(id => {
         return readFile(path.join('contractdata', `${id}.json`)).then(file => {
             return generateUserCentric(JSON.parse(file), userData, req.gameVersion, repoData);
@@ -44,18 +59,47 @@ app.get('/dashboard/Dashboard_Category_Escalation/10000000-0000-0000-0000-000000
         }
     }).filter(data => data); // filter out nulls
 
+    let item = {};
+    if (req.params.type == 'ContractList') {
+        item = {
+            Id: req.params.id,
+            Type: 'ContractList',
+            Title: 'ContractList',
+            Date: new Date().toISOString(),
+            Data: contracts.length > 0 ? contracts : null,
+        };
+    } else if (req.params.type == 'Contract') {
+        if (contracts.length != 1) {
+            res.status(404).send('Subscription item not found');
+            return;
+        }
+        item = {
+            Id: req.params.id,
+            Type: 'Contract',
+            Title: contracts[0].Contract.Metadata.Title,
+            Date: new Date().toISOString(),
+            Data: contracts[0],
+        };
+    } else if (req.params.type == 'NoContent') {
+        item = {
+            Id: null,
+            Type: "NoContent",
+            Title: null,
+            Date: "0001-01-01T00:00:00Z",
+            Data: null
+        };
+    } else {
+        // TODO? Are there more types?
+        res.status(400).send('unknown type');
+        return;
+    }
+
     res.json({
         template: req.params.mode == 'dataonly' ? null : await getTemplate('dashboard_category'),
         data: {
-            Item: {
-                Id: '25739126-6a40-4b0b-b9a6-5da1b737190b',
-                Type: 'ContractList',
-                Title: 'ContractList',
-                Date: '2020-01-01T00:00:00.0000000Z',
-                Data: contracts.length > 0 ? contracts : null,
-            },
+            Item: item,
         },
-    })
+    });
 });
 
 app.get('/Hub', extractToken, async (req, res) => {
