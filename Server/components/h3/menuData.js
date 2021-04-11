@@ -605,7 +605,47 @@ app.get('/missionend', extractToken, scoreHandler.missionend);
 
 async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrder) {
     const result = new Map();
-    for (const objective of Objectives) {
+    let gameChangerObjectives = [];
+
+    if (GameChangers && GameChangers.length > 0) {
+        const gameChangerData = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'GameChangerProperties.json')));
+        for (const gamechangerId of GameChangers) {
+            const gameChangerProps = gameChangerData[gamechangerId];
+            if (gameChangerProps) {
+                if (gameChangerProps.IsHidden) {
+                    if (gameChangerProps.Objectives.length == 1) { // Either 0 or 1 I think.
+                        const objective = gameChangerProps.Objectives[0];
+                        objective.Id = gamechangerId;
+                        gameChangerObjectives.push(objective);
+                    }
+                } else {
+                    result.set(gamechangerId, {
+                        Type: 'gamechanger',
+                        Properties: {
+                            Id: gamechangerId,
+                            Name: gameChangerProps.Name,
+                            Description: gameChangerProps.Description,
+                            LongDescription: gameChangerProps.LongDescription == null ?
+                                gameChangerProps.Description : gameChangerProps.LongDescription,
+                            TileImage: gameChangerProps.TileImage,
+                            Icon: gameChangerProps.Icon,
+                            ObjectivesCategory: gameChangerProps.ObjectivesCategory,
+                        },
+                    });
+                }
+            }
+        }
+    }
+
+    for (const objective of (Objectives || []).concat(gameChangerObjectives)) {
+        if (!objective.Category) {
+            objective.Category = objective.Primary ? 'primary' : 'secondary';
+        }
+        if (objective.ForceShowOnLoadingScreen === false || objective.Activation
+            || objective.OnActive && objective.OnActive.IfInProgress && objective.OnActive.IfInProgress.Visible === false) {
+            continue; // do not show objectives with 'ForceShowOnLoadingScreen: false' or objectives that are not visible on start
+        }
+
         if (objective.SuccessEvent && objective.SuccessEvent.EventName == 'Kill'
             && objective.SuccessEvent.EventValues
             && objective.SuccessEvent.EventValues.RepositoryId) {
@@ -616,13 +656,13 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
                     Conditions: [], // TODO?
                 },
             });
-        } else if (objective.Type == 'statemachine' && objective.Definition.States && objective.Definition.States.Start
-            && objective.Definition.States.Start.Kill) { // This objective can possibly be displayed as a simple kill objective
+        } else if ((!objective.ObjectiveType || objective.ObjectiveType == 'kill') && objective.Type == 'statemachine' && objective.Definition.States
+            && objective.Definition.States.Start && objective.Definition.States.Start.Kill) { // This objective can possibly be displayed as a simple kill objective
 
             let simpleKill = false;
             let conditionsRequired = false;
             let failsWithoutConditions = false;
-            let targetId;
+            let targetIds = [];
             let Conditions = objective.TargetConditions ? objective.TargetConditions.map(condition => ({
                 Type: condition.Type,
                 RepositoryId: condition.RepositoryId || uuid.NIL,
@@ -634,48 +674,85 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
             for (const event in objective.Definition.States.Start) {
                 const eventActions = Array.isArray(objective.Definition.States.Start[event]) ?
                     objective.Definition.States.Start[event] : [objective.Definition.States.Start[event]]; // can be array or object -> make array if object
-                if (event == 'Kill') {
+                if (event == 'Kill' || event == 'Pacify') {
                     for (const eventAction of eventActions) {
                         if (eventAction.Transition == 'Success') {
-                            let andConditions = (eventAction.Condition.$eq && [eventAction.Condition]) || eventAction.Condition.$and;
-                            if (andConditions && andConditions.length > 0) {
-                                for (const condition of andConditions) {
-                                    if (condition.$eq) {
-                                        const repoStrIndex = condition.$eq.indexOf('$Value.RepositoryId');
-                                        const killItemCatStrIndex = condition.$eq.indexOf('$Value.KillItemCategory');
-                                        const disguiseRepoStrIndex = condition.$eq.indexOf('$Value.OutfitRepositoryId');
-                                        if (repoStrIndex != -1) { // killed target id is checked
-                                            if (targetId && targetId != condition.$eq[1 - repoStrIndex]) {
-                                                // TargetId checked against different ids (?) -> no simple kill
-                                                simpleKill = false;
-                                                break;
+                            const simplekillcheck = function simplekillcheck(condition, localTargetIds) {
+                                let localConditionsRequired = false;
+                                if (condition.$and) {
+                                    localConditionsRequired = condition.$and.some(subCondition => simplekillcheck(subCondition, localTargetIds)[1]);
+                                } else if (condition.$or) {
+                                    localConditionsRequired = condition.$or.every(subCondition => simplekillcheck(subCondition, localTargetIds)[1]);
+                                } else if (condition.$eq) {
+                                    const repoStrIndex = condition.$eq.indexOf('$Value.RepositoryId');
+                                    if (repoStrIndex != -1) { // killed target id is checked
+                                        let localtargetId = condition.$eq[1 - repoStrIndex];
+                                        if (!localTargetIds.includes(localtargetId)) {
+                                            if (localtargetId.startsWith('$')) {
+                                                // TODO? (I hope not): get target id from dynamic variables
                                             }
-                                            targetId = condition.$eq[1 - repoStrIndex];
-                                            if (targetId.startsWith('$')) {
-                                                simpleKill = false; // TODO?: get target id from dynamic variables
-                                                break;
-                                            } else {
-                                                simpleKill = true;
-                                            }
-                                        } else if (killItemCatStrIndex != -1 // kill item category is checked
-                                            || disguiseRepoStrIndex != -1) { // disguise id is checked
-                                            conditionsRequired = true;
+                                            localTargetIds.push(localtargetId);
                                         }
-                                    } else if (condition.$any && condition.$any.in == '$Value.DamageEvents') {
-                                        // some check is done on the damage events
-                                        conditionsRequired = true;
+                                    } else if (condition.$eq.includes('$Value.KillItemCategory') // kill item category is checked
+                                        || condition.$eq.includes('$Value.KillItemRepositoryId') // kill item id is checked
+                                        || condition.$eq.includes('$Value.KillClass') // kill class is checked
+                                        || condition.$eq.includes('$Value.KillMethodBroad') // broad kill method is checked
+                                        || condition.$eq.includes('$Value.KillMethodStrict') // strict kill method is checked
+                                        || condition.$eq.includes('$Value.OutfitRepositoryId') // disguise id is checked
+                                        || condition.$eq.includes('$Value.SetPieceType') // setpiecetype checked (e.g. drowning in toilet)
+                                        || (condition.$eq.includes('$Value.Accident') && condition.$eq.includes(true))) { // accident enforced
+                                        localConditionsRequired = true;
+                                    }
+                                } else if (condition.$any && (condition.$any.in == '$Value.DamageEvents' // damage events are probed
+                                    || (condition.$any['?'].$eq
+                                        && condition.$any['?'].$eq.includes('$Value.KillItemRepositoryId') // kill item is checked against a list
+                                        && condition.$any['?'].$eq.includes('$.#'))
+                                    || (condition.$any.in.length == 2
+                                        && condition.$any.in.includes('$Value.KillMethodBroad') // either broad/strict kill method is checked
+                                        && condition.$any.in.includes('$Value.KillMethodStrict')
+                                    ))) {
+                                    localConditionsRequired = true;
+                                } else if (condition.$inarray && condition.$inarray.in == '$.Targets'
+                                    && condition.$inarray['?'] && condition.$inarray['?'].$eq
+                                    && condition.$inarray['?'].$eq.includes('$Value.RepositoryId')
+                                    && condition.$inarray['?'].$eq.includes('$.#')
+                                    && objective.Definition.Context && objective.Definition.Context.Targets
+                                    && objective.Definition.Context.Targets.length == 1) {
+                                    // WHY, IOI, WHY
+                                    let localtargetId = objective.Definition.Context.Targets[0];
+                                    if (!localTargetIds.includes(localtargetId)) {
+                                        localTargetIds.push(localtargetId);
                                     }
                                 }
+                                return [localTargetIds, localConditionsRequired];
+                            };
+
+                            let newTargetIds;
+                            [newTargetIds, conditionsRequired] = simplekillcheck(eventAction.Condition, []);
+                            if (newTargetIds.length == 1
+                                && (targetIds.length == 0 || (targetIds.length == 1 && targetIds[0] == newTargetIds[0]))) {
+                                targetIds = newTargetIds;
+                                simpleKill = true;
+                            } else {
+                                // multiple targets -> no simple kill
+                                simpleKill = false;
+                                break;
                             }
                         } else if (eventAction.Transition == 'Failure' && objective.TargetConditions) {
-                            let condition = eventAction.Condition.$eq && eventAction.Condition;
+                            let condition = eventAction.Condition;
                             if (eventAction.Condition.$and && eventAction.Condition.$and.length == 1) { // single value in $and block
                                 condition = eventAction.Condition.$and[0];
                             }
-                            if (condition && condition.$eq) {
+                            if (condition.$eq) {
                                 const index = condition.$eq.indexOf('$Value.RepositoryId');
                                 if (index != -1) {
-                                    targetId = condition.$eq[1 - index];
+                                    let targetId = condition.$eq[1 - index];
+                                    if (targetIds.length == 1 && targetIds[0] != targetId) {
+                                        // multiple target ids -> no simple kill
+                                        simpleKill = false;
+                                        break;
+                                    }
+                                    targetIds = [targetId];
                                     if (targetId.startsWith('$')) {
                                         simpleKill = false; // TODO?: get target id from dynamic variables
                                         break;
@@ -683,7 +760,26 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
                                         // Objective fails if regular kill
                                         failsWithoutConditions = true;
                                     }
+                                } else {
+                                    // Event leads to fail without checking target id
+                                    simpleKill = false;
+                                    break;
                                 }
+                            } else if (condition.$inarray && condition.$inarray.in == '$.Targets'
+                                && condition.$inarray['?'] && condition.$inarray['?'].$eq
+                                && condition.$inarray['?'].$eq.includes('$Value.RepositoryId')
+                                && condition.$inarray['?'].$eq.includes('$.#')
+                                && objective.Definition.Context && objective.Definition.Context.Targets
+                                && objective.Definition.Context.Targets.length == 1) {
+                                // yep.
+                                let targetId = objective.Definition.Context.Targets[0];
+                                if (targetIds.length == 1 && targetIds[0] != targetId) {
+                                    // multiple target ids -> no simple kill
+                                    simpleKill = false;
+                                    break;
+                                }
+                                targetIds = [targetId];
+                                failsWithoutConditions = true;
                             }
                         } else if (eventAction.Transition) {
                             // Transition to other state than success -> no simple kill
@@ -692,75 +788,93 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
                         }
                     }
                 } else {
-                    if (eventActions.some(eventAction => eventAction.Transition)) {
+                    if (![ // ugh, exceptions
+                        'NoAccidentAvailable',
+                        'KatanaLost',
+                        'ShamanOutfitLost',
+                    ].includes(event) && eventActions.some(eventAction => eventAction.Transition)) {
                         simpleKill = false; // some other event than kill can transition to other state -> no simple kill
                         break;
                     }
                 }
             }
 
-            if (simpleKill && targetId && (!conditionsRequired || Conditions.length > 0) && (conditionsRequired == failsWithoutConditions)) {
+            if (simpleKill && (!conditionsRequired || Conditions.length > 0) && (conditionsRequired == failsWithoutConditions)) {
                 result.set(objective.Id, { // Custom objective is actually a simple kill objective
                     Type: 'kill',
                     Properties: {
-                        Id: targetId,
-                        Conditions: Conditions, // TODO?
+                        Id: targetIds[0],
+                        Conditions: Conditions,
                     }
                 });
+                continue;
             }
             // else: This is no simple kill objective: fall through to next block
         }
-        if (objective.HUDTemplate && objective.ObjectiveType && !objective.Activation) {
+        if (objective.HUDTemplate && objective.ObjectiveType) {
+            let id = null;
+            if (objective.Definition && objective.Definition.Context && objective.Definition.Context.Targets
+                && objective.Definition.Context.Targets.length == 1) {
+                id = objective.Definition.Context.Targets[0];
+            }
+
+            const properties = {
+                Id: id,
+                BriefingText: objective.BriefingText || '',
+                LongBriefingText: objective.LongBriefingText == null ?
+                    (objective.BriefingText || '') : objective.LongBriefingText,
+                Image: objective.Image,
+                BriefingName: objective.BriefingName,
+                DisplayAsKill: objective.DisplayAsKillObjective || false,
+                ObjectivesCategory: objective.Category,
+                ForceShowOnLoadingScreen: objective.ForceShowOnLoadingScreen || false,
+            };
+            switch (objective.ObjectiveType) {
+                case 'customkill':
+                    delete properties.Image;
+                    delete properties.ForceShowOnLoadingScreen;
+                    delete properties.BriefingName;
+                case 'setpiece':
+                    delete properties.ObjectivesCategory;
+                    break;
+                default:
+                    delete properties.Id; // only add Id for customkill and setpiece
+            }
+
             result.set(objective.Id, {
                 Type: objective.ObjectiveType,
-                Properties: {
-                    BriefingText: objective.BriefingText,
-                    LongBriefingText: objective.LongBriefingText || objective.BriefingText,
-                    Image: objective.Image,
-                    BriefingName: objective.BriefingName,
-                    DisplayAsKill: objective.DisplayAsKillObjective || false,
-                    ObjectivesCategory: objective.Category,
-                    ForceShowOnLoadingScreen: objective.ForceShowOnLoadingScreen || false,
-                },
+                Properties: properties,
             });
         }
         // objective not shown on planning screen
     }
-    if (GameChangers && GameChangers.length > 0) {
-        const gameChangerData = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'GameChangerProperties.json')));
-        for (const gamechangerId of GameChangers) {
-            const gameChangerProps = gameChangerData[gamechangerId];
-            if (gameChangerProps && !gameChangerProps.isHidden) {
-                if (!gameChangerProps.LongDescription) {
-                    gameChangerProps.LongDescription = gameChangerProps.Description;
-                }
-                gameChangerProps.Id = gamechangerId;
-                delete gameChangerProps.isHidden;
-                delete gameChangerProps.Resource;
-                delete gameChangerProps.Objectives;
-                result.set(gamechangerId, {
-                    Type: 'gamechanger',
-                    Properties: gameChangerProps,
-                });
-            }
-        }
-    }
-
 
     const sortedResult = [];
-    for (const { Id, IsNew, ExcludeFromScoring, ForceShowOnLoadingScreen } of GroupObjectiveDisplayOrder || Objectives) {
-        const objective = result.get(Id);
-        if (objective) {
-            if (!GroupObjectiveDisplayOrder && (ExcludeFromScoring && !ForceShowOnLoadingScreen)) {
-                continue; // Do not show objectives with 'ExcludeFromScoring: true' if no custom sorting is present
+    const resultIds = new Set();
+    for (const { Id, IsNew } of GroupObjectiveDisplayOrder || []) {
+        if (!resultIds.has(Id)) { // if not yet added
+            const objective = result.get(Id);
+            if (objective) {
+                if (IsNew) {
+                    objective.Properties.IsNew = true;
+                }
+                sortedResult.push(objective);
+                resultIds.add(Id);
             }
-
-            if (IsNew) {
-                objective.Properties.IsNew = true;
-            }
-            sortedResult.push(objective);
         }
     }
+
+    // add each objective or gamechanger that is not already in the result
+    for (const { Id, ExcludeFromScoring, IgnoreIfInactive, ForceShowOnLoadingScreen } of (Objectives || []).concat((GameChangers || []).map(x => ({ Id: x })))) {
+        if (!resultIds.has(Id)) {
+            let resultobjective = result.get(Id);
+            if (resultobjective && (!(ExcludeFromScoring || IgnoreIfInactive) || ForceShowOnLoadingScreen)) {
+                sortedResult.push(resultobjective);
+                resultIds.add(Id);
+            }
+        }
+    }
+
     return sortedResult;
 }
 
