@@ -3251,6 +3251,7 @@
   "ab91b785-7914-4790-96f9-130eea842084": {
     "Name": "UI_GAMECHANGERS_GLOBAL_HOT_DISGUISE_NAME",
     "Description": "UI_GAMECHANGERS_PARIS_AUCTION_STAFF_TIMER_DESC",
+    "LongDescription": "",
     "TileImage": "images/contracts/gamechangers/Gamechanger_Paris_Hot_Disguise_Palace_Staff.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
@@ -3326,6 +3327,7 @@
   "30b2d229-c3d7-44f7-98d6-bf88b057e354": {
     "Name": "UI_GAMECHANGERS_GLOBAL_HOT_DISGUISE_NAME",
     "Description": "UI_GAMECHANGERS_PARIS_SECURITY_GUARD_TIMER_DESC",
+    "LongDescription": "",
     "TileImage": "images/contracts/gamechangers/Gamechanger_Paris_Hot_Disguise_Security_Guard.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
@@ -5349,6 +5351,7 @@
   "eb4c8e84-ca1f-4242-b72a-cf90175d223f": {
     "Name": "UI_GAMECHANGERS_GLOBAL_HOT_DISGUISE_NAME",
     "Description": "UI_GAMECHANGERS_HOKKAIDO_NAILS_HOT_DISGUISE_DESC",
+    "LongDescription": "",
     "TileImage": "images/contracts/gamechangers/Gamechanger_Hokkaido_Hot_Disguise_Heli_Pilot.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
@@ -6975,6 +6978,7 @@
   "3ff7f4a5-3410-428e-a635-2dce2c0eedf5": {
     "Name": "UI_GAMECHANGERS_GLOBAL_HOT_DISGUISE_NAME",
     "Description": "UI_GAMECHANGERS_MUMBAI_HOT_DISGUISES_DESC",
+    "LongDescription": "",
     "TileImage": "images/contracts/gamechangers/Gamechanger_Mumbai_Hot_Disguises.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
