@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2020 grappigegovert <grappigegovert@hotmail.com>
+﻿// Copyright (C) 2020-2021 grappigegovert <grappigegovert@hotmail.com>
 // Licensed under the zlib license. See LICENSE for more info
 
 using System;
@@ -12,15 +12,18 @@ using System.Text;
 namespace Hitman2Patcher
 {
 	// from https://docs.microsoft.com/en-us/windows/win32/memory/memory-protection-constants
-	public enum MemProtection
+	// Not all, but I'm pretty sure these are the only types that will occur here.
+	[Flags]
+	public enum MemProtection : uint
 	{
+		PAGE_NOACCESS = 0x00000001,
+		PAGE_READONLY = 0x00000002,
+		PAGE_READWRITE = 0x00000004,
 		PAGE_EXECUTE = 0x00000010,
 		PAGE_EXECUTE_READ = 0x00000020,
 		PAGE_EXECUTE_READWRITE = 0x00000040,
 		PAGE_EXECUTE_WRITECOPY = 0x00000080,
-		PAGE_NOACCESS = 0x00000001,
-		PAGE_READONLY = 0x00000002,
-		PAGE_READWRITE = 0x00000004
+		PAGE_GUARD = 0x00000100
 	}
 
 	public class MemoryPatcher
@@ -31,16 +34,17 @@ namespace Hitman2Patcher
 		[DllImport("kernel32", SetLastError = true)]
 		private static extern bool CloseHandle(IntPtr hObject);
 
-		[DllImport("kernel32")]
-		private static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr address, byte[] buffer, uint size, out int byteswritten);
+		[DllImport("kernel32.dll", SetLastError = true)]
+		private static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr address, byte[] buffer, UIntPtr size, out UIntPtr byteswritten);
 
 		[DllImport("kernel32.dll", SetLastError = true)]
-		static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr address, [Out] byte[] buffer, uint size, out int numberOfBytesRead);
+		private static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr address, [Out] byte[] buffer, UIntPtr size, out UIntPtr numberOfBytesRead);
 
 		[DllImport("kernel32.dll")]
-		static extern bool VirtualProtectEx(IntPtr hProcess, IntPtr lpAddress, uint dwSize, MemProtection flNewProtect, out uint lpflOldProtect);
+		private static extern bool VirtualProtectEx(IntPtr hProcess, IntPtr lpAddress, UIntPtr dwSize, MemProtection flNewProtect, out MemProtection lpflOldProtect);
 
-		private const uint PROCESS_VM_READ = 0x0010; //Required to read memory in a process using ReadProcessMemory.
+		// from https://docs.microsoft.com/en-us/windows/win32/procthread/process-security-and-access-rights
+		private const uint PROCESS_VM_READ = 0x0010; // Required to read memory in a process using ReadProcessMemory.
 		private const uint PROCESS_VM_WRITE = 0x0020; // Required to write to memory in a process using WriteProcessMemory.
 		private const uint PROCESS_VM_OPERATION = 0x0008; // Required to perform an operation on the address space of a process using VirtualProtectEx
 
@@ -50,8 +54,8 @@ namespace Hitman2Patcher
 				false, process.Id);
 			IntPtr b = process.MainModule.BaseAddress;
 			Hitman2Version v = Hitman2Version.getVersion(getTimestamp(hProcess, b), patchOptions.ForcedVersion);
-			int byteswritten;
-			uint oldprotectflags;
+			UIntPtr byteswritten;
+			MemProtection oldprotectflags;
 			byte[] newurl = Encoding.ASCII.GetBytes(patchOptions.CustomConfigDomain).Concat(new byte[] { 0x00 }).ToArray();
 			List<Patch> patches = new List<Patch>();
 
@@ -105,20 +109,20 @@ namespace Hitman2Patcher
 					patchmemprotection = false;
 				}
 
-				if (patchmemprotection && !VirtualProtectEx(hProcess, b + patch.offset, (uint)dataToWrite.Length,
+				if (patchmemprotection && !VirtualProtectEx(hProcess, b + patch.offset, (UIntPtr)dataToWrite.Length,
 						newmemprotection, out oldprotectflags))
 				{
 					CloseHandle(hProcess);
 					throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at {0} for offset {1:X}", "vpe1", patch.offset));
 				}
 
-				if (!WriteProcessMemory(hProcess, b + patch.offset, dataToWrite, (uint)dataToWrite.Length, out byteswritten))
+				if (!WriteProcessMemory(hProcess, b + patch.offset, dataToWrite, (UIntPtr)dataToWrite.Length, out byteswritten))
 				{
 					CloseHandle(hProcess);
 					throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at {0} for offset {1:X}", "wpm", patch.offset));
 				}
 
-				if (patchmemprotection && !VirtualProtectEx(hProcess, b + patch.offset, (uint)dataToWrite.Length,
+				if (patchmemprotection && !VirtualProtectEx(hProcess, b + patch.offset, (UIntPtr)dataToWrite.Length,
 						patch.defaultProtection, out oldprotectflags))
 				{
 					CloseHandle(hProcess);
@@ -135,11 +139,11 @@ namespace Hitman2Patcher
 		private static bool IsReadyForPatching(IntPtr hProcess, IntPtr baseAddress, Hitman2Version version, int processId)
 		{
 			byte[] buffer = { 0 };
-			int bytesread;
+			UIntPtr bytesread;
 			bool ready = true;
 			foreach (Patch p in version.configdomain.Where(p => p.customPatch == "configdomain"))
 			{
-				if (!ReadProcessMemory(hProcess, baseAddress + p.offset, buffer, 1, out bytesread))
+				if (!ReadProcessMemory(hProcess, baseAddress + p.offset, buffer, (UIntPtr)1, out bytesread))
 				{
 					int tries = patchTries.GetValueOrDefault(processId);
 					if (tries >= 3) // throw if this fails 3 times
@@ -168,10 +172,10 @@ namespace Hitman2Patcher
 		public static UInt32 getTimestamp(IntPtr hProcess, IntPtr baseAddress)
 		{
 			byte[] buffer = new byte[4];
-			int bytesread;
-			ReadProcessMemory(hProcess, baseAddress + 0x3C, buffer, 4, out bytesread);
+			UIntPtr bytesread;
+			ReadProcessMemory(hProcess, baseAddress + 0x3C, buffer, (UIntPtr)4, out bytesread);
 			int NTHeaderOffset = BitConverter.ToInt32(buffer, 0);
-			ReadProcessMemory(hProcess, baseAddress + NTHeaderOffset + 0x8, buffer, 4, out bytesread);
+			ReadProcessMemory(hProcess, baseAddress + NTHeaderOffset + 0x8, buffer, (UIntPtr)4, out bytesread);
 			return BitConverter.ToUInt32(buffer, 0);
 		}
 	}
