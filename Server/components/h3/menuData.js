@@ -656,6 +656,7 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
                     Conditions: [], // TODO?
                 },
             });
+            continue;
         } else if ((!objective.ObjectiveType || objective.ObjectiveType == 'kill') && objective.Type == 'statemachine' && objective.Definition.States
             && objective.Definition.States.Start && objective.Definition.States.Start.Kill) { // This objective can possibly be displayed as a simple kill objective
 
@@ -868,7 +869,7 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
     for (const { Id, ExcludeFromScoring, IgnoreIfInactive, ForceShowOnLoadingScreen } of (Objectives || []).concat((GameChangers || []).map(x => ({ Id: x })))) {
         if (!resultIds.has(Id)) {
             let resultobjective = result.get(Id);
-            if (resultobjective && (!(ExcludeFromScoring || IgnoreIfInactive) || ForceShowOnLoadingScreen)) {
+            if (resultobjective && (!ExcludeFromScoring || ForceShowOnLoadingScreen)) {
                 sortedResult.push(resultobjective);
                 resultIds.add(Id);
             }
