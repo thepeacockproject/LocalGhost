@@ -46,7 +46,7 @@ namespace Hitman2Patcher
 			}
 
 			log("Patcher ready");
-			log("Select a server and start hitman 2");
+			log("Select a server and start hitman");
 			
 		}
 
