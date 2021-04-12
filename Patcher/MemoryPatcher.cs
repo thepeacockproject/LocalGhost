@@ -59,7 +59,7 @@ namespace Hitman2Patcher
 			byte[] newurl = Encoding.ASCII.GetBytes(patchOptions.CustomConfigDomain).Concat(new byte[] { 0x00 }).ToArray();
 			List<Patch> patches = new List<Patch>();
 
-			if (!IsReadyForPatching(hProcess, b, v, process.Id))
+			if (!IsReadyForPatching(hProcess, b, v))
 			{
 				CloseHandle(hProcess);
 				return false;
@@ -134,9 +134,7 @@ namespace Hitman2Patcher
 			return true;
 		}
 
-		public static Dictionary<int, int> patchTries = new Dictionary<int, int>();
-
-		private static bool IsReadyForPatching(IntPtr hProcess, IntPtr baseAddress, Hitman2Version version, int processId)
+		private static bool IsReadyForPatching(IntPtr hProcess, IntPtr baseAddress, Hitman2Version version)
 		{
 			byte[] buffer = { 0 };
 			UIntPtr bytesread;
@@ -145,13 +143,7 @@ namespace Hitman2Patcher
 			{
 				if (!ReadProcessMemory(hProcess, baseAddress + p.offset, buffer, (UIntPtr)1, out bytesread))
 				{
-					int tries = patchTries.GetValueOrDefault(processId);
-					if (tries >= 3) // throw if this fails 3 times
-					{
-						CloseHandle(hProcess);
-						throw new Win32Exception(Marshal.GetLastWin32Error());
-					}
-					patchTries[processId] = tries + 1;
+					throw new Win32Exception(Marshal.GetLastWin32Error());
 				}
 				ready &= buffer[0] != 0;
 			}
@@ -177,16 +169,6 @@ namespace Hitman2Patcher
 			int NTHeaderOffset = BitConverter.ToInt32(buffer, 0);
 			ReadProcessMemory(hProcess, baseAddress + NTHeaderOffset + 0x8, buffer, (UIntPtr)4, out bytesread);
 			return BitConverter.ToUInt32(buffer, 0);
-		}
-	}
-
-	public static class DictionaryExtentions
-	{
-		public static TValue GetValueOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key,
-			TValue defaultValue = default(TValue))
-		{
-			TValue value;
-			return dictionary.TryGetValue(key, out value) ? value : defaultValue;
 		}
 	}
 }

@@ -93,7 +93,6 @@ namespace Hitman2Patcher
 		private void button1_Click(object sender, EventArgs e)
 		{
 			patchedprocesses.Clear();
-			MemoryPatcher.patchTries.Clear();
 		}
 
 		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
