@@ -95,7 +95,7 @@ app.get('/dashboard/Dashboard_Category_:category/:subscriptionId/:type/:id/:mode
     }
 
     res.json({
-        template: req.params.mode == 'dataonly' ? null : await getTemplate('dashboard_category'),
+        template: req.params.mode == 'dataonly' ? null : await getTemplate('dashboard_category', req.gameVersion),
         data: {
             Item: item,
         },
@@ -642,7 +642,11 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
             objective.Category = objective.Primary ? 'primary' : 'secondary';
         }
         if (objective.ForceShowOnLoadingScreen === false || objective.Activation
-            || objective.OnActive && objective.OnActive.IfInProgress && objective.OnActive.IfInProgress.Visible === false) {
+            || (objective.OnActive && objective.OnActive.IfInProgress && objective.OnActive.IfInProgress.Visible === false)
+            || (objective.OnActive && objective.OnActive.IfCompleted && objective.OnActive.IfCompleted.Visible === false
+                && objective.Definition && objective.Definition.States && objective.Definition.States.Start
+                && objective.Definition.States.Start['-'] && objective.Definition.States.Start['-'].Transition == 'Success')
+        ) {
             continue; // do not show objectives with 'ForceShowOnLoadingScreen: false' or objectives that are not visible on start
         }
 
@@ -782,20 +786,7 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
                                 targetIds = [targetId];
                                 failsWithoutConditions = true;
                             }
-                        } else if (eventAction.Transition) {
-                            // Transition to other state than success -> no simple kill
-                            simpleKill = false;
-                            break;
                         }
-                    }
-                } else {
-                    if (![ // ugh, exceptions
-                        'NoAccidentAvailable',
-                        'KatanaLost',
-                        'ShamanOutfitLost',
-                    ].includes(event) && eventActions.some(eventAction => eventAction.Transition)) {
-                        simpleKill = false; // some other event than kill can transition to other state -> no simple kill
-                        break;
                     }
                 }
             }
@@ -866,7 +857,7 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
     }
 
     // add each objective or gamechanger that is not already in the result
-    for (const { Id, ExcludeFromScoring, IgnoreIfInactive, ForceShowOnLoadingScreen } of (Objectives || []).concat((GameChangers || []).map(x => ({ Id: x })))) {
+    for (const { Id, ExcludeFromScoring, ForceShowOnLoadingScreen } of (Objectives || []).concat((GameChangers || []).map(x => ({ Id: x })))) {
         if (!resultIds.has(Id)) {
             let resultobjective = result.get(Id);
             if (resultobjective && (!ExcludeFromScoring || ForceShowOnLoadingScreen)) {
