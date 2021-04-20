@@ -664,10 +664,10 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
         } else if ((!objective.ObjectiveType || objective.ObjectiveType == 'kill') && objective.Type == 'statemachine' && objective.Definition.States
             && objective.Definition.States.Start && objective.Definition.States.Start.Kill) { // This objective can possibly be displayed as a simple kill objective
 
-            let simpleKill = false;
+            let simpleKill = true;
             let conditionsRequired = false;
             let failsWithoutConditions = false;
-            let targetIds = [];
+            let targetIds = new Set();
             let Conditions = objective.TargetConditions ? objective.TargetConditions.map(condition => ({
                 Type: condition.Type,
                 RepositoryId: condition.RepositoryId || uuid.NIL,
@@ -682,6 +682,7 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
                 if (event == 'Kill' || event == 'Pacify') {
                     for (const eventAction of eventActions) {
                         if (eventAction.Transition == 'Success') {
+
                             const simplekillcheck = function simplekillcheck(condition, localTargetIds) {
                                 let localConditionsRequired = false;
                                 if (condition.$and) {
@@ -692,12 +693,10 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
                                     const repoStrIndex = condition.$eq.indexOf('$Value.RepositoryId');
                                     if (repoStrIndex != -1) { // killed target id is checked
                                         let localtargetId = condition.$eq[1 - repoStrIndex];
-                                        if (!localTargetIds.includes(localtargetId)) {
-                                            if (localtargetId.startsWith('$')) {
-                                                // TODO? (I hope not): get target id from dynamic variables
-                                            }
-                                            localTargetIds.push(localtargetId);
+                                        if (localtargetId.startsWith('$')) {
+                                            simpleKill = false; // TODO? (I hope not): get target id from dynamic variables
                                         }
+                                        localTargetIds.add(localtargetId);
                                     } else if (condition.$eq.includes('$Value.KillItemCategory') // kill item category is checked
                                         || condition.$eq.includes('$Value.KillItemRepositoryId') // kill item id is checked
                                         || condition.$eq.includes('$Value.KillClass') // kill class is checked
@@ -705,6 +704,7 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
                                         || condition.$eq.includes('$Value.KillMethodStrict') // strict kill method is checked
                                         || condition.$eq.includes('$Value.OutfitRepositoryId') // disguise id is checked
                                         || condition.$eq.includes('$Value.SetPieceType') // setpiecetype checked (e.g. drowning in toilet)
+                                        || (condition.$eq.includes('$Value.OutfitIsHitmanSuit') && condition.$eq.includes(true)) // suit enforced
                                         || (condition.$eq.includes('$Value.Accident') && condition.$eq.includes(true))) { // accident enforced
                                         localConditionsRequired = true;
                                     }
@@ -721,43 +721,36 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
                                     && condition.$inarray['?'] && condition.$inarray['?'].$eq
                                     && condition.$inarray['?'].$eq.includes('$Value.RepositoryId')
                                     && condition.$inarray['?'].$eq.includes('$.#')
-                                    && objective.Definition.Context && objective.Definition.Context.Targets
-                                    && objective.Definition.Context.Targets.length == 1) {
+                                    && objective.Definition.Context && objective.Definition.Context.Targets) {
                                     // WHY, IOI, WHY
-                                    let localtargetId = objective.Definition.Context.Targets[0];
-                                    if (!localTargetIds.includes(localtargetId)) {
-                                        localTargetIds.push(localtargetId);
+                                    for (const targetId of objective.Definition.Context.Targets) {
+                                        localTargetIds.add(targetId);
                                     }
                                 }
                                 return [localTargetIds, localConditionsRequired];
                             };
 
                             let newTargetIds;
-                            [newTargetIds, conditionsRequired] = simplekillcheck(eventAction.Condition, []);
-                            if (newTargetIds.length == 1
-                                && (targetIds.length == 0 || (targetIds.length == 1 && targetIds[0] == newTargetIds[0]))) {
-                                targetIds = newTargetIds;
-                                simpleKill = true;
-                            } else {
-                                // multiple targets -> no simple kill
-                                simpleKill = false;
-                                break;
+                            [newTargetIds, conditionsRequired] = simplekillcheck(eventAction.Condition, new Set());
+                            for (const targetId of newTargetIds) {
+                                targetIds.add(targetId);
                             }
                         } else if (eventAction.Transition == 'Failure' && objective.TargetConditions) {
                             let condition = eventAction.Condition;
-                            if (eventAction.Condition.$and && eventAction.Condition.$and.length == 1) { // single value in $and block
-                                condition = eventAction.Condition.$and[0];
+                            let notindex = -1;
+                            if (eventAction.Condition.$and) {
+                                if (eventAction.Condition.$and.length == 1) { // single value in $and block
+                                    condition = eventAction.Condition.$and[0];
+                                } else if (eventAction.Condition.$and.length == 2 // two values
+                                    && (notindex = eventAction.Condition.$and.findIndex(x => x.$not)) != -1) { // one is a $not
+                                    condition = eventAction.Condition.$and[1 - notindex]; // use the other one
+                                }
                             }
                             if (condition.$eq) {
                                 const index = condition.$eq.indexOf('$Value.RepositoryId');
                                 if (index != -1) {
                                     let targetId = condition.$eq[1 - index];
-                                    if (targetIds.length == 1 && targetIds[0] != targetId) {
-                                        // multiple target ids -> no simple kill
-                                        simpleKill = false;
-                                        break;
-                                    }
-                                    targetIds = [targetId];
+                                    targetIds.add(targetId);
                                     if (targetId.startsWith('$')) {
                                         simpleKill = false; // TODO?: get target id from dynamic variables
                                         break;
@@ -766,7 +759,7 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
                                         failsWithoutConditions = true;
                                     }
                                 } else {
-                                    // Event leads to fail without checking target id
+                                    // Kill event leads to fail without checking target id
                                     simpleKill = false;
                                     break;
                                 }
@@ -774,16 +767,11 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
                                 && condition.$inarray['?'] && condition.$inarray['?'].$eq
                                 && condition.$inarray['?'].$eq.includes('$Value.RepositoryId')
                                 && condition.$inarray['?'].$eq.includes('$.#')
-                                && objective.Definition.Context && objective.Definition.Context.Targets
-                                && objective.Definition.Context.Targets.length == 1) {
+                                && objective.Definition.Context && objective.Definition.Context.Targets) {
                                 // yep.
-                                let targetId = objective.Definition.Context.Targets[0];
-                                if (targetIds.length == 1 && targetIds[0] != targetId) {
-                                    // multiple target ids -> no simple kill
-                                    simpleKill = false;
-                                    break;
+                                for (const targetId of objective.Definition.Context.Targets) {
+                                    targetIds.add(targetId);
                                 }
-                                targetIds = [targetId];
                                 failsWithoutConditions = true;
                             }
                         }
@@ -791,11 +779,12 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
                 }
             }
 
-            if (simpleKill && (!conditionsRequired || Conditions.length > 0) && (conditionsRequired == failsWithoutConditions)) {
+            if (simpleKill && targetIds.size == 1 && (!conditionsRequired || Conditions.length > 0)
+                && ((conditionsRequired || Conditions.some(x => x.HardCondition)) == failsWithoutConditions)) {
                 result.set(objective.Id, { // Custom objective is actually a simple kill objective
                     Type: 'kill',
                     Properties: {
-                        Id: targetIds[0],
+                        Id: targetIds.values().next().value, // get first element
                         Conditions: Conditions,
                     }
                 });
