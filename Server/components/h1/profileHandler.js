@@ -14,13 +14,7 @@ app.post('/ProfileService/GetPlatformEntitlements', express.json(), getEntitleme
 app.post('/AuthenticationService/GetBlobOfflineCacheDatabaseDiff', (req, res) => {
     // Which menu files should be loaded from the server?
     // TODO
-    res.json([
-        'menusystem/pages/hub/dashboard/dashboard.json',
-        'menusystem/pages/hub/hub_content.json',
-        'menusystem/pages/hub/dashboard/category_escalation/result.json',
-        'menusystem/pages/result/versusresult_content.json',
-        'menusystem/pages/multiplayer/content/lobbyslim.json',
-    ]);
+    res.json([]);
 });
 
 module.exports = {
