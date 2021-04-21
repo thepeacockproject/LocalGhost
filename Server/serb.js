@@ -8,7 +8,7 @@ const path = require('path');
 const uuid = require('uuid');
 const { writeFile, readFile } = require('atomically');
 
-const { extractToken, ServerVer, getGameVersionFromJWTPis, getGameVersionFromServerVersion } = require('./components/utils.js');
+const { extractToken, ServerVer, getGameVersionFromJWTPis, getGameVersionFromServerVersion, UUIDRegex } = require('./components/utils.js');
 const h1router = require('./components/h1router.js');
 const h2router = require('./components/h2router.js');
 const h3router = require('./components/h3router.js');
@@ -103,7 +103,7 @@ app.post('/oauth/token', async (req, res) => {
 
     const gameVersion = getGameVersionFromJWTPis(external_platform == 'steam' ? req.body.steam_appid : epic_appid);
 
-    if (req.body.pId && !/^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/.test(req.body.pId)) {
+    if (req.body.pId && !UUIDRegex.test(req.body.pId)) {
         res.status(400).end(); // pId is not a GUID
         return;
     }

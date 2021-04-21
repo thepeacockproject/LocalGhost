@@ -240,6 +240,10 @@ app.get('/stashpoint', extractToken, async (req, res) => {
     // /stashpoint?contractid=c1d015b4-be08-4e44-808e-ada0f387656f&slotid=3&slotname=disguise3&stashpoint=&allowlargeitems=true&allowcontainers=true
     // /stashpoint?contractid=&slotid=3&slotname=disguise&stashpoint=&allowlargeitems=true&allowcontainers=false
     // /stashpoint?contractid=5b5f8aa4-ecb4-4a0a-9aff-98aa1de43dcc&slotid=6&slotname=stashpoint6&stashpoint=28b03709-d1f0-4388-b207-f03611eafb64&allowlargeitems=true&allowcontainers=false
+    if (!UUIDRegex.test(req.query.contractid)) {
+        res.status(400).send('contract id was not a uuid');
+        return;
+    }
     const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
     let contractData;
     await readFile(path.join('contractdata', `${req.query.contractid}.json`)).then(contractfile => {
@@ -264,7 +268,7 @@ app.get('/stashpoint', extractToken, async (req, res) => {
                 Items: userData.Extensions.inventory.filter(item => {
                     return item.Unlockable.Properties.LoadoutSlot // only display items
                         && (!req.query.slotname
-                            || ((/^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/.test(req.query.slotid) // container
+                            || ((UUIDRegex.test(req.query.slotid) // container
                                 || req.query.slotname == 'stashpoint') // stashpoint
                                 && item.Unlockable.Properties.LoadoutSlot != 'disguise') // container or stashpoint => display all items
                             || item.Unlockable.Properties.LoadoutSlot == req.query.slotname) // else: display items for requested slot
@@ -352,6 +356,11 @@ app.get('/multiplayer', extractToken, async (req, res) => { // /multiplayer?game
 });
 
 app.get('/Planning', extractToken, async (req, res) => {
+    if (!UUIDRegex.test(req.query.contractid)) {
+        res.status(400).send('contract id was not a uuid');
+        return;
+    }
+
     const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
     const repo = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'allunlockables.json')));
     const entranceData = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'Entrances.json')));
@@ -486,6 +495,11 @@ app.get('/leaderboardsview', extractToken, async (req, res) => {
 });
 
 app.get('/selectagencypickup', extractToken, async (req, res) => {
+    if (!UUIDRegex.test(req.query.contractId)) {
+        res.status(400).send('contract id was not a uuid');
+        return;
+    }
+
     const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
     const pickupData = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'AgencyPickups.json')));
     readFile(path.join('contractdata', `${req.query.contractId}.json`)).then(async contractfile => {
@@ -523,6 +537,11 @@ app.get('/selectagencypickup', extractToken, async (req, res) => {
 
 
 app.get('/selectentrance', extractToken, async (req, res) => {
+    if (!UUIDRegex.test(req.query.contractId)) {
+        res.status(400).send('contract id was not a uuid');
+        return;
+    }
+
     const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
     const entranceData = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'Entrances.json')));
     readFile(path.join('contractdata', `${req.query.contractId}.json`)).then(async contractfile => {

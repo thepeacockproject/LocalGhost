@@ -53,7 +53,7 @@ app.post('/RegisterToMatch', extractToken, express.json(), async (req, res) => {
         }));
         match.Players.push(req.jwt.unique_name);
     } else { // MatchId not found
-        res.status(404).send();
+        res.status(404).end();
         return;
     }
 
@@ -89,7 +89,7 @@ app.post('/SetMatchData', extractToken, express.json(), (req, res) => {
             MatchType: 0
         });
     } else {
-        res.status(404).send();
+        res.status(404).end();
     }
 });
 
@@ -97,7 +97,7 @@ app.post('/RegisterToPreset', extractToken, express.json(), (req, res) => { // m
     // TODO: implement matchmaking
     // req.body.presetId
     // req.body.lobbyId (this is just a timestamp?)
-    res.status(500).send();
+    res.status(500).end();
 });
 
 module.exports = app;

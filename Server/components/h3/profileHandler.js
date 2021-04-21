@@ -6,7 +6,7 @@ const path = require('path');
 const { writeFile, readFile } = require('atomically');
 
 
-const { extractToken, MaxPlayerLevel } = require('../utils.js');
+const { extractToken, MaxPlayerLevel, UUIDRegex } = require('../utils.js');
 const { getEntitlements } = require('./platformEntitlements.js');
 
 const app = express.Router();
@@ -33,6 +33,7 @@ app.post('/ProfileService/UpdateUserSaveFileTable', (req, res) => {
 app.post('/ProfileService/UpdateProfileStats', express.json(), async (req, res) => {
     if (req.jwt.unique_name != req.body.id) {
         res.status(403).end(); // data submitted for different profile id
+        return;
     }
     let userdata = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
     
@@ -44,6 +45,7 @@ app.post('/ProfileService/UpdateProfileStats', express.json(), async (req, res) 
 });
 
 app.post('/ProfileService/SynchronizeOfflineUnlockables', (req, res) => {
+    // TODO: add submitted items to inventory (for this session)
     res.status(204).end();
 });
 
@@ -102,7 +104,7 @@ app.post('/ProfileService/SynchroniseGameStats', extractToken, express.json(), a
 
 async function resolveProfiles(profileIDs, gameVersion) {
     return (await Promise.allSettled(profileIDs.map(id => {
-        if (!/^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/.test(id)) {
+        if (!UUIDRegex.test(id)) {
             return Promise.reject('Tried to resolve malformed profile id');
         }
         return readFile(path.join('userdata', gameVersion, 'users', `${id}.json`));
@@ -146,12 +148,14 @@ app.post('/ProfileService/ResolveGamerTags', express.json(), async (req, res) =>
 
 app.post('/ProfileService/GetFriendsCount', extractToken, async (req, res) => {
     let userdata = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
+    // TODO: This should actually return the number of friends that also own the game
     res.json(userdata.Extensions.friends.length);
 });
 
 app.post('/GamePersistentDataService/GetData', extractToken, express.json(), async (req, res) => {
     if (req.jwt.unique_name != req.body.userId) {
         res.status(403).end();
+        return;
     }
     let userdata = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.body.userId}.json`)));
     res.json(userdata.Extensions.gamepersistentdata[req.body.key]);
@@ -160,6 +164,7 @@ app.post('/GamePersistentDataService/GetData', extractToken, express.json(), asy
 app.post('/GamePersistentDataService/SaveData', extractToken, express.json(), async (req, res) => {
     if (req.jwt.unique_name != req.body.userId) {
         res.status(403).end();
+        return;
     }
     let userdata = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.body.userId}.json`)));
     userdata.Extensions.gamepersistentdata[req.body.key] = req.body.data;
