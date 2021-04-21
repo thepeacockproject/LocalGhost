@@ -680,138 +680,7 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
                 },
             });
             continue;
-        } else if ((!objective.ObjectiveType || objective.ObjectiveType == 'kill') && objective.Type == 'statemachine' && objective.Definition.States
-            && objective.Definition.States.Start && objective.Definition.States.Start.Kill) { // This objective can possibly be displayed as a simple kill objective
-
-            let simpleKill = true;
-            let conditionsRequired = false;
-            let failsWithoutConditions = false;
-            let targetIds = new Set();
-            let Conditions = objective.TargetConditions ? objective.TargetConditions.map(condition => ({
-                Type: condition.Type,
-                RepositoryId: condition.RepositoryId || uuid.NIL,
-                HardCondition: condition.HardCondition || false,
-                ObjectiveId: condition.ObjectiveId || uuid.NIL,
-                KillMethod: condition.KillMethod || '',
-            })) : [];
-
-            for (const event in objective.Definition.States.Start) {
-                const eventActions = Array.isArray(objective.Definition.States.Start[event]) ?
-                    objective.Definition.States.Start[event] : [objective.Definition.States.Start[event]]; // can be array or object -> make array if object
-                if (event == 'Kill' || event == 'Pacify') {
-                    for (const eventAction of eventActions) {
-                        if (eventAction.Transition == 'Success') {
-
-                            const simplekillcheck = function simplekillcheck(condition, localTargetIds) {
-                                let localConditionsRequired = false;
-                                if (condition.$and) {
-                                    localConditionsRequired = condition.$and.some(subCondition => simplekillcheck(subCondition, localTargetIds)[1]);
-                                } else if (condition.$or) {
-                                    localConditionsRequired = condition.$or.every(subCondition => simplekillcheck(subCondition, localTargetIds)[1]);
-                                } else if (condition.$eq) {
-                                    const repoStrIndex = condition.$eq.indexOf('$Value.RepositoryId');
-                                    if (repoStrIndex != -1) { // killed target id is checked
-                                        let localtargetId = condition.$eq[1 - repoStrIndex];
-                                        if (localtargetId.startsWith('$')) {
-                                            simpleKill = false; // TODO? (I hope not): get target id from dynamic variables
-                                        }
-                                        localTargetIds.add(localtargetId);
-                                    } else if (condition.$eq.includes('$Value.KillItemCategory') // kill item category is checked
-                                        || condition.$eq.includes('$Value.KillItemRepositoryId') // kill item id is checked
-                                        || condition.$eq.includes('$Value.KillClass') // kill class is checked
-                                        || condition.$eq.includes('$Value.KillMethodBroad') // broad kill method is checked
-                                        || condition.$eq.includes('$Value.KillMethodStrict') // strict kill method is checked
-                                        || condition.$eq.includes('$Value.OutfitRepositoryId') // disguise id is checked
-                                        || condition.$eq.includes('$Value.SetPieceType') // setpiecetype checked (e.g. drowning in toilet)
-                                        || (condition.$eq.includes('$Value.OutfitIsHitmanSuit') && condition.$eq.includes(true)) // suit enforced
-                                        || (condition.$eq.includes('$Value.Accident') && condition.$eq.includes(true))) { // accident enforced
-                                        localConditionsRequired = true;
-                                    }
-                                } else if (condition.$any && (condition.$any.in == '$Value.DamageEvents' // damage events are probed
-                                    || (condition.$any['?'].$eq
-                                        && condition.$any['?'].$eq.includes('$Value.KillItemRepositoryId') // kill item is checked against a list
-                                        && condition.$any['?'].$eq.includes('$.#'))
-                                    || (condition.$any.in.length == 2
-                                        && condition.$any.in.includes('$Value.KillMethodBroad') // either broad/strict kill method is checked
-                                        && condition.$any.in.includes('$Value.KillMethodStrict')
-                                    ))) {
-                                    localConditionsRequired = true;
-                                } else if (condition.$inarray && condition.$inarray.in == '$.Targets'
-                                    && condition.$inarray['?'] && condition.$inarray['?'].$eq
-                                    && condition.$inarray['?'].$eq.includes('$Value.RepositoryId')
-                                    && condition.$inarray['?'].$eq.includes('$.#')
-                                    && objective.Definition.Context && objective.Definition.Context.Targets) {
-                                    // WHY, IOI, WHY
-                                    for (const targetId of objective.Definition.Context.Targets) {
-                                        localTargetIds.add(targetId);
-                                    }
-                                }
-                                return [localTargetIds, localConditionsRequired];
-                            };
-
-                            let newTargetIds;
-                            [newTargetIds, conditionsRequired] = simplekillcheck(eventAction.Condition, new Set());
-                            for (const targetId of newTargetIds) {
-                                targetIds.add(targetId);
-                            }
-                        } else if (eventAction.Transition == 'Failure' && objective.TargetConditions) {
-                            let condition = eventAction.Condition;
-                            let notindex = -1;
-                            if (eventAction.Condition.$and) {
-                                if (eventAction.Condition.$and.length == 1) { // single value in $and block
-                                    condition = eventAction.Condition.$and[0];
-                                } else if (eventAction.Condition.$and.length == 2 // two values
-                                    && (notindex = eventAction.Condition.$and.findIndex(x => x.$not)) != -1) { // one is a $not
-                                    condition = eventAction.Condition.$and[1 - notindex]; // use the other one
-                                }
-                            }
-                            if (condition.$eq) {
-                                const index = condition.$eq.indexOf('$Value.RepositoryId');
-                                if (index != -1) {
-                                    let targetId = condition.$eq[1 - index];
-                                    targetIds.add(targetId);
-                                    if (targetId.startsWith('$')) {
-                                        simpleKill = false; // TODO?: get target id from dynamic variables
-                                        break;
-                                    } else {
-                                        // Objective fails if regular kill
-                                        failsWithoutConditions = true;
-                                    }
-                                } else {
-                                    // Kill event leads to fail without checking target id
-                                    simpleKill = false;
-                                    break;
-                                }
-                            } else if (condition.$inarray && condition.$inarray.in == '$.Targets'
-                                && condition.$inarray['?'] && condition.$inarray['?'].$eq
-                                && condition.$inarray['?'].$eq.includes('$Value.RepositoryId')
-                                && condition.$inarray['?'].$eq.includes('$.#')
-                                && objective.Definition.Context && objective.Definition.Context.Targets) {
-                                // yep.
-                                for (const targetId of objective.Definition.Context.Targets) {
-                                    targetIds.add(targetId);
-                                }
-                                failsWithoutConditions = true;
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (simpleKill && targetIds.size == 1 && (!conditionsRequired || Conditions.length > 0)
-                && ((conditionsRequired || Conditions.some(x => x.HardCondition)) == failsWithoutConditions)) {
-                result.set(objective.Id, { // Custom objective is actually a simple kill objective
-                    Type: 'kill',
-                    Properties: {
-                        Id: targetIds.values().next().value, // get first element
-                        Conditions: Conditions,
-                    }
-                });
-                continue;
-            }
-            // else: This is no simple kill objective: fall through to next block
-        }
-        if (objective.HUDTemplate && objective.ObjectiveType) {
+        } else if (objective.HUDTemplate && ['custom', 'customkill', 'setpiece'].includes(objective.ObjectiveType)) {
             let id = null;
             if (objective.Definition && objective.Definition.Context && objective.Definition.Context.Targets
                 && objective.Definition.Context.Targets.length == 1) {
@@ -844,6 +713,25 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
             result.set(objective.Id, {
                 Type: objective.ObjectiveType,
                 Properties: properties,
+            });
+        } else if (objective.Type == 'statemachine' && objective.Definition && objective.Definition.Context
+            && objective.Definition.Context.Targets && objective.Definition.Context.Targets.length == 1
+            && objective.HUDTemplate) {
+            // This objective will be displayed as a kill objective
+            let Conditions = objective.TargetConditions ? objective.TargetConditions.map(condition => ({
+                Type: condition.Type,
+                RepositoryId: condition.RepositoryId || uuid.NIL,
+                HardCondition: condition.HardCondition || false,
+                ObjectiveId: condition.ObjectiveId || uuid.NIL,
+                KillMethod: condition.KillMethod || '',
+            })) : [];
+
+            result.set(objective.Id, {
+                Type: 'kill',
+                Properties: {
+                    Id: objective.Definition.Context.Targets[0],
+                    Conditions: Conditions,
+                }
             });
         }
         // objective not shown on planning screen
