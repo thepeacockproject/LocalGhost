@@ -46,13 +46,15 @@ namespace Hitman2Patcher
 			}
 
 			log("Patcher ready");
-			log("Select a server and start hitman 2");
+			log("Select a server and start hitman");
 			
 		}
 
 		void timer_Tick(object sender, EventArgs e)
 		{
-			Process[] hitmans = Process.GetProcessesByName("HITMAN2");
+			IEnumerable<Process> hitmans = Process.GetProcessesByName("HITMAN")
+				.Concat(Process.GetProcessesByName("HITMAN2"))
+				.Concat(Process.GetProcessesByName("HITMAN3"));
 			foreach (Process process in hitmans)
 			{
 				if (!patchedprocesses.Contains(process.Id))
@@ -69,9 +71,10 @@ namespace Hitman2Patcher
 						}
 						// else: process not yet ready for patching, try again next timer tick
 					}
-					catch (Win32Exception)
+					catch (Win32Exception err)
 					{
 						log(String.Format("Failed to patch processid {0}: error code {1}", process.Id, Marshal.GetLastWin32Error()));
+						log(err.Message);
 						patchedprocesses.Add(process.Id);
 					}
 					catch (NotImplementedException)
@@ -186,6 +189,11 @@ namespace Hitman2Patcher
 					comboBox1.Items.Add("config.hitman.io");
 				}
 			}
+		}
+
+		private void Form1_Resize(object sender, EventArgs e)
+		{
+			listView1.Columns[0].Width = listView1.Width - 4 - SystemInformation.VerticalScrollBarWidth;
 		}
 	}
 }

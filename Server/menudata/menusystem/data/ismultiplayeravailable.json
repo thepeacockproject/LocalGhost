@@ -1,6 +1,0 @@
-{
-  "$if $eq ($platform,stadia)": {
-    "$then": false,
-    "$else": true
-  }
-}

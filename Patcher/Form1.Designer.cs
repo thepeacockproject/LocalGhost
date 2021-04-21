@@ -54,7 +54,8 @@ namespace Hitman2Patcher
 			// 
 			// listView1
 			// 
-			this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1});
@@ -74,7 +75,6 @@ namespace Hitman2Patcher
 			// 
 			// label2
 			// 
-			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label2.AutoSize = true;
 			this.label2.Location = new System.Drawing.Point(12, 61);
 			this.label2.Name = "label2";
@@ -95,6 +95,8 @@ namespace Hitman2Patcher
 			// 
 			// comboBox1
 			// 
+			this.comboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox1.FormattingEnabled = true;
 			this.comboBox1.Location = new System.Drawing.Point(127, 12);
 			this.comboBox1.MaxLength = 150;
@@ -127,6 +129,7 @@ namespace Hitman2Patcher
 			// 
 			// button3
 			// 
+			this.button3.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.button3.Location = new System.Drawing.Point(155, 42);
 			this.button3.Name = "button3";
 			this.button3.Size = new System.Drawing.Size(161, 33);
@@ -148,12 +151,13 @@ namespace Hitman2Patcher
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.listView1);
 			this.Controls.Add(this.label1);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
+			this.MinimumSize = new System.Drawing.Size(429, 299);
 			this.Name = "Form1";
-			this.Text = "Hitman 2 patcher";
+			this.Text = "LocalGhost Patcher";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+			this.Resize += new System.EventHandler(this.Form1_Resize);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
