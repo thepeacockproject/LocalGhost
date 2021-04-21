@@ -59,7 +59,9 @@ Each gameversion (h1, h2, or h3) uses its own version of the `featuredContracts.
 The server is written in NodeJS and serves as replacement for all http(s) servers that the game connects to.
 Without the patcher, the first connection the game makes is to `config.hitman.io` which serves some json that contains all other domains the game should use.
 This server returns json that makes the game connect to the same domain for all requests.
+
 Most parts of the server are split up into three versions: h1, h2, and h3; corresponding to the different releases of the game: HITMAN™ (2016), HITMAN™ 2, and HITMAN III.
+\
 When a request comes in, the request is assigned a req.gameVersion according to its steam/epic token appid, and routed to the version specific parts of the server, falling back to newer game versions if a request isn't handled by the version specific part.
 This means that most of the code is in the h3 subdirectories, with only some version-specific bits in the h1/h2 folders.
 
