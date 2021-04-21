@@ -6,15 +6,15 @@ const path = require('path');
 const uuid = require('uuid');
 const { readFile } = require('atomically');
 
-const { extractToken, ServerVer } = require('../utils.js');
+const { extractToken, ServerVer, UUIDRegex } = require('../utils.js');
 const eventHandler = require('./eventHandler.js');
 
 const app = express.Router();
 
 app.post('/GetForPlay2', express.json(), extractToken, async (req, res) => {
-    if (!/^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/.test(req.body.id)) {
+    if (!UUIDRegex.test(req.body.id)) {
         res.status(400).end();
-        return; // user sent some nasty info
+        return; // user sent a non-uuid contract id
     }
     readFile(path.join('contractdata', `${req.body.id}.json`)).then(async contractfile => {
         const contractData = JSON.parse(contractfile);

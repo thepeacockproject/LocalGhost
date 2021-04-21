@@ -20,8 +20,8 @@ function extractToken(req, res, next) {
     if (auth.length == 2 && auth[0] == "bearer") {
         req.jwt = jwt.decode(auth[1]); // I'm not going to verify the token
         if (!UUIDRegex.test(req.jwt.unique_name)) {
-            res.status(400).end(); // user sent some nasty info
-            next && next('user tried to send dirty auth header');
+            res.status(400).end();
+            next && next('user sent jwt with non-uuid user id');
             return;
         }
         next && next();

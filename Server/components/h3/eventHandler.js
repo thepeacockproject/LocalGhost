@@ -134,7 +134,8 @@ function newSession(sessionId, contractId, userId) {
 
 app.post('/SaveAndSynchronizeEvents4', extractToken, express.json({ limit: '5Mb' }), (req, res) => {
     if (req.body.userId != req.jwt.unique_name) {
-        res.status(403).send(); // Trying to save events for other user
+        res.status(403).end(); // Trying to save events for other user
+        return;
     }
     let userQueue;
     let newEvents = null;
@@ -165,7 +166,7 @@ app.post('/SaveAndSynchronizeEvents4', extractToken, express.json({ limit: '5Mb'
 
 app.post('/SaveEvents2', extractToken, express.json({ limit: '5Mb' }), (req, res) => {
     if (req.jwt.unique_name != req.body.userId) {
-        res.status(403).send(); // Trying to save events for other user
+        res.status(403).end(); // Trying to save events for other user
         return;
     }
     res.json(saveEvents(req.body.userId, req.body.values));

@@ -18,6 +18,12 @@ async function missionend(req, res) {
         res.status(401).end();
         return;
     }
+    if (!UUIDRegex.test(sessionDetails.contractId)) {
+        // This should never happen as it means we saved an invalid id earlier. Doesn't hurt to check however.
+        res.status(400).send('contract id was not a uuid');
+        return;
+    }
+
     const unlockables = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'allunlockables.json')));
     const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
     const contractData = JSON.parse(await readFile(path.join('contractdata', `${sessionDetails.contractId}.json`)));
