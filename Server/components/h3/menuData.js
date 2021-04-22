@@ -546,7 +546,11 @@ app.get('/selectentrance', extractToken, async (req, res) => {
     const entranceData = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'Entrances.json')));
     readFile(path.join('contractdata', `${req.query.contractId}.json`)).then(async contractfile => {
         const contractData = JSON.parse(contractfile);
-        const entrancesInScene = entranceData[contractData.Metadata.ScenePath.toLowerCase()];
+        let entrancesInScene = entranceData[contractData.Metadata.ScenePath.toLowerCase()];
+        if (!entrancesInScene) {
+            entrancesInScene = [];
+            console.error(`Could not find entrance data for '${contractData.Metadata.ScenePath.toLowerCase()}'`);
+        }
         const unlockedEntrances = userData.Extensions.inventory.filter(item => item.Unlockable.Type == 'access')
             .map(i => i.Unlockable)
             .filter(unlockable => unlockable.Properties.RepositoryId);
