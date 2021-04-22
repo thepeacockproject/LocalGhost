@@ -36,7 +36,7 @@ app.post('/ProfileService/UpdateProfileStats', express.json(), async (req, res) 
         return;
     }
     let userdata = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
-    
+
     userdata.Gamertag = req.body.gamerTag;
     userdata.Extensions.achievements = req.body.achievements;
 
@@ -137,12 +137,12 @@ app.post('/ProfileService/ResolveGamerTags', express.json(), async (req, res) =>
         if (profile.LinkedAccounts.dev) {
             result.dev = result.dev || {};
             result.dev[profile.Id] = null;
-        } else if (profile.Gamertag){
+        } else if (profile.Gamertag) {
             result.steam = result.steam || {};
             result.steam[profile.Id] = profile.Gamertag;
         }
     }
-    
+
     res.json(result);
 });
 
@@ -209,6 +209,40 @@ app.post('/HubPagesService/GetChallengeTreeFor', extractToken, express.json(), (
             }
         }
     });
+});
+
+app.post('/DefaultLoadoutService/Set', extractToken, express.json(), async (req, res) => {
+    const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
+    const inventory = userData.Extensions.inventory;
+    const allunlockables = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'allunlockables.json')));
+    const sublocation = req.body.location && allunlockables.find(unlockable => unlockable.Id == req.body.location);
+    if (!userData.Extensions.defaultloadout) {
+        userData.Extensions.defaultloadout = {};
+    }
+    if (sublocation && req.body.loadout) {
+        const loadout = {};
+        const locationstring = sublocation.Properties.ParentLocation;
+
+        for (const slotid of [0, 1, 2, 3, 4, 5, 6]) {
+            if (inventory.find(item => item.Unlockable.Id == req.body.loadout[slotid])) {
+                loadout[slotid] = req.body.loadout[slotid];
+            }
+        }
+        for (const slotid in req.body.loadout) {
+            if (UUIDRegex.test(slotid) && inventory.find(item => item.InstanceId == slotid)
+            && inventory.find(item => item.Unlockable.Id == req.body.loadout[slotid])) {
+                // container contents
+                loadout[slotid] = req.body.loadout[slotid];
+                break; // only one container is supported
+            }
+        }
+
+        userData.Extensions.defaultloadout[locationstring] = loadout;
+        await writeFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`), JSON.stringify(userData), { fsyncWait: false });
+        res.status(204).end();
+    } else {
+        res.status(400).end();
+    }
 });
 
 module.exports = {
