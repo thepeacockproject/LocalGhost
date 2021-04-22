@@ -378,6 +378,23 @@ app.get('/Planning', extractToken, async (req, res) => {
             .map(i => i.Unlockable)
             .filter(unlockable => unlockable.Properties.RepositoryId);
         sublocation.DisplayNameLocKey = `UI_${sublocation.Id}_NAME`;
+        const loadoutSlots = [
+            'carriedweapon',
+            'carrieditem',
+            'concealedweapon',
+            'disguise',
+            'gear',
+            'gear',
+            'stashpoint'
+        ];
+        const defaultLoadout = Object.assign(Array(7).fill(null), (userData.Extensions.defaultloadout || {})[sublocation.Properties.ParentLocation]
+            || {
+            2: 'FIREARMS_HERO_PISTOL_TACTICAL_ICA_19',
+            3: 'TOKEN_OUTFIT_HITMANSUIT', // TODO: default location-specific suit
+            4: 'TOKEN_FIBERWIRE',
+            5: 'PROP_TOOL_COIN',
+        });
+
         res.json({
             template: await getTemplate('planning', req.gameVersion),
             data: {
@@ -398,55 +415,18 @@ app.get('/Planning', extractToken, async (req, res) => {
                 Entrances: unlockedEntrances.filter(unlockable => entrancesInScene.includes(unlockable.Properties.RepositoryId))
                     .sort((a, b) => a.Properties.UnlockOrder - b.Properties.UnlockOrder),
                 Location: sublocation,
-                LoadoutData: [
+                LoadoutData: Object.entries(defaultLoadout).map(([slotid, itemId]) => (
                     {
-                        SlotName: 'carriedweapon',
-                        SlotId: '0',
-                        Recommended: null,
-                    },
-                    {
-                        SlotName: 'carrieditem',
-                        SlotId: '1',
-                        Recommended: null,
-                    },
-                    {
-                        SlotName: 'concealedweapon',
-                        SlotId: '2',
-                        Recommended: {
-                            item: userData.Extensions.inventory.find(item => item.Unlockable.Id == 'FIREARMS_HERO_PISTOL_TACTICAL_ICA_19'),
-                            type: 'concealedweapon',
-                        },
-                    },
-                    {
-                        SlotName: 'disguise',
-                        SlotId: '3',
-                        Recommended: {
-                            item: userData.Extensions.inventory.find(item => item.Unlockable.Id == 'TOKEN_OUTFIT_HITMANSUIT'),
-                            type: 'disguise',
-                        },
-                    },
-                    {
-                        SlotName: 'gear',
-                        SlotId: '4',
-                        Recommended: {
-                            item: userData.Extensions.inventory.find(item => item.Unlockable.Id == 'TOKEN_FIBERWIRE'),
-                            type: 'gear',
-                        },
-                    },
-                    {
-                        SlotName: 'gear',
-                        SlotId: '5',
-                        Recommended: {
-                            item: userData.Extensions.inventory.find(item => item.Unlockable.Id == 'PROP_TOOL_COIN'),
-                            type: 'gear',
-                        },
-                    },
-                    {
-                        SlotName: 'stashpoint',
-                        SlotId: '6',
-                        Recommended: null,
-                    },
-                ], // TODO
+                        SlotName: loadoutSlots[slotid] || itemId,
+                        SlotId: slotid,
+                        Recommended: itemId ? {
+                            item: userData.Extensions.inventory.find(item => item.Unlockable.Id == itemId),
+                            type: loadoutSlots[slotid] || itemId,
+                            owned: true,
+                        } : null,
+                        IsContainer: loadoutSlots[slotid] == undefined ? true : undefined,
+                    }
+                )),
                 LimitedLoadoutUnlockLevel: 0, // ?
                 CharacterLoadoutData: null,
                 ChallengeData: {
