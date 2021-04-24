@@ -173,19 +173,20 @@ app.post('/ChallengesService/GetActiveChallengesAndProgression', extractToken, e
     challenges.push(...JSON.parse(await readFile(path.join('challenges', 'globalChallenges.json')))); // TODO: more challenges
     // TODO: location specific challenges
 
-    for (const challenge of challenges) { // TODO: actual completion data
-        challenge.Progression = {
-            ChallengeId: challenge.Challenge.Id,
+    let result = challenges.map(challenge => ({
+        Challenge: challenge,
+        Progression: {
+            ChallengeId: challenge.Id,
             ProfileId: req.jwt.unique_name,
             Completed: false,
             State: {},
             ETag: `W/\"datetime'${encodeURIComponent(new Date().toISOString())}'\"`,
             CompletedAt: null,
             MustBeSaved: false
-        };
-    }
+        }
+    }));
 
-    res.json(challenges);
+    res.json(result);
 });
 
 app.post('/HubPagesService/GetChallengeTreeFor', extractToken, express.json(), (req, res) => {
