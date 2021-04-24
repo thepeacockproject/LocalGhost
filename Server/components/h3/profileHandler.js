@@ -170,7 +170,7 @@ app.post('/GamePersistentDataService/SaveData', extractToken, express.json(), as
 
 app.post('/ChallengesService/GetActiveChallengesAndProgression', extractToken, express.json(), async (req, res) => {
     const challenges = [];
-    challenges.push(...JSON.parse(await readFile(path.join('challenges', 'global.json')))); // TODO: more challenges
+    challenges.push(...JSON.parse(await readFile(path.join('challenges', 'globalChallenges.json')))); // TODO: more challenges
     // TODO: location specific challenges
 
     for (const challenge of challenges) { // TODO: actual completion data
