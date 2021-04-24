@@ -8,7 +8,7 @@ const menuSystem = require('./h1/menuSystem.js');
 const menuData = require('./h1/menuData.js');
 //const eventHandler = require('./h1/eventHandler.js');
 //const multiplayerHandler = require('./h1/multiplayerHandler.js');
-//const contractHandler = require('./h1/contractHandler.js');
+const contractHandler = require('./h1/contractHandler.js');
 
 const router = express.Router();
 
@@ -16,7 +16,7 @@ const router = express.Router();
 
 //router.use('/authentication/api/userchannel/EventsService/', eventHandler.router);
 
-//router.use('/authentication/api/userchannel/ContractsService/', contractHandler);
+router.use('/authentication/api/userchannel/ContractsService/', contractHandler);
 
 router.use('/authentication/api/userchannel/', profileHandler.router);
 
