@@ -17,7 +17,7 @@ const UUIDRegex = /^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-
 
 function extractToken(req, res, next) {
     let auth = req.header('Authorization') ? req.header('Authorization').split(' ') : [];
-    if (auth.length == 2 && auth[0] == "bearer") {
+    if (auth.length == 2 && auth[0].toLowerCase() == "bearer") {
         req.jwt = jwt.decode(auth[1]); // I'm not going to verify the token
         if (!UUIDRegex.test(req.jwt.unique_name)) {
             res.status(400).end();
