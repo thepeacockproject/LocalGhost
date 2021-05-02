@@ -141,6 +141,65 @@ async function getTemplate(endpoint, gameVersion) {
     });
 }
 
+function getDefaultLoadout(location, gameVersion) {
+    return {
+        2: gameVersion == 'h1' ? 'FIREARMS_HERO_PISTOL_TACTICAL_001_SU_SKIN01' : 'FIREARMS_HERO_PISTOL_TACTICAL_ICA_19',
+        3: ((location) => {
+            switch (location) {
+                case 'LOCATION_PARENT_ICA_FACILITY':
+                    return 'TOKEN_OUTFIT_GREENLAND_HERO_TRAININGSUIT';
+                case 'LOCATION_PARENT_PARIS':
+                    return 'TOKEN_OUTFIT_PARIS_HERO_PARISSUIT';
+                case 'LOCATION_PARENT_COASTALTOWN':
+                    return 'TOKEN_OUTFIT_SAPIENZA_HERO_SAPIENZASUIT';
+                case 'LOCATION_PARENT_MARRAKECH':
+                    return 'TOKEN_OUTFIT_MARRAKESH_HERO_MARRAKESHSUIT';
+                case 'LOCATION_PARENT_BANGKOK':
+                    return 'TOKEN_OUTFIT_BANGKOK_HERO_BANGKOKSUIT';
+                case 'LOCATION_PARENT_COLORADO':
+                    return 'TOKEN_OUTFIT_COLORADO_HERO_COLORADOSUIT';
+                case 'LOCATION_PARENT_HOKKAIDO':
+                    return 'TOKEN_OUTFIT_HOKKAIDO_HERO_HOKKAIDOSUIT';
+                case 'LOCATION_PARENT_NEWZEALAND':
+                    return 'TOKEN_OUTFIT_NEWZEALAND_HERO_NEWZEALANDSUIT';
+                case 'LOCATION_PARENT_MIAMI':
+                    return 'TOKEN_OUTFIT_MIAMI_HERO_MIAMISUIT';
+                case 'LOCATION_PARENT_COLOMBIA':
+                    return 'TOKEN_OUTFIT_COLOMBIA_HERO_COLOMBIASUIT';
+                case 'LOCATION_PARENT_MUMBAI':
+                    return 'TOKEN_OUTFIT_MUMBAI_HERO_MUMBAISUIT';
+                case 'LOCATION_PARENT_NORTHAMERICA':
+                    return 'TOKEN_OUTFIT_NORTHAMERICA_HERO_NORTHAMERICASUIT';
+                case 'LOCATION_PARENT_NORTHSEA':
+                    return 'TOKEN_OUTFIT_NORTHSEA_HERO_NORTHSEASUIT';
+                case 'LOCATION_PARENT_GREEDY':
+                    return 'TOKEN_OUTFIT_GREEDY_HERO_GREEDYSUIT';
+                case 'LOCATION_PARENT_OPULENT':
+                    return 'TOKEN_OUTFIT_OPULENT_HERO_OPULENTSUIT';
+                case 'LOCATION_PARENT_GOLDEN':
+                    return 'TOKEN_OUTFIT_HERO_GECKO_SUIT';
+                case 'LOCATION_PARENT_ANCESTRAL':
+                    return 'TOKEN_OUTFIT_ANCESTRAL_HERO_ANCESTRALSUIT';
+                case 'LOCATION_PARENT_EDGY':
+                    return 'TOKEN_OUTFIT_EDGY_HERO_EDGYSUIT';
+                case 'LOCATION_PARENT_WET':
+                    return 'TOKEN_OUTFIT_WET_HERO_WETSUIT';
+                case 'LOCATION_PARENT_ELEGANT':
+                    return 'TOKEN_OUTFIT_ELEGANT_HERO_LLAMASUIT';
+                case 'LOCATION_PARENT_TRAPPED':
+                    return 'TOKEN_OUTFIT_TRAPPED_WOLVERINE_SUIT';
+                default:
+                    return 'TOKEN_OUTFIT_HITMANSUIT';
+            }
+        })(location),
+        4: 'TOKEN_FIBERWIRE',
+        5: 'PROP_TOOL_COIN',
+    };
+
+
+    return result;
+}
+
 module.exports = {
     extractToken,
     ServerVer,
@@ -152,4 +211,5 @@ module.exports = {
     getGameVersionFromServerVersion,
     getTemplate,
     UUIDRegex,
+    getDefaultLoadout,
 };

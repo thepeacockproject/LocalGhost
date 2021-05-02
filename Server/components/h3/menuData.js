@@ -6,7 +6,7 @@ const path = require('path');
 const uuid = require('uuid');
 const { readFile } = require('atomically');
 
-const { extractToken, MaxPlayerLevel, xpRequiredForLevel, maxLevelForLocation, getTemplate, UUIDRegex } = require('../utils.js');
+const { extractToken, MaxPlayerLevel, xpRequiredForLevel, maxLevelForLocation, getTemplate, UUIDRegex, getDefaultLoadout } = require('../utils.js');
 const { resolveProfiles } = require('./profileHandler.js');
 const { contractSessions } = require('./eventHandler.js');
 const scoreHandler = require('./scoreHandler.js');
@@ -388,12 +388,7 @@ app.get('/Planning', extractToken, async (req, res) => {
             'stashpoint'
         ];
         const defaultLoadout = Object.assign(Array(7).fill(null), (userData.Extensions.defaultloadout || {})[sublocation.Properties.ParentLocation]
-            || {
-            2: 'FIREARMS_HERO_PISTOL_TACTICAL_ICA_19',
-            3: 'TOKEN_OUTFIT_HITMANSUIT', // TODO: default location-specific suit
-            4: 'TOKEN_FIBERWIRE',
-            5: 'PROP_TOOL_COIN',
-        });
+            || getDefaultLoadout(sublocation.Properties.ParentLocation, req.gameVersion));
 
         res.json({
             template: await getTemplate('planning', req.gameVersion),
