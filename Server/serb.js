@@ -60,24 +60,39 @@ app.post('/api/metrics/*', (req, res) => {
 
 app.use('/oauth/token', express.urlencoded({ extended: false, type: 'application/json' }));
 app.post('/oauth/token', async (req, res) => {
+    const signOptions = {
+        notBefore: -60000,
+        expiresIn: 6000,
+        issuer: 'auth.hitman.io',
+        audience: 'pc_prod_7',
+        noTimestamp: true,
+    };
+
     if (req.body.grant_type == 'refresh_token') {
-        extractToken(req);
+        // send back the token from the request (re-signed so the timestamps update)
+        extractToken(req); // init req.jwt
+        // remove signOptions from existing jwt
+        delete req.jwt.nbf; // notBefore
+        delete req.jwt.exp; // expiresIn
+        delete req.jwt.iss; // issuer
+        delete req.jwt.aud; // audience
         res.json({
-            "access_token": req.jwt,
+            "access_token": jwt.sign(req.jwt, 'secret', signOptions),
             "token_type": "bearer",
             "expires_in": 5000,
             "refresh_token": uuid.v4(),
         });
+        return;
     }
 
-    let external_platform, external_userid, external_users_folder;
-    let epic_appid;
+    let external_platform, external_userid, external_users_folder, external_appid;
 
     if (req.body.grant_type == 'external_steam') {
         if (!/^\d{1,20}$/.test(req.body.steam_userid)) {
             res.status(400).end(); // invalid steam user id
             return;
         }
+        external_appid = req.body.steam_appid;
         external_platform = 'steam';
         external_userid = req.body.steam_userid;
         external_users_folder = 'steamids';
@@ -91,8 +106,7 @@ app.post('/oauth/token', async (req, res) => {
             res.status(400).end(); // invalid epic access token
             return;
         }
-        epic_appid = epic_token.appid;
-
+        external_appid = epic_token.appid;
         external_platform = 'epic';
         external_userid = req.body.epic_userid;
         external_users_folder = 'epicids';
@@ -101,7 +115,7 @@ app.post('/oauth/token', async (req, res) => {
         return;
     }
 
-    const gameVersion = getGameVersionFromJWTPis(external_platform == 'steam' ? req.body.steam_appid : epic_appid);
+    const gameVersion = getGameVersionFromJWTPis(external_appid);
 
     if (req.body.pId && !UUIDRegex.test(req.body.pId)) {
         res.status(400).end(); // pId is not a GUID
@@ -187,18 +201,11 @@ app.post('/oauth/token', async (req, res) => {
         platform: external_platform,
         locale: req.body.locale,
         rgn: req.body.rgn,
-        pis: external_platform == 'steam' ? req.body.steam_appid : epic_appid,
+        pis: external_appid,
         cntry: req.body.locale,
     };
-    const authOptions = {
-        notBefore: -60000,
-        expiresIn: 6000,
-        audience: 'pc_prod_7',
-        issuer: 'auth.hitman.io',
-        noTimestamp: true,
-    };
     res.json({
-        access_token: jwt.sign(userinfo, 'secret', authOptions),
+        access_token: jwt.sign(userinfo, 'secret', signOptions),
         token_type: 'bearer',
         expires_in: 5000,
         refresh_token: uuid.v4(),
