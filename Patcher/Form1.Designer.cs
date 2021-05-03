@@ -64,7 +64,7 @@ namespace Hitman2Patcher
 			this.listView1.HideSelection = false;
 			this.listView1.Location = new System.Drawing.Point(0, 81);
 			this.listView1.Name = "listView1";
-			this.listView1.Size = new System.Drawing.Size(411, 125);
+			this.listView1.Size = new System.Drawing.Size(432, 106);
 			this.listView1.TabIndex = 2;
 			this.listView1.UseCompatibleStateImageBehavior = false;
 			this.listView1.View = System.Windows.Forms.View.Details;
@@ -85,7 +85,7 @@ namespace Hitman2Patcher
 			// button1
 			// 
 			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button1.Location = new System.Drawing.Point(352, 1);
+			this.button1.Location = new System.Drawing.Point(373, 1);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(58, 44);
 			this.button1.TabIndex = 4;
@@ -101,14 +101,14 @@ namespace Hitman2Patcher
 			this.comboBox1.Location = new System.Drawing.Point(127, 12);
 			this.comboBox1.MaxLength = 150;
 			this.comboBox1.Name = "comboBox1";
-			this.comboBox1.Size = new System.Drawing.Size(219, 24);
+			this.comboBox1.Size = new System.Drawing.Size(240, 24);
 			this.comboBox1.TabIndex = 5;
 			// 
 			// linkLabel1
 			// 
 			this.linkLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.linkLabel1.AutoSize = true;
-			this.linkLabel1.Location = new System.Drawing.Point(152, 221);
+			this.linkLabel1.Location = new System.Drawing.Point(173, 202);
 			this.linkLabel1.Name = "linkLabel1";
 			this.linkLabel1.Size = new System.Drawing.Size(247, 17);
 			this.linkLabel1.TabIndex = 6;
@@ -119,7 +119,7 @@ namespace Hitman2Patcher
 			// button2
 			// 
 			this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.button2.Location = new System.Drawing.Point(12, 215);
+			this.button2.Location = new System.Drawing.Point(12, 196);
 			this.button2.Name = "button2";
 			this.button2.Size = new System.Drawing.Size(109, 28);
 			this.button2.TabIndex = 7;
@@ -130,7 +130,7 @@ namespace Hitman2Patcher
 			// button3
 			// 
 			this.button3.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.button3.Location = new System.Drawing.Point(155, 42);
+			this.button3.Location = new System.Drawing.Point(166, 42);
 			this.button3.Name = "button3";
 			this.button3.Size = new System.Drawing.Size(161, 33);
 			this.button3.TabIndex = 8;
@@ -142,7 +142,7 @@ namespace Hitman2Patcher
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(411, 252);
+			this.ClientSize = new System.Drawing.Size(432, 233);
 			this.Controls.Add(this.button3);
 			this.Controls.Add(this.button2);
 			this.Controls.Add(this.linkLabel1);
@@ -153,7 +153,7 @@ namespace Hitman2Patcher
 			this.Controls.Add(this.label1);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(429, 299);
+			this.MinimumSize = new System.Drawing.Size(424, 240);
 			this.Name = "Form1";
 			this.Text = "LocalGhost Patcher";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
