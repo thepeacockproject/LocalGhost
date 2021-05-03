@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2020 grappigegovert <grappigegovert@hotmail.com>
+// Copyright (C) 2020 grappigegovert <grappigegovert@hotmail.com>
 // Licensed under the zlib license. See LICENSE for more info
 
 using System;
@@ -21,8 +21,7 @@ namespace Hitman2Patcher
 		private static readonly Dictionary<string, string> publicServers = new Dictionary<string, string>
 		{
 			{"gm.hitmaps.com - Eastern US", "gm.hitmaps.com"},
-			{"gm.notex.app - Western US", "gm.notex.app"},
-			{"gm.hitmanstat.us - EU", "gm.hitmanstat.us"}
+			{"ghostmode.rdil.rocks - Eastern US", "ghostmode.rdil.rocks"}
 		};
 
 		private static readonly Dictionary<string, string> publicServersReverse = publicServers.ToDictionary(kvp => kvp.Value, kvp => kvp.Key);
