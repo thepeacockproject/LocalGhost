@@ -28,18 +28,19 @@ app.get('/config/pc-prod/:serverVersion(\\d+_\\d+_\\d+)', (req, res) => {
     readFile('static/config.json').then((configfile) => {
         let config = JSON.parse(configfile);
         let serverhost = req.hostname;
+        let protocol = req.protocol;
         if (req.params.serverVersion.startsWith('6')) {
             config.Versions[0].GAME_VER = "6.74.0";
         } else if (req.params.serverVersion.startsWith('8')) {
             config.Versions[0].GAME_VER = '8.2.0';
         }
         config.Versions[0].ISSUER_ID = req.query.issuer || '*';
-        config.Versions[0].SERVER_VER.Metrics.MetricsServerHost = `http://${serverhost}`;
-        config.Versions[0].SERVER_VER.Authentication.AuthenticationHost = `http://${serverhost}`;
-        config.Versions[0].SERVER_VER.Configuration.Url = `http://${serverhost}/files/onlineconfig.json`;
-        config.Versions[0].SERVER_VER.Configuration.AgreementUrl = `http://${serverhost}/files/privacypolicy/hm2/privacypolicy.json`;
-        config.Versions[0].SERVER_VER.Resources.ResourcesServicePath = `http://${serverhost}/files`;
-        config.Versions[0].SERVER_VER.GlobalAuthentication.AuthenticationHost = `http://${serverhost}`;
+        config.Versions[0].SERVER_VER.Metrics.MetricsServerHost = `${protocol}://${serverhost}`;
+        config.Versions[0].SERVER_VER.Authentication.AuthenticationHost = `${protocol}://${serverhost}`;
+        config.Versions[0].SERVER_VER.Configuration.Url = `${protocol}://${serverhost}/files/onlineconfig.json`;
+        config.Versions[0].SERVER_VER.Configuration.AgreementUrl = `${protocol}://${serverhost}/files/privacypolicy/hm2/privacypolicy.json`;
+        config.Versions[0].SERVER_VER.Resources.ResourcesServicePath = `${protocol}://${serverhost}/files`;
+        config.Versions[0].SERVER_VER.GlobalAuthentication.AuthenticationHost = `${protocol}://${serverhost}`;
         res.json(config);
     });
 });
