@@ -302,7 +302,7 @@ app.get('/stashpoint', extractToken, async (req, res) => {
         }
     }
     if (contractData) {
-        stashData.data.UserCentric = await generateUserCentric(contractData, userData, req.gameVersion)
+        stashData.data.UserCentric = await generateUserCentric(contractData, userData, req.gameVersion);
     }
     res.json(stashData);
 });
@@ -811,4 +811,7 @@ function calculateMpScore(sessionDetails) {
     }
 }
 
-module.exports = app;
+module.exports = {
+    router: app,
+    generateUserCentric: generateUserCentric,
+};
