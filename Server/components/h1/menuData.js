@@ -113,7 +113,10 @@ app.get('/stashpoint', extractToken, async (req, res) => {
                 HasMore: false,
                 HasMoreLeft: false,
                 HasMoreRight: false,
-                OptionalData: {},
+                OptionalData: slotid == 6 ? {
+                    stashpoint: req.query.stashpoint,
+                    AllowLargeItems: req.query.allowlargeitems || !req.query.stashpoint,
+                } : {},
             })),
             Contract: userCentricContract.Contract,
             ShowSlotName: req.query.slotname,

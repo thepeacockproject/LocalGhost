@@ -293,9 +293,9 @@ app.get('/stashpoint', extractToken, async (req, res) => {
                 HasMoreLeft: false,
                 HasMoreRight: false,
                 OptionalData: {
-                    stashpoint: req.query.stashpoint || '',
-                    AllowLargeItems: req.query.allowlargeitems, //?? true (null coalescing when) (edit: not needed as it's always sent)
-                    AllowContainers: req.query.allowcontainers, //?? true
+                    stashpoint: req.query.stashpoint == null ? '' : (req.query.stashpoint || null), // wow
+                    AllowLargeItems: req.query.allowlargeitems == null || req.query.allowlargeitems,
+                    AllowContainers: req.query.allowcontainers == null || req.query.allowcontainers,
                 }
             },
             ShowSlotName: req.query.slotname,
