@@ -126,7 +126,7 @@ app.post('/oauth/token', async (req, res) => {
     if (!req.body.pId) { // if no profile id supplied
         await readFile(path.join('userdata', gameVersion, external_users_folder, `${external_userid}.json`)).then(data => { // get profile id from external id
             // TODO: check legit server response
-            req.body.pId = data;
+            req.body.pId = data.toString();
         }).catch(async err => {
             if (err.code != 'ENOENT') {
                 throw err; // rethrow if error is something else than a non-existant file
@@ -137,7 +137,7 @@ app.post('/oauth/token', async (req, res) => {
         });
     } else { // if a profile id is supplied
         readFile(path.join('userdata', gameVersion, external_users_folder, `${external_userid}.json`)).then(pId => { // read profile id linked to supplied external id
-            if (pId != req.body.pId) { // requested external id is linked to different profile id
+            if (pId.toString() != req.body.pId) { // requested external id is linked to different profile id
                 // TODO: check legit server response
             }
         }).catch(async err => {
