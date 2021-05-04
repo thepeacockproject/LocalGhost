@@ -1,14 +1,12 @@
-﻿// Copyright (C) 2020 grappigegovert <grappigegovert@hotmail.com>
+// Copyright (C) 2020-2021 grappigegovert <grappigegovert@hotmail.com>
 // Licensed under the zlib license. See LICENSE for more info
 
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Hitman2Patcher
@@ -20,9 +18,8 @@ namespace Hitman2Patcher
 
 		private static readonly Dictionary<string, string> publicServers = new Dictionary<string, string>
 		{
-			{"gm.hitmaps.com - Eastern US", "gm.hitmaps.com"},
-			{"gm.notex.app - Western US", "gm.notex.app"},
-			{"gm.hitmanstat.us - EU", "gm.hitmanstat.us"}
+			{"gm.hitmaps.com (Hitmaps roulette)", "gm.hitmaps.com"},
+			{"ghostmode.rdil.rocks (ghost mode)", "ghostmode.rdil.rocks"}
 		};
 
 		private static readonly Dictionary<string, string> publicServersReverse = publicServers.ToDictionary(kvp => kvp.Value, kvp => kvp.Key);

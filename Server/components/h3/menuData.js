@@ -240,20 +240,22 @@ app.get('/stashpoint', extractToken, async (req, res) => {
     // /stashpoint?contractid=c1d015b4-be08-4e44-808e-ada0f387656f&slotid=3&slotname=disguise3&stashpoint=&allowlargeitems=true&allowcontainers=true
     // /stashpoint?contractid=&slotid=3&slotname=disguise&stashpoint=&allowlargeitems=true&allowcontainers=false
     // /stashpoint?contractid=5b5f8aa4-ecb4-4a0a-9aff-98aa1de43dcc&slotid=6&slotname=stashpoint6&stashpoint=28b03709-d1f0-4388-b207-f03611eafb64&allowlargeitems=true&allowcontainers=false
-    if (!UUIDRegex.test(req.query.contractid)) {
+    if (req.query.contractid && !UUIDRegex.test(req.query.contractid)) {
         res.status(400).send('contract id was not a uuid');
         return;
     }
     const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
-    let contractData;
-    await readFile(path.join('contractdata', `${req.query.contractid}.json`)).then(contractfile => {
-        contractData = req.query.contractid ? JSON.parse(contractfile) : null;
-    }).catch(err => {
-        if (err.code != 'ENOENT') {
-            throw err; // rethrow if error is something else than a non-existant file
-        }
-        contractData = null;
-    })
+    let contractData = null;
+    if (req.query.contractid) {
+        await readFile(path.join('contractdata', `${req.query.contractid}.json`)).then(contractfile => {
+            contractData = req.query.contractid ? JSON.parse(contractfile) : null;
+        }).catch(err => {
+            if (err.code != 'ENOENT') {
+                throw err; // rethrow if error is something else than a non-existant file
+            }
+            contractData = null;
+        });
+    }
 
     if (req.query.slotname.endsWith(req.query.slotid.toString())) {
         req.query.slotname = req.query.slotname.slice(0, -req.query.slotid.toString().length); // weird

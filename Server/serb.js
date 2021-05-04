@@ -28,18 +28,19 @@ app.get('/config/pc-prod/:serverVersion(\\d+_\\d+_\\d+)', (req, res) => {
     readFile('static/config.json').then((configfile) => {
         let config = JSON.parse(configfile);
         let serverhost = req.hostname;
+        let protocol = req.protocol;
         if (req.params.serverVersion.startsWith('6')) {
             config.Versions[0].GAME_VER = "6.74.0";
         } else if (req.params.serverVersion.startsWith('8')) {
             config.Versions[0].GAME_VER = '8.2.0';
         }
         config.Versions[0].ISSUER_ID = req.query.issuer || '*';
-        config.Versions[0].SERVER_VER.Metrics.MetricsServerHost = `http://${serverhost}`;
-        config.Versions[0].SERVER_VER.Authentication.AuthenticationHost = `http://${serverhost}`;
-        config.Versions[0].SERVER_VER.Configuration.Url = `http://${serverhost}/files/onlineconfig.json`;
-        config.Versions[0].SERVER_VER.Configuration.AgreementUrl = `http://${serverhost}/files/privacypolicy/hm2/privacypolicy.json`;
-        config.Versions[0].SERVER_VER.Resources.ResourcesServicePath = `http://${serverhost}/files`;
-        config.Versions[0].SERVER_VER.GlobalAuthentication.AuthenticationHost = `http://${serverhost}`;
+        config.Versions[0].SERVER_VER.Metrics.MetricsServerHost = `${protocol}://${serverhost}`;
+        config.Versions[0].SERVER_VER.Authentication.AuthenticationHost = `${protocol}://${serverhost}`;
+        config.Versions[0].SERVER_VER.Configuration.Url = `${protocol}://${serverhost}/files/onlineconfig.json`;
+        config.Versions[0].SERVER_VER.Configuration.AgreementUrl = `${protocol}://${serverhost}/files/privacypolicy/hm2/privacypolicy.json`;
+        config.Versions[0].SERVER_VER.Resources.ResourcesServicePath = `${protocol}://${serverhost}/files`;
+        config.Versions[0].SERVER_VER.GlobalAuthentication.AuthenticationHost = `${protocol}://${serverhost}`;
         res.json(config);
     });
 });
@@ -126,7 +127,7 @@ app.post('/oauth/token', async (req, res) => {
     if (!req.body.pId) { // if no profile id supplied
         await readFile(path.join('userdata', gameVersion, external_users_folder, `${external_userid}.json`)).then(data => { // get profile id from external id
             // TODO: check legit server response
-            req.body.pId = data;
+            req.body.pId = data.toString();
         }).catch(async err => {
             if (err.code != 'ENOENT') {
                 throw err; // rethrow if error is something else than a non-existant file
@@ -137,7 +138,7 @@ app.post('/oauth/token', async (req, res) => {
         });
     } else { // if a profile id is supplied
         readFile(path.join('userdata', gameVersion, external_users_folder, `${external_userid}.json`)).then(pId => { // read profile id linked to supplied external id
-            if (pId != req.body.pId) { // requested external id is linked to different profile id
+            if (pId.toString() != req.body.pId) { // requested external id is linked to different profile id
                 // TODO: check legit server response
             }
         }).catch(async err => {
@@ -251,7 +252,7 @@ app.use(express.Router().use('/resources-:serverVersion(\\d+-\\d+)/', (req, res,
 
 function generateBlobConfig(req) {
     return {
-        bloburl: `http://${req.hostname}/resources-${req.serverVersion}/`,
+        bloburl: `${req.protocol}://${req.hostname}/resources-${req.serverVersion}/`,
         blobsig: '?sv=2018-03-28',
         blobsigduration: 7200000.0
     };
