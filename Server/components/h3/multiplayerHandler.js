@@ -28,7 +28,7 @@ let activeMatches = new Map();
 
 app.post('/RegisterToMatch', extractToken, express.json(), async (req, res) => {
     // get a random contract from the list of possible ones in the selected preset
-    let multiplayerPresets = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'MultiplayerPresets.json')));
+    let multiplayerPresets = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'multiplayerpresets.json')));
     if (!req.body.presetId) {
         req.body.presetId = 'd72d7cc9-ee26-4c7d-857a-75abdc9ccb61'; // default to miami invite preset
     }
