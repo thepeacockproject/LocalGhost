@@ -18,7 +18,7 @@ namespace Hitman2Patcher
 
 		private static readonly Dictionary<string, string> publicServers = new Dictionary<string, string>
 		{
-			{"gm.hitmaps.com (Hitmaps roulette)", "gm.hitmaps.com"},
+			{"gm.hitmaps.com (H3 | HITMAPS Roulette, H2 | Ghost Mode)", "gm.hitmaps.com"},
 			{"ghostmode.rdil.rocks (ghost mode)", "ghostmode.rdil.rocks"}
 		};
 
