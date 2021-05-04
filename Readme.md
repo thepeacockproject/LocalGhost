@@ -1,4 +1,4 @@
-# Localghost
+# LocalGhost
 This started off as a barebones server replacement for ghost mode only, but it has grown a bit since.
 
 This project consists of two parts: a patcher, and a server.
@@ -25,11 +25,10 @@ Make sure the patcher is running while you start the game.
 ## Public servers : 
 _These servers are kindly provided by members of the community. I am not responsible for any custom content they might host._
 
-| Host | Region |
-| ------ | ------ |
-| gm.hitmaps.com | Eastern US |
-| gm.hitmanstat.us  | EU |
-| gm.notex.app | Western US |
+| Host | Server content | Server region |
+| ------ | ------ | ------ |
+| gm.hitmaps.com | Hosts the HITMAPS™ roulette (ghost mode might not work) | Eastern US |
+| ghostmode.rdil.rocks | For playing ghost mode | Eastern US |
 
 If you don't want to use a public server, you or your opponent will have to host one. Install NodeJS and follow [Server hosters](#server-hosters) to start the server. You'll have to port-forward port 80 for other players to be able to connect. Other players can then enter [your IP address](https://ident.me/) in the patcher to connect to your server.
 
