@@ -313,7 +313,7 @@ app.get('/multiplayerpresets', extractToken, async (req, res) => { // /multiplay
     if (req.query.gamemode != 'versus') { // not sure what happens here
         next();
     }
-    let multiplayerPresets = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'MultiplayerPresets.json')));
+    let multiplayerPresets = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'multiplayerpresets.json')));
 
     multiplayerPresets.data.LoadoutData = await getLoadoutData(req.jwt.unique_name, req.query.disguiseUnlockableId, req.gameVersion);
     // TODO: completion data for locations
