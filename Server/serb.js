@@ -252,7 +252,7 @@ app.use(express.Router().use('/resources-:serverVersion(\\d+-\\d+)/', (req, res,
 
 function generateBlobConfig(req) {
     return {
-        bloburl: `http://${req.hostname}/resources-${req.serverVersion}/`,
+        bloburl: `${req.protocol}://${req.hostname}/resources-${req.serverVersion}/`,
         blobsig: '?sv=2018-03-28',
         blobsigduration: 7200000.0
     };
