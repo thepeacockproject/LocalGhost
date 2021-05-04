@@ -12,7 +12,7 @@ const eventHandler = require('./eventHandler.js');
 const app = express.Router();
 
 app.post('/GetRequiredResourcesForPreset', express.json(), async (req, res) => {
-    let presetData = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'MultiplayerPresets.json')));
+    let presetData = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'multiplayerpresets.json')));
     let result = presetData.data.Presets.find(preset => preset.Id == req.body.id).Data.Contracts.map(contractId => {
         let contract = presetData.data.UserCentricContracts.find(contract => contract.Contract.Metadata.Id == contractId);
         return {
