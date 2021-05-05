@@ -190,15 +190,24 @@ async function missionend(req, res) {
     const timeSeconds = Math.floor(timeTotal - (timeHours * 3600) - (timeMinutes * 60));
     let timebonus = 0;
 
-    // formula from https://www.hitmanforum.com/t/how-the-time-bonus-is-calculated/17438
-    if (timeTotal <= 300) { // 5 minutes
-        timebonus = total * (1.1 - ((timeTotal / 300) * 0.4));
-    } else if (timeTotal <= 900) { // 15 minutes
-        timebonus = total * (0.7 - (((timeTotal - 300) / (900 - 300)) * 0.1));
-    } else if (timeTotal <= 3600) { // 60 minutes
-        timebonus = total * (0.6 - (((timeTotal - 900) / (3600 - 900)) * 0.1));
-    } else if (timeTotal <= 200 * 60) { // todo: check this limit
-        timebonus = total * (0.5 - (((timeTotal - 3600) / (200 * 60 - 3600)) * 0.5));
+    // formula from https://hitmanforumarchive.notex.app/#/t/how-the-time-bonus-is-calculated/17438 (https://archive.ph/pRjzI)
+    const scorePoints = [
+        [0, 1.1], // 1.1 bonus multiplier at 0 secs (0 min)
+        [300, 0.7], // 0.7 bonus multiplier at 300 secs (5 min)
+        [900, 0.6], // 0.6 bonus multiplier at 900 secs (15 min)
+        [17100, 0.0], // 0 bonus multiplier at 17100 secs (285 min) // Todo: test near this limit
+    ];
+    let prevsecs, prevmultiplier;
+    for (const [secs, multiplier] of scorePoints) {
+        if (timeTotal > secs) {
+            prevsecs = secs;
+            prevmultiplier = multiplier;
+            continue;
+        }
+        // linear interpolation between current and previous scorePoints
+        const bonusmultiplier = prevmultiplier - (prevmultiplier - multiplier) * (timeTotal - prevsecs) / (secs - prevsecs);
+        timebonus = total * bonusmultiplier;
+        break;
     }
     timebonus = Math.round(timebonus);
 
