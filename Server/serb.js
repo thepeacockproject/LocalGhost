@@ -27,7 +27,7 @@ app.use((req, res, next) => {
 app.get('/config/pc-prod/:serverVersion(\\d+_\\d+_\\d+)', (req, res) => {
     readFile('static/config.json').then((configfile) => {
         let config = JSON.parse(configfile);
-        let serverhost = req.hostname;
+        let serverhost = req.get('Host');
         let protocol = req.protocol;
         if (req.params.serverVersion.startsWith('6')) {
             config.Versions[0].GAME_VER = "6.74.0";
@@ -252,7 +252,7 @@ app.use(express.Router().use('/resources-:serverVersion(\\d+-\\d+)/', (req, res,
 
 function generateBlobConfig(req) {
     return {
-        bloburl: `${req.protocol}://${req.hostname}/resources-${req.serverVersion}/`,
+        bloburl: `${req.protocol}://${req.get('Host')}/resources-${req.serverVersion}/`,
         blobsig: '?sv=2018-03-28',
         blobsigduration: 7200000.0
     };
