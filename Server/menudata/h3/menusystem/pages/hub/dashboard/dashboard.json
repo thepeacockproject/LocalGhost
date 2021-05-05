@@ -101,9 +101,9 @@
             "ncols": 2,
             "data": {
               "header": "View GitLab repo",
-              "title": "localghost",
+              "title": "LocalGhost",
               "icon": "arrowright",
-              "image": "$res images/livetile/grappigegovert_localghost.png"
+              "image": "$res images/livetile/localghost_livetile.png"
             },
             "actions": {
               "accept": {
@@ -121,7 +121,7 @@
                       "pressable": false,
                       "data": {
                         "header": "https://gitlab.com/grappigegovert/localghost",
-                        "title": "View Localghost repo",
+                        "title": "View LocalGhost repo",
                         "typeicon": "arrowright"
                       }
                     }
