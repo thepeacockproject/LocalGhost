@@ -245,6 +245,10 @@ function saveEvents(userId, events) {
             session.timerStart = event.Timestamp;
         } else if (event.Name == 'exit_gate') {
             session.timerEnd = event.Timestamp;
+        } else if (event.Name == 'ContractEnd') {
+            if (!session.timerEnd) {
+                session.timerEnd = event.Timestamp;
+            }
         } else if (event.Name == 'ObjectiveCompleted') {
             session.completedObjectives.add(event.Value.Id);
         } else if (event.Name == 'AccidentBodyFound') {
