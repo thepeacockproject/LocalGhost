@@ -92,6 +92,7 @@ namespace Hitman2Patcher
 			v3_10.addVersions();
 			v3_11.addVersions();
 			v3_20.addVersions();
+			v3_30.addVersions();
 		}
 	}
 }
