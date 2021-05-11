@@ -2,7 +2,7 @@
 // Licensed under the zlib license. See LICENSE for more info
 
 function GetPlatformEntitlements(req, res) {
-    if (req.body.issuerId == 'ed55aa5edc5941de92fd7f64de415793') { // Hitman 3 epic namespace
+    if (req.body.issuerId === 'ed55aa5edc5941de92fd7f64de415793') { // Hitman 3 epic namespace
         // Epic ids of hitman3 and its DLCs
         // might be incomplete
         res.json([

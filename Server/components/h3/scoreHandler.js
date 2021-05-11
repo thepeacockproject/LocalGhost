@@ -14,7 +14,7 @@ async function missionend(req, res) {
         res.status(404).end();
         return;
     }
-    if (sessionDetails.userId != req.jwt.unique_name) { // requested score for other user's session
+    if (sessionDetails.userId !== req.jwt.unique_name) { // requested score for other user's session
         res.status(401).end();
         return;
     }
@@ -27,7 +27,7 @@ async function missionend(req, res) {
     const unlockables = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'allunlockables.json')));
     const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
     const contractData = JSON.parse(await readFile(path.join('contractdata', `${sessionDetails.contractId}.json`)));
-    const sublocation = unlockables.find(entry => entry.Id == contractData.Metadata.Location);
+    const sublocation = unlockables.find(entry => entry.Id === contractData.Metadata.Location);
     const maxlevel = maxLevelForLocation(sublocation.Properties.ProgressionKey, req.gameVersion);
     const locationProgression = userData.Extensions.progression.Locations[sublocation.Properties.ProgressionKey.toLowerCase()];
 
@@ -135,11 +135,11 @@ async function missionend(req, res) {
         {
             headline: 'UI_SCORING_SUMMARY_NO_RECORDINGS',
             bonusId: 'SecurityErased',
-            condition: sessionDetails.recording == 'NOT_SPOTTED' || sessionDetails.recording == 'ERASED',
+            condition: sessionDetails.recording === 'NOT_SPOTTED' || sessionDetails.recording === 'ERASED',
         },
     ];
 
-    let stars = [...bonuses.slice(1), { condition: nonTargetKills == 0 }].filter(x => x.condition).length;
+    let stars = [...bonuses.slice(1), { condition: nonTargetKills === 0 }].filter(x => x.condition).length;
 
     let total = -5000 * nonTargetKills;
 
@@ -234,7 +234,7 @@ async function missionend(req, res) {
     }
 
     result.ScoreOverview.stars = result.ScoreOverview.ContractScore.StarCount = stars;
-    result.ScoreOverview.SilentAssassin = result.ScoreOverview.ContractScore.SilentAssassin = stars == 5; // not sure if this is correct
+    result.ScoreOverview.SilentAssassin = result.ScoreOverview.ContractScore.SilentAssassin = stars === 5; // not sure if this is correct
 
     // TODO: add xp to user profile
     // TODO: save in leaderboards

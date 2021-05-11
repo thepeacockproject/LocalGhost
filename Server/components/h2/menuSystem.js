@@ -19,7 +19,7 @@ app.get('/dynamic_resources_pc_release_rpkg', (req, res) => {
             },
         });
     }).catch(err => {
-        if (err.code != 'ENOENT') {
+        if (err.code !== 'ENOENT') {
             console.error(err);
         }
         res.sendFile(path.join('menudata', 'h2', 'dummy_resources.rpkg'), {

@@ -133,7 +133,7 @@ function newSession(sessionId, contractId, userId) {
 }
 
 app.post('/SaveAndSynchronizeEvents4', extractToken, express.json({ limit: '5Mb' }), (req, res) => {
-    if (req.body.userId != req.jwt.unique_name) {
+    if (req.body.userId !== req.jwt.unique_name) {
         res.status(403).end(); // Trying to save events for other user
         return;
     }
@@ -165,7 +165,7 @@ app.post('/SaveAndSynchronizeEvents4', extractToken, express.json({ limit: '5Mb'
 });
 
 app.post('/SaveEvents2', extractToken, express.json({ limit: '5Mb' }), (req, res) => {
-    if (req.jwt.unique_name != req.body.userId) {
+    if (req.jwt.unique_name !== req.body.userId) {
         res.status(403).end(); // Trying to save events for other user
         return;
     }
@@ -176,13 +176,13 @@ function saveEvents(userId, events) {
     let response = [];
     events.forEach(event => {
         const session = contractSessions.get(event.ContractSessionId);
-        if (!session || session.contractId != event.ContractId || session.userId != userId) {
+        if (!session || session.contractId !== event.ContractId || session.userId !== userId) {
             return; // session does not exist or contractid/userid doesn't match
         }
         session.duration = event.Timestamp;
         session.lastUpdate = new Date();
 
-        if (session.timerEnd != 0 && event.Timestamp > session.timerEnd) {
+        if (session.timerEnd !== 0 && event.Timestamp > session.timerEnd) {
             // Do not handle events that occur after exiting the level
             // Todo: ExitInventory, ContractEnd, etc. will probably end up here.
             response.push(process.hrtime.bigint().toString());
@@ -190,13 +190,13 @@ function saveEvents(userId, events) {
         }
 
         // Todo: handle more events
-        if (event.Name == 'Ghost_PlayerDied') {
+        if (event.Name === 'Ghost_PlayerDied') {
             session.ghost.deaths += 1;
-        } else if (event.Name == 'Ghost_TargetUnnoticed') {
+        } else if (event.Name === 'Ghost_TargetUnnoticed') {
             session.ghost.unnoticedKills += 1;
-        } else if (event.Name == 'Kill') {
+        } else if (event.Name === 'Kill') {
             // Todo?: check for event.Value.KillContext == 1
-            if (session.lastKill.timestamp == event.Timestamp) {
+            if (session.lastKill.timestamp === event.Timestamp) {
                 session.lastKill.repositoryIds.push(event.Value.RepositoryId);
             } else {
                 session.lastKill = {
@@ -209,54 +209,54 @@ function saveEvents(userId, events) {
             } else {
                 session.npcKills.add(event.Value.RepositoryId);
             }
-        } else if (event.Name == 'CrowdNPC_Died') {
+        } else if (event.Name === 'CrowdNPC_Died') {
             session.crowdNpcKills += 1;
-        } else if (event.Name == 'Pacify') {
+        } else if (event.Name === 'Pacify') {
             session.pacifications.add(event.Value.RepositoryId);
-        } else if (event.Name == 'BodyHidden') {
+        } else if (event.Name === 'BodyHidden') {
             session.bodiesHidden.add(event.Value.RepositoryId);
-        } else if (event.Name == 'Disguise') {
+        } else if (event.Name === 'Disguise') {
             session.disguisesUsed.add(event.Value);
-        } else if (event.Name == 'ContractStart') {
+        } else if (event.Name === 'ContractStart') {
             session.disguisesUsed.add(event.Value.Disguise);
-        } else if (event.Name == 'Opponents') {
+        } else if (event.Name === 'Opponents') {
             session.ghost.Opponents = event.Value.ConnectedSessions;
-        } else if (event.Name == 'MatchOver') {
+        } else if (event.Name === 'MatchOver') {
             session.ghost.Score = event.Value.MyScore;
             session.ghost.OpponentScore = event.Value.OpponentScore;
             session.ghost.IsWinner = event.Value.IsWinner;
             session.ghost.IsDraw = event.Value.IsDraw;
             session.timerEnd = event.Timestamp;
-        } else if (event.Name == 'DisguiseBlown') {
+        } else if (event.Name === 'DisguiseBlown') {
             session.disguisesRuined.add(event.Value);
-        } else if (event.Name == 'BrokenDisguiseCleared') {
+        } else if (event.Name === 'BrokenDisguiseCleared') {
             session.disguisesRuined.delete(event.Value);
-        } else if (event.Name == 'Spotted') {
+        } else if (event.Name === 'Spotted') {
             session.spottedBy.add(...event.Value);
-        } else if (event.Name == 'Witnesses') {
+        } else if (event.Name === 'Witnesses') {
             session.witnesses.add(...event.Value);
-        } else if (event.Name == 'SecuritySystemRecorder') {
-            if (event.Value.event == 'spotted' && session.recording != 'ERASED') {
+        } else if (event.Name === 'SecuritySystemRecorder') {
+            if (event.Value.event === 'spotted' && session.recording !== 'ERASED') {
                 session.recording = 'SPOTTED';
-            } else if (event.Value.event == 'destroyed' || event.Value.event == 'erased') {
+            } else if (event.Value.event === 'destroyed' || event.Value.event === 'erased') {
                 session.recording = 'ERASED';
             }
-        } else if (event.Name == 'IntroCutEnd') {
+        } else if (event.Name === 'IntroCutEnd') {
             session.timerStart = event.Timestamp;
-        } else if (event.Name == 'exit_gate') {
+        } else if (event.Name === 'exit_gate') {
             session.timerEnd = event.Timestamp;
-        } else if (event.Name == 'ContractEnd') {
+        } else if (event.Name === 'ContractEnd') {
             if (!session.timerEnd) {
                 session.timerEnd = event.Timestamp;
             }
-        } else if (event.Name == 'ObjectiveCompleted') {
+        } else if (event.Name === 'ObjectiveCompleted') {
             session.completedObjectives.add(event.Value.Id);
-        } else if (event.Name == 'AccidentBodyFound') {
+        } else if (event.Name === 'AccidentBodyFound') {
             session.lastAccident = event.Timestamp;
-        } else if (event.Name == 'MurderedBodySeen') {
-            if (event.Timestamp != session.lastAccident) {
+        } else if (event.Name === 'MurderedBodySeen') {
+            if (event.Timestamp !== session.lastAccident) {
                 session.bodiesFoundBy.add(event.Value.Witness);
-                if (event.Timestamp == session.lastKill.timestamp) {
+                if (event.Timestamp === session.lastKill.timestamp) {
                     session.killsNoticedBy.add(event.Value.Witness);
                 }
             }

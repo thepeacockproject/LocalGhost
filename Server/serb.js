@@ -69,7 +69,7 @@ app.post('/oauth/token', async (req, res) => {
         noTimestamp: true,
     };
 
-    if (req.body.grant_type == 'refresh_token') {
+    if (req.body.grant_type === 'refresh_token') {
         // send back the token from the request (re-signed so the timestamps update)
         extractToken(req); // init req.jwt
         // remove signOptions from existing jwt
@@ -88,7 +88,7 @@ app.post('/oauth/token', async (req, res) => {
 
     let external_platform, external_userid, external_users_folder, external_appid;
 
-    if (req.body.grant_type == 'external_steam') {
+    if (req.body.grant_type === 'external_steam') {
         if (!/^\d{1,20}$/.test(req.body.steam_userid)) {
             res.status(400).end(); // invalid steam user id
             return;
@@ -97,7 +97,7 @@ app.post('/oauth/token', async (req, res) => {
         external_platform = 'steam';
         external_userid = req.body.steam_userid;
         external_users_folder = 'steamids';
-    } else if (req.body.grant_type == 'external_epic') {
+    } else if (req.body.grant_type === 'external_epic') {
         if (!/^[\da-f]{32}$/.test(req.body.epic_userid)) {
             res.status(400).end(); // invalid epic user id
             return;
@@ -129,7 +129,7 @@ app.post('/oauth/token', async (req, res) => {
             // TODO: check legit server response
             req.body.pId = data.toString();
         }).catch(async err => {
-            if (err.code != 'ENOENT') {
+            if (err.code !== 'ENOENT') {
                 throw err; // rethrow if error is something else than a non-existant file
             }
             // external id has no profile associated: create new profile and link external id to it
@@ -138,11 +138,11 @@ app.post('/oauth/token', async (req, res) => {
         });
     } else { // if a profile id is supplied
         readFile(path.join('userdata', gameVersion, external_users_folder, `${external_userid}.json`)).then(pId => { // read profile id linked to supplied external id
-            if (pId.toString() != req.body.pId) { // requested external id is linked to different profile id
+            if (pId.toString() !== req.body.pId) { // requested external id is linked to different profile id
                 // TODO: check legit server response
             }
         }).catch(async err => {
-            if (err.code != 'ENOENT') {
+            if (err.code !== 'ENOENT') {
                 throw err; // rethrow if error is something else than a non-existant file
             }
             // external id is not yet linked to this profile
@@ -152,12 +152,12 @@ app.post('/oauth/token', async (req, res) => {
 
     await readFile(path.join('userdata', gameVersion, 'users', `${req.body.pId}.json`)).then(data => {
         let userdata = JSON.parse(data);
-        if (userdata.LinkedAccounts[external_platform] != external_userid) { // requested profile id is linked to different external id
+        if (userdata.LinkedAccounts[external_platform] !== external_userid) { // requested profile id is linked to different external id
             // TODO: check legit server response
             // TODO: handle multiple external links
         }
     }).catch(async err => {
-        if (err.code != 'ENOENT') {
+        if (err.code !== 'ENOENT') {
             throw err; // rethrow if error is something else than a non-existant file
         }
         // User does not exist, create new profile from default:
@@ -172,7 +172,7 @@ app.post('/oauth/token', async (req, res) => {
         }
         // add all unlockables to player's inventory
         const allunlockables = JSON.parse(await readFile(path.join('userdata', gameVersion, 'allunlockables.json')))
-            .filter(u => u.Type != 'location') // locations not in inventory
+            .filter(u => u.Type !== 'location') // locations not in inventory
             .concat(JSON.parse(await readFile(path.join('userdata', gameVersion, 'emotes.json')))); // add emotes to inventory
         // TODO: challengemultiplier type unlockables - (only used for sniper gamemode?)
         userdata.Extensions.inventory = allunlockables.map(unlockable => {

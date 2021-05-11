@@ -31,7 +31,7 @@ app.post('/ProfileService/UpdateUserSaveFileTable', (req, res) => {
 });
 
 app.post('/ProfileService/UpdateProfileStats', express.json(), async (req, res) => {
-    if (req.jwt.unique_name != req.body.id) {
+    if (req.jwt.unique_name !== req.body.id) {
         res.status(403).end(); // data submitted for different profile id
         return;
     }
@@ -54,7 +54,7 @@ app.post('/ProfileService/GetUserConfig', (req, res) => {
 });
 
 app.post('/ProfileService/GetProfile', extractToken, express.json(), async (req, res) => {
-    if (req.body.id != req.jwt.unique_name) {
+    if (req.body.id !== req.jwt.unique_name) {
         res.status(403).end(); // data requested for different profile id
         console.log(`user ${req.jwt.unique_name} requested profile of ${req.body.id}`);
         return;
@@ -74,7 +74,7 @@ app.post('/UnlockableService/GetInventory', extractToken, async (req, res) => {
 });
 
 app.post('/ProfileService/UpdateExtensions', extractToken, express.json(), async (req, res) => {
-    if (req.body.id != req.jwt.unique_name) { // data requested for different profile id
+    if (req.body.id !== req.jwt.unique_name) { // data requested for different profile id
         res.status(403).end();
         return;
     }
@@ -87,7 +87,7 @@ app.post('/ProfileService/UpdateExtensions', extractToken, express.json(), async
 });
 
 app.post('/ProfileService/SynchroniseGameStats', extractToken, express.json(), async (req, res) => {
-    if (req.body.profileId != req.jwt.unique_name) { // data requested for different profile id
+    if (req.body.profileId !== req.jwt.unique_name) { // data requested for different profile id
         res.status(403).end();
         return;
     }
@@ -109,12 +109,12 @@ async function resolveProfiles(profileIDs, gameVersion) {
         }
         return readFile(path.join('userdata', gameVersion, 'users', `${id}.json`));
     }))).map(outcome => {
-        if (outcome.status == 'fulfilled') {
+        if (outcome.status === 'fulfilled') {
             let userdata = JSON.parse(outcome.value);
             userdata.Extensions = {};
             return userdata;
         } else {
-            if (outcome.reason.code == 'ENOENT') {
+            if (outcome.reason.code === 'ENOENT') {
                 console.error(`Attempted to resolve unknown profile: ${path.basename(outcome.reason.path, '.json')}`);
                 return null;
             } else {
@@ -153,7 +153,7 @@ app.post('/ProfileService/GetFriendsCount', extractToken, async (req, res) => {
 });
 
 app.post('/GamePersistentDataService/GetData', extractToken, express.json(), async (req, res) => {
-    if (req.jwt.unique_name != req.body.userId) {
+    if (req.jwt.unique_name !== req.body.userId) {
         res.status(403).end();
         return;
     }
@@ -162,7 +162,7 @@ app.post('/GamePersistentDataService/GetData', extractToken, express.json(), asy
 })
 
 app.post('/GamePersistentDataService/SaveData', extractToken, express.json(), async (req, res) => {
-    if (req.jwt.unique_name != req.body.userId) {
+    if (req.jwt.unique_name !== req.body.userId) {
         res.status(403).end();
         return;
     }
@@ -215,7 +215,7 @@ app.post('/DefaultLoadoutService/Set', extractToken, express.json(), async (req,
     const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
     const inventory = userData.Extensions.inventory;
     const allunlockables = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'allunlockables.json')));
-    const sublocation = req.body.location && allunlockables.find(unlockable => unlockable.Id == req.body.location);
+    const sublocation = req.body.location && allunlockables.find(unlockable => unlockable.Id === req.body.location);
     if (!userData.Extensions.defaultloadout) {
         userData.Extensions.defaultloadout = {};
     }
@@ -224,13 +224,13 @@ app.post('/DefaultLoadoutService/Set', extractToken, express.json(), async (req,
         const locationstring = sublocation.Properties.ParentLocation;
 
         for (const slotid of [0, 1, 2, 3, 4, 5, 6]) {
-            if (inventory.find(item => item.Unlockable.Id == req.body.loadout[slotid])) {
+            if (inventory.find(item => item.Unlockable.Id === req.body.loadout[slotid])) {
                 loadout[slotid] = req.body.loadout[slotid];
             }
         }
         for (const slotid in req.body.loadout) {
-            if (UUIDRegex.test(slotid) && inventory.find(item => item.InstanceId == slotid)
-            && inventory.find(item => item.Unlockable.Id == req.body.loadout[slotid])) {
+            if (UUIDRegex.test(slotid) && inventory.find(item => item.InstanceId === slotid)
+            && inventory.find(item => item.Unlockable.Id === req.body.loadout[slotid])) {
                 // container contents
                 loadout[slotid] = req.body.loadout[slotid];
                 break; // only one container is supported
