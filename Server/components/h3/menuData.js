@@ -20,12 +20,12 @@ app.get('/dashboard/Dashboard_Category_:category/:subscriptionId/:type/:id/:mode
     const repoData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'allunlockables.json')));
     let contractIds = [];
 
-    if (req.params.type == 'ContractList') {
-        if (req.params.subscriptionId == '10000000-0000-0000-0000-000000000000') {
+    if (req.params.type === 'ContractList') {
+        if (req.params.subscriptionId === '10000000-0000-0000-0000-000000000000') {
             await readFile(path.join('menudata', req.gameVersion, 'featuredContracts.json')).then(file => {
                 contractIds = JSON.parse(file);
             }).catch(err => {
-                if (err.code != 'ENOENT') {
+                if (err.code !== 'ENOENT') {
                     console.error(err);
                 } // use empty array if no featuredContracts.json exists
             });
@@ -33,7 +33,7 @@ app.get('/dashboard/Dashboard_Category_:category/:subscriptionId/:type/:id/:mode
             res.status(404).send('Subscription item not found');
             return;
         }
-    } else if (req.params.type == 'Contract') {
+    } else if (req.params.type === 'Contract') {
         if (!UUIDRegex.test(req.params.id)) {
             res.status(400).send('id was not a uuid');
             return;
@@ -46,10 +46,10 @@ app.get('/dashboard/Dashboard_Category_:category/:subscriptionId/:type/:id/:mode
             return generateUserCentric(JSON.parse(file), userData, req.gameVersion, repoData);
         });
     }))).map(outcome => {
-        if (outcome.status == 'fulfilled') {
+        if (outcome.status === 'fulfilled') {
             return outcome.value;
         } else {
-            if (outcome.reason.code == 'ENOENT') {
+            if (outcome.reason.code === 'ENOENT') {
                 console.error(`Attempted to resolve unknown contract: ${path.basename(outcome.reason.path, '.json')}`);
                 return null;
             } else {
@@ -60,7 +60,7 @@ app.get('/dashboard/Dashboard_Category_:category/:subscriptionId/:type/:id/:mode
     }).filter(data => data); // filter out nulls
 
     let item = {};
-    if (req.params.type == 'ContractList') {
+    if (req.params.type === 'ContractList') {
         item = {
             Id: req.params.id,
             Type: 'ContractList',
@@ -68,8 +68,8 @@ app.get('/dashboard/Dashboard_Category_:category/:subscriptionId/:type/:id/:mode
             Date: new Date().toISOString(),
             Data: contracts.length > 0 ? contracts : null,
         };
-    } else if (req.params.type == 'Contract') {
-        if (contracts.length != 1) {
+    } else if (req.params.type === 'Contract') {
+        if (contracts.length !== 1) {
             res.status(404).send('Subscription item not found');
             return;
         }
@@ -80,7 +80,7 @@ app.get('/dashboard/Dashboard_Category_:category/:subscriptionId/:type/:id/:mode
             Date: new Date().toISOString(),
             Data: contracts[0],
         };
-    } else if (req.params.type == 'NoContent') {
+    } else if (req.params.type === 'NoContent') {
         item = {
             Id: null,
             Type: "NoContent",
@@ -95,7 +95,7 @@ app.get('/dashboard/Dashboard_Category_:category/:subscriptionId/:type/:id/:mode
     }
 
     res.json({
-        template: req.params.mode == 'dataonly' ? null : await getTemplate('dashboard_category', req.gameVersion),
+        template: req.params.mode === 'dataonly' ? null : await getTemplate('dashboard_category', req.gameVersion),
         data: {
             Item: item,
         },
@@ -107,7 +107,7 @@ app.get('/Hub', extractToken, async (req, res) => {
     const serverTile = await readFile(path.join('menudata', 'h3', 'serverTile.json')).then(file => {
         return JSON.parse(file);
     }).catch(async err => {
-        if (err.code != 'ENOENT') {
+        if (err.code !== 'ENOENT') {
             throw err;
         }
         return JSON.parse(await readFile(path.join('menudata', 'h3', 'serverTile.template.json'))); // use template if no custom serverTile.json exists
@@ -168,18 +168,18 @@ app.get('/SafehouseCategory', extractToken, async (req, res) => {
     };
     for (const item of inventory) {
         if (req.query.type) { // if type is specified in query
-            if (item.Unlockable.Type != req.query.type) {
+            if (item.Unlockable.Type !== req.query.type) {
                 continue; // skip all items that are not that type
             }
-            if (req.query.subtype && item.Unlockable.Subtype != req.query.subtype) { // if subtype is specified
+            if (req.query.subtype && item.Unlockable.Subtype !== req.query.subtype) { // if subtype is specified
                 continue; // skip all items that are not that subtype
             }
-        } else if (item.Unlockable.Type == 'access' || item.Unlockable.Type == 'location' || item.Unlockable.Type == 'package'
-            || item.Unlockable.Type == 'loadoutunlock' || item.Unlockable.Type == 'agencypickup' || item.Unlockable.Type == 'emote') {
+        } else if (item.Unlockable.Type === 'access' || item.Unlockable.Type === 'location' || item.Unlockable.Type === 'package'
+            || item.Unlockable.Type === 'loadoutunlock' || item.Unlockable.Type === 'agencypickup' || item.Unlockable.Type === 'emote') {
             continue; // these types should not be displayed when not asked for
         }
 
-        let category = safehousedata.data.SubCategories.find(cat => cat.Category == item.Unlockable.Type);
+        let category = safehousedata.data.SubCategories.find(cat => cat.Category === item.Unlockable.Type);
         let subcategory;
         if (!category) {
             category = {
@@ -190,7 +190,7 @@ app.get('/SafehouseCategory', extractToken, async (req, res) => {
             };
             safehousedata.data.SubCategories.push(category);
         }
-        subcategory = category.SubCategories.find(cat => cat.Category == item.Unlockable.Subtype);
+        subcategory = category.SubCategories.find(cat => cat.Category === item.Unlockable.Subtype);
         if (!subcategory) {
             subcategory = {
                 Category: item.Unlockable.Subtype,
@@ -223,12 +223,12 @@ app.get('/SafehouseCategory', extractToken, async (req, res) => {
     }
 
     for (const [id, category] of safehousedata.data.SubCategories.entries()) {
-        if (category.SubCategories.length == 1) { // if category only has one subcategory
+        if (category.SubCategories.length === 1) { // if category only has one subcategory
             safehousedata.data.SubCategories[id] = category.SubCategories[0]; // flatten it
             safehousedata.data.SubCategories[id].Category = category.Category; // but keep the top category's name
         }
     }
-    if (safehousedata.data.SubCategories.length == 1) { // if root has only one subcategory
+    if (safehousedata.data.SubCategories.length === 1) { // if root has only one subcategory
         safehousedata.data = safehousedata.data.SubCategories[0]; // flatten it
     }
 
@@ -250,7 +250,7 @@ app.get('/stashpoint', extractToken, async (req, res) => {
         await readFile(path.join('contractdata', `${req.query.contractid}.json`)).then(contractfile => {
             contractData = req.query.contractid ? JSON.parse(contractfile) : null;
         }).catch(err => {
-            if (err.code != 'ENOENT') {
+            if (err.code !== 'ENOENT') {
                 throw err; // rethrow if error is something else than a non-existant file
             }
             contractData = null;
@@ -271,11 +271,11 @@ app.get('/stashpoint', extractToken, async (req, res) => {
                     return item.Unlockable.Properties.LoadoutSlot // only display items
                         && (!req.query.slotname
                             || ((UUIDRegex.test(req.query.slotid) // container
-                                || req.query.slotname == 'stashpoint') // stashpoint
-                                && item.Unlockable.Properties.LoadoutSlot != 'disguise') // container or stashpoint => display all items
-                            || item.Unlockable.Properties.LoadoutSlot == req.query.slotname) // else: display items for requested slot
-                        && (req.query.allowcontainers == 'true' || !item.Unlockable.Properties.IsContainer)
-                        && (req.query.allowlargeitems == 'true' || item.Unlockable.Properties.LoadoutSlot != 'carriedweapon'); // not sure about this one
+                                || req.query.slotname === 'stashpoint') // stashpoint
+                                && item.Unlockable.Properties.LoadoutSlot !== 'disguise') // container or stashpoint => display all items
+                            || item.Unlockable.Properties.LoadoutSlot === req.query.slotname) // else: display items for requested slot
+                        && (req.query.allowcontainers === 'true' || !item.Unlockable.Properties.IsContainer)
+                        && (req.query.allowlargeitems === 'true' || item.Unlockable.Properties.LoadoutSlot !== 'carriedweapon'); // not sure about this one
                     // TODO: filter for specific stashpoints?
                 }).map(item => ({
                     Item: item,
@@ -310,7 +310,7 @@ app.get('/stashpoint', extractToken, async (req, res) => {
 });
 
 app.get('/multiplayerpresets', extractToken, async (req, res) => { // /multiplayerpresets?gamemode=versus&disguiseUnlockableId=TOKEN_OUTFIT_HOT_SUMMER_SUIT
-    if (req.query.gamemode != 'versus') { // not sure what happens here
+    if (req.query.gamemode !== 'versus') { // not sure what happens here
         next();
     }
     let multiplayerPresets = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'multiplayerpresets.json')));
@@ -323,9 +323,9 @@ app.get('/multiplayerpresets', extractToken, async (req, res) => { // /multiplay
 async function getLoadoutData(userId, disguiseUnlockableId, gameVersion) {
     const allunlockables = JSON.parse(await readFile(path.join('userdata', gameVersion, 'allunlockables.json')));
     const userInventory = JSON.parse(await readFile(path.join('userdata', gameVersion, 'users', `${userId}.json`))).Extensions.inventory;
-    let unlockable = allunlockables.find(unlockable => unlockable.Id == disguiseUnlockableId);
+    let unlockable = allunlockables.find(unlockable => unlockable.Id === disguiseUnlockableId);
     if (!unlockable) {
-        unlockable = allunlockables.find(unlockable => unlockable.Id == 'TOKEN_OUTFIT_HITMANSUIT');
+        unlockable = allunlockables.find(unlockable => unlockable.Id === 'TOKEN_OUTFIT_HITMANSUIT');
     }
     unlockable.GameAsset = null;
     unlockable.DisplayNameLocKey = `UI_${unlockable.Id}_NAME`;
@@ -340,13 +340,13 @@ async function getLoadoutData(userId, disguiseUnlockableId, gameVersion) {
                 Properties: {},
             },
             type: 'disguise',
-            owned: userInventory.some(item => item.Unlockable.Id == disguiseUnlockableId),
+            owned: userInventory.some(item => item.Unlockable.Id === disguiseUnlockableId),
         },
     });
 }
 
 app.get('/multiplayer', extractToken, async (req, res) => { // /multiplayer?gamemode=versus&disguiseUnlockableId=TOKEN_OUTFIT_ELUSIVE_COMPLETE_15_SUIT
-    if (req.query.gamemode != 'versus') { // not sure what happens here
+    if (req.query.gamemode !== 'versus') { // not sure what happens here
         return
     }
     res.json({
@@ -370,13 +370,13 @@ app.get('/Planning', extractToken, async (req, res) => {
         const contractData = JSON.parse(contractfile);
         const creatorProfile = (await resolveProfiles([contractData.Metadata.CreatorUserId], req.gameVersion))[0]
             || (await resolveProfiles(['fadb923c-e6bb-4283-a537-eb4d1150262e'], req.gameVersion))[0]; // use IOI profile if profile not found
-        const sublocation = repo.find(entry => entry.Id == contractData.Metadata.Location);
+        const sublocation = repo.find(entry => entry.Id === contractData.Metadata.Location);
         let entrancesInScene = entranceData[contractData.Metadata.ScenePath.toLowerCase()];
         if (!entrancesInScene) {
             entrancesInScene = [];
             console.error(`Could not find entrance data for '${contractData.Metadata.ScenePath.toLowerCase()}'`);
         }
-        const unlockedEntrances = userData.Extensions.inventory.filter(item => item.Unlockable.Type == 'access')
+        const unlockedEntrances = userData.Extensions.inventory.filter(item => item.Unlockable.Type === 'access')
             .map(i => i.Unlockable)
             .filter(unlockable => unlockable.Properties.RepositoryId);
         sublocation.DisplayNameLocKey = `UI_${sublocation.Id}_NAME`;
@@ -405,11 +405,11 @@ app.get('/Planning', extractToken, async (req, res) => {
                 UserCentric: await generateUserCentric(contractData, userData, req.gameVersion, repo),
                 IsFirstInGroup: true, // escalation related?
                 Creator: creatorProfile,
-                UserContract: creatorProfile.DevId != 'IOI',
-                UnlockedEntrances: userData.Extensions.inventory.filter(item => item.Unlockable.Type == 'access')
+                UserContract: creatorProfile.DevId !== 'IOI',
+                UnlockedEntrances: userData.Extensions.inventory.filter(item => item.Unlockable.Type === 'access')
                     .map(i => i.Unlockable.Properties.RepositoryId)
                     .filter(id => id),
-                UnlockedAgencyPickups: userData.Extensions.inventory.filter(item => item.Unlockable.Type == 'agencypickup')
+                UnlockedAgencyPickups: userData.Extensions.inventory.filter(item => item.Unlockable.Type === 'agencypickup')
                     .map(i => i.Unlockable.Properties.RepositoryId)
                     .filter(id => id),
                 Objectives: await mapObjectives(contractData.Data.Objectives, contractData.Data.GameChangers, contractData.Metadata.GroupObjectiveDisplayOrder),
@@ -422,11 +422,11 @@ app.get('/Planning', extractToken, async (req, res) => {
                         SlotName: loadoutSlots[slotid] || itemId,
                         SlotId: slotid,
                         Recommended: itemId ? {
-                            item: userData.Extensions.inventory.find(item => item.Unlockable.Id == itemId),
+                            item: userData.Extensions.inventory.find(item => item.Unlockable.Id === itemId),
                             type: loadoutSlots[slotid] || itemId,
                             owned: true,
                         } : null,
-                        IsContainer: loadoutSlots[slotid] == undefined ? true : undefined,
+                        IsContainer: loadoutSlots[slotid] === undefined ? true : undefined,
                     }
                 )),
                 LimitedLoadoutUnlockLevel: 0, // ?
@@ -456,7 +456,7 @@ app.get('/Planning', extractToken, async (req, res) => {
             },
         });
     }).catch(err => {
-        if (err.code == 'ENOENT') {
+        if (err.code === 'ENOENT') {
             console.error(`Requested /Planning for unknown contract: ${path.basename(err.path, '.json')}`);
             res.status(404).end();
         } else {
@@ -491,7 +491,7 @@ app.get('/selectagencypickup', extractToken, async (req, res) => {
             pickupsInScene = [];
             console.error(`Could not find pickup data for '${contractData.Metadata.ScenePath.toLowerCase()}'`);
         }
-        const unlockedAgencyPickups = userData.Extensions.inventory.filter(item => item.Unlockable.Type == 'agencypickup')
+        const unlockedAgencyPickups = userData.Extensions.inventory.filter(item => item.Unlockable.Type === 'agencypickup')
             .map(i => i.Unlockable)
             .filter(unlockable => unlockable.Properties.RepositoryId);
 
@@ -507,7 +507,7 @@ app.get('/selectagencypickup', extractToken, async (req, res) => {
         };
         res.json(selectagencypickup);
     }).catch(err => {
-        if (err.code == 'ENOENT') {
+        if (err.code === 'ENOENT') {
             console.error(`Requested /selectagencypickup for unknown contract: ${path.basename(err.path, '.json')}`);
             res.status(404).end();
         } else {
@@ -533,7 +533,7 @@ app.get('/selectentrance', extractToken, async (req, res) => {
             entrancesInScene = [];
             console.error(`Could not find entrance data for '${contractData.Metadata.ScenePath.toLowerCase()}'`);
         }
-        const unlockedEntrances = userData.Extensions.inventory.filter(item => item.Unlockable.Type == 'access')
+        const unlockedEntrances = userData.Extensions.inventory.filter(item => item.Unlockable.Type === 'access')
             .map(i => i.Unlockable)
             .filter(unlockable => unlockable.Properties.RepositoryId);
 
@@ -549,7 +549,7 @@ app.get('/selectentrance', extractToken, async (req, res) => {
         };
         res.json(selectentrance);
     }).catch(err => {
-        if (err.code == 'ENOENT') {
+        if (err.code === 'ENOENT') {
             console.error(`Requested /selectentrance for unknown contract: ${path.basename(err.path, '.json')}`);
             res.status(404).end();
         } else {
@@ -618,7 +618,7 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
             const gameChangerProps = gameChangerData[gamechangerId];
             if (gameChangerProps) {
                 if (gameChangerProps.IsHidden) {
-                    if (gameChangerProps.Objectives.length == 1) { // Either 0 or 1 I think.
+                    if (gameChangerProps.Objectives.length === 1) { // Either 0 or 1 I think.
                         const objective = gameChangerProps.Objectives[0];
                         objective.Id = gamechangerId;
                         gameChangerObjectives.push(objective);
@@ -630,7 +630,7 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
                             Id: gamechangerId,
                             Name: gameChangerProps.Name,
                             Description: gameChangerProps.Description,
-                            LongDescription: gameChangerProps.LongDescription == null ?
+                            LongDescription: gameChangerProps.LongDescription === undefined ?
                                 gameChangerProps.Description : gameChangerProps.LongDescription,
                             TileImage: gameChangerProps.TileImage,
                             Icon: gameChangerProps.Icon,
@@ -650,12 +650,12 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
             || (objective.OnActive && objective.OnActive.IfInProgress && objective.OnActive.IfInProgress.Visible === false)
             || (objective.OnActive && objective.OnActive.IfCompleted && objective.OnActive.IfCompleted.Visible === false
                 && objective.Definition && objective.Definition.States && objective.Definition.States.Start
-                && objective.Definition.States.Start['-'] && objective.Definition.States.Start['-'].Transition == 'Success')
+                && objective.Definition.States.Start['-'] && objective.Definition.States.Start['-'].Transition === 'Success')
         ) {
             continue; // do not show objectives with 'ForceShowOnLoadingScreen: false' or objectives that are not visible on start
         }
 
-        if (objective.SuccessEvent && objective.SuccessEvent.EventName == 'Kill'
+        if (objective.SuccessEvent && objective.SuccessEvent.EventName === 'Kill'
             && objective.SuccessEvent.EventValues
             && objective.SuccessEvent.EventValues.RepositoryId) {
             result.set(objective.Id, {
@@ -669,14 +669,14 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
         } else if (objective.HUDTemplate && ['custom', 'customkill', 'setpiece'].includes(objective.ObjectiveType)) {
             let id = null;
             if (objective.Definition && objective.Definition.Context && objective.Definition.Context.Targets
-                && objective.Definition.Context.Targets.length == 1) {
+                && objective.Definition.Context.Targets.length === 1) {
                 id = objective.Definition.Context.Targets[0];
             }
 
             const properties = {
                 Id: id,
                 BriefingText: objective.BriefingText || '',
-                LongBriefingText: objective.LongBriefingText == null ?
+                LongBriefingText: objective.LongBriefingText === undefined ?
                     (objective.BriefingText || '') : objective.LongBriefingText,
                 Image: objective.Image,
                 BriefingName: objective.BriefingName,
@@ -700,8 +700,8 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
                 Type: objective.ObjectiveType,
                 Properties: properties,
             });
-        } else if (objective.Type == 'statemachine' && objective.Definition && objective.Definition.Context
-            && objective.Definition.Context.Targets && objective.Definition.Context.Targets.length == 1
+        } else if (objective.Type === 'statemachine' && objective.Definition && objective.Definition.Context
+            && objective.Definition.Context.Targets && objective.Definition.Context.Targets.length === 1
             && objective.HUDTemplate) {
             // This objective will be displayed as a kill objective
             let Conditions = objective.TargetConditions ? objective.TargetConditions.map(condition => ({
@@ -754,7 +754,7 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
 
 async function generateUserCentric(contractData, userData, gameVersion, repoData) {
     const repo = repoData || JSON.parse(await readFile(path.join('userdata', gameVersion, 'allunlockables.json')));
-    const sublocation = repo.find(entry => entry.Id == contractData.Metadata.Location);
+    const sublocation = repo.find(entry => entry.Id === contractData.Metadata.Location);
     sublocation.DisplayNameLocKey = `UI_${sublocation.Id}_NAME`;
     const maxlevel = maxLevelForLocation(sublocation.Properties.ProgressionKey, gameVersion);
     const locationProgression = userData.Extensions.progression.Locations[sublocation.Properties.ProgressionKey.toLowerCase()];
@@ -765,10 +765,10 @@ async function generateUserCentric(contractData, userData, gameVersion, repoData
             LockedReason: '',
             LocationLevel: locationProgression.Level,
             LocationMaxLevel: maxlevel,
-            LocationCompletion: (locationProgression.Level == maxlevel) ? 1 :
+            LocationCompletion: (locationProgression.Level === maxlevel) ? 1 :
                 (locationProgression.Xp - xpRequiredForLevel(locationProgression.Level)) /
                 (xpRequiredForLevel(locationProgression.Level + 1) - xpRequiredForLevel(locationProgression.Level)),
-            LocationXpLeft: (locationProgression.Level == maxlevel) ? 0 : xpRequiredForLevel(locationProgression.Level + 1) - locationProgression.Xp,
+            LocationXpLeft: (locationProgression.Level === maxlevel) ? 0 : xpRequiredForLevel(locationProgression.Level + 1) - locationProgression.Xp,
             LocationHideProgression: false, // ?
             ElusiveContractState: '', // ?
             IsFeatured: false,
@@ -780,10 +780,10 @@ async function generateUserCentric(contractData, userData, gameVersion, repoData
                 Level: locationProgression.Level,
                 MaxLevel: maxlevel,
                 XP: locationProgression.Xp,
-                Completion: (locationProgression.Level == maxlevel) ? 1 :
+                Completion: (locationProgression.Level === maxlevel) ? 1 :
                     (locationProgression.Xp - xpRequiredForLevel(locationProgression.Level)) /
                     (xpRequiredForLevel(locationProgression.Level + 1) - xpRequiredForLevel(locationProgression.Level)),
-                XpLeft: (locationProgression.Level == maxlevel) ? 0 : xpRequiredForLevel(locationProgression.Level + 1) - locationProgression.Xp,
+                XpLeft: (locationProgression.Level === maxlevel) ? 0 : xpRequiredForLevel(locationProgression.Level + 1) - locationProgression.Xp,
                 Id: sublocation.Properties.ParentLocation,
                 SubLocationId: sublocation.Id,
                 HideProgression: false,

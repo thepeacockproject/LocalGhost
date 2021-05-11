@@ -2,7 +2,7 @@
 // Licensed under the zlib license. See LICENSE for more info
 
 function GetPlatformEntitlements(req, res) {
-    if (req.body.issuerId == '863550') { // Hitman 2 steam appid
+    if (req.body.issuerId === '863550') { // Hitman 2 steam appid
         // Steam AppIDs of Hitman2 and its DLCs
         res.json([
             '863550', // Hitman 2

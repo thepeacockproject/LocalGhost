@@ -17,7 +17,7 @@ const UUIDRegex = /^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-
 
 function extractToken(req, res, next) {
     let auth = req.header('Authorization') ? req.header('Authorization').split(' ') : [];
-    if (auth.length == 2 && auth[0].toLowerCase() == "bearer") {
+    if (auth.length === 2 && auth[0].toLowerCase() === "bearer") {
         req.jwt = jwt.decode(auth[1]); // I'm not going to verify the token
         if (!UUIDRegex.test(req.jwt.unique_name)) {
             res.status(400).end();
@@ -38,7 +38,7 @@ function xpRequiredForLevel(level) {
 }
 
 function maxLevelForLocation(location, gameVersion) {
-    if (gameVersion == 'h3') {
+    if (gameVersion === 'h3') {
         switch (location.toUpperCase()) {
             case 'LOCATION_PARIS':
             case 'LOCATION_PARENT_COASTALTOWN':
@@ -98,7 +98,7 @@ function maxLevelForLocation(location, gameVersion) {
 }
 
 function getLocationCompletion(location, locationProgression) {
-    return (locationProgression.Level == maxLevelForLocation(location)) ? 1 :
+    return (locationProgression.Level === maxLevelForLocation(location)) ? 1 :
         (locationProgression.Xp - xpRequiredForLevel(locationProgression.Level)) /
         (xpRequiredForLevel(locationProgression.Level + 1) - xpRequiredForLevel(locationProgression.Level));
 }
@@ -134,7 +134,7 @@ async function getTemplate(endpoint, gameVersion) {
         let json = JSON.parse(fileData);
         return JSON.parse(fileData);
     }).catch(err => {
-        if (err.code != 'ENOENT') { // if other error than non-existant file
+        if (err.code !== 'ENOENT') { // if other error than non-existant file
             console.log(err);
         }
         return null;

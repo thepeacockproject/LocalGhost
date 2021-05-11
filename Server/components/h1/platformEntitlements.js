@@ -2,7 +2,7 @@
 // Licensed under the zlib license. See LICENSE for more info
 
 function GetPlatformEntitlements(req, res) {
-    if (req.body.issuerId == '236870') { // Hitman 1 steam appid
+    if (req.body.issuerId === '236870') { // Hitman 1 steam appid
         // Steam AppIDs of Hitman1 and its DLCs
         // Probably incomplete
         res.json([
@@ -18,7 +18,7 @@ function GetPlatformEntitlements(req, res) {
             '588780', // Hitman - Digital Bonus Content
             '664270', // Hitman - Japanese V/O Pack
         ]);
-    } else if (req.body.issuerId == '3c06b15a8a2845c0b725d4f952fe00aa') { // Hitman 1 epic namespace
+    } else if (req.body.issuerId === '3c06b15a8a2845c0b725d4f952fe00aa') { // Hitman 1 epic namespace
         // Epic ids of Hitman 1 and its DLCs
         res.json([
             '0a73eaedcac84bd28b567dbec764c5cb', // Hitman 1 standard edition

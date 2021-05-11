@@ -13,8 +13,8 @@ const app = express.Router();
 
 app.post('/GetRequiredResourcesForPreset', express.json(), async (req, res) => {
     let presetData = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'multiplayerpresets.json')));
-    let result = presetData.data.Presets.find(preset => preset.Id == req.body.id).Data.Contracts.map(contractId => {
-        let contract = presetData.data.UserCentricContracts.find(contract => contract.Contract.Metadata.Id == contractId);
+    let result = presetData.data.Presets.find(preset => preset.Id === req.body.id).Data.Contracts.map(contractId => {
+        let contract = presetData.data.UserCentricContracts.find(contract => contract.Contract.Metadata.Id === contractId);
         return {
             Id: contractId,
             DlcId: contract.Data.DlcName,
@@ -32,10 +32,10 @@ app.post('/RegisterToMatch', extractToken, express.json(), async (req, res) => {
     if (!req.body.presetId) {
         req.body.presetId = 'd72d7cc9-ee26-4c7d-857a-75abdc9ccb61'; // default to miami invite preset
     }
-    let preset = multiplayerPresets.data.Presets.find(preset => preset.Id == req.body.presetId);
+    let preset = multiplayerPresets.data.Presets.find(preset => preset.Id === req.body.presetId);
     let contractId = preset.Data.Contracts[Math.trunc(Math.random() * preset.Data.Contracts.length)];
 
-    if (req.body.matchId == uuid.NIL) { // create new match
+    if (req.body.matchId === uuid.NIL) { // create new match
         req.body.matchId = uuid.v4();
         activeMatches.set(req.body.matchId, {
             MatchData: {
