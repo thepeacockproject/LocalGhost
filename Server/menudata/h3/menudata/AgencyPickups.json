@@ -257,6 +257,30 @@
     "b9660a54-5d89-49f1-8141-8cc2307bad41",
     "80133265-3e70-4953-ac83-7006b795d013"
   ],
+  "assembly:/_pro/scenes/missions/elegant/scene_llama_elusive_clerico.entity": [
+    "c9e4c63f-d969-43db-b46f-a8c56cc80c51",
+    "23cecaad-4fba-4bc4-b2e5-40a69b02b40d",
+    "1eaa28f7-8ba7-4f9e-b02f-027ae8dfb4ce",
+    "20a8c062-5ba1-4754-a510-10295f7545c6",
+    "339b9416-7153-4800-8ca4-99d45119d282",
+    "c3296484-2ea0-4a76-8f9b-858830aedf81",
+    "c85a1d85-919e-452c-b457-437c96a0493a",
+    "8c1fa53f-b979-4e68-bb81-492c32c5a877",
+    "b9660a54-5d89-49f1-8141-8cc2307bad41",
+    "80133265-3e70-4953-ac83-7006b795d013"
+  ],
+  "assembly:/_pro/scenes/missions/elegant/scene_llama_elusive_jockeyclub.entity": [
+    "c9e4c63f-d969-43db-b46f-a8c56cc80c51",
+    "23cecaad-4fba-4bc4-b2e5-40a69b02b40d",
+    "1eaa28f7-8ba7-4f9e-b02f-027ae8dfb4ce",
+    "20a8c062-5ba1-4754-a510-10295f7545c6",
+    "339b9416-7153-4800-8ca4-99d45119d282",
+    "c3296484-2ea0-4a76-8f9b-858830aedf81",
+    "c85a1d85-919e-452c-b457-437c96a0493a",
+    "8c1fa53f-b979-4e68-bb81-492c32c5a877",
+    "b9660a54-5d89-49f1-8141-8cc2307bad41",
+    "80133265-3e70-4953-ac83-7006b795d013"
+  ],
   "assembly:/_pro/scenes/missions/elegant/scene_llama_jacaranda.entity": [
     "c9e4c63f-d969-43db-b46f-a8c56cc80c51",
     "23cecaad-4fba-4bc4-b2e5-40a69b02b40d",
@@ -304,6 +328,15 @@
     "8c1fa53f-b979-4e68-bb81-492c32c5a877",
     "b9660a54-5d89-49f1-8141-8cc2307bad41",
     "80133265-3e70-4953-ac83-7006b795d013"
+  ],
+  "assembly:/_pro/scenes/missions/golden/mission_gecko/scene_gecko_angelica.entity": [
+    "0e8b5215-dad9-4a73-b549-8c7e3d27d604",
+    "d4b6f7eb-6c48-4605-95de-7f9695be2ed1",
+    "9c2005f3-9368-45e1-8884-baefe63b5fc0",
+    "4c7250fa-f7eb-4ade-9dc7-18a9ae998992",
+    "18dee391-ac91-48c4-b864-6875da29e49b",
+    "d3388229-d256-499a-8039-d3715e5c01d5",
+    "1a7f20ee-909a-4fa5-bba0-b8068ac05241"
   ],
   "assembly:/_pro/scenes/missions/golden/mission_gecko/scene_gecko_basic.entity": [
     "0e8b5215-dad9-4a73-b549-8c7e3d27d604",
@@ -684,6 +717,18 @@
     "5e0df81c-e0a8-4061-a9da-d298e9bd8972"
   ],
   "assembly:/_pro/scenes/missions/wet/scene_rat_basic.entity": [
+    "acca901a-c33e-4462-b422-8c3bd81f4efa",
+    "ff66b29c-c3c2-4aec-8b5c-c4e780f42a8a",
+    "50be49a2-c366-443d-bdaa-6de2e11eefbe",
+    "20701325-000b-408a-99ca-17c9d87a221b",
+    "e1658358-1b89-4dc2-bb42-3f046faf5813",
+    "2bc67e36-180c-41b6-bdf4-01b91d53cf29",
+    "7b719d9b-13cd-48c7-bbff-c3809d01d39b",
+    "c3b730f6-e402-4a2f-8fc2-4f01b30ced0f",
+    "f0cd0184-8d7c-4b5f-8c5e-94177f8bd9ff",
+    "5e0df81c-e0a8-4061-a9da-d298e9bd8972"
+  ],
+  "assembly:/_pro/scenes/missions/wet/scene_wet_makoyana.entity": [
     "acca901a-c33e-4462-b422-8c3bd81f4efa",
     "ff66b29c-c3c2-4aec-8b5c-c4e780f42a8a",
     "50be49a2-c366-443d-bdaa-6de2e11eefbe",

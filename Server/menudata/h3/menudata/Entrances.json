@@ -19,7 +19,7 @@
     "d4ec0c94-02b2-4aae-be9e-cbb5cc7d7e4a",
     "5314c86b-7173-412b-a0b5-b0d9af2da722",
     "0aec817c-738e-4381-bbd4-a13b5d1c6730",
-    "384761fe-104c-11e5-bc55-3e819330f945"
+    "f1ea381e-d998-4c7b-9ef0-34e365624cfc"
   ],
   "assembly:/_pro/scenes/missions/bangkok/_scene_mission_tiger.entity": [
     "3aa4388f-6f87-44a4-b3dc-ac015bf65264",
@@ -234,6 +234,26 @@
     "bfb5f09f-a8c9-4d4e-9787-f7169c09d428",
     "cef7b74a-bd2c-4ee9-94cd-4af5b4613556"
   ],
+  "assembly:/_pro/scenes/missions/elegant/scene_llama_elusive_clerico.entity": [
+    "29b96e56-a29f-4a4d-85b3-24e5be9f35a1",
+    "209589c8-e758-4632-a214-9205531032a3",
+    "cb100c2e-c741-4c27-988c-8dce814f4e9f",
+    "64ebf985-fcd6-45a7-8126-81a96ca950c6",
+    "939ead3c-0602-4144-a8e6-740719d1950f",
+    "bfb5f09f-a8c9-4d4e-9787-f7169c09d428",
+    "cef7b74a-bd2c-4ee9-94cd-4af5b4613556",
+    "b093bc4d-7f5e-47b9-bbbc-981ef745ec0f"
+  ],
+  "assembly:/_pro/scenes/missions/elegant/scene_llama_elusive_jockeyclub.entity": [
+    "29b96e56-a29f-4a4d-85b3-24e5be9f35a1",
+    "209589c8-e758-4632-a214-9205531032a3",
+    "cb100c2e-c741-4c27-988c-8dce814f4e9f",
+    "64ebf985-fcd6-45a7-8126-81a96ca950c6",
+    "939ead3c-0602-4144-a8e6-740719d1950f",
+    "bfb5f09f-a8c9-4d4e-9787-f7169c09d428",
+    "cef7b74a-bd2c-4ee9-94cd-4af5b4613556",
+    "b093bc4d-7f5e-47b9-bbbc-981ef745ec0f"
+  ],
   "assembly:/_pro/scenes/missions/elegant/scene_llama_jacaranda.entity": [
     "f45b0af4-e50d-477e-bb92-83136b04506f"
   ],
@@ -247,6 +267,9 @@
   "assembly:/_pro/scenes/missions/elegant/scene_whitedryas_level3.entity": [
     "930f79a4-48f5-4521-ae7b-78104d11fe30",
     "939ead3c-0602-4144-a8e6-740719d1950f"
+  ],
+  "assembly:/_pro/scenes/missions/golden/mission_gecko/scene_gecko_angelica.entity": [
+    "e690549c-d035-46fe-b175-2b73e1c048d3"
   ],
   "assembly:/_pro/scenes/missions/golden/mission_gecko/scene_gecko_basic.entity": [
     "bc531204-8e82-4550-b2a7-829b047dc6cc",
@@ -644,5 +667,9 @@
     "75827342-5601-4656-ac00-55aff44b48f4",
     "4752ebbb-02c0-48b0-8e05-3ec2a920dedd",
     "f9c65d0b-e5ce-454e-8f20-08a8083a9b9d"
+  ],
+  "assembly:/_pro/scenes/missions/wet/scene_wet_makoyana.entity": [
+    "94883e8e-2659-4539-8404-a93de574888d",
+    "d497ce5a-011e-4b40-9d69-341cc8141120"
   ]
 }

@@ -547,6 +547,230 @@
       }
     ]
   },
+  "55e29f8f-579a-4cb2-b235-2166d23deffe": {
+    "Name": "UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_HIDE_ALL_BODIES_PRIMARY_NAME",
+    "Description": "UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_HIDE_ALL_BODIES_PRIMARY_DESC",
+    "TileImage": "images/contractconditions/condition_contrac_hide_all_bodies.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "IsHidden": true,
+    "Resource": [],
+    "Objectives": [
+      {
+        "Id": "6b2e1b5d-3484-44d5-a0c0-769116f2ea5d",
+        "Activation": {
+          "$eq": [
+            "$73928b41-96ae-4f0b-88c2-9b0ba76b94d2",
+            "Completed"
+          ]
+        },
+        "OnActive": {
+          "IfCompleted": {
+            "Visible": false
+          }
+        },
+        "OnInactive": {
+          "IfCompleted": {
+            "State": "Completed"
+          },
+          "IfInProgress": {
+            "State": "Completed"
+          },
+          "IfFailed": {
+            "State": "InProgress"
+          }
+        },
+        "Category": "primary",
+        "ExcludeFromScoring": true,
+        "BriefingText": "$loc UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_HIDE_ALL_BODIES_PRIMARY_OBJ",
+        "HUDTemplate": {
+          "display": "$loc UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_HIDE_ALL_BODIES_PRIMARY_OBJ",
+          "iconType": 17
+        },
+        "Type": "statemachine",
+        "IgnoreIfInactive": true,
+        "UpdateActivationWhileCompleted": true,
+        "Definition": {
+          "Scope": "session",
+          "Context": {
+            "IsExiting": 0,
+            "PacifiedBodiesHidden": true,
+            "DeadBodiesHidden": true,
+            "DeadBeforeActivationIds": []
+          },
+          "States": {
+            "Start": {
+              "Kill": {
+                "Actions": {
+                  "$pushunique": [
+                    "DeadBeforeActivationIds",
+                    "$Value.RepositoryId"
+                  ]
+                }
+              },
+              "PickedUpLetterOpener": {
+                "Transition": "Success"
+              }
+            },
+            "Success": {
+              "Kill": {
+                "Condition": {
+                  "$eq": [
+                    "$.IsExiting",
+                    0
+                  ]
+                },
+                "Actions": {
+                  "$set": [
+                    "DeadBodiesHidden",
+                    false
+                  ]
+                },
+                "Transition": "NeedToHideBodies"
+              },
+              "Pacify": {
+                "Condition": {
+                  "$eq": [
+                    "$.IsExiting",
+                    0
+                  ]
+                },
+                "Actions": {
+                  "$set": [
+                    "PacifiedBodiesHidden",
+                    false
+                  ]
+                },
+                "Transition": "NeedToHideBodies"
+              },
+              "exit_gate": {
+                "Actions": {
+                  "$inc": "IsExiting"
+                }
+              },
+              "BodyBagged": {
+                "Condition": {
+                  "$and": [
+                    {
+                      "$eq": [
+                        "$.IsExiting",
+                        0
+                      ]
+                    },
+                    {
+                      "$not": {
+                        "$any": {
+                          "?": {
+                            "$eq": [
+                              "$.#",
+                              "$Value.RepositoryId"
+                            ]
+                          },
+                          "in": "$.DeadBeforeActivationIds"
+                        }
+                      }
+                    }
+                  ]
+                },
+                "Transition": "Failure"
+              }
+            },
+            "NeedToHideBodies": {
+              "BodyBagged": {
+                "Condition": {
+                  "$not": {
+                    "$any": {
+                      "?": {
+                        "$eq": [
+                          "$.#",
+                          "$Value.RepositoryId"
+                        ]
+                      },
+                      "in": "$.DeadBeforeActivationIds"
+                    }
+                  }
+                },
+                "Transition": "Failure"
+              },
+              "Kill": {
+                "Actions": {
+                  "$set": [
+                    "DeadBodiesHidden",
+                    false
+                  ]
+                }
+              },
+              "Pacify": {
+                "Actions": {
+                  "$set": [
+                    "PacifiedBodiesHidden",
+                    false
+                  ]
+                }
+              },
+              "AllBodiesHidden": [
+                {
+                  "Actions": {
+                    "$set": [
+                      "DeadBodiesHidden",
+                      true
+                    ]
+                  }
+                },
+                {
+                  "Condition": {
+                    "$and": [
+                      {
+                        "$eq": [
+                          "$.PacifiedBodiesHidden",
+                          true
+                        ]
+                      },
+                      {
+                        "$eq": [
+                          "$.DeadBodiesHidden",
+                          true
+                        ]
+                      }
+                    ]
+                  },
+                  "Transition": "Success"
+                }
+              ],
+              "AllPacifiedHidden": [
+                {
+                  "Actions": {
+                    "$set": [
+                      "PacifiedBodiesHidden",
+                      true
+                    ]
+                  }
+                },
+                {
+                  "Condition": {
+                    "$and": [
+                      {
+                        "$eq": [
+                          "$.PacifiedBodiesHidden",
+                          true
+                        ]
+                      },
+                      {
+                        "$eq": [
+                          "$.DeadBodiesHidden",
+                          true
+                        ]
+                      }
+                    ]
+                  },
+                  "Transition": "Success"
+                }
+              ]
+            }
+          }
+        }
+      }
+    ]
+  },
   "3db72bb5-63d6-47fe-9332-d7ea3c195e06": {
     "Name": "UI_GAMECHANGERS_GLOBAL_RESTRICTED_LOADOUT_NAME",
     "Description": "UI_GAMECHANGERS_GLOBAL_RESTRICTED_LOADOUT_DESC",
@@ -8137,6 +8361,30 @@
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
     "Resource": [],
+    "Objectives": []
+  },
+  "99ce90aa-7669-4ff0-82c5-5f962432ce24": {
+    "Name": "UI_GAMECHANGERS_WET_LOCKED_DOORS_NAME",
+    "Description": "UI_GAMECHANGERS_WET_LOCKED_DOORS_DESC",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Magnolia_LockedDoors.jpg",
+    "Icon": null,
+    "ObjectivesCategory": "secondary",
+    "IsHidden": null,
+    "Resource": [
+      "assembly:/_PRO/Scenes/Missions/wet/gamechanger_lockeddoors.brick"
+    ],
+    "Objectives": []
+  },
+  "09a41818-4aa4-4b8b-885a-59ec74b1eb2d": {
+    "Name": "UI_GAMECHANGERS_WET_SWAP_CROWBARS_NAME",
+    "Description": "UI_GAMECHANGERS_WET_SWAP_CROWBARS_DESC",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Magnolia_RustyCrowbars.jpg",
+    "Icon": null,
+    "ObjectivesCategory": "secondary",
+    "IsHidden": null,
+    "Resource": [
+      "assembly:/_PRO/Scenes/Missions/wet/gamechanger_swapcrowbars.brick"
+    ],
     "Objectives": []
   }
 }
