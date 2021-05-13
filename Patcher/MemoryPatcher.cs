@@ -55,7 +55,7 @@ namespace Hitman2Patcher
 			IntPtr b = process.MainModule.BaseAddress;
 			Hitman2Version v = Hitman2Version.getVersion(getTimestamp(hProcess, b), patchOptions.ForcedVersion);
 			UIntPtr byteswritten;
-			MemProtection oldprotectflags;
+			MemProtection oldprotectflags = 0;
 			byte[] newurl = Encoding.ASCII.GetBytes(patchOptions.CustomConfigDomain).Concat(new byte[] { 0x00 }).ToArray();
 			List<Patch> patches = new List<Patch>();
 
@@ -122,8 +122,14 @@ namespace Hitman2Patcher
 					throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at {0} for offset {1:X}", "wpm", patch.offset));
 				}
 
+				MemProtection protectionToRestore = patch.defaultProtection;
+				if (oldprotectflags.HasFlag(MemProtection.PAGE_GUARD)) // re-add page guard if it had it before
+				{
+					protectionToRestore |= MemProtection.PAGE_GUARD;
+				}
+
 				if (patchmemprotection && !VirtualProtectEx(hProcess, b + patch.offset, (UIntPtr)dataToWrite.Length,
-						patch.defaultProtection, out oldprotectflags))
+						protectionToRestore, out oldprotectflags))
 				{
 					CloseHandle(hProcess);
 					throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at {0} for offset {1:X}", "vpe2", patch.offset));
