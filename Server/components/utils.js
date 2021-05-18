@@ -131,7 +131,6 @@ function getGameVersionFromServerVersion(serverVersion) {
 
 async function getTemplate(endpoint, gameVersion) {
     return await readFile(path.join('menudata', gameVersion, 'menudata', 'templates', `${endpoint}.json`)).then(fileData => {
-        let json = JSON.parse(fileData);
         return JSON.parse(fileData);
     }).catch(err => {
         if (err.code !== 'ENOENT') { // if other error than non-existant file
