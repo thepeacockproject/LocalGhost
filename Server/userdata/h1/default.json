@@ -174,7 +174,7 @@
     },
     "opportunityprogression": {},
     "inventory": [],
-    "defaultloadout": [],
+    "defaultloadout": {},
     "friends": []
   },
   "ETag": null,
