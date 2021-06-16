@@ -1,4 +1,14 @@
 {
+  "assembly:/_pro/scenes/missions/ancestral/scene_ancestral_vesper.entity": [
+    "5a60147f-9c85-4998-b70f-1441ee7ba9b1",
+    "b38a7610-5f7f-4fcb-ad09-c554c3544367",
+    "3812ea57-e29c-42cb-b93a-ea2d3e6a6806",
+    "feaf524e-f54d-4815-bb2b-afb8f1a39141",
+    "0809cabd-20f1-4fd4-b4fc-9cdc86bdf7cf",
+    "d4ec0c94-02b2-4aae-be9e-cbb5cc7d7e4a",
+    "5314c86b-7173-412b-a0b5-b0d9af2da722",
+    "0aec817c-738e-4381-bbd4-a13b5d1c6730"
+  ],
   "assembly:/_pro/scenes/missions/ancestral/scene_bulldog.entity": [
     "9c111405-637e-46b7-a051-279039c533ab",
     "5a60147f-9c85-4998-b70f-1441ee7ba9b1",
@@ -11,14 +21,6 @@
     "0aec817c-738e-4381-bbd4-a13b5d1c6730"
   ],
   "assembly:/_pro/scenes/missions/ancestral/scene_smoothsnake.entity": [
-    "5a60147f-9c85-4998-b70f-1441ee7ba9b1",
-    "b38a7610-5f7f-4fcb-ad09-c554c3544367",
-    "3812ea57-e29c-42cb-b93a-ea2d3e6a6806",
-    "feaf524e-f54d-4815-bb2b-afb8f1a39141",
-    "0809cabd-20f1-4fd4-b4fc-9cdc86bdf7cf",
-    "d4ec0c94-02b2-4aae-be9e-cbb5cc7d7e4a",
-    "5314c86b-7173-412b-a0b5-b0d9af2da722",
-    "0aec817c-738e-4381-bbd4-a13b5d1c6730",
     "f1ea381e-d998-4c7b-9ef0-34e365624cfc"
   ],
   "assembly:/_pro/scenes/missions/bangkok/_scene_mission_tiger.entity": [
@@ -172,6 +174,9 @@
   ],
   "assembly:/_pro/scenes/missions/colorado_2/scene_rabies.entity": [
     "237e7963-574a-48c8-8d8a-e415b30f5643"
+  ],
+  "assembly:/_pro/scenes/missions/edgy/mission_fox/scene_ambrosia.entity": [
+    "c82062a2-eb04-48f8-ac39-ddf85bff338b"
   ],
   "assembly:/_pro/scenes/missions/edgy/mission_fox/scene_fox_basic.entity": [
     "b4c9da30-44f2-447f-b64f-a8fbaa59b35d",
@@ -660,6 +665,15 @@
   ],
   "assembly:/_pro/scenes/missions/wet/scene_rat_basic.entity": [
     "d497ce5a-011e-4b40-9d69-341cc8141120",
+    "f3944deb-0747-4d67-b26a-99af5f979705",
+    "c235f578-f55b-4c9d-b568-db6cad909c8c",
+    "7371c3ea-cfb9-46b8-a699-93ab1cdd07af",
+    "3fd57506-80d6-4a63-88ed-206b15686758",
+    "75827342-5601-4656-ac00-55aff44b48f4",
+    "4752ebbb-02c0-48b0-8e05-3ec2a920dedd",
+    "f9c65d0b-e5ce-454e-8f20-08a8083a9b9d"
+  ],
+  "assembly:/_pro/scenes/missions/wet/scene_rat_elusive_redsnapper.entity": [
     "f3944deb-0747-4d67-b26a-99af5f979705",
     "c235f578-f55b-4c9d-b568-db6cad909c8c",
     "7371c3ea-cfb9-46b8-a699-93ab1cdd07af",

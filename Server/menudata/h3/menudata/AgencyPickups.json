@@ -1,4 +1,14 @@
 {
+  "assembly:/_pro/scenes/missions/ancestral/scene_ancestral_vesper.entity": [
+    "f26550e7-bb18-4faf-90eb-2d70cdf2eda3",
+    "19aec70f-5499-480e-b333-63c3a63a1db7",
+    "b7ae3305-3950-462a-955c-410887eeb101",
+    "c6b00102-ea2f-45ec-91b3-493d633522f4",
+    "1f8b00e1-bb33-4e73-a078-687224a5cb3b",
+    "fa21bb4d-e803-4bd1-8d96-fb449a1e62db",
+    "1ab00f45-9c4f-4827-8151-3b835c0e74c5",
+    "f82ca3c6-83dd-4ad7-9aba-c2a7f69e8f23"
+  ],
   "assembly:/_pro/scenes/missions/ancestral/scene_bulldog.entity": [
     "f26550e7-bb18-4faf-90eb-2d70cdf2eda3",
     "19aec70f-5499-480e-b333-63c3a63a1db7",
@@ -161,6 +171,16 @@
     "737686c7-acfc-4ca7-b71e-9fbdfa60900e"
   ],
   "assembly:/_pro/scenes/missions/colorado_2/scene_rabies.entity": [],
+  "assembly:/_pro/scenes/missions/edgy/mission_fox/scene_ambrosia.entity": [
+    "b0190d6a-cb36-4d29-a0f2-2e6cd09b6e61",
+    "763a1d99-04cf-4654-a68f-3d9544c95697",
+    "57edcd83-5571-491b-8557-03ff5d30cc9c",
+    "ba12c19b-25c7-4ef8-ae47-04ca45519ba9",
+    "77106766-ba9d-4f54-96c1-32034bf61111",
+    "0f67b24e-d6b6-4c18-b655-826ef6644f3f",
+    "3157f66c-ebf5-46d9-9612-639984bb458c",
+    "acff6beb-8bdf-4745-8496-2ca282f7bda3"
+  ],
   "assembly:/_pro/scenes/missions/edgy/mission_fox/scene_fox_basic.entity": [
     "b0190d6a-cb36-4d29-a0f2-2e6cd09b6e61",
     "763a1d99-04cf-4654-a68f-3d9544c95697",
@@ -717,6 +737,18 @@
     "5e0df81c-e0a8-4061-a9da-d298e9bd8972"
   ],
   "assembly:/_pro/scenes/missions/wet/scene_rat_basic.entity": [
+    "acca901a-c33e-4462-b422-8c3bd81f4efa",
+    "ff66b29c-c3c2-4aec-8b5c-c4e780f42a8a",
+    "50be49a2-c366-443d-bdaa-6de2e11eefbe",
+    "20701325-000b-408a-99ca-17c9d87a221b",
+    "e1658358-1b89-4dc2-bb42-3f046faf5813",
+    "2bc67e36-180c-41b6-bdf4-01b91d53cf29",
+    "7b719d9b-13cd-48c7-bbff-c3809d01d39b",
+    "c3b730f6-e402-4a2f-8fc2-4f01b30ced0f",
+    "f0cd0184-8d7c-4b5f-8c5e-94177f8bd9ff",
+    "5e0df81c-e0a8-4061-a9da-d298e9bd8972"
+  ],
+  "assembly:/_pro/scenes/missions/wet/scene_rat_elusive_redsnapper.entity": [
     "acca901a-c33e-4462-b422-8c3bd81f4efa",
     "ff66b29c-c3c2-4aec-8b5c-c4e780f42a8a",
     "50be49a2-c366-443d-bdaa-6de2e11eefbe",

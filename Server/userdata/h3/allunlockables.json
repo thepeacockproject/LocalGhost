@@ -2533,6 +2533,73 @@
     "Rarity": null
   },
   {
+    "Id": "LOCATION_PARENT_ROCKY",
+    "Guid": "394b4e01-0706-444d-b60a-8980c0f025d4",
+    "Type": "location",
+    "Subtype": "location",
+    "ImageId": null,
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Icon": "images/locations/LOCATION_OPULENT_STINGRAY/tile.jpg",
+      "Background": "images/locations/LOCATION_OPULENT_STINGRAY/background.jpg",
+      "LockedIcon": "images/locations/LOCATION_OPULENT_STINGRAY/tile_unreleased.jpg",
+      "DlcImage": "images/livetile/dlc/tile_hitman3.jpg",
+      "DlcName": "GAME_STORE_METADATA_S3_GAME_TITLE",
+      "IsLocked": false,
+      "UpcomingContent": false,
+      "UpcomingKey": "UI_MENU_LIVETILE_CONTENT_UPCOMING_HEADLINE",
+      "Order": 150,
+      "LimitedLoadout": false,
+      "ProgressionKey": "LOCATION_ROCKY",
+      "Season": 3,
+      "RequiredResources": [
+        "[assembly:/_PRO/Scenes/Missions/Rocky/scene_dugong.entity.entity].entitytemplate"
+      ],
+      "Entitlements": []
+    },
+    "Rarity": null
+  },
+  {
+    "Id": "LOCATION_ROCKY_DUGONG",
+    "Guid": "90d8f477-7aa1-4f1d-8c16-5429a318c2b4",
+    "Type": "location",
+    "Subtype": "sublocation",
+    "ImageId": null,
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "ParentLocation": "LOCATION_PARENT_ROCKY",
+      "Icon": "images/locations/LOCATION_OPULENT_STINGRAY/tile.jpg",
+      "Background": "images/locations/LOCATION_OPULENT_STINGRAY/background.jpg",
+      "LockedIcon": "images/locations/LOCATION_OPULENT_STINGRAY/tile_unreleased.jpg",
+      "DlcImage": "images/livetile/dlc/tile_hitman3.jpg",
+      "DlcName": "GAME_STORE_METADATA_S3_GAME_TITLE",
+      "IsLocked": false,
+      "UpcomingContent": false,
+      "UpcomingKey": "UI_MENU_LIVETILE_CONTENT_UPCOMING_HEADLINE",
+      "Order": 1,
+      "LimitedLoadout": false,
+      "ProgressionKey": "LOCATION_ROCKY",
+      "Season": 3,
+      "RequiredResources": [
+        "[assembly:/_PRO/Scenes/Missions/Opulent/Rocky/scene_dugong.entity.entity].entitytemplate"
+      ],
+      "Entitlements": []
+    },
+    "Rarity": null
+  },
+  {
     "Id": "PACKAGE_S1_PLAYER_REWARD",
     "Guid": "4323f3bf-4897-4df7-a941-7bc395625260",
     "Type": "package",
@@ -10049,6 +10116,27 @@
     "Rarity": "common"
   },
   {
+    "Id": "PROP_DEVICE_AUDIO_SEDATIVE_MINE_SLOTH",
+    "Guid": "0934d125-9305-4b31-bd70-e6c2b4f9fd6d",
+    "Type": "gear",
+    "Subtype": "explosive",
+    "ImageId": "",
+    "RMTPrice": 149,
+    "GamePrice": 149,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Quality": 3,
+      "LoadoutSlot": "gear",
+      "Rarity": "common",
+      "RepositoryId": "09c37e1a-c2b3-4dba-9e26-50fac96d3f65"
+    },
+    "Rarity": "common"
+  },
+  {
     "Id": "PROP_DEVICE_REMOTE_RUBBERDUCK_CONCUSSION_COLLECTORS",
     "Guid": "016f0d57-e64b-490e-a187-f5a2514b21f6",
     "Type": "gear",
@@ -11262,6 +11350,27 @@
     "Rarity": "common"
   },
   {
+    "Id": "FIREARMS_HERO_SMG_DAKX2_COVERT_SLOTH",
+    "Guid": "214aaec0-8136-420a-8d4b-72dca5f480ef",
+    "Type": "weapon",
+    "Subtype": "smg",
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Gameplay": {},
+      "Quality": 4,
+      "Rarity": "common",
+      "LoadoutSlot": "concealedweapon",
+      "RepositoryId": "f6d61543-405b-411f-b0c7-a5befc1c62cd"
+    },
+    "Rarity": "common"
+  },
+  {
     "Id": "FIREARMS_HERO_SMG_TAC_SMG_S2",
     "Guid": "768a1d18-de8a-42f6-9353-94e92875aaa7",
     "Type": "weapon",
@@ -11555,6 +11664,34 @@
       "Rarity": "common",
       "LoadoutSlot": "concealedweapon",
       "RepositoryId": "214004ec-5c86-4c26-8403-9e83a9bcdd24",
+      "UnlockOrder": 10
+    },
+    "Rarity": "common"
+  },
+  {
+    "Id": "FIREARMS_HERO_PISTOL_TACTICAL_ICA_19_FA_STEALTH_DUCKY",
+    "Guid": "4e406389-05d8-4c7c-9e55-4ad0a5a30e63",
+    "Type": "weapon",
+    "Subtype": "pistol",
+    "ImageId": "",
+    "RMTPrice": 99,
+    "GamePrice": 99,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Gameplay": {
+        "range": 0.5,
+        "damage": 0.6,
+        "clipsize": 0.2,
+        "rateoffire": 0.6
+      },
+      "Quality": 4,
+      "Rarity": "common",
+      "LoadoutSlot": "concealedweapon",
+      "RepositoryId": "256ac829-2ec6-44de-8d5f-16801a0491df",
       "UnlockOrder": 10
     },
     "Rarity": "common"
@@ -17234,7 +17371,7 @@
       "Rarity": "common",
       "LoadoutSlot": "disguise",
       "RepositoryId": "22a2ba57-09ab-4147-a6e7-aa6a319b72fa",
-      "OrderIndex": 913,
+      "OrderIndex": 904,
       "AllowUpSync": true
     },
     "IsDroppable": false,
@@ -17257,7 +17394,7 @@
       "Rarity": "common",
       "LoadoutSlot": "disguise",
       "RepositoryId": "833835aa-e982-48b4-9fa5-681972027ab0",
-      "OrderIndex": 914,
+      "OrderIndex": 906,
       "AllowUpSync": true
     },
     "IsDroppable": false,
@@ -17280,7 +17417,7 @@
       "Rarity": "common",
       "LoadoutSlot": "disguise",
       "RepositoryId": "ce31f5de-18ae-42a3-8b6a-c94a0aa3e4f9",
-      "OrderIndex": 915,
+      "OrderIndex": 908,
       "AllowUpSync": true
     },
     "IsDroppable": false,
@@ -17303,7 +17440,7 @@
       "Rarity": "common",
       "LoadoutSlot": "disguise",
       "RepositoryId": "e57564ba-d3e4-455b-bc1b-d0b64352c0d3",
-      "OrderIndex": 916,
+      "OrderIndex": 910,
       "AllowUpSync": true
     },
     "IsDroppable": false,
@@ -17326,7 +17463,7 @@
       "Rarity": "common",
       "LoadoutSlot": "disguise",
       "RepositoryId": "8ae5d394-49d1-4aaa-a51d-85d0bbe6bca9",
-      "OrderIndex": 917,
+      "OrderIndex": 912,
       "AllowUpSync": true
     },
     "IsDroppable": false,
@@ -19003,6 +19140,34 @@
     "Rarity": null
   },
   {
+    "Id": "STARTING_LOCATION_EDGY_RADLER_CLUB_ENTRANCE",
+    "Guid": "e5b43c7c-f27e-4972-b2f4-5c84ac4ec0fc",
+    "Type": "access",
+    "Subtype": "startinglocation",
+    "ImageId": null,
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Location": "LOCATION_PARENT_EDGY",
+      "LoadoutSettings": {
+        "GearSlotsEnabledCount": 2,
+        "GearSlotsAllowContainers": true,
+        "ConcealedWeaponSlotEnabled": false
+      },
+      "RepositoryId": "000fc136-f098-43a2-b204-26c038a55490",
+      "UnlockOrder": 1,
+      "Equip": [
+        "TOKEN_OUTFIT_REWARD_HERO_RAVING_SUIT"
+      ]
+    },
+    "Rarity": null
+  },
+  {
     "Id": "STARTING_LOCATION_EDGY_FOX_NIGHTPHLOX_B1_BAR",
     "Guid": "c0fdd966-f833-4bc1-b98f-f09b41bc7cac",
     "Type": "access",
@@ -19228,6 +19393,30 @@
       "LoadoutSettings": {},
       "Equip": [
         "TOKEN_OUTFIT_HERO_ASYLUM_SUIT"
+      ]
+    },
+    "Rarity": null
+  },
+  {
+    "Id": "STARTING_LOCATION_EDGY_FOX_AMBROSIA",
+    "Guid": "62495896-7e1a-4ed1-8b50-96e8728b5d0b",
+    "Type": "access",
+    "Subtype": "startinglocation",
+    "ImageId": null,
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Location": "LOCATION_PARENT_EDGY",
+      "UnlockedByDefault": true,
+      "RepositoryId": "c82062a2-eb04-48f8-ac39-ddf85bff338b",
+      "LoadoutSettings": {},
+      "Equip": [
+        "TOKEN_OUTFIT_HERO_LUST_SUIT"
       ]
     },
     "Rarity": null
