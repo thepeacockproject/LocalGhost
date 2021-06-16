@@ -7,8 +7,8 @@
     <ProjectGuid>{0487D44B-B3E1-4A6E-91E0-47016C391A20}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Hitman2Patcher</RootNamespace>
-    <AssemblyName>Hitman2Patcher</AssemblyName>
+    <RootNamespace>HitmanPatcher</RootNamespace>
+    <AssemblyName>HitmanPatcher</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -62,7 +62,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Hitman2Version.cs" />
+    <Compile Include="HitmanVersion.cs" />
     <Compile Include="MemoryPatcher.cs" />
     <Compile Include="OptionsForm.cs">
       <SubType>Form</SubType>

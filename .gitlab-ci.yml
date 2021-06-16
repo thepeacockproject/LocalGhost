@@ -12,11 +12,11 @@ build_patcher:
         changes:
             - Patcher/**/*
     script:
-        - '& $msbuild .\Patcher\Hitman2Patcher.sln /t:Build /p:Configuration=Release'
-        - 'mv .\Patcher\bin\x64\Release\Hitman2Patcher.exe .\Hitman2Patcher.exe'
+        - '& $msbuild .\Patcher\HitmanPatcher.sln /t:Build /p:Configuration=Release'
+        - 'mv .\Patcher\bin\x64\Release\HitmanPatcher.exe .\LocalGhostPatcher.exe'
     artifacts:
         name: "LocalGhost-PatcherBinary-$env:CI_COMMIT_SHORT_SHA"
         when: on_success
         expire_in: never
         paths:
-            - Hitman2Patcher.exe
+            - LocalGhostPatcher.exe

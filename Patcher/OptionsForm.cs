@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Hitman2Patcher
+namespace HitmanPatcher
 {
 	public partial class OptionsForm : Form
 	{
@@ -14,7 +14,7 @@ namespace Hitman2Patcher
 		public OptionsForm(Settings currentSettings)
 		{
 			InitializeComponent();
-			comboBoxVersion.Items.AddRange(Hitman2Version.Versions.ToArray<object>());
+			comboBoxVersion.Items.AddRange(HitmanVersion.Versions.ToArray<object>());
 			this.settings = currentSettings;
 		}
 

@@ -9,7 +9,7 @@ using System.Linq;
 using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Text;
 
-namespace Hitman2Patcher
+namespace HitmanPatcher
 {
 	public class Patch
 	{
@@ -37,20 +37,20 @@ namespace Hitman2Patcher
 		}
 	}
 
-	public class Hitman2Version
+	public class HitmanVersion
 	{
 		public Patch[] certpin, authheader, configdomain, protocol, dynres_noforceoffline;
 
 		private static Dictionary<uint, string> timestampMap = new Dictionary<uint, string>();
 
-		private static Dictionary<string, Hitman2Version> versionMap = new Dictionary<string, Hitman2Version>();
+		private static Dictionary<string, HitmanVersion> versionMap = new Dictionary<string, HitmanVersion>();
 
 		public static IEnumerable<string> Versions
 		{
 			get { return versionMap.Keys; }
 		}
 
-		public static void addVersion(string name, uint timestamp, Hitman2Version patchVersions)
+		public static void addVersion(string name, uint timestamp, HitmanVersion patchVersions)
 		{
 			timestampMap.Add(timestamp, name);
 			versionMap.Add(name, patchVersions);
@@ -66,14 +66,14 @@ namespace Hitman2Patcher
 			return result;
 		}
 
-		public static Hitman2Version getVersion(UInt32 timestamp, string versionString = "")
+		public static HitmanVersion getVersion(UInt32 timestamp, string versionString = "")
 		{
 			if (versionString == "")
 			{
 				versionString = versionStringFromTimestamp(timestamp);
 			}
 
-			Hitman2Version version;
+			HitmanVersion version;
 			if (versionMap.TryGetValue(versionString, out version))
 			{
 				return version;
@@ -82,7 +82,7 @@ namespace Hitman2Patcher
 			throw new NotImplementedException();
 		}
 
-		static Hitman2Version()
+		static HitmanVersion()
 		{
 			v1_15.addVersions();
 			v1_16.addVersions();

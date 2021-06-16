@@ -1,18 +1,18 @@
 ﻿// Copyright (C) 2021 grappigegovert <grappigegovert@hotmail.com>
 // Licensed under the zlib license. See LICENSE for more info
 
-namespace Hitman2Patcher
+namespace HitmanPatcher
 {
 	public static class v3_10
 	{
 		public static void addVersions()
 		{
-			Hitman2Version.addVersion("3.10.0.0_dx12", 0x5FFECE18, v3_10_0_dx12);
-			Hitman2Version.addVersion("3.10.0.0-h1_dx12", 0x60084611, v3_10_0_h1_dx12);
-			Hitman2Version.addVersion("3.10.1.0_dx12", 0x600AB0F6, v3_10_1_dx12);
+			HitmanVersion.addVersion("3.10.0.0_dx12", 0x5FFECE18, v3_10_0_dx12);
+			HitmanVersion.addVersion("3.10.0.0-h1_dx12", 0x60084611, v3_10_0_h1_dx12);
+			HitmanVersion.addVersion("3.10.1.0_dx12", 0x600AB0F6, v3_10_1_dx12);
 		}
 
-		private static Hitman2Version v3_10_0_dx12 = new Hitman2Version()
+		private static HitmanVersion v3_10_0_dx12 = new HitmanVersion()
 		{
 			certpin = new[] { new Patch(0x0C9E55E, "0F85", "90E9", MemProtection.PAGE_EXECUTE_READ) },
 			authheader = new[]
@@ -30,9 +30,9 @@ namespace Hitman2Patcher
 			dynres_noforceoffline = new[] { new Patch(0x2AAC008, "01", "00", MemProtection.PAGE_EXECUTE_READWRITE) }
 		};
 
-		private static Hitman2Version v3_10_0_h1_dx12 = v3_10_0_dx12;
+		private static HitmanVersion v3_10_0_h1_dx12 = v3_10_0_dx12;
 
-		private static Hitman2Version v3_10_1_dx12 = new Hitman2Version()
+		private static HitmanVersion v3_10_1_dx12 = new HitmanVersion()
 		{
 			certpin = new[] { new Patch(0x0C9E61E, "0F85", "90E9", MemProtection.PAGE_EXECUTE_READ) },
 			authheader = v3_10_0_dx12.authheader,

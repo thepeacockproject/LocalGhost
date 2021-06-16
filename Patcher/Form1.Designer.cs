@@ -1,7 +1,7 @@
 ﻿// Copyright (C) 2020 grappigegovert <grappigegovert@hotmail.com>
 // Licensed under the zlib license. See LICENSE for more info
 
-namespace Hitman2Patcher
+namespace HitmanPatcher
 {
 	partial class Form1
 	{
