@@ -633,7 +633,7 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
                             LongDescription: gameChangerProps.LongDescription === undefined ?
                                 gameChangerProps.Description : gameChangerProps.LongDescription,
                             TileImage: gameChangerProps.TileImage,
-                            Icon: gameChangerProps.Icon,
+                            Icon: gameChangerProps.Icon || '',
                             ObjectivesCategory: gameChangerProps.ObjectivesCategory,
                         },
                     });
@@ -646,7 +646,7 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
         if (!objective.Category) {
             objective.Category = objective.Primary ? 'primary' : 'secondary';
         }
-        if (objective.ForceShowOnLoadingScreen === false || objective.Activation
+        if (objective.Activation
             || (objective.OnActive && objective.OnActive.IfInProgress && objective.OnActive.IfInProgress.Visible === false)
             || (objective.OnActive && objective.OnActive.IfCompleted && objective.OnActive.IfCompleted.Visible === false
                 && objective.Definition && objective.Definition.States && objective.Definition.States.Start
