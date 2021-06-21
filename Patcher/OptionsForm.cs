@@ -38,7 +38,7 @@ namespace Hitman2Patcher
 						CustomConfigDomain = this.customDomain,
 						UseHttp = checkBoxHttp.Checked,
 						DisableForceOfflineOnFailedDynamicResources = checkBoxNoForceOffline.Checked,
-						ForcedVersion = comboBoxVersion.Text
+						ForcedVersion = comboBoxVersion.Text == null ? "" : comboBoxVersion.Text
 					},
 					showTestingDomains = checkBoxTestingDomains.Checked,
 				};
