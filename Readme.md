@@ -17,6 +17,8 @@ Things of note:
 - Hitman 1 support is not as complete as h2/h3 support yet. Check the h1 branch.
 
 # Players
+
+##### NOTE: Ghost Mode (currently) only works in Hitman™ 2
 To use this software, download the patcher [here](https://gitlab.com/grappigegovert/localghost/-/jobs/artifacts/master/download?job=build_patcher).
 
 Open the patcher and enter the IP address or domain name of the server you want to connect to.
