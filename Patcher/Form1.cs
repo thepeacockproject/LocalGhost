@@ -9,7 +9,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace Hitman2Patcher
+namespace HitmanPatcher
 {
 	public partial class Form1 : Form
 	{

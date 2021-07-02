@@ -9,7 +9,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Hitman2Patcher
+namespace HitmanPatcher
 {
 	// from https://docs.microsoft.com/en-us/windows/win32/memory/memory-protection-constants
 	// Not all, but I'm pretty sure these are the only types that will occur here.
@@ -53,7 +53,7 @@ namespace Hitman2Patcher
 			IntPtr hProcess = OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION,
 				false, process.Id);
 			IntPtr b = process.MainModule.BaseAddress;
-			Hitman2Version v = Hitman2Version.getVersion(getTimestamp(hProcess, b), patchOptions.ForcedVersion);
+			HitmanVersion v = HitmanVersion.getVersion(getTimestamp(hProcess, b), patchOptions.ForcedVersion);
 			UIntPtr byteswritten;
 			MemProtection oldprotectflags = 0;
 			byte[] newurl = Encoding.ASCII.GetBytes(patchOptions.CustomConfigDomain).Concat(new byte[] { 0x00 }).ToArray();
@@ -140,7 +140,7 @@ namespace Hitman2Patcher
 			return true;
 		}
 
-		private static bool IsReadyForPatching(IntPtr hProcess, IntPtr baseAddress, Hitman2Version version)
+		private static bool IsReadyForPatching(IntPtr hProcess, IntPtr baseAddress, HitmanVersion version)
 		{
 			byte[] buffer = { 0 };
 			UIntPtr bytesread;

@@ -1,17 +1,17 @@
 ﻿// Copyright (C) 2020 grappigegovert <grappigegovert@hotmail.com>
 // Licensed under the zlib license. See LICENSE for more info
 
-namespace Hitman2Patcher
+namespace HitmanPatcher
 {
 	public static class v1_15
 	{
 		public static void addVersions()
 		{
-			Hitman2Version.addVersion("1.15.0.0_dx11", 0x5F8ED8B9, v1_15_0_dx11);
-			Hitman2Version.addVersion("1.15.0.0_dx12", 0x5F8ED8D0, v1_15_0_dx12);
+			HitmanVersion.addVersion("1.15.0.0_dx11", 0x5F8ED8B9, v1_15_0_dx11);
+			HitmanVersion.addVersion("1.15.0.0_dx12", 0x5F8ED8D0, v1_15_0_dx12);
 		}
 
-		private static Hitman2Version v1_15_0_dx11 = new Hitman2Version()
+		private static HitmanVersion v1_15_0_dx11 = new HitmanVersion()
 		{
 			certpin = new[] { new Patch(0x0CD744C, "0F85", "90E9", MemProtection.PAGE_EXECUTE_READ) },
 			authheader = new[]
@@ -27,7 +27,7 @@ namespace Hitman2Patcher
 			dynres_noforceoffline = new[] { new Patch(0x273CAA8, "01", "00", MemProtection.PAGE_READWRITE) }
 		};
 
-		private static Hitman2Version v1_15_0_dx12 = new Hitman2Version()
+		private static HitmanVersion v1_15_0_dx12 = new HitmanVersion()
 		{
 			certpin = new[] { new Patch(0x0CD7C6C, "0F85", "90E9", MemProtection.PAGE_EXECUTE_READ) },
 			authheader = new[]

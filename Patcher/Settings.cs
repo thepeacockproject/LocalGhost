@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Hitman2Patcher
+namespace HitmanPatcher
 {
 
 	public class Settings
@@ -84,7 +84,7 @@ namespace Hitman2Patcher
 								result.patchOptions.DisableForceOfflineOnFailedDynamicResources = Boolean.Parse(linecontents[1]);
 								break;
 							case "forcedVersion":
-								result.patchOptions.ForcedVersion = Hitman2Version.Versions.Contains(linecontents[1]) ? linecontents[1] : "";
+								result.patchOptions.ForcedVersion = HitmanVersion.Versions.Contains(linecontents[1]) ? linecontents[1] : "";
 								break;
 							case "showTestingDomains":
 								result.showTestingDomains = Boolean.Parse(linecontents[1]);

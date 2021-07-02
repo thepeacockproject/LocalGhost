@@ -1,16 +1,16 @@
 ﻿// Copyright (C) 2021 grappigegovert <grappigegovert@hotmail.com>
 // Licensed under the zlib license. See LICENSE for more info
 
-namespace Hitman2Patcher
+namespace HitmanPatcher
 {
 	public static class v3_11
 	{
 		public static void addVersions()
 		{
-			Hitman2Version.addVersion("3.11.0.0_dx12", 0x60338C8E, v3_11_0_dx12);
+			HitmanVersion.addVersion("3.11.0.0_dx12", 0x60338C8E, v3_11_0_dx12);
 		}
 
-		private static Hitman2Version v3_11_0_dx12 = new Hitman2Version()
+		private static HitmanVersion v3_11_0_dx12 = new HitmanVersion()
 		{
 			certpin = new[] { new Patch(0x0CA5F3E, "0F85", "90E9", MemProtection.PAGE_EXECUTE_READ) },
 			authheader = new[]

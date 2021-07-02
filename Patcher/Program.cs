@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.Security.Principal;
 using System.Windows.Forms;
 
-namespace Hitman2Patcher
+namespace HitmanPatcher
 {
 	static class Program
 	{
