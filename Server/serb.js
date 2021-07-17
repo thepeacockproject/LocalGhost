@@ -101,12 +101,12 @@ app.post('/oauth/token', async (req, res) => {
             res.status(400).end(); // invalid epic user id
             return;
         }
-        const epic_token = jwt.decode(req.body.access_token);
-        if (!epic_token || !epic_token.appid) {
+        const epic_token = jwt.decode(req.body.access_token.replace(/^eg1~/, ''));
+        if (!epic_token || !(epic_token.appid || epic_token.app)) {
             res.status(400).end(); // invalid epic access token
             return;
         }
-        external_appid = epic_token.appid;
+        external_appid = epic_token.appid || epic_token.app;
         external_platform = 'epic';
         external_userid = req.body.epic_userid;
         external_users_folder = 'epicids';
