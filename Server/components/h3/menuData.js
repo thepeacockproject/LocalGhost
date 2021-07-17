@@ -652,7 +652,7 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
                 && objective.Definition && objective.Definition.States && objective.Definition.States.Start
                 && objective.Definition.States.Start['-'] && objective.Definition.States.Start['-'].Transition === 'Success')
         ) {
-            continue; // do not show objectives with 'ForceShowOnLoadingScreen: false' or objectives that are not visible on start
+            continue; // do not show objectives that require activation or (immediately transition into a state where they) are not visible.
         }
 
         if (objective.SuccessEvent && objective.SuccessEvent.EventName === 'Kill'
