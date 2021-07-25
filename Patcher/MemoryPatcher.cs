@@ -35,13 +35,13 @@ namespace HitmanPatcher
 		private static extern bool CloseHandle(IntPtr hObject);
 
 		[DllImport("kernel32.dll", SetLastError = true)]
-		private static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr address, byte[] buffer, UIntPtr size, [Out] out UIntPtr byteswritten);
+		private static extern bool WriteProcessMemory([In] IntPtr hProcess, [In] IntPtr address, [In, MarshalAs(UnmanagedType.LPArray)] byte[] buffer, [In] UIntPtr size, [Out] out UIntPtr byteswritten);
 
 		[DllImport("kernel32.dll", SetLastError = true)]
-		private static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr address, [Out] byte[] buffer, UIntPtr size, [Out] out UIntPtr numberOfBytesRead);
+		private static extern bool ReadProcessMemory([In] IntPtr hProcess, [In] IntPtr address, [Out, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 3)] byte[] buffer, [In] UIntPtr size, [Out] out UIntPtr numberOfBytesRead);
 
 		[DllImport("kernel32.dll", SetLastError = true)]
-		private static extern bool VirtualProtectEx(IntPtr hProcess, IntPtr lpAddress, UIntPtr dwSize, MemProtection flNewProtect, out MemProtection lpflOldProtect);
+		private static extern bool VirtualProtectEx([In] IntPtr hProcess, [In] IntPtr lpAddress, [In] UIntPtr dwSize, [In] MemProtection flNewProtect, [Out] out MemProtection lpflOldProtect);
 
 		// from https://docs.microsoft.com/en-us/windows/win32/procthread/process-security-and-access-rights
 		private const uint PROCESS_VM_READ = 0x0010; // Required to read memory in a process using ReadProcessMemory.
