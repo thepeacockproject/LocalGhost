@@ -3286,6 +3286,16 @@
       }
     ]
   },
+  "79ace974-8886-4669-927e-84f4ee6256a6": {
+    "Name": "UI_GAMECHANGERS_GLOBAL_NO_NON_TARGET_KILL_PENALTY_NAME",
+    "Description": "UI_GAMECHANGERS_GLOBAL_NO_NON_TARGET_KILL_PENALTY_DESC",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Global_NoNonTargetKillPenalty.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "secondary",
+    "IsHidden": null,
+    "Resource": [],
+    "Objectives": []
+  },
   "1d58a82b-ff56-4d88-9d02-8a6a1f9c35b1": {
     "Name": "UI_GAMECHANGERS_MODULE_002_ALL_CAMERAS_NAME",
     "Description": "UI_GAMECHANGERS_MODULE_002_ALL_CAMERAS_DESC",

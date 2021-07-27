@@ -394,6 +394,15 @@
     "d3388229-d256-499a-8039-d3715e5c01d5",
     "1a7f20ee-909a-4fa5-bba0-b8068ac05241"
   ],
+  "assembly:/_pro/scenes/missions/golden/mission_gecko/scene_gibson.entity": [
+    "0e8b5215-dad9-4a73-b549-8c7e3d27d604",
+    "d4b6f7eb-6c48-4605-95de-7f9695be2ed1",
+    "9c2005f3-9368-45e1-8884-baefe63b5fc0",
+    "4c7250fa-f7eb-4ade-9dc7-18a9ae998992",
+    "18dee391-ac91-48c4-b864-6875da29e49b",
+    "d3388229-d256-499a-8039-d3715e5c01d5",
+    "1a7f20ee-909a-4fa5-bba0-b8068ac05241"
+  ],
   "assembly:/_pro/scenes/missions/greedy/mission_raccoon/scene_raccoon_basic.entity": [
     "384c9fcb-6f7f-41b9-9029-cc6b3f583356",
     "3c597442-432c-4cb7-9f60-081e03a7985d",
@@ -639,6 +648,10 @@
     "6120437a-d943-431f-90c1-a7ccca663a07",
     "ca81b636-d61d-454c-83de-d998214f5470",
     "25ff09ba-134e-4292-901b-a43efc73c2ae"
+  ],
+  "assembly:/_pro/scenes/missions/rocky/scene_dugong.entity": [
+    "8407a499-afc3-4058-b488-17026b967f21",
+    "73d107b9-83ad-47cd-8a51-3f7ca9160d2b"
   ],
   "assembly:/_pro/scenes/missions/sheep/scene_adonis.entity": [
     "418b0f5c-3e74-4e06-823c-0352ddf2cf4f",
