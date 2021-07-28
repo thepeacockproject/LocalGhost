@@ -119,7 +119,8 @@ namespace HitmanPatcher
 				if (!WriteProcessMemory(hProcess, b + patch.offset, dataToWrite, (UIntPtr)dataToWrite.Length, out byteswritten))
 				{
 					CloseHandle(hProcess);
-					throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at {0} for offset {1:X}", "wpm", patch.offset));
+					throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at {0} for offset {1:X}"
+					+ "\nBytes written: {2}", "wpm", patch.offset, byteswritten));
 				}
 
 				MemProtection protectionToRestore = patch.defaultProtection;

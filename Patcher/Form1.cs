@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms;
 
 namespace HitmanPatcher
@@ -84,7 +85,10 @@ namespace HitmanPatcher
 
 		private void log(String msg)
 		{
-			listView1.Items.Insert(0, String.Format("[{0:HH:mm:ss}] - {1}", DateTime.Now, msg));
+			foreach (string line in msg.Split('\n'))
+			{
+				listView1.Items.Insert(0, String.Format("[{0:HH:mm:ss}] - {1}", DateTime.Now, line));
+			}
 		}
 
 		private void button1_Click(object sender, EventArgs e)
@@ -191,6 +195,16 @@ namespace HitmanPatcher
 		private void Form1_Resize(object sender, EventArgs e)
 		{
 			listView1.Columns[0].Width = listView1.Width - 4 - SystemInformation.VerticalScrollBarWidth;
+		}
+
+		private void copyLogToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			StringBuilder builder = new StringBuilder();
+			foreach (ListViewItem item in listView1.Items)
+			{
+				builder.AppendLine(item.Text);
+			}
+			Clipboard.SetText(builder.ToString());
 		}
 	}
 }

@@ -31,6 +31,7 @@ namespace HitmanPatcher
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
 			this.label1 = new System.Windows.Forms.Label();
 			this.listView1 = new System.Windows.Forms.ListView();
@@ -41,6 +42,9 @@ namespace HitmanPatcher
 			this.linkLabel1 = new System.Windows.Forms.LinkLabel();
 			this.button2 = new System.Windows.Forms.Button();
 			this.button3 = new System.Windows.Forms.Button();
+			this.logContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.copyLogToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.logContextMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -59,6 +63,7 @@ namespace HitmanPatcher
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1});
+			this.listView1.ContextMenuStrip = this.logContextMenu;
 			this.listView1.FullRowSelect = true;
 			this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
 			this.listView1.HideSelection = false;
@@ -138,6 +143,22 @@ namespace HitmanPatcher
 			this.button3.UseVisualStyleBackColor = true;
 			this.button3.Click += new System.EventHandler(this.button3_Click);
 			// 
+			// logContextMenu
+			// 
+			this.logContextMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
+			this.logContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.copyLogToClipboardToolStripMenuItem});
+			this.logContextMenu.Name = "logContextMenu";
+			this.logContextMenu.Size = new System.Drawing.Size(225, 56);
+			// 
+			// copyLogToClipboardToolStripMenuItem
+			// 
+			this.copyLogToClipboardToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.copyLogToClipboardToolStripMenuItem.Name = "copyLogToClipboardToolStripMenuItem";
+			this.copyLogToClipboardToolStripMenuItem.Size = new System.Drawing.Size(224, 24);
+			this.copyLogToClipboardToolStripMenuItem.Text = "Copy log to clipboard";
+			this.copyLogToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyLogToClipboardToolStripMenuItem_Click);
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -158,6 +179,7 @@ namespace HitmanPatcher
 			this.Text = "LocalGhost Patcher";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
 			this.Resize += new System.EventHandler(this.Form1_Resize);
+			this.logContextMenu.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -174,6 +196,8 @@ namespace HitmanPatcher
 		private System.Windows.Forms.LinkLabel linkLabel1;
 		private System.Windows.Forms.Button button2;
 		private System.Windows.Forms.Button button3;
+		private System.Windows.Forms.ContextMenuStrip logContextMenu;
+		private System.Windows.Forms.ToolStripMenuItem copyLogToClipboardToolStripMenuItem;
 	}
 }
 
