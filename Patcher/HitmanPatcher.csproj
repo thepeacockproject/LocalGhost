@@ -73,6 +73,7 @@
     <Compile Include="PatchDefinitions\v1_15.cs" />
     <Compile Include="PatchDefinitions\v1_16.cs" />
     <Compile Include="PatchDefinitions\v2_13.cs" />
+    <Compile Include="PatchDefinitions\v2_70.cs" />
     <Compile Include="PatchDefinitions\v2_71.cs" />
     <Compile Include="PatchDefinitions\v3_50.cs" />
     <Compile Include="PatchDefinitions\v3_40.cs" />
