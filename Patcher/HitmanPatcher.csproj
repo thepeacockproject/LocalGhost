@@ -70,6 +70,7 @@
     <Compile Include="OptionsForm.Designer.cs">
       <DependentUpon>OptionsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PatchDefinitions\v1_0_sniper.cs" />
     <Compile Include="PatchDefinitions\v1_15.cs" />
     <Compile Include="PatchDefinitions\v1_16.cs" />
     <Compile Include="PatchDefinitions\v2_13.cs" />

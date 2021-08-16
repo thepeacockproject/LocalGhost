@@ -84,6 +84,7 @@ namespace HitmanPatcher
 
 		static HitmanVersion()
 		{
+			v1_0_sniper.addVersions();
 			v1_15.addVersions();
 			v1_16.addVersions();
 			v2_13.addVersions();
