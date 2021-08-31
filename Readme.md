@@ -105,6 +105,7 @@ A copy of the zlib license can be found in the LICENSE file
 # Credits
 
 Coded for the most part by @grappigegovert, with contributions from:
+ - @AnthonyFuller1
  - @rdil
  - @mike-koch
  - @hardIware
