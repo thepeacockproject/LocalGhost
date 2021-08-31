@@ -24,7 +24,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get('/config/pc-prod/:serverVersion(\\d+_\\d+_\\d+)', (req, res) => {
+app.get('/config/:configName/:serverVersion(\\d+_\\d+_\\d+)', (req, res) => {
     readFile('static/config.json').then((configfile) => {
         let config = JSON.parse(configfile);
         let serverhost = req.get('Host');
@@ -34,6 +34,7 @@ app.get('/config/pc-prod/:serverVersion(\\d+_\\d+_\\d+)', (req, res) => {
         } else if (req.params.serverVersion.startsWith('8')) {
             config.Versions[0].GAME_VER = '8.2.0';
         }
+        config.Versions[0].Name = req.params.configName;
         config.Versions[0].ISSUER_ID = req.query.issuer || '*';
         config.Versions[0].SERVER_VER.Metrics.MetricsServerHost = `${protocol}://${serverhost}`;
         config.Versions[0].SERVER_VER.Authentication.AuthenticationHost = `${protocol}://${serverhost}`;
