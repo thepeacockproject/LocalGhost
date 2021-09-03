@@ -60,7 +60,7 @@ namespace HitmanPatcher
 					{
 						if (MemoryPatcher.Patch(process, currentSettings.patchOptions))
 						{
-							log(String.Format("Sucessfully patched processid {0}", process.Id));
+							log(String.Format("Successfully patched processid {0}", process.Id));
 							if (currentSettings.patchOptions.SetCustomConfigDomain)
 							{
 								log(String.Format("Injected server: {0}", getSelectedServerHostname()));
