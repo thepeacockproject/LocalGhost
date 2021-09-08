@@ -139,7 +139,8 @@ async function missionend(req, res) {
         },
     ];
 
-    let stars = [...bonuses.slice(1), { condition: nonTargetKills === 0 }].filter(x => x.condition).length;
+    let stars = 5 - [...bonuses, { condition: nonTargetKills === 0 }].filter(x => !x.condition).length; // one star less for each bonus missed
+    stars = stars < 0 ? 0 : stars; // clamp to 0
 
     let total = -5000 * nonTargetKills;
 
@@ -234,7 +235,8 @@ async function missionend(req, res) {
     }
 
     result.ScoreOverview.stars = result.ScoreOverview.ContractScore.StarCount = stars;
-    result.ScoreOverview.SilentAssassin = result.ScoreOverview.ContractScore.SilentAssassin = stars === 5; // not sure if this is correct
+    result.ScoreOverview.SilentAssassin = result.ScoreOverview.ContractScore.SilentAssassin =
+        [...bonuses.slice(1), { condition: nonTargetKills === 0 }].every(x => x.condition); // need to have all bonuses except objectives for SA
 
     // TODO: add xp to user profile
     // TODO: save in leaderboards
