@@ -52,92 +52,104 @@ namespace HitmanPatcher
 		{
 			IntPtr hProcess = OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION,
 				false, process.Id);
-			IntPtr b = process.MainModule.BaseAddress;
-			HitmanVersion v = HitmanVersion.getVersion(getTimestamp(hProcess, b), patchOptions.ForcedVersion);
-			UIntPtr byteswritten;
-			MemProtection oldprotectflags = 0;
-			byte[] newurl = Encoding.ASCII.GetBytes(patchOptions.CustomConfigDomain).Concat(new byte[] { 0x00 }).ToArray();
-			List<Patch> patches = new List<Patch>();
 
-			if (!IsReadyForPatching(hProcess, b, v))
+			if (hProcess == IntPtr.Zero)
+			{
+				throw new Win32Exception(Marshal.GetLastWin32Error(), "Failed to get a process handle.");
+			}
+
+			try
+			{
+				IntPtr b = process.MainModule.BaseAddress;
+				HitmanVersion v = HitmanVersion.getVersion(getTimestamp(hProcess, b), patchOptions.ForcedVersion);
+				UIntPtr byteswritten;
+				MemProtection oldprotectflags = 0;
+				byte[] newurl = Encoding.ASCII.GetBytes(patchOptions.CustomConfigDomain).Concat(new byte[] { 0x00 }).ToArray();
+				List<Patch> patches = new List<Patch>();
+
+				if (!IsReadyForPatching(hProcess, b, v))
+				{
+					// Online_ConfigDomain variable is not initialized yet, try again in 1 second.
+					CloseHandle(hProcess);
+					return false;
+				}
+
+				if (patchOptions.DisableCertPinning)
+				{
+					patches.AddRange(v.certpin);
+				}
+				if (patchOptions.AlwaysSendAuthHeader)
+				{
+					patches.AddRange(v.authheader);
+				}
+				if (patchOptions.SetCustomConfigDomain)
+				{
+					patches.AddRange(v.configdomain);
+				}
+				if (patchOptions.UseHttp)
+				{
+					patches.AddRange(v.protocol);
+				}
+				if (patchOptions.DisableForceOfflineOnFailedDynamicResources)
+				{
+					patches.AddRange(v.dynres_noforceoffline);
+				}
+
+				foreach (Patch patch in patches)
+				{
+					byte[] dataToWrite = patch.patch;
+					if (patch.customPatch == "configdomain")
+					{
+						dataToWrite = newurl;
+					}
+					MemProtection newmemprotection = MemProtection.PAGE_READWRITE;
+					bool patchmemprotection = true;
+
+					if (patch.defaultProtection == MemProtection.PAGE_EXECUTE_READ)
+					{
+						newmemprotection = MemProtection.PAGE_EXECUTE_READWRITE;
+					}
+					else if (patch.defaultProtection == MemProtection.PAGE_READONLY)
+					{
+						newmemprotection = MemProtection.PAGE_READWRITE;
+					}
+					else
+					{
+						// page is already writable so it doesn't need patching
+						patchmemprotection = false;
+					}
+
+					if (patchmemprotection && !VirtualProtectEx(hProcess, b + patch.offset, (UIntPtr)dataToWrite.Length,
+						newmemprotection, out oldprotectflags))
+					{
+						throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at {0} for offset {1:X}", "vpe1", patch.offset));
+					}
+
+					if (!WriteProcessMemory(hProcess, b + patch.offset, dataToWrite, (UIntPtr)dataToWrite.Length, out byteswritten))
+					{
+						throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at {0} for offset {1:X}"
+							+ "\nBytes written: {2}", "wpm", patch.offset, byteswritten));
+					}
+
+					MemProtection protectionToRestore = patch.defaultProtection;
+					if (oldprotectflags.HasFlag(MemProtection.PAGE_GUARD)) // re-add page guard if it had it before
+					{
+						protectionToRestore |= MemProtection.PAGE_GUARD;
+						patchmemprotection = true;
+					}
+
+					if (patchmemprotection && !VirtualProtectEx(hProcess, b + patch.offset, (UIntPtr)dataToWrite.Length,
+						protectionToRestore, out oldprotectflags))
+					{
+						throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at {0} for offset {1:X}", "vpe2", patch.offset));
+					}
+				}
+			}
+			finally
 			{
 				CloseHandle(hProcess);
-				return false;
 			}
 
-			if (patchOptions.DisableCertPinning)
-			{
-				patches.AddRange(v.certpin);
-			}
-			if (patchOptions.AlwaysSendAuthHeader)
-			{
-				patches.AddRange(v.authheader);
-			}
-			if (patchOptions.SetCustomConfigDomain)
-			{
-				patches.AddRange(v.configdomain);
-			}
-			if (patchOptions.UseHttp)
-			{
-				patches.AddRange(v.protocol);
-			}
-			if (patchOptions.DisableForceOfflineOnFailedDynamicResources)
-			{
-				patches.AddRange(v.dynres_noforceoffline);
-			}
-
-			foreach (Patch patch in patches)
-			{
-				byte[] dataToWrite = patch.patch;
-				if (patch.customPatch == "configdomain")
-				{
-					dataToWrite = newurl;
-				}
-				MemProtection newmemprotection = MemProtection.PAGE_READWRITE;
-				bool patchmemprotection = true;
-
-				if (patch.defaultProtection == MemProtection.PAGE_EXECUTE_READ)
-				{
-					newmemprotection = MemProtection.PAGE_EXECUTE_READWRITE;
-				}
-				else if (patch.defaultProtection == MemProtection.PAGE_READONLY)
-				{
-					newmemprotection = MemProtection.PAGE_READWRITE;
-				}
-				else
-				{
-					patchmemprotection = false;
-				}
-
-				if (patchmemprotection && !VirtualProtectEx(hProcess, b + patch.offset, (UIntPtr)dataToWrite.Length,
-						newmemprotection, out oldprotectflags))
-				{
-					CloseHandle(hProcess);
-					throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at {0} for offset {1:X}", "vpe1", patch.offset));
-				}
-
-				if (!WriteProcessMemory(hProcess, b + patch.offset, dataToWrite, (UIntPtr)dataToWrite.Length, out byteswritten))
-				{
-					CloseHandle(hProcess);
-					throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at {0} for offset {1:X}"
-					+ "\nBytes written: {2}", "wpm", patch.offset, byteswritten));
-				}
-
-				MemProtection protectionToRestore = patch.defaultProtection;
-				if (oldprotectflags.HasFlag(MemProtection.PAGE_GUARD)) // re-add page guard if it had it before
-				{
-					protectionToRestore |= MemProtection.PAGE_GUARD;
-				}
-
-				if (patchmemprotection && !VirtualProtectEx(hProcess, b + patch.offset, (UIntPtr)dataToWrite.Length,
-						protectionToRestore, out oldprotectflags))
-				{
-					CloseHandle(hProcess);
-					throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at {0} for offset {1:X}", "vpe2", patch.offset));
-				}
-			}
-
-			CloseHandle(hProcess);
 			return true;
 		}
 

@@ -71,7 +71,7 @@ namespace HitmanPatcher
 					}
 					catch (Win32Exception err)
 					{
-						log(String.Format("Failed to patch processid {0}: error code {1}", process.Id, Marshal.GetLastWin32Error()));
+						log(String.Format("Failed to patch processid {0}: error code {1}", process.Id, err.NativeErrorCode));
 						log(err.Message);
 						patchedprocesses.Add(process.Id);
 					}
