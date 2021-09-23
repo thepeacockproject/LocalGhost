@@ -29,7 +29,20 @@ namespace HitmanPatcher
 			try
 			{
 				IntPtr b = process.MainModule.BaseAddress;
-				HitmanVersion v = HitmanVersion.getVersion(getTimestamp(hProcess, b), patchOptions.ForcedVersion);
+				uint timestamp = getTimestamp(hProcess, b);
+				HitmanVersion v = HitmanVersion.getVersion(timestamp, patchOptions.ForcedVersion);
+				if (v == HitmanVersion.NotFound)
+				{
+					if (AOBScanner.TryGetHitmanVersionByScanning(process, hProcess, out v))
+					{
+						// add it to the db so subsequent patches don't need searching again
+						HitmanVersion.addVersion(timestamp.ToString("X8"), timestamp, v);
+					}
+					else
+					{
+						throw new NotImplementedException();
+					}
+				}
 				UIntPtr byteswritten;
 				MemProtection oldprotectflags = 0;
 				byte[] newurl = Encoding.ASCII.GetBytes(patchOptions.CustomConfigDomain).Concat(new byte[] { 0x00 }).ToArray();

@@ -45,6 +45,8 @@ namespace HitmanPatcher
 
 		private static Dictionary<string, HitmanVersion> versionMap = new Dictionary<string, HitmanVersion>();
 
+		public static readonly HitmanVersion NotFound = new HitmanVersion();
+
 		public static IEnumerable<string> Versions
 		{
 			get { return versionMap.Keys; }
@@ -79,7 +81,7 @@ namespace HitmanPatcher
 				return version;
 			}
 
-			throw new NotImplementedException();
+			return HitmanVersion.NotFound;
 		}
 
 		static HitmanVersion()
