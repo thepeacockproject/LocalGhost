@@ -12,8 +12,21 @@ using System.Windows.Forms;
 
 namespace HitmanPatcher
 {
+	public struct PROC_BASIC_INFORMATION
+	{
+		internal IntPtr Reserved1;
+		internal IntPtr PebBaseAddress;
+		internal IntPtr Reserved2_0;
+		internal IntPtr Reserved2_1;
+		internal IntPtr UniqueProcessId;
+		internal IntPtr InheritedFromUniqueProcessId;
+	}
+	
 	public partial class Form1 : Form
 	{
+		[DllImport("ntdll.dll")]
+		private static extern int NtQueryInformationProcess(IntPtr processHandle, int processInformationClass, ref PROC_BASIC_INFORMATION processInformation, int processInformationLength, out int returnLength);
+
 		Timer timer;
 		HashSet<int> patchedprocesses = new HashSet<int>();
 
@@ -58,7 +71,25 @@ namespace HitmanPatcher
 				if (!patchedprocesses.Contains(process.Id))
 					try
 					{
-						if (MemoryPatcher.Patch(process, currentSettings.patchOptions))
+						PROC_BASIC_INFORMATION pbi = new PROC_BASIC_INFORMATION();
+						int returnLength;
+						int status = NtQueryInformationProcess(process.Handle, 0, ref pbi, Marshal.SizeOf(pbi), out returnLength);
+						string parentName = "";
+						if (status != 0)
+							throw new Win32Exception(status);
+
+						try
+						{
+							parentName = Process.GetProcessById(pbi.InheritedFromUniqueProcessId.ToInt32()).ProcessName;
+						}
+						catch (ArgumentException)
+						{ } // We don't want to do anything with this as the parent process just might not be running anymore (e.g. legendary)
+
+						if (parentName.Contains("HITMAN"))
+						{
+							patchedprocesses.Add(process.Id);
+						}
+						else if (MemoryPatcher.Patch(process, currentSettings.patchOptions))
 						{
 							log(String.Format("Successfully patched processid {0}", process.Id));
 							if (currentSettings.patchOptions.SetCustomConfigDomain)
