@@ -494,6 +494,7 @@ app.get('/selectagencypickup', extractToken, async (req, res) => {
                 Unlocked: unlockedAgencyPickups.map(unlockable => unlockable.Properties.RepositoryId),
                 Contract: contractData,
                 OrderedUnlocks: unlockedAgencyPickups.filter(unlockable => pickupsInScene.includes(unlockable.Properties.RepositoryId))
+                    .filter(unlockable => unlockable.Properties.Difficulty === contractData.Metadata.Difficulty)
                     .sort((a, b) => a.Properties.UnlockOrder - b.Properties.UnlockOrder),
                 UserCentric: await generateUserCentric(contractData, userData, req.gameVersion),
             }
@@ -536,6 +537,7 @@ app.get('/selectentrance', extractToken, async (req, res) => {
                 Unlocked: unlockedEntrances.map(unlockable => unlockable.Properties.RepositoryId),
                 Contract: contractData,
                 OrderedUnlocks: unlockedEntrances.filter(unlockable => entrancesInScene.includes(unlockable.Properties.RepositoryId))
+                    .filter(unlockable => unlockable.Properties.Difficulty === contractData.Metadata.Difficulty)
                     .sort((a, b) => a.Properties.UnlockOrder - b.Properties.UnlockOrder),
                 UserCentric: await generateUserCentric(contractData, userData, req.gameVersion),
             }
