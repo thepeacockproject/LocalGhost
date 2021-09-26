@@ -49,7 +49,7 @@ namespace HitmanPatcher
 
 			try
 			{
-				currentSettings = Settings.getFromFile("patcher.conf");
+				currentSettings = Settings.getFromFile(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\LocalGhost\patcher.conf");
 			}
 			catch (Exception)
 			{
@@ -129,7 +129,11 @@ namespace HitmanPatcher
 
 		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			currentSettings.saveToFile("patcher.conf");
+			if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\LocalGhost")) {
+				Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\LocalGhost");
+			}
+
+			currentSettings.saveToFile(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\LocalGhost\patcher.conf");
 		}
 
 		private string getSelectedServerHostname()
