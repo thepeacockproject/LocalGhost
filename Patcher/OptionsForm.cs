@@ -11,11 +11,17 @@ namespace HitmanPatcher
 	{
 		private string customDomain;
 
+		TrayOptions.settings traySettings = new TrayOptions.settings();
+
 		public OptionsForm(Settings currentSettings)
 		{
 			InitializeComponent();
 			comboBoxVersion.Items.AddRange(HitmanVersion.Versions.ToArray<object>());
 			this.settings = currentSettings;
+
+			traySettings.startMin = currentSettings.startInTray;
+			traySettings.minTray = currentSettings.minToTray;
+			traySettings.domains = currentSettings.trayDomains;
 		}
 
 		private void buttonCancel_Click(object sender, EventArgs e)
@@ -41,6 +47,9 @@ namespace HitmanPatcher
 						ForcedVersion = comboBoxVersion.Text == null ? "" : comboBoxVersion.Text
 					},
 					showTestingDomains = checkBoxTestingDomains.Checked,
+					startInTray = traySettings.startMin,
+					minToTray = traySettings.minTray,
+					trayDomains = traySettings.domains
 				};
 			}
 			private set
@@ -54,6 +63,9 @@ namespace HitmanPatcher
 				checkBoxTestingDomains.Checked = value.showTestingDomains;
 				checkBoxForceVersion.Checked = value.patchOptions.ForcedVersion != "";
 				comboBoxVersion.Text = value.patchOptions.ForcedVersion;
+				this.traySettings.startMin = value.startInTray;
+				this.traySettings.minTray = value.minToTray;
+				this.traySettings.domains = value.trayDomains;
 			}
 		}
 
@@ -79,6 +91,16 @@ namespace HitmanPatcher
 			{
 				comboBoxVersion.Enabled = false;
 				comboBoxVersion.SelectedIndex = -1;
+			}
+		}
+
+		private void button1_Click(object sender, EventArgs e)
+		{
+			TrayOptions trayForm = new TrayOptions(traySettings);
+			DialogResult result = trayForm.ShowDialog();
+			if (result == DialogResult.OK)
+			{
+				traySettings = trayForm.options;
 			}
 		}
 	}
