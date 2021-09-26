@@ -601,7 +601,29 @@ app.post('/multiplayermatchstats', (req, res) => {
     });
 });
 
-app.get('/missionend', extractToken, scoreHandler.missionend);
+// /profiles/page/missionend
+app.get('/missionend', extractToken, async (req, res) => {
+    const sessionDetails = contractSessions.get(req.query.contractSessionId);
+    if (!sessionDetails) { // contract session not found
+        res.status(404).end();
+        return;
+    }
+    if (sessionDetails.userId != req.jwt.unique_name) { // requested score for other user's session
+        res.status(401).end();
+        return;
+    }
+    if (!UUIDRegex.test(sessionDetails.contractId)) {
+        // This should never happen as it means we saved an invalid id earlier. Doesn't hurt to check however.
+        res.status(400).send('contract id was not a uuid');
+        return;
+    }
+
+    res.json({
+        template: await getTemplate('missionend', req.gameVersion),
+        data: await scoreHandler.getMissionEndData(req.query.contractSessionId, req.gameVersion),
+    });
+});
+
 
 async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrder) {
     const result = new Map();

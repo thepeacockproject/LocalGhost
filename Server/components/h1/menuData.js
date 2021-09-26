@@ -5,7 +5,9 @@ const express = require('express');
 const path = require('path');
 const { readFile } = require('atomically');
 const { extractToken, getTemplate, UUIDRegex, getDefaultLoadout } = require('../utils.js');
+const { contractSessions } = require('../h3/eventHandler.js');
 const { generateUserCentric } = require('../h3/menuData.js');
+const scoreHandler = require('../h3/scoreHandler.js');
 
 const app = express.Router();
 
@@ -122,6 +124,29 @@ app.get('/stashpoint', extractToken, async (req, res) => {
             ShowSlotName: req.query.slotname,
             UserCentric: userCentricContract,
         }
+    });
+});
+
+// /profiles/page/scoreoverview?contractSessionId=5873269880175-0f35f154-671b-4ddb-ba18-8efcc72935f8
+app.get('/scoreoverview', extractToken, async (req, res) => {
+    const sessionDetails = contractSessions.get(req.query.contractSessionId);
+    if (!sessionDetails) { // contract session not found
+        res.status(404).end();
+        return;
+    }
+    if (sessionDetails.userId != req.jwt.unique_name) { // requested score for other user's session
+        res.status(401).end();
+        return;
+    }
+    if (!UUIDRegex.test(sessionDetails.contractId)) {
+        // This should never happen as it means we saved an invalid id earlier. Doesn't hurt to check however.
+        res.status(400).send('contract id was not a uuid');
+        return;
+    }
+
+    res.json({
+        template: await getTemplate('scoreoverview', req.gameVersion),
+        data: (await scoreHandler.getMissionEndData(req.query.contractSessionId, req.gameVersion)).ScoreOverview,
     });
 });
 
