@@ -103,12 +103,12 @@ app.post('/oauth/token', async (req, res) => {
             res.status(400).end(); // invalid epic user id
             return;
         }
-        const epic_token = jwt.decode(req.body.access_token);
-        if (!epic_token || !epic_token.appid) {
+        const epic_token = jwt.decode(req.body.access_token.replace(/^eg1~/, ''));
+        if (!epic_token || !(epic_token.appid || epic_token.app)) {
             res.status(400).end(); // invalid epic access token
             return;
         }
-        external_appid = epic_token.appid;
+        external_appid = epic_token.appid || epic_token.app;
         external_platform = 'epic';
         external_userid = req.body.epic_userid;
         external_users_folder = 'epicids';
@@ -166,9 +166,9 @@ app.post('/oauth/token', async (req, res) => {
         let userdata = JSON.parse(await readFile(path.join('userdata', gameVersion, 'default.json')));
         userdata.Id = req.body.pId;
         userdata.LinkedAccounts[external_platform] = external_userid;
-        if (external_platform == 'steam') {
+        if (external_platform === 'steam') {
             userdata.SteamId = req.body.steam_userid;
-        } else if (external_platform == 'epic') {
+        } else if (external_platform === 'epic') {
             userdata.EpicId = req.body.epic_userid;
         }
         // add all unlockables to player's inventory

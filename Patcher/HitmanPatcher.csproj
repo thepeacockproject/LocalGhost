@@ -72,6 +72,7 @@
       <DependentUpon>OptionsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="PatchDefinitions\sniper_v1_0.cs" />
+    <Compile Include="PatchDefinitions\v1_12.cs" />
     <Compile Include="PatchDefinitions\v1_15.cs" />
     <Compile Include="PatchDefinitions\v1_16.cs" />
     <Compile Include="PatchDefinitions\v2_13.cs" />

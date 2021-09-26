@@ -20,7 +20,7 @@ router.use('/authentication/api/userchannel/ContractsService/', contractHandler)
 
 router.use('/authentication/api/userchannel/', profileHandler.router);
 
-router.use('/profiles/page/', menuData);
+router.use('/profiles/page/', menuData.router);
 
 router.use('/resources-(\\d+-\\d+)/', menuSystem);
 

@@ -175,22 +175,23 @@ app.post('/GamePersistentDataService/SaveData', extractToken, express.json(), as
 
 app.post('/ChallengesService/GetActiveChallengesAndProgression', extractToken, express.json(), async (req, res) => {
     const challenges = [];
-    challenges.push(...JSON.parse(await readFile(path.join('challenges', 'global.json')))); // TODO: more challenges
+    challenges.push(...JSON.parse(await readFile(path.join('challenges', 'globalChallenges.json')))); // TODO: more challenges
     // TODO: location specific challenges
 
-    for (const challenge of challenges) { // TODO: actual completion data
-        challenge.Progression = {
-            ChallengeId: challenge.Challenge.Id,
+    let result = challenges.map(challenge => ({
+        Challenge: challenge,
+        Progression: {
+            ChallengeId: challenge.Id,
             ProfileId: req.jwt.unique_name,
             Completed: false,
             State: {},
             ETag: `W/\"datetime'${encodeURIComponent(new Date().toISOString())}'\"`,
             CompletedAt: null,
             MustBeSaved: false
-        };
-    }
+        }
+    }));
 
-    res.json(challenges);
+    res.json(result);
 });
 
 app.post('/HubPagesService/GetChallengeTreeFor', extractToken, express.json(), (req, res) => {

@@ -195,7 +195,7 @@ function saveEvents(userId, events) {
         } else if (event.Name === 'Ghost_TargetUnnoticed') {
             session.ghost.unnoticedKills += 1;
         } else if (event.Name === 'Kill') {
-            // Todo?: check for event.Value.KillContext == 1
+            // Todo?: check for event.Value.KillContext === 1
             if (session.lastKill.timestamp === event.Timestamp) {
                 session.lastKill.repositoryIds.push(event.Value.RepositoryId);
             } else {

@@ -7,28 +7,17 @@ const { readFile } = require('atomically');
 const { xpRequiredForLevel, maxLevelForLocation, getLocationCompletion, UUIDRegex } = require('../utils.js');
 const { contractSessions } = require('./eventHandler.js');
 
-// /profiles/page/missionend
-async function missionend(req, res) {
-    const sessionDetails = contractSessions.get(req.query.contractSessionId);
-    if (!sessionDetails) { // contract session not found
-        res.status(404).end();
-        return;
-    }
-    if (sessionDetails.userId !== req.jwt.unique_name) { // requested score for other user's session
-        res.status(401).end();
-        return;
-    }
-    if (!UUIDRegex.test(sessionDetails.contractId)) {
-        // This should never happen as it means we saved an invalid id earlier. Doesn't hurt to check however.
-        res.status(400).send('contract id was not a uuid');
-        return;
+async function getMissionEndData(sessionId, gameVersion) {
+    const sessionDetails = contractSessions.get(sessionId);
+    if (!sessionDetails) {
+        return null;
     }
 
-    const unlockables = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'allunlockables.json')));
-    const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
+    const unlockables = JSON.parse(await readFile(path.join('userdata', gameVersion, 'allunlockables.json')));
+    const userData = JSON.parse(await readFile(path.join('userdata', gameVersion, 'users', `${sessionDetails.userId}.json`)));
     const contractData = JSON.parse(await readFile(path.join('contractdata', `${sessionDetails.contractId}.json`)));
     const sublocation = unlockables.find(entry => entry.Id === contractData.Metadata.Location);
-    const maxlevel = maxLevelForLocation(sublocation.Properties.ProgressionKey, req.gameVersion);
+    const maxlevel = maxLevelForLocation(sublocation.Properties.ProgressionKey, gameVersion);
     const locationProgression = userData.Extensions.progression.Locations[sublocation.Properties.ProgressionKey.toLowerCase()];
 
     let nonTargetKills = sessionDetails.npcKills.size + sessionDetails.crowdNpcKills;
@@ -241,12 +230,9 @@ async function missionend(req, res) {
     // TODO: add xp to user profile
     // TODO: save in leaderboards
 
-    res.json({
-        template: null,
-        data: result,
-    });
+    return result;
 }
 
 module.exports = {
-    missionend,
+    getMissionEndData,
 };

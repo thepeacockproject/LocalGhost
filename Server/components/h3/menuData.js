@@ -6,7 +6,7 @@ const path = require('path');
 const uuid = require('uuid');
 const { readFile } = require('atomically');
 
-const { extractToken, MaxPlayerLevel, xpRequiredForLevel, maxLevelForLocation, getTemplate, UUIDRegex } = require('../utils.js');
+const { extractToken, MaxPlayerLevel, xpRequiredForLevel, maxLevelForLocation, getTemplate, UUIDRegex, getDefaultLoadout } = require('../utils.js');
 const { resolveProfiles } = require('./profileHandler.js');
 const { contractSessions } = require('./eventHandler.js');
 const scoreHandler = require('./scoreHandler.js');
@@ -295,16 +295,16 @@ app.get('/stashpoint', extractToken, async (req, res) => {
                 HasMoreLeft: false,
                 HasMoreRight: false,
                 OptionalData: {
-                    stashpoint: req.query.stashpoint || '',
-                    AllowLargeItems: req.query.allowlargeitems, //?? true (null coalescing when) (edit: not needed as it's always sent)
-                    AllowContainers: req.query.allowcontainers, //?? true
+                    stashpoint: req.query.stashpoint == null ? '' : (req.query.stashpoint || null), // wow
+                    AllowLargeItems: req.query.allowlargeitems == null || req.query.allowlargeitems,
+                    AllowContainers: req.query.allowcontainers == null || req.query.allowcontainers,
                 }
             },
             ShowSlotName: req.query.slotname,
         }
     }
     if (contractData) {
-        stashData.data.UserCentric = await generateUserCentric(contractData, userData, req.gameVersion)
+        stashData.data.UserCentric = await generateUserCentric(contractData, userData, req.gameVersion);
     }
     res.json(stashData);
 });
@@ -390,12 +390,7 @@ app.get('/Planning', extractToken, async (req, res) => {
             'stashpoint'
         ];
         const defaultLoadout = Object.assign(Array(7).fill(null), (userData.Extensions.defaultloadout || {})[sublocation.Properties.ParentLocation]
-            || {
-            2: 'FIREARMS_HERO_PISTOL_TACTICAL_ICA_19',
-            3: 'TOKEN_OUTFIT_HITMANSUIT', // TODO: default location-specific suit
-            4: 'TOKEN_FIBERWIRE',
-            5: 'PROP_TOOL_COIN',
-        });
+            || getDefaultLoadout(sublocation.Properties.ParentLocation, req.gameVersion));
 
         res.json({
             template: await getTemplate('planning', req.gameVersion),
@@ -501,6 +496,7 @@ app.get('/selectagencypickup', extractToken, async (req, res) => {
                 Unlocked: unlockedAgencyPickups.map(unlockable => unlockable.Properties.RepositoryId),
                 Contract: contractData,
                 OrderedUnlocks: unlockedAgencyPickups.filter(unlockable => pickupsInScene.includes(unlockable.Properties.RepositoryId))
+                    .filter(unlockable => unlockable.Properties.Difficulty === contractData.Metadata.Difficulty)
                     .sort((a, b) => a.Properties.UnlockOrder - b.Properties.UnlockOrder),
                 UserCentric: await generateUserCentric(contractData, userData, req.gameVersion),
             }
@@ -543,6 +539,7 @@ app.get('/selectentrance', extractToken, async (req, res) => {
                 Unlocked: unlockedEntrances.map(unlockable => unlockable.Properties.RepositoryId),
                 Contract: contractData,
                 OrderedUnlocks: unlockedEntrances.filter(unlockable => entrancesInScene.includes(unlockable.Properties.RepositoryId))
+                    .filter(unlockable => unlockable.Properties.Difficulty === contractData.Metadata.Difficulty)
                     .sort((a, b) => a.Properties.UnlockOrder - b.Properties.UnlockOrder),
                 UserCentric: await generateUserCentric(contractData, userData, req.gameVersion),
             }
@@ -606,7 +603,29 @@ app.post('/multiplayermatchstats', (req, res) => {
     });
 });
 
-app.get('/missionend', extractToken, scoreHandler.missionend);
+// /profiles/page/missionend
+app.get('/missionend', extractToken, async (req, res) => {
+    const sessionDetails = contractSessions.get(req.query.contractSessionId);
+    if (!sessionDetails) { // contract session not found
+        res.status(404).end();
+        return;
+    }
+    if (sessionDetails.userId != req.jwt.unique_name) { // requested score for other user's session
+        res.status(401).end();
+        return;
+    }
+    if (!UUIDRegex.test(sessionDetails.contractId)) {
+        // This should never happen as it means we saved an invalid id earlier. Doesn't hurt to check however.
+        res.status(400).send('contract id was not a uuid');
+        return;
+    }
+
+    res.json({
+        template: await getTemplate('missionend', req.gameVersion),
+        data: await scoreHandler.getMissionEndData(req.query.contractSessionId, req.gameVersion),
+    });
+});
+
 
 async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrder) {
     const result = new Map();
@@ -818,4 +837,7 @@ function calculateMpScore(sessionDetails) {
     }
 }
 
-module.exports = app;
+module.exports = {
+    router: app,
+    generateUserCentric: generateUserCentric,
+};

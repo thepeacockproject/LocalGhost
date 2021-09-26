@@ -22,10 +22,17 @@ app.post('/GetForPlay2', express.json(), extractToken, async (req, res) => {
             Contract: contractData,
             ContractSessionId: `${process.hrtime.bigint().toString()}-${uuid.v4()}`,
         };
-        if (contractData.Data.GameChangers && contractData.Data.GameChangers.length > 0) {
+        if (!contractData.Data.GameChangers) {
+            contractData.Data.GameChangers = [];
+        }
+        for (const gamechangerId of req.body.extraGameChangerIds) {
+            contractData.Data.GameChangers.push(gamechangerId);
+        }
+
+        if (contractData.Data.GameChangers.length > 0) {
             const gameChangerData = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'GameChangerProperties.json')));
             contractData.Data.GameChangerReferences = [];
-            for(const gameChangerId of contractData.Data.GameChangers) {
+            for (const gameChangerId of contractData.Data.GameChangers) {
                 const gameChanger = gameChangerData[gameChangerId];
                 if (!gameChanger) {
                     console.error(`Encountered unknown gamechanger id: ${gameChangerId}`);

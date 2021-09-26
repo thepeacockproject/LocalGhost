@@ -2,7 +2,10 @@
 // Licensed under the zlib license. See LICENSE for more info
 
 const express = require('express');
+const path = require('path');
+const { readFile } = require('atomically');
 
+const { extractToken } = require('../utils.js');
 const { getEntitlements } = require('./platformEntitlements.js');
 
 const app = express.Router();
@@ -14,13 +17,33 @@ app.post('/ProfileService/GetPlatformEntitlements', express.json(), getEntitleme
 app.post('/AuthenticationService/GetBlobOfflineCacheDatabaseDiff', (req, res) => {
     // Which menu files should be loaded from the server?
     // TODO
-    res.json([
-        'menusystem/pages/hub/dashboard/dashboard.json',
-        'menusystem/pages/hub/hub_content.json',
-        'menusystem/pages/hub/dashboard/category_escalation/result.json',
-        'menusystem/pages/result/versusresult_content.json',
-        'menusystem/pages/multiplayer/content/lobbyslim.json',
-    ]);
+    res.json([]);
+});
+
+app.post('/ChallengesService/GetActiveChallenges', extractToken, express.json(), async (req, res) => {
+    const challenges = [];
+    challenges.push(...JSON.parse(await readFile(path.join('challenges', 'globalChallenges.json')))); // TODO: more challenges
+    // TODO: location specific challenges
+
+    res.json(challenges);
+});
+
+app.post('/ChallengesService/GetProgression', extractToken, express.json(), async (req, res) => {
+    const challenges = [];
+    challenges.push(...JSON.parse(await readFile(path.join('challenges', 'globalChallenges.json')))); // TODO: more challenges
+    // TODO: location specific challenges
+
+    let result = challenges.map(challenge => ({
+        ChallengeId: challenge.Id,
+        ProfileId: req.jwt.unique_name,
+        Completed: false,
+        State: {},
+        ETag: `W/\"datetime'${encodeURIComponent(new Date().toISOString())}'\"`,
+        CompletedAt: null,
+        MustBeSaved: false
+    }));
+
+    res.json(result);
 });
 
 module.exports = {
