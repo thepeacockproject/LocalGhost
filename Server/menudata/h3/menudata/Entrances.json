@@ -20,6 +20,9 @@
     "5314c86b-7173-412b-a0b5-b0d9af2da722",
     "0aec817c-738e-4381-bbd4-a13b5d1c6730"
   ],
+  "assembly:/_pro/scenes/missions/ancestral/scene_hollyhock.entity": [
+    "ddc2d081-0a07-498f-babf-3016aabf5118"
+  ],
   "assembly:/_pro/scenes/missions/ancestral/scene_smoothsnake.entity": [
     "45ae9b57-9fd1-497f-ad53-78e8523b3a7a",
     "f1ea381e-d998-4c7b-9ef0-34e365624cfc"
@@ -571,6 +574,11 @@
     "d76ae2ee-05ea-4f2b-a9c7-62efa6422628"
   ],
   "assembly:/_pro/scenes/missions/rocky/scene_dugong.entity": [
+    "9c9a5c9d-ecae-4f80-a670-a9e336de3411",
+    "8a84a260-c008-4445-bb14-0fce6a89e121",
+    "589a67c3-c4de-499b-8767-ca09cb0f44fa",
+    "0bee3add-2394-4674-a0de-5e4c0182e638",
+    "cf68d4af-7b55-43de-9e54-cc29345750a7",
     "734db2c7-7691-46ab-a279-618d768ab4b3"
   ],
   "assembly:/_pro/scenes/missions/sheep/scene_adonis.entity": [
