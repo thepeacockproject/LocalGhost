@@ -7,10 +7,10 @@ namespace HitmanPatcher
 	{
 		public static void addVersions()
 		{
-			HitmanVersion.addVersion("2.13.0.0-h3_dx11", 0x5C49A4CB, v2_13_0_h3_dx11);
+			HitmanVersion.addVersion("2.13.0.0-h2_dx11", 0x5C49A4CB, v2_13_0_h2_dx11);
 		}
 
-		private static HitmanVersion v2_13_0_h3_dx11 = new HitmanVersion()
+		private static HitmanVersion v2_13_0_h2_dx11 = new HitmanVersion()
 		{
 			certpin = new[] { new Patch(0xEED662, "75", "EB", MemProtection.PAGE_EXECUTE_READ) },
 			authheader = new[]
