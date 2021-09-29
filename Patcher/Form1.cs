@@ -56,6 +56,8 @@ namespace HitmanPatcher
 			foreach (Process process in hitmans)
 			{
 				if (!patchedprocesses.Contains(process.Id))
+				{
+					patchedprocesses.Add(process.Id);
 					try
 					{
 						if (MemoryPatcher.Patch(process, currentSettings.patchOptions))
@@ -65,21 +67,23 @@ namespace HitmanPatcher
 							{
 								log(String.Format("Injected server: {0}", getSelectedServerHostname()));
 							}
-							patchedprocesses.Add(process.Id);
 						}
-						// else: process not yet ready for patching, try again next timer tick
+						else
+						{
+							// else: process not yet ready for patching, try again next timer tick
+							patchedprocesses.Remove(process.Id);
+						}
 					}
 					catch (Win32Exception err)
 					{
 						log(String.Format("Failed to patch processid {0}: error code {1}", process.Id, err.NativeErrorCode));
 						log(err.Message);
-						patchedprocesses.Add(process.Id);
 					}
 					catch (NotImplementedException)
 					{
 						log(String.Format("Failed to patch processid {0}: unknown version", process.Id));
-						patchedprocesses.Add(process.Id);
 					}
+				}
 			}
 		}
 
