@@ -2,6 +2,7 @@
 // Licensed under the zlib license. See LICENSE for more info
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -13,30 +14,53 @@ namespace HitmanPatcher
 	{
 		public static bool TryGetHitmanVersionByScanning(Process process, IntPtr hProcess, out HitmanVersion result)
 		{
+			Stopwatch bench = Stopwatch.StartNew();
+
 			IntPtr baseAddress = process.MainModule.BaseAddress;
 			byte[] exeData = new byte[process.MainModule.ModuleMemorySize];
 			UIntPtr bytesread;
 			Pinvoke.ReadProcessMemory(hProcess, baseAddress, exeData, (UIntPtr)exeData.Length, out bytesread); // fuck it, just read the whole thing
-			Task<int[]> getCertpinAddr = Task.Factory.StartNew(() => findPattern(exeData, 0xd,
-				"0f856ffdffffc747302f000000c7471804000000"));
-			Task<int[]> getAuthhead1Addr = Task.Factory.StartNew(() => findPattern(exeData, 0xd,
-				"0f85b50000004883f90675e8"));
-			Task<int[]> getAuthhead2Addr = Task.Factory.StartNew(() => findPattern(exeData, 0x3,
-				"0f84b800000084db0f85b0000000"));
-			Task<int[]> getDomainAddr = Task.Factory.StartNew(() => findPattern(exeData, 0xe,
-				"488905 ? ? ? 03488d0d ? ? ? 034883c4205b48ff25 ? ? ? 01"))
-				.ContinueWith(task => task.Result.Select(addr => addr + 14 + BitConverter.ToInt32(exeData, addr + 10)).ToArray());
-			Task<int[]> getProtocolAddr = Task.Factory.StartNew(() => findPattern(exeData, 0x0,
-				"68747470733a2f2f7b307d00"));
-			Task<int[]> getForceOfflineAddr = Task.Factory.StartNew(() => findPattern(exeData, 0x1,
-				"83f17269c193010001488d0d ? ? ? 0383f06569d093010001e8 ? ? 0400488d05 ? ? ? 01c705 ? ? ? 0301000000"))
-				.ContinueWith(task => task.Result.Select(addr => addr + 47 + BitConverter.ToInt32(exeData, addr + 39)).ToArray());
 
-			Task<int[]>[] tasks = { getCertpinAddr, getAuthhead1Addr, getAuthhead2Addr, getDomainAddr, getProtocolAddr, getForceOfflineAddr };
-			Task.WaitAll(tasks);
+			Task<IEnumerable<Patch[]>> getCertpinPatches = Task.Factory.ContinueWhenAll(new Func<byte[], Task<Patch[]>>[]
+			{
+				findCertpin_nearjump,
+				findCertpin_shortjump
+			}.Select(func => func.Invoke(exeData)).ToArray(), tasks => tasks.Select(task => task.Result).Where(x => x != null));
 
-			// error out if any pattern does not have exactly 1 search result
-			if (tasks.Any(task => task.Result.Count() != 1))
+			Task<IEnumerable<Patch[]>> getAuthheadPatches = Task.Factory.ContinueWhenAll(new Func<byte[], Task<Patch[]>>[]
+			{
+				findAuthhead3_30,
+				findAuthhead2_72,
+				findAuthhead1_15
+			}.Select(func => func.Invoke(exeData)).ToArray(), tasks => tasks.Select(task => task.Result).Where(x => x != null));
+
+			Task<IEnumerable<Patch[]>> getConfigdomainPatches = Task.Factory.ContinueWhenAll(new Func<byte[], Task<Patch[]>>[]
+			{
+				findConfigdomain
+			}.Select(func => func.Invoke(exeData)).ToArray(), tasks => tasks.Select(task => task.Result).Where(x => x != null));
+
+			Task<IEnumerable<Patch[]>> getProtocolPatches = Task.Factory.ContinueWhenAll(new Func<byte[], Task<Patch[]>>[]
+			{
+				findProtocol3_30
+			}.Select(func => func.Invoke(exeData)).ToArray(), tasks => tasks.Select(task => task.Result).Where(x => x != null));
+
+			Task<IEnumerable<Patch[]>> getDynresForceofflinePatches = Task.Factory.ContinueWhenAll(new Func<byte[], Task<Patch[]>>[]
+			{
+				findDynresForceoffline
+			}.Select(func => func.Invoke(exeData)).ToArray(), tasks => tasks.Select(task => task.Result).Where(x => x != null));
+
+
+			Task<IEnumerable<Patch[]>>[] alltasks =
+			{
+				getCertpinPatches, getAuthheadPatches, getConfigdomainPatches, getProtocolPatches, getDynresForceofflinePatches
+			};
+			Task.WaitAll(alltasks);
+
+			bench.Stop();
+			Console.WriteLine(bench.Elapsed.ToString());
+
+			// error out if any task does not have exactly 1 result
+			if (alltasks.Any(task => task.Result.Count() != 1))
 			{
 				result = null;
 				return false;
@@ -44,22 +68,223 @@ namespace HitmanPatcher
 
 			result = new HitmanVersion()
 			{
-				certpin = new[] { new Patch(getCertpinAddr.Result.First(), "0F85", "90E9", MemProtection.PAGE_EXECUTE_READ) },
-				authheader = new[]
-				{
-					new Patch(getAuthhead1Addr.Result.First(), "0F85B5000000", "909090909090", MemProtection.PAGE_EXECUTE_READ),
-					new Patch(getAuthhead2Addr.Result.First(), "0F84B8000000", "909090909090", MemProtection.PAGE_EXECUTE_READ)
-				},
-				configdomain = new[] { new Patch(getDomainAddr.Result.First(), "", "", MemProtection.PAGE_READWRITE, "configdomain") },
-				protocol = new[]
-				{
-					new Patch(getProtocolAddr.Result.First(), "68", "61", MemProtection.PAGE_READONLY)
-				},
-				dynres_noforceoffline = new[] { new Patch(getForceOfflineAddr.Result.First(), "01", "00", MemProtection.PAGE_EXECUTE_READWRITE) }
+				certpin = getCertpinPatches.Result.First(),
+				authheader = getAuthheadPatches.Result.First(),
+				configdomain = getConfigdomainPatches.Result.First(),
+				protocol = getProtocolPatches.Result.First(),
+				dynres_noforceoffline = getDynresForceofflinePatches.Result.First()
 			};
 
 			return true;
 		}
+
+		#region certpin
+
+		private static Task<Patch[]> findCertpin_nearjump(byte[] data)
+		{
+			return Task.Factory.ContinueWhenAll(new[]
+			{
+				Task.Factory.StartNew(() => findPattern(data, 0xe,
+					"? ? 9afdffffc747302f000000c7471803000000")),
+				Task.Factory.StartNew(() => findPattern(data, 0xc,
+					"? ? 9afdffffc747302f000000c7471803000000")), // 1.15
+				Task.Factory.StartNew(() => findPattern(data, 0xd,
+					"? ? 6ffdffffc747302f000000c7471804000000"))
+			}, tasks =>
+			{
+				IEnumerable<int> offsets = tasks.SelectMany(task => task.Result);
+				if (offsets.Count() != 1)
+					return null;
+				return new[] { new Patch(offsets.First(), "0F85", "90E9", MemProtection.PAGE_EXECUTE_READ) };
+			});
+		}
+
+		private static Task<Patch[]> findCertpin_shortjump(byte[] data)
+		{
+			return Task.Factory.ContinueWhenAll(new[]
+			{
+				Task.Factory.StartNew(() => findPattern(data, 0x3, "? 0ec746302f000000c7461803000000")),
+				Task.Factory.StartNew(() => findPattern(data, 0x2, "? 0ec746302f000000c7461803000000")), // v2.13
+			}, tasks =>
+			{
+				IEnumerable<int> offsets = tasks.SelectMany(task => task.Result);
+				if (offsets.Count() != 1)
+					return null;
+				return new[] { new Patch(offsets.First(), "75", "EB", MemProtection.PAGE_EXECUTE_READ) };
+			});
+		}
+
+		#endregion
+
+		#region authheader
+
+		private static Task<Patch[]> findAuthhead3_30(byte[] data)
+		{
+			return Task.Factory.ContinueWhenAll(new[]
+			{
+				Task.Factory.StartNew(() => findPattern(data, 0xd, "0f85b50000004883f90675e8")),
+				Task.Factory.StartNew(() => findPattern(data, 0xd, "9090909090904883f90675e8")),
+				Task.Factory.StartNew(() => findPattern(data, 0x3, "0f84b800000084db0f85b0000000")),
+				Task.Factory.StartNew(() => findPattern(data, 0x3, "90909090909084db0f85b0000000"))
+			}, tasks =>
+			{
+				// concat results for non-patched and patched
+				IEnumerable<int> offsetspart1 = tasks.Take(2).SelectMany(task => task.Result);
+				IEnumerable<int> offsetspart2 = tasks.Skip(2).Take(2).SelectMany(task => task.Result);
+				if (offsetspart1.Count() != 1 || offsetspart2.Count() != 1)
+					return null;
+				return new[]
+				{
+					new Patch(offsetspart1.First(), "0F85B5000000", "909090909090", MemProtection.PAGE_EXECUTE_READ),
+					new Patch(offsetspart2.First(), "0F84B8000000", "909090909090", MemProtection.PAGE_EXECUTE_READ)
+				};
+			});
+		}
+
+		private static Task<Patch[]> findAuthhead2_72(byte[] data)
+		{
+			return Task.Factory.ContinueWhenAll(new[]
+			{
+				Task.Factory.StartNew(() => findPattern(data, 0x8, "? 18488d15ff02cd00")),
+				Task.Factory.StartNew(() => findPattern(data, 0x8, "? 18488d155fd6cc00")),
+				Task.Factory.StartNew(() => findPattern(data, 0x7, "? 18488d152018cc00")), // v2.13
+				Task.Factory.StartNew(() => findPattern(data, 0xc, "0f84860000004584e4")),
+				Task.Factory.StartNew(() => findPattern(data, 0xc, "9090909090904584e4")),
+				Task.Factory.StartNew(() => findPattern(data, 0xb, "0f84830000004584e4")), // v2.13
+				Task.Factory.StartNew(() => findPattern(data, 0xb, "9090909090904584e4")), // v2.13
+			}, tasks =>
+			{
+				// concat results for non-patched and patched
+				IEnumerable<int> offsetspart1 = tasks.Take(3).SelectMany(task => task.Result);
+				IEnumerable<int> offsetspart2 = tasks.Skip(3).Take(4).SelectMany(task => task.Result);
+				if (offsetspart1.Count() != 1 || offsetspart2.Count() != 1)
+					return null;
+				return new[]
+				{
+					new Patch(offsetspart1.First(), "75", "EB", MemProtection.PAGE_EXECUTE_READ),
+					new Patch(offsetspart2.First(), "0F8486000000", "909090909090", MemProtection.PAGE_EXECUTE_READ)
+				};
+			});
+		}
+
+		private static Task<Patch[]> findAuthhead1_15(byte[] data)
+		{
+			return Task.Factory.ContinueWhenAll(new[]
+			{
+				Task.Factory.StartNew(() => findPattern(data, 0x5, "0f84b3000000498bcf")),
+				Task.Factory.StartNew(() => findPattern(data, 0x5, "909090909090498bcf")),
+				Task.Factory.StartNew(() => findPattern(data, 0x5, "0f84a30000004584ed")),
+				Task.Factory.StartNew(() => findPattern(data, 0x5, "9090909090904584ed"))
+			}, tasks =>
+			{
+				// concat results for non-patched and patched
+				IEnumerable<int> offsetspart1 = tasks.Take(2).SelectMany(task => task.Result);
+				IEnumerable<int> offsetspart2 = tasks.Skip(2).Take(2).SelectMany(task => task.Result);
+				if (offsetspart1.Count() != 1 || offsetspart2.Count() != 1)
+					return null;
+				return new[]
+				{
+					new Patch(offsetspart1.First(), "0F84B3000000", "909090909090", MemProtection.PAGE_EXECUTE_READ),
+					new Patch(offsetspart2.First(), "0F84A3000000", "909090909090", MemProtection.PAGE_EXECUTE_READ)
+				};
+			});
+		}
+
+		#endregion
+
+		#region configdomain
+
+		private static Task<Patch[]> findConfigdomain(byte[] data)
+		{
+			return Task.Factory.ContinueWhenAll(new[]
+			{
+				Task.Factory.StartNew(() => findPattern(data, 0xe,
+					"488905 ? ? ? 03488d0d ? ? ? 034883c4205b48ff25 ? ? ? 01"))
+					.ContinueWith(task =>
+						task.Result.Select(addr => addr + 14 + BitConverter.ToInt32(data, addr + 10)).ToArray()),
+				Task.Factory.StartNew(() => findPattern(data, 0xd,
+					"83f06e69d093010001e8 ? ? 0400488d05 ? ? ? 01ba000100004c8d05 ? ? ? 01488905 ? ? ? 02488d0d ? ? ? 02"))
+					.ContinueWith(task =>
+						task.Result.Select(addr => addr + 47 + BitConverter.ToInt32(data, addr + 43)).ToArray()),
+				Task.Factory.StartNew(() => findPattern(data, 0xd,
+						"83f16e69d193010001488d0d ? ? ? 02e8 ? ? 0400488d05 ? ? ? 01ba000100004c8d05 ? ? ? 01488905 ? ? ? 02488d0d ? ? ? 02"))
+					.ContinueWith(task =>
+						task.Result.Select(addr => addr + 54 + BitConverter.ToInt32(data, addr + 50)).ToArray()), // 2.13: big boy
+				Task.Factory.StartNew(() => findPattern(data, 0x0,
+						"4883ec28baa71ace87488d0d ? ? ? 02e8 ? ? 0200488d05 ? ? ? 01ba000100004c8d05 ? ? ? 01488905 ? ? ? 02488d0d ? ? ? 02"))
+					.ContinueWith(task =>
+						task.Result.Select(addr => addr + 54 + BitConverter.ToInt32(data, addr + 50)).ToArray()) // 1.15: big boy as well
+			}, tasks =>
+			{
+				IEnumerable<int> offsets = tasks.SelectMany(task => task.Result);
+					if (offsets.Count() != 1)
+						return null;
+					return new[]
+					{
+						new Patch(offsets.First(), "", "", MemProtection.PAGE_READWRITE, "configdomain")
+					};
+				});
+		}
+
+		#endregion
+
+		#region protocol
+
+		private static Task<Patch[]> findProtocol3_30(byte[] data)
+		{
+			return Task.Factory.ContinueWhenAll(new[]
+			{
+				Task.Factory.StartNew(() => findPattern(data, 0x0, "? 747470733a2f2f7b307d00")),
+				Task.Factory.StartNew(() => findPattern(data, 0x8, "? 747470733a2f2f7b307d00"))
+			}, tasks =>
+			{
+				IEnumerable<int> offsets = tasks.SelectMany(task => task.Result);
+				if (offsets.Count() != 1)
+					return null;
+				return new[]
+				{
+					new Patch(offsets.First(), "68", "61", MemProtection.PAGE_READONLY)
+				};
+			});
+		}
+
+		#endregion
+
+		#region dynres_forceoffline
+
+		private static Task<Patch[]> findDynresForceoffline(byte[] data)
+		{
+			return Task.Factory.ContinueWhenAll(new[]
+			{
+				Task.Factory.StartNew(() => findPattern(data, 0x1,
+						"83f17269c193010001488d0d ? ? ? 0383f06569d093010001e8 ? ? 0400488d05 ? ? ? 01c705 ? ? ? 0301000000"))
+					.ContinueWith(task =>
+						task.Result.Select(addr => addr + 47 + BitConverter.ToInt32(data, addr + 39)).ToArray()),
+				Task.Factory.StartNew(() => findPattern(data, 0xb,
+						"83f17269c193010001488d0d ? ? ? 0283f06569d093010001e8 ? ? 0400488d05 ? ? ? 01c705 ? ? ? 0201000000")) // 2.72
+					.ContinueWith(task =>
+						task.Result.Select(addr => addr + 47 + BitConverter.ToInt32(data, addr + 39)).ToArray()),
+				Task.Factory.StartNew(() => findPattern(data, 0x7,
+						"83f17269c193010001488d0d ? ? ? 0283f06569d093010001e8 ? ? 0400488d05 ? ? ? 01c705 ? ? ? 0201000000")) // 2.13
+					.ContinueWith(task =>
+						task.Result.Select(addr => addr + 47 + BitConverter.ToInt32(data, addr + 39)).ToArray()),
+				Task.Factory.StartNew(() => findPattern(data, 0x4,
+						"ba2734ff12488d0d ? ? ? 02e8 ? ? 0200488d05 ? ? ? 01c705 ? ? ? 0201000000")) // 1.15
+					.ContinueWith(task =>
+						task.Result.Select(addr => addr + 34 + BitConverter.ToInt32(data, addr + 26)).ToArray())
+			}, tasks =>
+			{
+				IEnumerable<int> offsets = tasks.SelectMany(task => task.Result);
+					if (offsets.Count() != 1)
+						return null;
+					return new[]
+					{
+						new Patch(offsets.First(), "01", "00", MemProtection.PAGE_EXECUTE_READWRITE)
+					};
+				});
+		}
+
+		#endregion
 
 		private static int[] findPattern(byte[] data, byte alignment, string pattern)
 		{
@@ -91,7 +316,7 @@ namespace HitmanPatcher
 			for (int i = alignment; i < data.Length; i += 16)
 			{
 				int j = 0;
-				while (wildcards[j] || data[i + j] == bytepattern[j])
+				while (i + j < data.Length && (wildcards[j] || data[i + j] == bytepattern[j]))
 				{
 					j += 1;
 					if (j == bytepattern.Length)
