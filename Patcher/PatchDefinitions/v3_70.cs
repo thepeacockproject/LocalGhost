@@ -8,6 +8,7 @@ namespace HitmanPatcher
 		public static void addVersions()
 		{
 			HitmanVersion.addVersion("3.70.0.0_dx12", 0x614B0237, v3_70_0_dx12);
+			HitmanVersion.addVersion("3.70.0.0-h1_dx12", 0x6157119F, v3_70_0_h1_dx12);
 		}
 
 		private static HitmanVersion v3_70_0_dx12 = new HitmanVersion()
@@ -24,6 +25,15 @@ namespace HitmanPatcher
 				new Patch(0x1E77550, "68", "61", MemProtection.PAGE_READONLY) // dont ask me why this works
 			},
 			dynres_noforceoffline = new[] { new Patch(0x3B22B18, "01", "00", MemProtection.PAGE_EXECUTE_READWRITE) }
+		};
+
+		private static HitmanVersion v3_70_0_h1_dx12 = new HitmanVersion()
+		{
+			certpin = v3_70_0_dx12.certpin,
+			authheader = v3_70_0_dx12.authheader,
+			configdomain = v3_70_0_dx12.configdomain,
+			protocol = new[] { new Patch(0x1E77580, "68", "61", MemProtection.PAGE_READONLY) },
+			dynres_noforceoffline = v3_70_0_dx12.dynres_noforceoffline
 		};
 	}
 }
