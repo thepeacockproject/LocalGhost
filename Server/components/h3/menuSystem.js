@@ -32,6 +32,16 @@ app.get('/dynamic_resources_pc_release_rpkg', (req, res) => {
     });
 });
 
-app.use('/', express.static(path.join('menudata', 'h3')));
+for (const folder of [
+    'menusystem',
+    'pages',
+    'images'
+]) {
+    app.use(`/${folder}/`, express.static(path.join('menudata', 'h3', folder), {
+        index: false,
+        redirect: false,
+        dotfiles: 'ignore',
+    }));
+}
 
 module.exports = app;
