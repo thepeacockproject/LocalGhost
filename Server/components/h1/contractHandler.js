@@ -30,12 +30,12 @@ app.post('/GetForPlay', express.json(), extractToken, async (req, res, next) => 
             const gameChangerData = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'GameChangerProperties.json')));
             contractData.Data.GameChangerReferences = [];
             for (const gameChangerId of contractData.Data.GameChangers) {
-                const gameChanger = gameChangerData[gameChangerId];
-                if (!gameChanger) {
+                if (!UUIDRegex.test(gameChangerId) || !Object.hasOwn(gameChangerData, gameChangerId)) {
                     console.error(`Encountered unknown gamechanger id: ${gameChangerId}`);
                     res.status(500);
                     continue;
                 }
+                const gameChanger = gameChangerData[gameChangerId];
                 gameChanger.Id = gameChangerId;
                 delete gameChanger.ObjectivesCategory;
 

@@ -81,7 +81,7 @@ app.post('/ProfileService/UpdateExtensions', extractToken, express.json(), async
     let userdata = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
     const response = {};
     for (const extension in userdata.Extensions) {
-        if (req.body.extensionsData[extension]) {
+        if (Object.hasOwn(req.body.extensionsData, extension)) {
             // TODO: restrict further; is this ever called with anything other than 'friends'?
             userdata.Extensions[extension] = req.body.extensionsData[extension];
             response[extension] = req.body.extensionsData[extension];
@@ -175,7 +175,7 @@ app.post('/GamePersistentDataService/SaveData', extractToken, express.json(), as
     userdata.Extensions.gamepersistentdata[req.body.key] = req.body.data;
     writeFile(path.join('userdata', req.gameVersion, 'users', `${req.body.userId}.json`), JSON.stringify(userdata), { fsyncWait: false });
 
-    res.json(null);
+    res.status(204).end();
 })
 
 app.post('/ChallengesService/GetActiveChallengesAndProgression', extractToken, express.json(), async (req, res) => {

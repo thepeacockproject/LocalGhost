@@ -5,6 +5,17 @@ const jwt = require('jsonwebtoken');
 const path = require('path');
 const { readFile } = require('atomically');
 
+if (!Object.prototype.hasOwnProperty.call(Object, 'hasOwn')) {
+    /**
+     * Determines whether an object has a property with the specified name.
+     * @param {Object} object The JavaScript object instance to test.
+     * @param {String} property The {@link String} name or {@link Symbol} of the property to test.
+     * @returns {Boolean} `true` if the specified object has directly defined the specified property. Otherwise `false`
+     */
+    Object.hasOwn = function hasOwn(object, property) {
+        return Object.prototype.hasOwnProperty.call(object, property);
+    }
+}
 
 const ServerVer = {
     _Major: 7,
