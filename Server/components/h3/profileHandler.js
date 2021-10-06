@@ -79,11 +79,16 @@ app.post('/ProfileService/UpdateExtensions', extractToken, express.json(), async
         return;
     }
     let userdata = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
-    for (const extension in req.body.extensionsData) {
-        userdata.Extensions[extension] = req.body.extensionsData[extension];
+    const response = {};
+    for (const extension in userdata.Extensions) {
+        if (req.body.extensionsData[extension]) {
+            // TODO: restrict further; is this ever called with anything other than 'friends'?
+            userdata.Extensions[extension] = req.body.extensionsData[extension];
+            response[extension] = req.body.extensionsData[extension];
+        }
     }
     writeFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`), JSON.stringify(userdata), { fsyncWait: false });
-    res.json(req.body.extensionsData);
+    res.json(response);
 });
 
 app.post('/ProfileService/SynchroniseGameStats', extractToken, express.json(), async (req, res) => {
