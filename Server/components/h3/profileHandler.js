@@ -136,7 +136,7 @@ app.post('/ProfileService/ResolveGamerTags', express.json(), async (req, res) =>
     for (const profile of profiles) {
         if (profile.LinkedAccounts.dev) {
             result.dev = result.dev || {};
-            result.dev[profile.Id] = null;
+            result.dev[profile.Id] = "";
         } else if (profile.Gamertag) {
             result.steam = result.steam || {};
             result.steam[profile.Id] = profile.Gamertag;
@@ -231,7 +231,7 @@ app.post('/DefaultLoadoutService/Set', extractToken, express.json(), async (req,
         }
         for (const slotid in req.body.loadout) {
             if (UUIDRegex.test(slotid) && inventory.find(item => item.InstanceId === slotid)
-            && inventory.find(item => item.Unlockable.Id === req.body.loadout[slotid])) {
+                && inventory.find(item => item.Unlockable.Id === req.body.loadout[slotid])) {
                 // container contents
                 loadout[slotid] = req.body.loadout[slotid];
                 break; // only one container is supported
