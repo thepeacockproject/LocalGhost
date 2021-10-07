@@ -24,6 +24,14 @@ function GetPlatformEntitlements(req, res) {
             '0a73eaedcac84bd28b567dbec764c5cb', // Hitman 1 standard edition
             '81aecb49a60b47478e61e1cbd68d63c5', // Hitman 1 GOTY upgrade
         ]);
+    } else if (req.body.issuerId === '54504350291134065') { // Hitman 1 gog (no clue where this id comes from, should this not be 1545448592?)
+        // I also don't know if these are actually used by the game
+        res.json([
+            "1545448592", // HITMAN
+            "1389434554", // HITMAN - Game of the Year Edition Upgrade
+        ]);
+    } else {
+        res.status(501).end();
     }
 }
 

@@ -16,15 +16,10 @@ Server/userdata/*/users/**
 # except IOI profile
 !Server/userdata/*/users/fadb923c-e6bb-4283-a537-eb4d1150262e.json
 
-# no steamid => profileid bindings
-Server/userdata/*/steamids/**
-# but keep the folder
-!Server/userdata/*/steamids/.gitkeep
-
-# no epicid => profileid bindings
-Server/userdata/*/epicids/**
-# but keep the folder
-!Server/userdata/*/epicids/.gitkeep
+# no external id => profile id bindings
+Server/userdata/*/*ids/**
+# but keep the folders
+!Server/userdata/*/*ids/.gitkeep
 
 # no contract data
 Server/contractdata/**

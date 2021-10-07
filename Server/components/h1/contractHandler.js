@@ -7,7 +7,7 @@ const uuid = require('uuid');
 const { readFile } = require('atomically');
 const fs = require('fs');
 
-const { extractToken, ServerVer, UUIDRegex } = require('../utils');
+const { extractToken, getServerVerObj, UUIDRegex } = require('../utils');
 const eventHandler = require('../h3/eventHandler.js');
 
 const app = express.Router();
@@ -82,7 +82,7 @@ app.post('/Start', express.json(), extractToken, async (req, res) => {
 
     // all event stuff is handled in h3 eventhandler
     eventHandler.enqueueEvent(req.jwt.unique_name, {
-        Version: ServerVer,
+        Version: getServerVerObj(req.gameVersion),
         IsReplicated: false,
         CreatedContract: null,
         Id: uuid.v4(),

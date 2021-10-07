@@ -8,7 +8,7 @@ const path = require('path');
 const uuid = require('uuid');
 const { writeFile, readFile } = require('atomically');
 
-const { extractToken, ServerVer, getGameVersionFromJWTPis, getGameVersionFromServerVersion, UUIDRegex } = require('./components/utils.js');
+const { extractToken, getServerVerObj, getGameVersionFromJWTPis, getGameVersionFromServerVersion, UUIDRegex } = require('./components/utils.js');
 const h1router = require('./components/h1router.js');
 const h2router = require('./components/h2router.js');
 const h3router = require('./components/h3router.js');
@@ -42,6 +42,7 @@ app.get('/config/:configName/:serverVersion(\\d+_\\d+_\\d+)', (req, res) => {
         config.Versions[0].SERVER_VER.Configuration.AgreementUrl = `${protocol}://${serverhost}/files/privacypolicy/hm2/privacypolicy.json`;
         config.Versions[0].SERVER_VER.Resources.ResourcesServicePath = `${protocol}://${serverhost}/files`;
         config.Versions[0].SERVER_VER.GlobalAuthentication.AuthenticationHost = `${protocol}://${serverhost}`;
+        config.Versions[0].SERVER_VER.GlobalAuthentication.RequestedAudience = `pc-prod_${req.params.serverVersion.slice(0, 1)}`;
         res.json(config);
     });
 });
@@ -112,6 +113,15 @@ app.post('/oauth/token', async (req, res) => {
         external_platform = 'epic';
         external_userid = req.body.epic_userid;
         external_users_folder = 'epicids';
+    } else if (req.body.grant_type === 'external_gog') {
+        if (!/^\d{1,50}$/.test(req.body.gog_userid)) { // no clue what the format is
+            res.status(400).end(); // invalid gog user id
+            return;
+        }
+        external_appid = req.body.gog_cid; // ?
+        external_platform = 'gog';
+        external_userid = req.body.gog_userid;
+        external_users_folder = 'gogids';
     } else {
         res.status(501).end(); // unsupported auth method
         return;
@@ -235,19 +245,17 @@ app.use(express.Router().use('/resources-:serverVersion(\\d+-\\d+)/', (req, res,
     req.gameVersion = getGameVersionFromServerVersion(req.serverVersion);
     next('router');
 }).use(extractToken, (req, res, next) => {
-    switch (req.jwt.pis) { // set ServerVersion from jwt (appid from login token)
-        case 'egp_io_interactive_hitman_the_complete_first_season': // hitman 1 epic
-        case '236870': // hitman 1 steam appid
-            req.serverVersion = '6-74';
-            break;
-        case '863550': // hitman 2 steam appid
-            req.serverVersion = '7-17';
-            break;
-        case 'fghi4567xQOCheZIin0pazB47qGUvZw4': // hitman 3 epic
-            req.serverVersion = '8-2';
-            break;
+    req.gameVersion = getGameVersionFromJWTPis(req.jwt.pis);
+    if (req.gameVersion === 'h1') {
+        req.serverVersion = '6-74';
+    } else if (req.gameVersion === 'h2') {
+        req.serverVersion = '7-17';
+    } else if (req.gameVersion === 'h3') {
+        req.serverVersion = '8-2';
+    } else {
+        res.status(500).end();
+        return;
     }
-    req.gameVersion = getGameVersionFromServerVersion(req.serverVersion);
     next();
 }));
 
@@ -259,12 +267,14 @@ function generateBlobConfig(req) {
     };
 }
 
-app.get('/authentication/api/configuration/Init?*', extractToken, (req, res) => { // configName=pc-prod&lockedContentDisabled=false&isFreePrologueUser=false&isIntroPackUser=false&isFullExperienceUser=false
+// configName=pc-prod&lockedContentDisabled=false&isFreePrologueUser=false&isIntroPackUser=false&isFullExperienceUser=false
+app.get('/authentication/api/configuration/Init?*', extractToken, (req, res) => {
+    let ver = getServerVerObj(req.gameVersion);
     res.json({
         token: `${req.jwt.exp}-${req.jwt.nbf}-${req.jwt.platform}-${req.jwt.userid}`,
         blobconfig: generateBlobConfig(req),
         profileid: req.jwt.unique_name,
-        serverversion: `${ServerVer._Major}.${ServerVer._Minor}.${ServerVer._Build}.${ServerVer._Revision}`,
+        serverversion: `${ver._Major}.${ver._Minor}.${ver._Build}.${ver._Revision}`,
         servertimeutc: new Date().toISOString(),
     });
 });

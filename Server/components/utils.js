@@ -17,12 +17,30 @@ if (!Object.prototype.hasOwnProperty.call(Object, 'hasOwn')) {
     }
 }
 
-const ServerVer = {
-    _Major: 7,
-    _Minor: 17,
-    _Build: 6,
-    _Revision: 0
-};
+function getServerVerObj(gameVersion) {
+    if (gameVersion === 'h1') {
+        return {
+            _Major: 6,
+            _Minor: 74,
+            _Build: 61,
+            _Revision: 0,
+        };
+    } else if (gameVersion === 'h2') {
+        return {
+            _Major: 7,
+            _Minor: 21,
+            _Build: 0,
+            _Revision: 16,
+        };
+    } else {
+        return {
+            _Major: 8,
+            _Minor: 7,
+            _Build: 0,
+            _Revision: 32,
+        };
+    }
+}
 
 const UUIDRegex = /^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/;
 
@@ -94,6 +112,7 @@ function getLocationCompletion(location, locationProgression) {
 
 function getGameVersionFromJWTPis(pis) {
     switch (pis) { // set ServerVersion from jwt (appid from login token)
+        case '54504350291134065': // hitman 1 gog
         case 'egp_io_interactive_hitman_the_complete_first_season': // hitman 1 epic
         case '236870': // hitman 1 steam appid
             return 'h1';
@@ -190,7 +209,7 @@ function getDefaultLoadout(location, gameVersion) {
 
 module.exports = {
     extractToken,
-    ServerVer,
+    getServerVerObj,
     MaxPlayerLevel,
     xpRequiredForLevel,
     maxLevelForLocation,

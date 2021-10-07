@@ -6,7 +6,7 @@ const path = require('path');
 const uuid = require('uuid');
 const { readFile } = require('atomically');
 
-const { extractToken, ServerVer, UUIDRegex } = require('../utils.js');
+const { extractToken, getServerVerObj, UUIDRegex } = require('../utils.js');
 const eventHandler = require('./eventHandler.js');
 
 const app = express.Router();
@@ -49,7 +49,7 @@ app.post('/GetForPlay2', express.json(), extractToken, async (req, res) => {
         }
 
         eventHandler.enqueueEvent(req.jwt.unique_name, {
-            Version: ServerVer,
+            Version: getServerVerObj(req.gameVersion),
             IsReplicated: false,
             CreatedContract: null,
             Id: uuid.v4(),
