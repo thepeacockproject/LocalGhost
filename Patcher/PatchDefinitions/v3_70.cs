@@ -9,6 +9,7 @@ namespace HitmanPatcher
 		{
 			HitmanVersion.addVersion("3.70.0.0_dx12", 0x614B0237, v3_70_0_dx12);
 			HitmanVersion.addVersion("3.70.0.0-h1_dx12", 0x6157119F, v3_70_0_h1_dx12);
+			HitmanVersion.addVersion("3.70.0.0-h2_dx12", 0x615D0611, v3_70_0_h2_dx12);
 		}
 
 		private static HitmanVersion v3_70_0_dx12 = new HitmanVersion()
@@ -35,5 +36,7 @@ namespace HitmanPatcher
 			protocol = new[] { new Patch(0x1E77580, "68", "61", MemProtection.PAGE_READONLY) },
 			dynres_noforceoffline = v3_70_0_dx12.dynres_noforceoffline
 		};
+
+		private static HitmanVersion v3_70_0_h2_dx12 = v3_70_0_h1_dx12;
 	}
 }
