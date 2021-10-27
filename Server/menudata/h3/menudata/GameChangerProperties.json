@@ -8353,6 +8353,16 @@
     "Resource": [],
     "Objectives": []
   },
+  "fa97a991-499b-4ca3-a790-dc1bf4dccac6": {
+    "Name": "UI_CONTRACT_HOLLYHOCK_GAMECHANGER_DONTDROPWEAPON_TITLE",
+    "Description": "UI_CONTRACT_HOLLYHOCK_GAMECHANGER_DONTDROPWEAPON_DESC",
+    "TileImage": "images/contracts/escalation/ContractEscalation_Ancestral_Hollyhock_Drop_Weapon.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "secondary",
+    "IsHidden": null,
+    "Resource": [],
+    "Objectives": []
+  },
   "8f2f766d-dd6f-4258-8116-3e16955e5ded": {
     "Name": "UI_GAMECHANGERS_EDGY_GRASSSNAKE_RABBITSHAVEMOVED_NAME",
     "Description": "UI_GAMECHANGERS_EDGY_GRASSSNAKE_RABBITSHAVEMOVED_DESC",
