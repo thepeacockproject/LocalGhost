@@ -49,15 +49,15 @@ function extractToken(req, res, next) {
     if (auth.length === 2 && auth[0].toLowerCase() === "bearer") {
         req.jwt = jwt.decode(auth[1]); // I'm not going to verify the token
         if (!UUIDRegex.test(req.jwt.unique_name)) {
+            console.warn('user sent jwt with non-uuid user id');
             res.status(400).end();
-            next && next('user sent jwt with non-uuid user id');
             return;
         }
         next && next();
         return;
     }
+    console.warn(`invalid auth token for url ${req.originalUrl}`);
     res.status(401).end();
-    next && next('invalid auth token');
 }
 
 const MaxPlayerLevel = 5000;
