@@ -83,24 +83,23 @@ namespace HitmanPatcher
 					{
 						dataToWrite = newurl;
 					}
-					MemProtection newmemprotection = MemProtection.PAGE_READWRITE;
-					bool patchmemprotection = true;
+					MemProtection newmemprotection;
 
-					if (patch.defaultProtection == MemProtection.PAGE_EXECUTE_READ)
+					switch (patch.defaultProtection)
 					{
-						newmemprotection = MemProtection.PAGE_EXECUTE_READWRITE;
-					}
-					else if (patch.defaultProtection == MemProtection.PAGE_READONLY)
-					{
-						newmemprotection = MemProtection.PAGE_READWRITE;
-					}
-					else
-					{
-						// page is already writable so it doesn't need patching
-						patchmemprotection = false;
+						case MemProtection.PAGE_EXECUTE_READ:
+						case MemProtection.PAGE_EXECUTE_READWRITE:
+							newmemprotection = MemProtection.PAGE_EXECUTE_READWRITE;
+							break;
+						case MemProtection.PAGE_READONLY:
+						case MemProtection.PAGE_READWRITE:
+							newmemprotection = MemProtection.PAGE_READWRITE;
+							break;
+						default:
+							throw new Exception("This shouldn't be able to happen.");
 					}
 
-					if (patchmemprotection && !Pinvoke.VirtualProtectEx(hProcess, b + patch.offset, (UIntPtr)dataToWrite.Length,
+					if (!Pinvoke.VirtualProtectEx(hProcess, b + patch.offset, (UIntPtr)dataToWrite.Length,
 						newmemprotection, out oldprotectflags))
 					{
 						throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at {0} for offset {1:X}", "vpe1", patch.offset));
@@ -112,14 +111,9 @@ namespace HitmanPatcher
 							+ "\nBytes written: {2}", "wpm", patch.offset, byteswritten));
 					}
 
-					MemProtection protectionToRestore = patch.defaultProtection;
-					if (oldprotectflags.HasFlag(MemProtection.PAGE_GUARD)) // re-add page guard if it had it before
-					{
-						protectionToRestore |= MemProtection.PAGE_GUARD;
-						patchmemprotection = true;
-					}
+					MemProtection protectionToRestore = oldprotectflags;
 
-					if (patchmemprotection && !Pinvoke.VirtualProtectEx(hProcess, b + patch.offset, (UIntPtr)dataToWrite.Length,
+					if (!Pinvoke.VirtualProtectEx(hProcess, b + patch.offset, (UIntPtr)dataToWrite.Length,
 						protectionToRestore, out oldprotectflags))
 					{
 						throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at {0} for offset {1:X}", "vpe2", patch.offset));
