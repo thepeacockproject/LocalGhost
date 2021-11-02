@@ -28,7 +28,13 @@ namespace HitmanPatcher
 
 			try
 			{
-				IntPtr b = process.MainModule.BaseAddress;
+				ProcessModule mainModule = process.MainModule;
+				if (mainModule == null)
+				{
+					return false; // process has no main module (not initialized yet?), try again next timer tick.
+				}
+
+				IntPtr b = mainModule.BaseAddress;
 				uint timestamp = getTimestamp(hProcess, b);
 				HitmanVersion v = HitmanVersion.getVersion(timestamp, patchOptions.ForcedVersion);
 				if (v == HitmanVersion.NotFound)
