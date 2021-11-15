@@ -13,6 +13,9 @@ namespace HitmanPatcher
 	{
 		public MemoryPatcher.Options patchOptions;
 		public bool showTestingDomains;
+		public bool startInTray;
+		public bool minToTray;
+		public string[] trayDomains;
 
 		public Settings()
 		{
@@ -28,6 +31,9 @@ namespace HitmanPatcher
 				ForcedVersion = ""
 			};
 			this.showTestingDomains = false;
+			this.startInTray = false;
+			this.minToTray = false;
+			this.trayDomains = new string[] { };
 		}
 
 		public void saveToFile(string path)
@@ -41,6 +47,9 @@ namespace HitmanPatcher
 			lines.Add(String.Format("DisableForceOfflineOnFailedDynamicResources={0}", patchOptions.DisableForceOfflineOnFailedDynamicResources));
 			lines.Add(String.Format("forcedVersion={0}", patchOptions.ForcedVersion));
 			lines.Add(String.Format("showTestingDomains={0}", showTestingDomains));
+			lines.Add(String.Format("startInTray={0}", startInTray));
+			lines.Add(String.Format("minToTray={0}", minToTray));
+			lines.Add(String.Format("trayDomains={0}", string.Join(",", trayDomains)));
 
 			File.WriteAllLines(path, lines);
 		}
@@ -89,10 +98,21 @@ namespace HitmanPatcher
 							case "showTestingDomains":
 								result.showTestingDomains = Boolean.Parse(linecontents[1]);
 								break;
+							case "startInTray":
+								result.startInTray = Boolean.Parse(linecontents[1]);
+								break;
+							case "minToTray":
+								result.minToTray = Boolean.Parse(linecontents[1]);
+								break;
+							case "trayDomains":
+								result.trayDomains = linecontents[1] == "" ? new string[0] : linecontents[1].Split(new char[] { ',' });
+								break;
 						}
 					}
 				}
 			}
+
+			result.saveToFile(path);
 			return result;
 		}
 	}
