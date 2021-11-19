@@ -13,7 +13,7 @@ using System.IO;
 
 namespace HitmanPatcher
 {
-	public partial class Form1 : Form
+	public partial class MainForm : Form
 	{
 		Timer timer;
 		HashSet<int> patchedprocesses = new HashSet<int>();
@@ -25,38 +25,8 @@ namespace HitmanPatcher
 		};
 
 		private static readonly Dictionary<string, string> publicServersReverse = publicServers.ToDictionary(kvp => kvp.Value, kvp => kvp.Key);
-
-		private void updateTrayDomains()
-		{
-			domainsTrayMenu.DropDownItems.Clear();
-			if (currentSettings.trayDomains != null)
-			{
-				for (int i = 0; i < currentSettings.trayDomains.Length; i++)
-				{
-					ToolStripMenuItem stripItem = new ToolStripMenuItem();
-
-					stripItem.Text = currentSettings.trayDomains[i];
-					stripItem.CheckOnClick = true;
-					stripItem.Click += (object sender, EventArgs e) =>
-					{
-						for (int j = 0; j < ((ToolStripMenuItem)sender).Owner.Items.Count; j++)
-						{
-							if (((ToolStripMenuItem)sender).Owner.Items[j] != ((ToolStripMenuItem)sender))
-							{
-								((ToolStripMenuItem)((ToolStripMenuItem)sender).Owner.Items[j]).Checked = false;
-							}
-						}
-
-						setSelectedServerHostname(((ToolStripMenuItem)sender).Text);
-						patchedprocesses.Clear();
-					};
-
-					domainsTrayMenu.DropDownItems.Add(stripItem);
-				}
-			}
-		}
 		
-		public Form1()
+		public MainForm()
 		{
 			InitializeComponent();
 			listView1.Columns[0].Width = listView1.Width - 4 - SystemInformation.VerticalScrollBarWidth;
@@ -73,18 +43,17 @@ namespace HitmanPatcher
 			{
 				currentSettings = new Settings();
 			}
+			updateTrayDomains();
 
 			log("Patcher ready");
 			log("Select a server and start hitman");
 
-			Shown += Form1_Shown;
-
 			if (currentSettings.startInTray)
 			{
 				trayIcon.Visible = true;
-
-				updateTrayDomains();
-
+				this.WindowState = FormWindowState.Minimized;
+				this.Hide();
+				this.ShowInTaskbar = false;
 				trayIcon.ShowBalloonTip(5000, "LocalGhost Patcher", "The LocalGhost Patcher has been started in the tray.", ToolTipIcon.Info);
 			}			
 		}
@@ -142,12 +111,12 @@ namespace HitmanPatcher
 			}
 		}
 
-		private void button1_Click(object sender, EventArgs e)
+		private void buttonRepatch_Click(object sender, EventArgs e)
 		{
 			patchedprocesses.Clear();
 		}
 
-		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			currentSettings.Save();
 		}
@@ -198,7 +167,7 @@ namespace HitmanPatcher
 			}
 		}
 
-		private void button3_Click(object sender, EventArgs e)
+		private void buttonOptions_Click(object sender, EventArgs e)
 		{
 			OptionsForm optionsForm = new OptionsForm(currentSettings);
 			DialogResult result = optionsForm.ShowDialog();
@@ -244,14 +213,13 @@ namespace HitmanPatcher
 			}
 		}
 
-		private void Form1_Resize(object sender, EventArgs e)
+		private void MainForm_Resize(object sender, EventArgs e)
 		{
-			if (this.WindowState == FormWindowState.Minimized && currentSettings.minToTray)
+			if (this.WindowState == FormWindowState.Minimized && currentSettings.minimizeToTray)
 			{
-				this.Visible = false;
+				this.Hide();
 				this.ShowInTaskbar = false;
 				trayIcon.Visible = true;
-				updateTrayDomains();
 				trayIcon.ShowBalloonTip(5000, "LocalGhost Patcher", "The LocalGhost Patcher has been minimized to the tray.", ToolTipIcon.Info);
 			}
 			else
@@ -270,36 +238,56 @@ namespace HitmanPatcher
 			Clipboard.SetText(builder.ToString());
 		}
 
-		private void Form1_Shown(object sender, EventArgs e)
-		{
-			if (currentSettings.startInTray)
-			{
-				this.Visible = false;
-				this.ShowInTaskbar = false;
-			}
-		}
-
-		private void trayIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+		private void menuItemOpen_Click(object sender, EventArgs e)
 		{
 			this.Visible = true;
-			this.ShowInTaskbar = true;
 			this.WindowState = FormWindowState.Normal;
 
-			// This makes it the active window
-			this.TopMost = true;
-			this.TopMost = false;
-
+			this.Focus();
+			this.ShowInTaskbar = true;
 			trayIcon.Visible = false;
 		}
 
-		private void exitTrayMenu_Click(object sender, EventArgs e)
+		private void menuItemExit_Click(object sender, EventArgs e)
 		{
 			Application.Exit();
 		}
 
-		private void repatchMenuItem_Click(object sender, EventArgs e)
+		private void domainItem_Click(object sender, EventArgs e)
 		{
-			patchedprocesses.Clear();
+			ToolStripMenuItem clickedItem = sender as ToolStripMenuItem;
+			if (clickedItem != null)
+			{
+				foreach (ToolStripMenuItem item in domainsTrayMenu.DropDownItems)
+				{
+					if (item == clickedItem)
+					{
+						item.Checked = true;
+					}
+					else
+					{
+						item.Checked = false;
+					}
+				}
+
+				setSelectedServerHostname(clickedItem.Text);
+			}
+		}
+
+		private void updateTrayDomains()
+		{
+			domainsTrayMenu.DropDownItems.Clear();
+			foreach (string domain in currentSettings.trayDomains)
+			{
+				if (!string.IsNullOrWhiteSpace(domain))
+				{
+					ToolStripMenuItem item = new ToolStripMenuItem();
+					item.Text = domain;
+					item.Click += domainItem_Click;
+
+					domainsTrayMenu.DropDownItems.Add(item);
+				}
+			}
 		}
 	}
 }

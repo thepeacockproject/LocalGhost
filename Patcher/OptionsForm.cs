@@ -2,6 +2,7 @@
 // Licensed under the zlib license. See LICENSE for more info
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -10,18 +11,14 @@ namespace HitmanPatcher
 	public partial class OptionsForm : Form
 	{
 		private string customDomain;
-
-		TrayOptions.settings traySettings = new TrayOptions.settings();
+		private bool startInTray, minimizeToTray;
+		private List<string> trayDomains;
 
 		public OptionsForm(Settings currentSettings)
 		{
 			InitializeComponent();
 			comboBoxVersion.Items.AddRange(HitmanVersion.Versions.ToArray<object>());
 			this.settings = currentSettings;
-
-			traySettings.startMin = currentSettings.startInTray;
-			traySettings.minTray = currentSettings.minToTray;
-			traySettings.domains = currentSettings.trayDomains;
 		}
 
 		private void buttonCancel_Click(object sender, EventArgs e)
@@ -47,9 +44,9 @@ namespace HitmanPatcher
 						ForcedVersion = comboBoxVersion.Text == null ? "" : comboBoxVersion.Text
 					},
 					showTestingDomains = checkBoxTestingDomains.Checked,
-					startInTray = traySettings.startMin,
-					minToTray = traySettings.minTray,
-					trayDomains = traySettings.domains
+					startInTray = this.startInTray,
+					minimizeToTray = this.minimizeToTray,
+					trayDomains = this.trayDomains
 				};
 			}
 			private set
@@ -63,9 +60,9 @@ namespace HitmanPatcher
 				checkBoxTestingDomains.Checked = value.showTestingDomains;
 				checkBoxForceVersion.Checked = value.patchOptions.ForcedVersion != "";
 				comboBoxVersion.Text = value.patchOptions.ForcedVersion;
-				this.traySettings.startMin = value.startInTray;
-				this.traySettings.minTray = value.minToTray;
-				this.traySettings.domains = value.trayDomains;
+				this.startInTray = value.startInTray;
+				this.minimizeToTray = value.minimizeToTray;
+				this.trayDomains = value.trayDomains;
 			}
 		}
 
@@ -94,13 +91,15 @@ namespace HitmanPatcher
 			}
 		}
 
-		private void button1_Click(object sender, EventArgs e)
+		private void buttonTrayOptions_Click(object sender, EventArgs e)
 		{
-			TrayOptions trayForm = new TrayOptions(traySettings);
-			DialogResult result = trayForm.ShowDialog();
+			TrayOptionsForm trayOptionsForm = new TrayOptionsForm(startInTray, minimizeToTray, trayDomains);
+			DialogResult result = trayOptionsForm.ShowDialog();
 			if (result == DialogResult.OK)
 			{
-				traySettings = trayForm.options;
+				this.startInTray = trayOptionsForm.startInTray;
+				this.minimizeToTray = trayOptionsForm.minimizeToTray;
+				this.trayDomains = trayOptionsForm.trayDomains;
 			}
 		}
 	}
