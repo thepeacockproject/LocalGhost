@@ -2,6 +2,7 @@
 // Licensed under the zlib license. See LICENSE for more info
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -10,6 +11,8 @@ namespace HitmanPatcher
 	public partial class OptionsForm : Form
 	{
 		private string customDomain;
+		private bool startInTray, minimizeToTray;
+		private List<string> trayDomains;
 
 		public OptionsForm(Settings currentSettings)
 		{
@@ -41,6 +44,9 @@ namespace HitmanPatcher
 						ForcedVersion = comboBoxVersion.Text == null ? "" : comboBoxVersion.Text
 					},
 					showTestingDomains = checkBoxTestingDomains.Checked,
+					startInTray = this.startInTray,
+					minimizeToTray = this.minimizeToTray,
+					trayDomains = this.trayDomains
 				};
 			}
 			private set
@@ -54,6 +60,9 @@ namespace HitmanPatcher
 				checkBoxTestingDomains.Checked = value.showTestingDomains;
 				checkBoxForceVersion.Checked = value.patchOptions.ForcedVersion != "";
 				comboBoxVersion.Text = value.patchOptions.ForcedVersion;
+				this.startInTray = value.startInTray;
+				this.minimizeToTray = value.minimizeToTray;
+				this.trayDomains = value.trayDomains;
 			}
 		}
 
@@ -79,6 +88,18 @@ namespace HitmanPatcher
 			{
 				comboBoxVersion.Enabled = false;
 				comboBoxVersion.SelectedIndex = -1;
+			}
+		}
+
+		private void buttonTrayOptions_Click(object sender, EventArgs e)
+		{
+			TrayOptionsForm trayOptionsForm = new TrayOptionsForm(startInTray, minimizeToTray, trayDomains);
+			DialogResult result = trayOptionsForm.ShowDialog();
+			if (result == DialogResult.OK)
+			{
+				this.startInTray = trayOptionsForm.startInTray;
+				this.minimizeToTray = trayOptionsForm.minimizeToTray;
+				this.trayDomains = trayOptionsForm.trayDomains;
 			}
 		}
 	}

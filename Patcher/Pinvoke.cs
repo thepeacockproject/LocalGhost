@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace HitmanPatcher
@@ -30,6 +32,29 @@ namespace HitmanPatcher
 		PROCESS_VM_OPERATION = 0x0008 // Required to perform an operation on the address space of a process using VirtualProtectEx
 	}
 
+	// from https://docs.microsoft.com/en-us/windows/win32/api/winternl/nf-winternl-ntqueryinformationprocess
+	public enum PROCESSINFOCLASS
+	{
+		ProcessBasicInformation = 0,
+		ProcessDebugPort = 7,
+		ProcessWow64Information = 26,
+		ProcessImageFileName = 27,
+		ProcessBreakOnTermination = 29,
+		ProcessSubsystemInformation = 75
+	}
+
+	// from https://docs.microsoft.com/en-us/windows/win32/api/winternl/nf-winternl-ntqueryinformationprocess
+	[StructLayout(LayoutKind.Sequential)]
+	public struct PROCESS_BASIC_INFORMATION
+	{
+		public IntPtr Reserved1;
+		public IntPtr PebBaseAddress;
+		public IntPtr Reserved2_0;
+		public IntPtr Reserved2_1;
+		public IntPtr UniqueProcessId;
+		public IntPtr Reserved3;
+	}
+
 	public static class Pinvoke
 	{
 		[DllImport("kernel32", SetLastError = true)]
@@ -46,5 +71,20 @@ namespace HitmanPatcher
 
 		[DllImport("kernel32.dll", SetLastError = true)]
 		public static extern bool VirtualProtectEx([In] IntPtr hProcess, [In] IntPtr lpAddress, [In] UIntPtr dwSize, [In] MemProtection flNewProtect, [Out] out MemProtection lpflOldProtect);
+
+		[DllImport("ntdll.dll")]
+		public static extern int NtQueryInformationProcess(IntPtr hProcess, PROCESSINFOCLASS processInformationClass, out PROCESS_BASIC_INFORMATION processInformation, uint processInformationLength, out uint returnLength);
+
+		public static int GetProcessParentPid(Process process)
+		{
+			PROCESS_BASIC_INFORMATION PEB = new PROCESS_BASIC_INFORMATION();
+			uint returnlength;
+			int result = NtQueryInformationProcess(process.Handle, PROCESSINFOCLASS.ProcessBasicInformation, out PEB, (uint)Marshal.SizeOf(PEB), out returnlength);
+			if (result != 0)
+			{
+				throw new Win32Exception(result, "(NTSTATUS)"); // not a w32 status code, but an NTSTATUS
+			}
+			return PEB.Reserved3.ToInt32(); // undocumented, but should hold the parent PID
+		}
 	}
 }

@@ -13,6 +13,13 @@ namespace HitmanPatcher
 	{
 		public MemoryPatcher.Options patchOptions;
 		public bool showTestingDomains;
+		public bool startInTray;
+		public bool minimizeToTray;
+		public List<string> trayDomains;
+
+		private static string localpath = "patcher.conf";
+		private static string appdatapath =
+			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "LocalGhost", "patcher.conf");
 
 		public Settings()
 		{
@@ -28,6 +35,9 @@ namespace HitmanPatcher
 				ForcedVersion = ""
 			};
 			this.showTestingDomains = false;
+			this.startInTray = false;
+			this.minimizeToTray = false;
+			this.trayDomains = new List<string>();
 		}
 
 		public void saveToFile(string path)
@@ -41,6 +51,13 @@ namespace HitmanPatcher
 			lines.Add(String.Format("DisableForceOfflineOnFailedDynamicResources={0}", patchOptions.DisableForceOfflineOnFailedDynamicResources));
 			lines.Add(String.Format("forcedVersion={0}", patchOptions.ForcedVersion));
 			lines.Add(String.Format("showTestingDomains={0}", showTestingDomains));
+			lines.Add(String.Format("startInTray={0}", startInTray));
+			lines.Add(String.Format("minToTray={0}", minimizeToTray));
+
+			foreach (string domain in trayDomains)
+			{
+				lines.Add(String.Format("trayDomain={0}", domain));
+			}
 
 			File.WriteAllLines(path, lines);
 		}
@@ -89,11 +106,44 @@ namespace HitmanPatcher
 							case "showTestingDomains":
 								result.showTestingDomains = Boolean.Parse(linecontents[1]);
 								break;
+							case "startInTray":
+								result.startInTray = Boolean.Parse(linecontents[1]);
+								break;
+							case "minToTray":
+								result.minimizeToTray = Boolean.Parse(linecontents[1]);
+								break;
+							case "trayDomain":
+								result.trayDomains.Add(linecontents[1]);
+								break;
 						}
 					}
 				}
 			}
+
 			return result;
+		}
+
+		public static Settings Load()
+		{
+			if (File.Exists(appdatapath))
+			{
+				return getFromFile(appdatapath);
+			}
+			else
+			{
+				return getFromFile(localpath);
+			}
+		}
+
+		public void Save()
+		{
+			string dir = Path.GetDirectoryName(appdatapath);
+			if (!Directory.Exists(dir))
+			{
+				Directory.CreateDirectory(dir);
+			}
+
+			this.saveToFile(appdatapath);
 		}
 	}
 }
