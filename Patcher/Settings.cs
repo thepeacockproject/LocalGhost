@@ -17,6 +17,10 @@ namespace HitmanPatcher
 		public bool minToTray;
 		public string[] trayDomains;
 
+		private static string localpath = "patcher.conf";
+		private static string appdatapath =
+			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "LocalGhost", "patcher.conf");
+
 		public Settings()
 		{
 			// Default settings
@@ -114,6 +118,29 @@ namespace HitmanPatcher
 
 			result.saveToFile(path);
 			return result;
+		}
+
+		public static Settings Load()
+		{
+			if (File.Exists(appdatapath))
+			{
+				return getFromFile(appdatapath);
+			}
+			else
+			{
+				return getFromFile(localpath);
+			}
+		}
+
+		public void Save()
+		{
+			string dir = Path.GetDirectoryName(appdatapath);
+			if (!Directory.Exists(dir))
+			{
+				Directory.CreateDirectory(dir);
+			}
+
+			this.saveToFile(appdatapath);
 		}
 	}
 }
