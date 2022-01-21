@@ -276,6 +276,7 @@ app.get('/authentication/api/configuration/Init?*', extractToken, (req, res) => 
         profileid: req.jwt.unique_name,
         serverversion: `${ver._Major}.${ver._Minor}.${ver._Build}.${ver._Revision}`,
         servertimeutc: new Date().toISOString(),
+        ias: 2,
     });
 });
 
