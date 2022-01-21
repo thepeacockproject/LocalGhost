@@ -598,6 +598,7 @@
       "GameChangers": [],
       "Order": 3,
       "ProgressionKey": "LOCATION_PARENT_COASTALTOWN",
+      "CreateContractId": "bc3eb4cb-3b7a-4a37-be41-fbc84669571a",
       "HideProgression": false,
       "RequiredResources": [
         "[assembly:/_PRO/Scenes/Missions/CoastalTown/scene_ebola.entity].entitytemplate"
@@ -1104,6 +1105,7 @@
       "Order": 1,
       "LimitedLoadout": false,
       "ProgressionKey": "LOCATION_HOKKAIDO",
+      "CreateContractId": "6d3db235-ea1c-4e14-b677-e5f28b7f0fcc",
       "HideProgression": false,
       "RequiredResources": [
         "[assembly:/_PRO/Scenes/Missions/Hokkaido/_scene_flu.entity].entitytemplate"
@@ -7331,6 +7333,28 @@
     "Rarity": "common"
   },
   {
+    "Id": "PROP_MELEE_MACHETE_JUNGLE",
+    "Guid": "c21fccef-c9c1-4ccc-b6bf-c6b2872a7378",
+    "Type": "weapon",
+    "Subtype": "melee",
+    "ImageId": "",
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "LoadoutSlot": "carriedweapon",
+      "Rarity": "common",
+      "RepositoryId": "5db9cefd-391e-4c35-a4c4-bb672ac9b996",
+      "Quality": "2",
+      "UnlockOrder": 5
+    },
+    "Rarity": "common"
+  },
+  {
     "Id": "PROP_MELEE_PIRATE_SABRE",
     "Guid": "a02f162b-f06d-4b47-b2ee-1a544f2b24ca",
     "Type": "weapon",
@@ -8397,6 +8421,62 @@
       "LoadoutSlot": "concealedweapon",
       "RepositoryId": "97f3ab46-e409-40dd-a0ba-8e9dd0b0345b",
       "UnlockOrder": 10
+    },
+    "Rarity": "common"
+  },
+  {
+    "Id": "FIREARMS_HERO_PISTOL_KRUGERMEIER_SPECTRE",
+    "Guid": "3fa2d74d-6d3d-45af-8d9d-47d67c8873ca",
+    "Type": "weapon",
+    "Subtype": "pistol",
+    "ImageId": "",
+    "RMTPrice": 99,
+    "GamePrice": 99,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Gameplay": {
+        "range": 0.4,
+        "damage": 0.3,
+        "clipsize": 0.7,
+        "rateoffire": 0.6
+      },
+      "Quality": 4,
+      "Rarity": "common",
+      "LoadoutSlot": "concealedweapon",
+      "RepositoryId": "b2d514ba-86d6-456a-be10-7592a30dcae1",
+      "UnlockOrder": 10
+    },
+    "Rarity": "common"
+  },
+  {
+    "Id": "FIREARMS_HERO_RIFLE_SIEGER_AR552_TACTICAL",
+    "Guid": "26309c00-3d82-49d7-9822-f204c2b2cbe1",
+    "Type": "weapon",
+    "Subtype": "assaultrifle",
+    "ImageId": "",
+    "RMTPrice": 99,
+    "GamePrice": 99,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Gameplay": {
+        "range": 0.8,
+        "damage": 0.95,
+        "clipsize": 0.85,
+        "rateoffire": 0.75
+      },
+      "Quality": 4,
+      "Rarity": "common",
+      "LoadoutSlot": "carriedweapon",
+      "RepositoryId": "a8309099-1b89-4492-bf37-37d4312b6615",
+      "UnlockOrder": 20
     },
     "Rarity": "common"
   },
@@ -10235,6 +10315,27 @@
     "Rarity": "common"
   },
   {
+    "Id": "PROP_EXPLOSIVE_GRENADE_MOLOTOV",
+    "Guid": "62ed4c2d-3611-45ad-9412-8728847b17e3",
+    "Type": "gear",
+    "Subtype": "explosive",
+    "ImageId": "",
+    "RMTPrice": 149,
+    "GamePrice": 149,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Quality": 3,
+      "LoadoutSlot": "gear",
+      "Rarity": "common",
+      "RepositoryId": "a83349bf-3d9c-43ec-92ee-c8c98cbeabc1"
+    },
+    "Rarity": "common"
+  },
+  {
     "Id": "PROP_GAS_GRENADE_EMETIC",
     "Guid": "a8ece8aa-1494-414c-92eb-c5320a3a2654",
     "Type": "gear",
@@ -10252,6 +10353,27 @@
       "LoadoutSlot": "gear",
       "Rarity": "common",
       "RepositoryId": "b988422a-02a6-499e-b796-302a782be3d1"
+    },
+    "Rarity": "common"
+  },
+  {
+    "Id": "PROP_GAS_GRENADE_EMETIC_FROG",
+    "Guid": "512ef2cc-e64a-4915-83aa-98b2c1083ced",
+    "Type": "gear",
+    "Subtype": "tool",
+    "ImageId": "",
+    "RMTPrice": 149,
+    "GamePrice": 149,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Quality": 3,
+      "LoadoutSlot": "gear",
+      "Rarity": "common",
+      "RepositoryId": "af82349c-259f-4bdd-8be7-d5ff61695c29"
     },
     "Rarity": "common"
   },
@@ -11634,6 +11756,48 @@
       "Rarity": "common",
       "LoadoutSlot": "carriedweapon",
       "RepositoryId": "8a30c788-049a-4b83-b148-1a6db49d2ae5"
+    },
+    "Rarity": "common"
+  },
+  {
+    "Id": "FIREARMS_SMG_HX10_MILITIA",
+    "Guid": "480adeb0-f55c-436d-9695-61921f211407",
+    "Type": "weapon",
+    "Subtype": "smg",
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Gameplay": {},
+      "Quality": 4,
+      "Rarity": "common",
+      "LoadoutSlot": "carriedweapon",
+      "RepositoryId": "6738e8ad-b8d0-496a-9749-d27a93b40113"
+    },
+    "Rarity": "common"
+  },
+  {
+    "Id": "FIREARMS_SMG_DAK_X2_RUSTY",
+    "Guid": "e08622c9-407c-4210-bd3d-2f1e25b68078",
+    "Type": "weapon",
+    "Subtype": "smg",
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Gameplay": {},
+      "Quality": 4,
+      "Rarity": "common",
+      "LoadoutSlot": "carriedweapon",
+      "RepositoryId": "79f8c0e9-4690-4ebf-b2b3-fd8411a1407f"
     },
     "Rarity": "common"
   },
@@ -18949,7 +19113,7 @@
   },
   {
     "Id": "STARTING_LOCATION_HOLLYHOCK_DEFAULT",
-    "Guid": "247bf2be-5fec-4444-972c-c07c818b4b3f",
+    "Guid": "1dd5d00a-e1c5-4744-95cb-0629d63801f1",
     "Type": "access",
     "Subtype": "startinglocation",
     "ImageId": null,
