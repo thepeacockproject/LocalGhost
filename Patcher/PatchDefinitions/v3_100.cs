@@ -49,7 +49,7 @@ namespace HitmanPatcher
 		{
 			certpin = v3_100_0_epic_dx12.certpin,
 			authheader = v3_100_0_epic_dx12.authheader,
-			configdomain = new[] { new Patch(0x3BF8E628, "", "", MemProtection.PAGE_READWRITE, "configdomain") },
+			configdomain = new[] { new Patch(0x3BF8E28, "", "", MemProtection.PAGE_READWRITE, "configdomain") },
 			protocol = new[]
 			{
 				new Patch(0x1E6A5B8, "68", "61", MemProtection.PAGE_READONLY) // dont ask me why this works
