@@ -119,6 +119,8 @@ function getGameVersionFromJWTPis(pis) {
         case '863550': // hitman 2 steam appid
             return 'h2';
         case 'fghi4567xQOCheZIin0pazB47qGUvZw4': // hitman 3 epic
+        case '1659040': // hitman 3 retail steam appid
+        case '1847520': // hitman 3 demo steam appid
             return 'h3';
     }
     console.error(`Could not get version from jwt pis: ${pis}`);

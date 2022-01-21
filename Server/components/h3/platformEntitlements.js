@@ -31,6 +31,34 @@ function GetPlatformEntitlements(req, res) {
             '0403062df0d347619c8dcf043c65c02e', // (Deadly Sins 6: Wrath?)
             '9e936ed2507a473db6f53ad24d2da587', // (Deadly Sins 7: Envy?)
         ]);
+    } else if (req.body.issuerId === '1659040' // Hitman 3 steam retail appid
+        || req.body.issuerId === '1847520') { // Hitman 3 steam demo appid
+        res.json([
+            // Steam AppIDs of Hitman3 and its DLCs
+            '1659040', // HITMAN 3
+            '1847520', // Hitman 3 Demo
+            '1829605', // HITMAN 3 - Dubai
+            '1829604', // HITMAN 3 - Dartmoor
+            '1829603', // HITMAN 3 - Berlin
+            '1829602', // HITMAN 3 - Chongqing
+            '1829601', // HITMAN 3 - Mendoza
+            '1829600', // HITMAN 3 - Carpathian Mountains
+            '1829596', // HITMAN 3 - Trinity Pack
+            '1829591', // HITMAN 3 - Deluxe Pack
+            '1829594', // HITMAN 3 - VR Access
+            '1843460', // HITMAN 3 Access Pass: HITMAN 1 GOTY Edition
+            '1829595', // HITMAN 3 Access Pass: HITMAN 1 GOTY Upgrade
+            '1829593', // HITMAN 3 Access Pass: HITMAN 1 Complete First Season
+            '1829592', // HITMAN 3 Access Pass: HITMAN 2 Standard
+            '1829590', // HITMAN 3 Access Pass: HITMAN 2 Expansion
+            '1829580', // HITMAN 3 - Seven Deadly Sins Act 1: Greed
+            '1829581', // HITMAN 3 - Seven Deadly Sins Act 2: Pride
+            '1829582', // HITMAN 3 - Seven Deadly Sins Act 3: Sloth
+            '1829583', // HITMAN 3 - Seven Deadly Sins Act 4: Lust
+            '1829584', // HITMAN 3 - Seven Deadly Sins Act 5: Gluttony
+            '1829585', // HITMAN 3 - Seven Deadly Sins Act 6: Envy
+            '1829586', // HITMAN 3 - Seven Deadly Sins Act 7: Wrath
+        ]);
     }
 }
 
