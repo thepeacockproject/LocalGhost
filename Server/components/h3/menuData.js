@@ -139,7 +139,7 @@ app.get('/Hub', extractToken, async (req, res) => {
             IOIAccountStatus: {
                 IsConfirmed: true,
                 LinkedEmail: 'mail@example.com',
-                IOIAccountId: '00000000-0000-0000-0000-000000000000',
+                IOIAccountId: uuid.NIL,
                 IOIAccountBaseUrl: 'https://account.ioi.dk',
             },
             FinishedFinalTest: true,

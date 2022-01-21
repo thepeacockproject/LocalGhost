@@ -4,6 +4,7 @@
 const express = require('express');
 const path = require('path');
 const { writeFile, readFile } = require('atomically');
+const uuid = require('uuid');
 
 
 const { extractToken, MaxPlayerLevel, UUIDRegex } = require('../utils.js');
@@ -249,6 +250,28 @@ app.post('/DefaultLoadoutService/Set', extractToken, express.json(), async (req,
     } else {
         res.status(400).end();
     }
+});
+
+app.post([
+    '/ProfileService/UnconfirmedSignupIoIAccount',
+    '/ProfileService/SubmitSemEmail',
+], extractToken, express.json(), async (req, res) => {
+    res.json({
+        Success: true,
+        ErrorCode: null,
+        IsConfirmed: true,
+        LinkedEmail: req.body.email,
+        IOIAccountId: uuid.NIL,
+    });
+});
+
+app.post('/ProfileService/GetSemLinkStatus', extractToken, express.json(), async (req, res) => {
+    res.json({
+        IsConfirmed: true,
+        LinkedEmail: 'mail@example.com',
+        IOIAccountId: uuid.NIL,
+        IOIAccountBaseUrl: "https://account.ioi.dk"
+    });
 });
 
 module.exports = {
