@@ -134,6 +134,16 @@
       "assembly:/_PRO/Scenes/bricks/ui_versus.brick",
       "assembly:/_PRO/Scenes/bricks/vs_race_multiplayer.brick"
     ],
+    "VR":[
+      {
+        "Quality":"base",
+        "Bricks":[
+          "assembly:/_pro/Scenes/Bricks/vr_setup.brick",
+          "assembly:/_pro/scenes/missions/miami/vr_overrides_flamingo.brick",
+          "assembly:/_PRO/scenes/missions/miami/vr_overrides_ps4perf.brick"
+        ]
+      }
+    ],
     "Entrances": [],
     "GameChangers": [],
     "EngineModesBricks": [],
