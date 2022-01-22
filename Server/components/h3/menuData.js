@@ -41,23 +41,7 @@ app.get('/dashboard/Dashboard_Category_:category/:subscriptionId/:type/:id/:mode
         contractIds = [req.params.id];
     }
 
-    const contracts = (await Promise.allSettled(contractIds.map(id => {
-        return readFile(path.join('contractdata', `${id}.json`)).then(file => {
-            return generateUserCentric(JSON.parse(file), userData, req.gameVersion, repoData);
-        });
-    }))).map(outcome => {
-        if (outcome.status === 'fulfilled') {
-            return outcome.value;
-        } else {
-            if (outcome.reason.code === 'ENOENT') {
-                console.error(`Attempted to resolve unknown contract: ${path.basename(outcome.reason.path, '.json')}`);
-                return null;
-            } else {
-                console.error(outcome.reason);
-                return null;
-            }
-        }
-    }).filter(data => data); // filter out nulls
+    const contracts = await generateUserCentricMultiple(contractIds, userData, req.gameVersion, repoData);
 
     let item = {};
     if (req.params.type === 'ContractList') {
@@ -313,23 +297,35 @@ app.get('/multiplayerpresets', extractToken, async (req, res) => { // /multiplay
     if (req.query.gamemode !== 'versus') { // not sure what happens here
         next();
     }
-    let multiplayerPresets = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'multiplayerpresets.json')));
+    const presets = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'multiplayerpresets.json')));
+    const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
+    const contractIds = new Set();
+    for (const preset of presets) {
+        for(const contractId of preset.Data.Contracts) {
+            contractIds.add(contractId);
+        }
+    }
 
-    multiplayerPresets.data.LoadoutData = await getLoadoutData(req.jwt.unique_name, req.query.disguiseUnlockableId, req.gameVersion);
-    // TODO: completion data for locations
-    res.json(multiplayerPresets); // presets + user data for locations + contract details + loadout
+    res.json({
+        template: null,
+        data: {
+            Presets: presets,
+            UserCentricContracts: await generateUserCentricMultiple(contractIds, userData, req.gameVersion),
+            LoadoutData: await getLoadoutData(userData, req.query.disguiseUnlockableId, req.gameVersion),
+        }
+    });
 });
 
-async function getLoadoutData(userId, disguiseUnlockableId, gameVersion) {
+async function getLoadoutData(userData, disguiseUnlockableId, gameVersion) {
     const allunlockables = JSON.parse(await readFile(path.join('userdata', gameVersion, 'allunlockables.json')));
-    const userInventory = JSON.parse(await readFile(path.join('userdata', gameVersion, 'users', `${userId}.json`))).Extensions.inventory;
-    let unlockable = allunlockables.find(unlockable => unlockable.Id === disguiseUnlockableId);
+    let unlockable = userData.Extensions.inventory.find(unlockable =>
+        unlockable.Id === disguiseUnlockableId && unlockable.Type === 'disguise');
     if (!unlockable) {
         unlockable = allunlockables.find(unlockable => unlockable.Id === 'TOKEN_OUTFIT_HITMANSUIT');
     }
     unlockable.GameAsset = null;
     unlockable.DisplayNameLocKey = `UI_${unlockable.Id}_NAME`;
-    return Array.of({
+    return [{
         SlotName: 'disguise',
         SlotId: '3',
         Recommended: {
@@ -340,19 +336,20 @@ async function getLoadoutData(userId, disguiseUnlockableId, gameVersion) {
                 Properties: {},
             },
             type: 'disguise',
-            owned: userInventory.some(item => item.Unlockable.Id === disguiseUnlockableId),
+            owned: true,
         },
-    });
+    }];
 }
 
 app.get('/multiplayer', extractToken, async (req, res) => { // /multiplayer?gamemode=versus&disguiseUnlockableId=TOKEN_OUTFIT_ELUSIVE_COMPLETE_15_SUIT
     if (req.query.gamemode !== 'versus') { // not sure what happens here
         return
     }
+    const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
     res.json({
         template: null,
         data: {
-            LoadoutData: await getLoadoutData(req.jwt.unique_name, req.query.disguiseUnlockableId, req.gameVersion),
+            LoadoutData: await getLoadoutData(userData, req.query.disguiseUnlockableId, req.gameVersion),
         }
     });
 });
@@ -771,6 +768,33 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
     return sortedResult;
 }
 
+async function generateUserCentricMultiple(contractIds, userData, gameVersion, unlockablesData) {
+    if (!unlockablesData) {
+        unlockablesData = JSON.parse(await readFile(path.join('userdata', gameVersion, 'allunlockables.json')));
+    }
+
+    let promises = [];
+    for(const contractId of contractIds) {
+        promises.push(readFile(path.join('contractdata', `${contractId}.json`)).then(file => {
+            return generateUserCentric(JSON.parse(file), userData, gameVersion, unlockablesData);
+        }));
+    }
+
+    return (await Promise.allSettled(promises)).map(outcome => {
+        if (outcome.status === 'fulfilled') {
+            return outcome.value;
+        } else {
+            if (outcome.reason.code === 'ENOENT') {
+                console.error(`Attempted to resolve unknown contract: ${path.basename(outcome.reason.path, '.json')}`);
+                return null;
+            } else {
+                console.error(outcome.reason);
+                return null;
+            }
+        }
+    }).filter(data => data); // filter out nulls
+}
+
 async function generateUserCentric(contractData, userData, gameVersion, repoData) {
     const repo = repoData || JSON.parse(await readFile(path.join('userdata', gameVersion, 'allunlockables.json')));
     const sublocation = repo.find(entry => entry.Id === contractData.Metadata.Location);
@@ -840,4 +864,5 @@ function calculateMpScore(sessionDetails) {
 module.exports = {
     router: app,
     generateUserCentric: generateUserCentric,
+    generateUserCentricMultiple: generateUserCentricMultiple,
 };

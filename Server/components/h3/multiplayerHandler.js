@@ -8,20 +8,28 @@ const { readFile } = require('atomically');
 
 const { extractToken } = require('../utils.js');
 const eventHandler = require('./eventHandler.js');
+const { generateUserCentricMultiple } = require('./menuData.js');
 
 const app = express.Router();
 
 app.post('/GetRequiredResourcesForPreset', express.json(), async (req, res) => {
-    let presetData = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'multiplayerpresets.json')));
-    let result = presetData.data.Presets.find(preset => preset.Id === req.body.id).Data.Contracts.map(contractId => {
-        let contract = presetData.data.UserCentricContracts.find(contract => contract.Contract.Metadata.Id === contractId);
-        return {
-            Id: contractId,
-            DlcId: contract.Data.DlcName,
-            Resources: Array.of(contract.Contract.Metadata.ScenePath, ...contract.Contract.Data.Bricks),
-        }
-    });
-    res.json(result);
+    const allPresets = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'multiplayerpresets.json')));
+    const requestedPreset = allPresets.find(preset => preset.Id === req.body.id);
+    if (!requestedPreset) {
+        res.status(404).end();
+        console.info('unknown multiplayer preset id requested');
+        return;
+    }
+
+    const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
+    const contractIds = requestedPreset.Data.Contracts;
+    const userCentrics = await generateUserCentricMultiple(contractIds, userData, req.gameVersion);
+
+    res.json(userCentrics.map(userCentric => ({
+        Id: userCentric.Contract.Metadata.Id,
+        DlcId: userCentric.Data.DlcName,
+        Resources: [userCentric.Contract.Metadata.ScenePath, ...userCentric.Contract.Data.Bricks],
+    })));
 });
 
 let activeMatches = new Map();
@@ -32,7 +40,13 @@ app.post('/RegisterToMatch', extractToken, express.json(), async (req, res) => {
     if (!req.body.presetId) {
         req.body.presetId = 'd72d7cc9-ee26-4c7d-857a-75abdc9ccb61'; // default to miami invite preset
     }
-    let preset = multiplayerPresets.data.Presets.find(preset => preset.Id === req.body.presetId);
+    let preset = multiplayerPresets.find(preset => preset.Id === req.body.presetId);
+    if (!preset) {
+        res.status(404).end();
+        console.info('unknown multiplayer preset id requested');
+        return;
+    }
+
     let contractId = preset.Data.Contracts[Math.trunc(Math.random() * preset.Data.Contracts.length)];
 
     if (req.body.matchId === uuid.NIL) { // create new match
