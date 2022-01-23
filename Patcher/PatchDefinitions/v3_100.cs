@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2021 grappigegovert <grappigegovert@hotmail.com>
+﻿// Copyright (C) 2022 grappigegovert <grappigegovert@hotmail.com>
 // Licensed under the zlib license. See LICENSE for more info
 
 namespace HitmanPatcher
@@ -60,7 +60,7 @@ namespace HitmanPatcher
 		private static HitmanVersion v3_100_0_h1_steam_dx12 = new HitmanVersion()
 		{
 			certpin = v3_100_0_steam_dx12.certpin,
-			authheader = v3_100_0_steam_dx12.certpin,
+			authheader = v3_100_0_steam_dx12.authheader,
 			configdomain = new[] { new Patch(0x3BFF808, "", "", MemProtection.PAGE_READWRITE, "configdomain") },
 			protocol = new[]
 			{
