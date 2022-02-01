@@ -14,11 +14,13 @@ Things of note:
 - The server sends a modified main menu, so the only thing available will be ghost mode, the options screen and possibly custom contracts.
 - On mission completion the game will grant you a placeholder challenge 'Old rusty wrench'. I did that because the screen looks so empty otherwise.
 - Ghost mode matchmaking is (still) not implemented. Inviting is the way to go.
-- Hitman 1 support is not as complete as h2/h3 support yet. Check the h1 branch.
 
 # Players
 
-##### NOTE: Ghost Mode (currently) only works in Hitman™ 2
+**NOTE: ~~Ghost Mode (currently) only works in Hitman™ 2~~**  
+**There is now a mod for (the steam version of) Hitman 3 that ports the files that are missing to make ghost mode possible from H2.**  
+**The mod, made by AnthonyFuller and MrMike, is available [on nexusmods](https://www.nexusmods.com/hitman3/mods/260).**
+
 To use this software, download the patcher [here](https://gitlab.com/grappigegovert/localghost/-/jobs/artifacts/master/download?job=build_patcher).
 
 Open the patcher and enter the IP address or domain name of the server you want to connect to.
@@ -29,8 +31,10 @@ _These servers are kindly provided by members of the community. I am not respons
 
 | Host | Server content | Server region |
 | ------ | ------ | ------ |
-| gm.hitmaps.com | Hosts the HITMAPS™ roulette (ghost mode might not work) | Eastern US |
-| ghostmode.rdil.rocks | For playing ghost mode | Eastern US |
+| gm.hitmaps.com | Hosts the HITMAPS™ roulette and ghost mode | Eastern US |
+| ghostmode.rdil.rocks | Hosts ghost mode only | Eastern US |
+
+The above servers can be found in the server drop-down in the patcher.
 
 If you don't want to use a public server, you or your opponent will have to host one. Install NodeJS and follow [Server hosters](#server-hosters) to start the server. You'll have to port-forward port 80 (or setup a different port) for other players to be able to connect. Other players can then enter [your IP address](https://ident.me/) in the patcher to connect to your server.
 
