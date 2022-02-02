@@ -58,11 +58,34 @@ namespace HitmanPatcher
 			}			
 		}
 
+		private List<Process> GetProcessesByName(params string[] names)
+		{
+			Process[] allProcesses = Process.GetProcesses();
+			List<Process> result = new List<Process>();
+			foreach (Process p in allProcesses)
+			{
+				try
+				{
+					if (names.Contains(p.ProcessName, StringComparer.OrdinalIgnoreCase))
+					{
+						result.Add(p);
+					}
+					else
+					{
+						p.Dispose();
+					}
+				}
+				catch (InvalidOperationException) // Process has exited or has no name
+				{
+					p.Dispose();
+				}
+			}
+			return result;
+		}
+
 		void timer_Tick(object sender, EventArgs e)
 		{
-			IEnumerable<Process> hitmans = Process.GetProcessesByName("HITMAN")
-				.Concat(Process.GetProcessesByName("HITMAN2"))
-				.Concat(Process.GetProcessesByName("HITMAN3"));
+			IEnumerable<Process> hitmans = GetProcessesByName("HITMAN", "HITMAN2", "HITMAN3");
 			foreach (Process process in hitmans)
 			{
 				if (!patchedprocesses.Contains(process.Id))
@@ -73,6 +96,7 @@ namespace HitmanPatcher
 						if (patchedprocesses.Contains(Pinvoke.GetProcessParentPid(process)))
 						{
 							// if we patched this process' parent before, this is probably an error reporter, so don't patch it.
+							process.Dispose();
 							continue;
 						}
 
@@ -100,6 +124,7 @@ namespace HitmanPatcher
 						log(String.Format("Failed to patch processid {0}: unknown version", process.Id));
 					}
 				}
+				process.Dispose();
 			}
 		}
 
