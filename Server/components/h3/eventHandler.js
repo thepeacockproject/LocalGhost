@@ -137,9 +137,14 @@ app.post('/SaveAndSynchronizeEvents4', extractToken, express.json({ limit: '5Mb'
         res.status(403).end(); // Trying to save events for other user
         return;
     }
+    if (!Array.isArray(req.body.values)) {
+        res.status(400).end(); // malformed request
+        return;
+    }
+
     let userQueue;
     let newEvents = null;
-    // events:
+    // events: (server->client)
     if (userQueue = eventQueue.get(req.jwt.unique_name)) {
         userQueue = userQueue.filter(item => item.time > req.body.lastEventTicks);
         eventQueue.set(req.jwt.unique_name, userQueue);
@@ -147,7 +152,7 @@ app.post('/SaveAndSynchronizeEvents4', extractToken, express.json({ limit: '5Mb'
         newEvents = Array.from(userQueue, item => item.event);
     }
 
-    // push messages:
+    // push messages: (server->client)
     let pushMessages = null;
     if (userQueue = messageQueue.get(req.jwt.unique_name)) {
         userQueue = userQueue.filter(item => item.time > req.body.lastPushDt);
@@ -157,7 +162,7 @@ app.post('/SaveAndSynchronizeEvents4', extractToken, express.json({ limit: '5Mb'
     }
 
     res.json({
-        SavedTokens: req.body.values ? saveEvents(req.body.userId, req.body.values) : null,
+        SavedTokens: req.body.values.length ? saveEvents(req.body.userId, req.body.values) : null,
         NewEvents: newEvents || null,
         NextPoll: 10.0,
         PushMessages: pushMessages || null,
