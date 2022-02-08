@@ -6,7 +6,16 @@ const path = require('path');
 const uuid = require('uuid');
 const { readFile } = require('atomically');
 
-const { extractToken, MaxPlayerLevel, xpRequiredForLevel, maxLevelForLocation, getTemplate, UUIDRegex, getDefaultLoadout } = require('../utils.js');
+const {
+    extractToken,
+    MaxPlayerLevel,
+    xpRequiredForLevel,
+    maxLevelForLocation,
+    getTemplate,
+    UUIDRegex,
+    getDefaultLoadout,
+    unlockOrderComparer,
+} = require('../utils.js');
 const { resolveProfiles } = require('./profileHandler.js');
 const { contractSessions } = require('./eventHandler.js');
 const scoreHandler = require('./scoreHandler.js');
@@ -407,7 +416,7 @@ app.get('/Planning', extractToken, async (req, res) => {
                 Objectives: await mapObjectives(contractData.Data.Objectives, contractData.Data.GameChangers, contractData.Metadata.GroupObjectiveDisplayOrder),
                 GroupData: {},
                 Entrances: unlockedEntrances.filter(unlockable => entrancesInScene.includes(unlockable.Properties.RepositoryId))
-                    .sort((a, b) => a.Properties.UnlockOrder - b.Properties.UnlockOrder),
+                    .sort(unlockOrderComparer),
                 Location: sublocation,
                 LoadoutData: Object.entries(defaultLoadout).map(([slotid, itemId]) => (
                     {
@@ -494,7 +503,7 @@ app.get('/selectagencypickup', extractToken, async (req, res) => {
                 Contract: contractData,
                 OrderedUnlocks: unlockedAgencyPickups.filter(unlockable => pickupsInScene.includes(unlockable.Properties.RepositoryId))
                     .filter(unlockable => unlockable.Properties.Difficulty === contractData.Metadata.Difficulty)
-                    .sort((a, b) => a.Properties.UnlockOrder - b.Properties.UnlockOrder),
+                    .sort(unlockOrderComparer),
                 UserCentric: await generateUserCentric(contractData, userData, req.gameVersion),
             }
         };
@@ -537,7 +546,7 @@ app.get('/selectentrance', extractToken, async (req, res) => {
                 Contract: contractData,
                 OrderedUnlocks: unlockedEntrances.filter(unlockable => entrancesInScene.includes(unlockable.Properties.RepositoryId))
                     .filter(unlockable => unlockable.Properties.Difficulty === contractData.Metadata.Difficulty)
-                    .sort((a, b) => a.Properties.UnlockOrder - b.Properties.UnlockOrder),
+                    .sort(unlockOrderComparer),
                 UserCentric: await generateUserCentric(contractData, userData, req.gameVersion),
             }
         };

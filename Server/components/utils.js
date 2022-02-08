@@ -4,6 +4,7 @@
 const jwt = require('jsonwebtoken');
 const path = require('path');
 const { readFile } = require('atomically');
+const { resourceLimits } = require('worker_threads');
 
 if (!Object.prototype.hasOwnProperty.call(Object, 'hasOwn')) {
     /**
@@ -209,6 +210,20 @@ function getDefaultLoadout(location, gameVersion) {
     return result;
 }
 
+function unlockOrderComparer(a, b) {
+    if (a.Properties.UnlockOrder === undefined) {
+        if (b.Properties.UnlockOrder === undefined) {
+            return 0; // undef == undef
+        }
+        return 1; // undef > *
+    }
+    if (b.Properties.UnlockOrder === undefined) {
+        return -1; // * < undef
+    }
+
+    return a.Properties.UnlockOrder - b.Properties.UnlockOrder;
+}
+
 module.exports = {
     extractToken,
     getServerVerObj,
@@ -221,4 +236,5 @@ module.exports = {
     getTemplate,
     UUIDRegex,
     getDefaultLoadout,
+    unlockOrderComparer,
 };
