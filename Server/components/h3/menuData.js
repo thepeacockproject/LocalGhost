@@ -310,7 +310,7 @@ app.get('/multiplayerpresets', extractToken, async (req, res) => { // /multiplay
     const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
     const contractIds = new Set();
     for (const preset of presets) {
-        for(const contractId of preset.Data.Contracts) {
+        for (const contractId of preset.Data.Contracts) {
             contractIds.add(contractId);
         }
     }
@@ -783,7 +783,7 @@ async function generateUserCentricMultiple(contractIds, userData, gameVersion, u
     }
 
     let promises = [];
-    for(const contractId of contractIds) {
+    for (const contractId of contractIds) {
         promises.push(readFile(path.join('contractdata', `${contractId}.json`)).then(file => {
             return generateUserCentric(JSON.parse(file), userData, gameVersion, unlockablesData);
         }));

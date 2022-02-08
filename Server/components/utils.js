@@ -205,9 +205,6 @@ function getDefaultLoadout(location, gameVersion) {
         4: 'TOKEN_FIBERWIRE',
         5: 'PROP_TOOL_COIN',
     };
-
-
-    return result;
 }
 
 function unlockOrderComparer(a, b) {
