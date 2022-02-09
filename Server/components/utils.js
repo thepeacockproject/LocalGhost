@@ -4,7 +4,6 @@
 const jwt = require('jsonwebtoken');
 const path = require('path');
 const { readFile } = require('atomically');
-const { resourceLimits } = require('worker_threads');
 
 if (!Object.prototype.hasOwnProperty.call(Object, 'hasOwn')) {
     /**
