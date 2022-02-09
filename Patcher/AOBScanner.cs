@@ -337,6 +337,7 @@ namespace HitmanPatcher
 				if (data[i] == firstbyte)
 				{
 					k = 1;
+					k += wildcards[k];
 					while (data[i + k] == bytepattern[k])
 					{
 						k += 1;
