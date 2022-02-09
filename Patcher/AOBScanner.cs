@@ -21,33 +21,33 @@ namespace HitmanPatcher
 			UIntPtr bytesread;
 			Pinvoke.ReadProcessMemory(hProcess, baseAddress, exeData, (UIntPtr)exeData.Length, out bytesread); // fuck it, just read the whole thing
 
-			Task<IEnumerable<Patch[]>> getCertpinPatches = Task.Factory.ContinueWhenAll(new Func<byte[], Task<Patch[]>>[]
+			Task<IEnumerable<Patch[]>> getCertpinPatches = Task.Factory.ContinueWhenAll(new Task<Patch[]>[]
 			{
-				findCertpin_nearjump,
-				findCertpin_shortjump
-			}.Select(func => func.Invoke(exeData)).ToArray(), tasks => tasks.Select(task => task.Result).Where(x => x != null));
+				findCertpin_nearjump(exeData),
+				findCertpin_shortjump(exeData),
+			}, tasks => tasks.Select(task => task.Result).Where(x => x != null));
 
-			Task<IEnumerable<Patch[]>> getAuthheadPatches = Task.Factory.ContinueWhenAll(new Func<byte[], Task<Patch[]>>[]
+			Task<IEnumerable<Patch[]>> getAuthheadPatches = Task.Factory.ContinueWhenAll(new Task<Patch[]>[]
 			{
-				findAuthhead3_30,
-				findAuthhead2_72,
-				findAuthhead1_15
-			}.Select(func => func.Invoke(exeData)).ToArray(), tasks => tasks.Select(task => task.Result).Where(x => x != null));
+				findAuthhead3_30(exeData),
+				findAuthhead2_72(exeData),
+				findAuthhead1_15(exeData),
+			}, tasks => tasks.Select(task => task.Result).Where(x => x != null));
 
-			Task<IEnumerable<Patch[]>> getConfigdomainPatches = Task.Factory.ContinueWhenAll(new Func<byte[], Task<Patch[]>>[]
+			Task<IEnumerable<Patch[]>> getConfigdomainPatches = Task.Factory.ContinueWhenAll(new Task<Patch[]>[]
 			{
-				findConfigdomain
-			}.Select(func => func.Invoke(exeData)).ToArray(), tasks => tasks.Select(task => task.Result).Where(x => x != null));
+				findConfigdomain(exeData),
+			}, tasks => tasks.Select(task => task.Result).Where(x => x != null));
 
-			Task<IEnumerable<Patch[]>> getProtocolPatches = Task.Factory.ContinueWhenAll(new Func<byte[], Task<Patch[]>>[]
+			Task<IEnumerable<Patch[]>> getProtocolPatches = Task.Factory.ContinueWhenAll(new Task<Patch[]>[]
 			{
-				findProtocol3_30
-			}.Select(func => func.Invoke(exeData)).ToArray(), tasks => tasks.Select(task => task.Result).Where(x => x != null));
+				findProtocol3_30(exeData),
+			}, tasks => tasks.Select(task => task.Result).Where(x => x != null));
 
-			Task<IEnumerable<Patch[]>> getDynresForceofflinePatches = Task.Factory.ContinueWhenAll(new Func<byte[], Task<Patch[]>>[]
+			Task<IEnumerable<Patch[]>> getDynresForceofflinePatches = Task.Factory.ContinueWhenAll(new Task<Patch[]>[]
 			{
-				findDynresForceoffline
-			}.Select(func => func.Invoke(exeData)).ToArray(), tasks => tasks.Select(task => task.Result).Where(x => x != null));
+				findDynresForceoffline(exeData),
+			}, tasks => tasks.Select(task => task.Result).Where(x => x != null));
 
 
 			Task<IEnumerable<Patch[]>>[] alltasks =
@@ -289,40 +289,63 @@ namespace HitmanPatcher
 		private static int[] findPattern(byte[] data, byte alignment, string pattern)
 		{
 			List<int> results = new List<int>();
+			int offset = 0;
 
 			// convert string pattern to byte array
-			List<byte> bytepatternlist = new List<byte>();
-			List<bool> wildcardslist = new List<bool>();
+			List<byte> bytepatternlist = new List<byte>(pattern.Length);
+			List<int> wildcardslist = new List<int>(pattern.Length);
 			pattern = pattern.Replace(" ", ""); // remove spaces
 			for (int i = 0; i < pattern.Length; i += 2)
 			{
 				string twochars = pattern.Substring(i, 2);
 				if (twochars.StartsWith("?"))
 				{
-					wildcardslist.Add(true);
-					bytepatternlist.Add(0x00); // dummy value
-					i -= 1; // only step forward by 1 because I use one '?' for a byte
+					if (wildcardslist.Count == 0) // pattern starts with wildcard(s)
+					{
+						alignment += 1;
+						offset -= 1;
+						i -= 1; // step forward 1 less because it's one '?' instead of two hex chars
+					}
+					else
+					{
+						wildcardslist.Add(1);
+						for (int j = wildcardslist.Count - 2; wildcardslist[j] > 0; j--)
+						{
+							wildcardslist[j] += 1;
+						}
+						bytepatternlist.Add(0x00); // dummy value
+						i -= 1; // step forward 1 less because it's one '?' instead of two hex chars
+					}
 				}
 				else
 				{
-					wildcardslist.Add(false);
+					wildcardslist.Add(0);
 					bytepatternlist.Add(Convert.ToByte(twochars, 16));
 				}
 			}
 			byte[] bytepattern = bytepatternlist.ToArray();
-			bool[] wildcards = wildcardslist.ToArray();
+			int[] wildcards = wildcardslist.ToArray();
+			int patternLen = bytepattern.Length;
+			int searchEnd = data.Length - patternLen;
+			int k = 0;
+			int[] matched = new int[patternLen];
+			byte firstbyte = bytepattern[0];
 
 			// search data for byte array
-			for (int i = alignment; i < data.Length; i += 16)
+			for (int i = alignment; i < searchEnd; i += 16)
 			{
-				int j = 0;
-				while (i + j < data.Length && (wildcards[j] || data[i + j] == bytepattern[j]))
+				if (data[i] == firstbyte)
 				{
-					j += 1;
-					if (j == bytepattern.Length)
+					k = 1;
+					while (data[i + k] == bytepattern[k])
 					{
-						results.Add(i);
-						break;
+						k += 1;
+						if (k == patternLen)
+						{
+							results.Add(i + offset);
+							break;
+						}
+						k += wildcards[k];
 					}
 				}
 			}
