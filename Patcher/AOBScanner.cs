@@ -2,7 +2,6 @@
 // Licensed under the zlib license. See LICENSE for more info
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -10,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HitmanPatcher
 {
-	public class AOBScanner
+	public static class AOBScanner
 	{
 		public static bool TryGetHitmanVersionByScanning(Process process, IntPtr hProcess, out HitmanVersion result)
 		{
