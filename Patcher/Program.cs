@@ -2,9 +2,6 @@
 // Licensed under the zlib license. See LICENSE for more info
 
 using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Security.Principal;
 using System.Windows.Forms;
 
 namespace HitmanPatcher
