@@ -3,7 +3,7 @@
 
 const jwt = require('jsonwebtoken');
 const path = require('path');
-const { readFile } = require('atomically');
+const { readFile, readFileSync } = require('atomically');
 
 if (!Object.prototype.hasOwnProperty.call(Object, 'hasOwn')) {
     /**
@@ -43,6 +43,8 @@ function getServerVerObj(gameVersion) {
 }
 
 const UUIDRegex = /^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/;
+const ContractSessionIdRegex = /^[0-9]+-[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/;
+
 
 function extractToken(req, res, next) {
     let auth = req.header('Authorization') ? req.header('Authorization').split(' ') : [];
@@ -220,6 +222,8 @@ function unlockOrderComparer(a, b) {
     return a.Properties.UnlockOrder - b.Properties.UnlockOrder;
 }
 
+const scoreTrackingObjective = JSON.parse(readFileSync(path.join('menudata', 'scoreTrackingObjective.json')));
+
 module.exports = {
     extractToken,
     getServerVerObj,
@@ -231,6 +235,8 @@ module.exports = {
     getGameVersionFromServerVersion,
     getTemplate,
     UUIDRegex,
+    ContractSessionIdRegex,
     getDefaultLoadout,
     unlockOrderComparer,
+    scoreTrackingObjective,
 };

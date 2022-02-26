@@ -1,18 +1,12 @@
-// Copyright (C) 2020 grappigegovert <grappigegovert@hotmail.com>
+// Copyright (C) 2020-2022 grappigegovert <grappigegovert@hotmail.com>
 // Licensed under the zlib license. See LICENSE for more info
 
 const path = require('path');
 const { readFile } = require('atomically');
 
 const { xpRequiredForLevel, maxLevelForLocation, getLocationCompletion, UUIDRegex } = require('../utils.js');
-const { contractSessions } = require('./eventHandler.js');
 
-async function getMissionEndData(sessionId, gameVersion) {
-    const sessionDetails = contractSessions.get(sessionId);
-    if (!sessionDetails) {
-        return null;
-    }
-
+async function getMissionEndData(sessionDetails, gameVersion) {
     const unlockables = JSON.parse(await readFile(path.join('userdata', gameVersion, 'allunlockables.json')));
     const userData = JSON.parse(await readFile(path.join('userdata', gameVersion, 'users', `${sessionDetails.userId}.json`)));
     const contractData = JSON.parse(await readFile(path.join('contractdata', `${sessionDetails.contractId}.json`)));
@@ -20,7 +14,9 @@ async function getMissionEndData(sessionId, gameVersion) {
     const maxlevel = maxLevelForLocation(sublocation.Properties.ProgressionKey, gameVersion);
     const locationProgression = userData.Extensions.progression.Locations[sublocation.Properties.ProgressionKey.toLowerCase()];
 
-    let nonTargetKills = sessionDetails.npcKills.size + sessionDetails.crowdNpcKills;
+    const scoreTrackerContext = sessionDetails.results.scoretracker.endContext;
+
+    let nonTargetKills = scoreTrackerContext.nonTargetKills;
 
     let result = {
         MissionReward: {
@@ -103,28 +99,30 @@ async function getMissionEndData(sessionId, gameVersion) {
         {
             headline: 'UI_SCORING_SUMMARY_OBJECTIVES',
             bonusId: 'AllObjectivesCompletedBonus',
-            condition: contractData.Data.Objectives.every(obj => obj.ExcludeFromScoring || sessionDetails.completedObjectives.has(obj.Id)),
+            condition: sessionDetails.results.objectives.every(objResult => objResult.endState === 'Success'),
         },
         {
             headline: 'UI_SCORING_SUMMARY_NOT_SPOTTED',
             bonusId: 'Unspotted',
-            condition: [...sessionDetails.witnesses, ...sessionDetails.spottedBy]
-                .every(witness => sessionDetails.targetKills.has(witness) || sessionDetails.npcKills.has(witness)),
+            condition: [...scoreTrackerContext.witnesses, ...scoreTrackerContext.spottedBy]
+                .every(witness => scoreTrackerContext.deadNpcs.includes(witness)),
         },
         {
             headline: 'UI_SCORING_SUMMARY_NO_NOTICED_KILLS',
             bonusId: 'NoWitnessedKillsBonus',
-            condition: [...sessionDetails.killsNoticedBy].every(witness => sessionDetails.targetKills.has(witness) || sessionDetails.npcKills.has(witness)),
+            condition: [...scoreTrackerContext.killsNoticedBy]
+                .every(witness => scoreTrackerContext.deadNpcs.includes(witness)),
         },
         {
             headline: 'UI_SCORING_SUMMARY_NO_BODIES_FOUND',
             bonusId: 'NoBodiesFound',
-            condition: [...sessionDetails.bodiesFoundBy].every(witness => sessionDetails.targetKills.has(witness) || sessionDetails.npcKills.has(witness)),
+            condition: [...scoreTrackerContext.bodiesFoundBy]
+                .every(witness => scoreTrackerContext.deadNpcs.includes(witness)),
         },
         {
             headline: 'UI_SCORING_SUMMARY_NO_RECORDINGS',
             bonusId: 'SecurityErased',
-            condition: sessionDetails.recording === 'NOT_SPOTTED' || sessionDetails.recording === 'ERASED',
+            condition: scoreTrackerContext.recording === 'NOT_SPOTTED' || scoreTrackerContext.recording === 'ERASED',
         },
     ];
 
@@ -172,7 +170,7 @@ async function getMissionEndData(sessionId, gameVersion) {
         scoreTotal: -5000 * nonTargetKills,
     }));
 
-    const timeTotal = sessionDetails.timerEnd - sessionDetails.timerStart;
+    const timeTotal = scoreTrackerContext.timerEnd - scoreTrackerContext.timerStart;
     result.ScoreOverview.ContractScore.TimeUsedSecs = timeTotal;
 
     const timeHours = Math.floor(timeTotal / 3600);
@@ -227,7 +225,6 @@ async function getMissionEndData(sessionId, gameVersion) {
     result.ScoreOverview.SilentAssassin = result.ScoreOverview.ContractScore.SilentAssassin =
         [...bonuses.slice(1), { condition: nonTargetKills === 0 }].every(x => x.condition); // need to have all bonuses except objectives for SA
 
-    // TODO: add xp to user profile
     // TODO: save in leaderboards
 
     return result;

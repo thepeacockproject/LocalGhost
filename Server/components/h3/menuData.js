@@ -1,4 +1,4 @@
-// Copyright (C) 2020-2021 grappigegovert <grappigegovert@hotmail.com>
+// Copyright (C) 2020-2022 grappigegovert <grappigegovert@hotmail.com>
 // Licensed under the zlib license. See LICENSE for more info
 
 const express = require('express');
@@ -15,9 +15,10 @@ const {
     UUIDRegex,
     getDefaultLoadout,
     unlockOrderComparer,
+    ContractSessionIdRegex,
 } = require('../utils.js');
 const { resolveProfiles } = require('./profileHandler.js');
-const { contractSessions } = require('./eventHandler.js');
+const { getContractSession } = require('./eventHandler.js');
 const scoreHandler = require('./scoreHandler.js');
 
 const app = express.Router();
@@ -562,39 +563,63 @@ app.get('/selectentrance', extractToken, async (req, res) => {
     });
 });
 
-app.get('/missionendready', async (req, res) => {
-    const missionendready = {
-        template: await getTemplate('missionendready', req.gameVersion),
-        data: {
-            contractSessionId: req.query.contractSessionId,
-            missionEndReady: true,
-            retryCount: 1,
-        }
-    };
-    res.json(missionendready);
-});
+app.get([
+    '/missionendready',
+    '/multiplayermatchstatsready'
+], async (req, res) => {
+    const retryCount = 1 + Number(req.query.retryCount) || 0;
 
-app.post('/multiplayermatchstatsready', (req, res) => {
-    // TODO: keep track of match stats return em with /multiplayermatchstats
+    if (!ContractSessionIdRegex.test(req.query.contractSessionId)) {
+        res.status(400).end();
+        console.warn('Invalid session id in missionendready');
+        return;
+    }
+
+    const sessionDetails = await getContractSession(req.query.contractSessionId, req.gameVersion).catch(err => {
+        if (err.code === 'ENOENT') { // session doesn't exist
+            res.status(404).end();
+            return;
+        }
+    });
+    const ready = sessionDetails.isParsed;
+    let template;
+    if (!ready && retryCount < 100) {
+        // wait some time proportional to the amount of retries
+        await new Promise((resolve) => setTimeout(() => resolve(), retryCount * 100));
+
+        template = await getTemplate('missionendnotready', req.gameVersion); // TODO: add this template
+    } else {
+        template = await getTemplate('missionendready', req.gameVersion);
+    }
+
     res.json({
-        template: null,
+        template: template,
         data: {
             contractSessionId: req.query.contractSessionId,
-            isReady: true,
-            retryCount: 1,
-        },
+            missionEndReady: ready,
+            retryCount: retryCount,
+        }
     });
 });
 
-app.post('/multiplayermatchstats', (req, res) => {
-    const sessionDetails = contractSessions.get(req.query.contractSessionId);
-    if (!sessionDetails) { // contract session not found
-        res.status(404).end();
+app.post('/multiplayermatchstats', async (req, res) => {
+    if (!ContractSessionIdRegex.test(req.query.contractSessionId)) {
+        res.status(400).end();
+        console.warn('Invalid session id in multiplayermatchstats');
         return;
     }
+
+    const sessionDetails = await getContractSession(req.query.contractSessionId, req.gameVersion).catch(err => {
+        if (err.code === 'ENOENT') { // session doesn't exist
+            res.status(404).end();
+            return;
+        }
+    });
+    const scoreTrackerContext = sessionDetails.results.scoretracker.endContext;
     const scores = [calculateMpScore(sessionDetails)];
-    for (const opponentId in sessionDetails.ghost.Opponents) {
-        const opponentSessionDetails = contractSessions.get(sessionDetails.ghost.Opponents[opponentId]);
+    for (const opponentId in scoreTrackerContext.ghost.Opponents) {
+        const opponentSessionId = scoreTrackerContext.ghost.Opponents[opponentId];
+        const opponentSessionDetails = await getContractSession(opponentSessionId, req.gameVersion);
         if (opponentSessionDetails) {
             scores.push(calculateMpScore(opponentSessionDetails));
         } else { // opponent contract session not found
@@ -611,11 +636,17 @@ app.post('/multiplayermatchstats', (req, res) => {
 
 // /profiles/page/missionend
 app.get('/missionend', extractToken, async (req, res) => {
-    const sessionDetails = contractSessions.get(req.query.contractSessionId);
-    if (!sessionDetails) { // contract session not found
-        res.status(404).end();
+    if (!ContractSessionIdRegex.test(req.query.contractSessionId)) {
+        res.status(400).end();
+        console.warn('Invalid session id in missionend');
         return;
     }
+    const sessionDetails = await getContractSession(req.query.contractSessionId, req.gameVersion).catch(err => {
+        if (err.code === 'ENOENT') { // session doesn't exist
+            res.status(404).end();
+            return;
+        }
+    });
     if (sessionDetails.userId != req.jwt.unique_name) { // requested score for other user's session
         res.status(401).end();
         return;
@@ -625,10 +656,14 @@ app.get('/missionend', extractToken, async (req, res) => {
         res.status(400).send('contract id was not a uuid');
         return;
     }
+    const scoreData = await scoreHandler.getMissionEndData(sessionDetails, req.gameVersion);
+    if (scoreData === null) { // session wasn't parsed yet
+        res.status(500).end();
+    }
 
     res.json({
         template: await getTemplate('missionend', req.gameVersion),
-        data: await scoreHandler.getMissionEndData(req.query.contractSessionId, req.gameVersion),
+        data: scoreData,
     });
 });
 
@@ -849,6 +884,7 @@ async function generateUserCentric(contractData, userData, gameVersion, repoData
 }
 
 function calculateMpScore(sessionDetails) {
+    // TODO: fix for new sessions rewrite
     return {
         Header: {
             GameMode: "Ghost",

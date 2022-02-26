@@ -1,9 +1,12 @@
-// Copyright (C) 2020 grappigegovert <grappigegovert@hotmail.com>
+// Copyright (C) 2020-2022 grappigegovert <grappigegovert@hotmail.com>
 // Licensed under the zlib license. See LICENSE for more info
 
+const { writeFile, readFile } = require('atomically');
 const express = require('express');
+const path = require('path');
 
-const { extractToken } = require('../utils.js');
+const { extractToken, scoreTrackingObjective, ContractSessionIdRegex } = require('../utils.js');
+const objectiveInterpreter = require('../objectiveInterpreter.js');
 
 const app = express.Router();
 
@@ -95,44 +98,53 @@ function enqueueEvent(userid, event) {
     }
 }
 
-let contractSessions = new Map();
-function newSession(sessionId, contractId, userId) {
+async function newSession(sessionId, contractId, userId, gameVersion) {
     timestamp = new Date();
 
-    contractSessions.set(sessionId, {
+    let contractSession = {
         sessionStart: timestamp,
         lastUpdate: timestamp,
         contractId: contractId,
         userId: userId,
-        timerStart: 0,
-        timerEnd: 0,
-        duration: 0,
-        ghost: {
-            Opponents: [],
-            deaths: 0,
-            unnoticedKills: 0,
-            Score: 0,
-            OpponentScore: 0,
-        },
-        crowdNpcKills: 0,
-        targetKills: new Set(),
-        npcKills: new Set(),
-        bodiesHidden: new Set(),
-        pacifications: new Set(),
-        disguisesUsed: new Set(),
-        disguisesRuined: new Set(),
-        spottedBy: new Set(),
-        witnesses: new Set(),
-        bodiesFoundBy: new Set(),
-        killsNoticedBy: new Set(),
-        completedObjectives: new Set(),
-        recording: 'NOT_SPOTTED',
-        lastAccident: 0,
-        lastKill: {},
-    });
+        isParsed: false,
+        eventIdMap: {},
+        events: [],
+    };
+
+    // todo: set userdata current session
+
+    await writeFile(path.join('userdata', gameVersion, 'contractsessions', `${sessionId}.json`), JSON.stringify(contractSession));
 }
 
-app.post('/SaveAndSynchronizeEvents4', extractToken, express.json({ limit: '5Mb' }), (req, res) => {
+async function endSession(sessionId, gameVersion) {
+    const contractSession = await getContractSession(sessionId, gameVersion);
+    const contractData = JSON.parse(await readFile(path.join('contractdata', `${contractSession.contractId}.json`)));
+
+    const results = objectiveInterpreter.handleEvents([
+        ...contractData.Data.Objectives,
+        // ...gamechanger objectives // TODO
+        scoreTrackingObjective,
+        // ...challenges, // TODO
+        // ...playStyles, // TODO
+    ], contractSession.events);
+
+    // TODO: handle progression here
+
+    // save all results in contractSession
+    contractSession.results = {
+        objectives: contractData.Data.Objectives.map(obj => results[obj.Id]),
+        scoretracker: results[scoreTrackingObjective.Id],
+        // playStyles: playStyles.map(obj => results[obj.Id]),
+    };
+
+    contractSession.isParsed = true;
+
+    // todo: set userdata current session
+
+    await writeFile(path.join('userdata', gameVersion, 'contractsessions', `${sessionId}.json`), JSON.stringify(contractSession));
+}
+
+app.post('/SaveAndSynchronizeEvents4', extractToken, express.json({ limit: '5Mb' }), async (req, res) => {
     if (req.body.userId !== req.jwt.unique_name) {
         res.status(403).end(); // Trying to save events for other user
         return;
@@ -161,129 +173,118 @@ app.post('/SaveAndSynchronizeEvents4', extractToken, express.json({ limit: '5Mb'
         pushMessages = Array.from(userQueue, item => item.message);
     }
 
+    let eventServerIds = null;
+    if (req.body.values.length) {
+        eventServerIds = await saveEvents(req.body.userId, req.body.values, req.gameVersion);
+        if (eventServerIds.length != req.body.values.length) {
+            // only codepath that does this is a user error
+            res.status(400).end();
+            return;
+        }
+    }
+
     res.json({
-        SavedTokens: req.body.values.length ? saveEvents(req.body.userId, req.body.values) : null,
+        SavedTokens: eventServerIds,
         NewEvents: newEvents || null,
         NextPoll: 10.0,
         PushMessages: pushMessages || null,
     });
 });
 
-app.post('/SaveEvents2', extractToken, express.json({ limit: '5Mb' }), (req, res) => {
+app.post('/SaveEvents2', extractToken, express.json({ limit: '5Mb' }), async (req, res) => {
     if (req.jwt.unique_name !== req.body.userId) {
-        res.status(403).end(); // Trying to save events for other user
+        res.status(403).end();
+        console.warn('/SaveEvents2: Trying to save events for other user');
         return;
     }
-    res.json(saveEvents(req.body.userId, req.body.values));
+    if (!Array.isArray(req.body.values)) {
+        res.status(400).end();
+        console.warn('/SaveEvents2: malformed request');
+        return;
+    }
+
+
+    const eventServerIds = await saveEvents(req.body.userId, req.body.values, req.gameVersion);
+    if (eventServerIds.length != req.body.values.length) {
+        // only codepath that does this is a user error
+        res.status(400).end();
+    } else {
+        res.json(eventServerIds);
+    }
 });
 
-function saveEvents(userId, events) {
+async function saveEvents(userId, events, gameVersion) {
     let response = [];
-    events.forEach(event => {
-        const session = contractSessions.get(event.ContractSessionId);
-        if (!session || session.contractId !== event.ContractId || session.userId !== userId) {
-            return; // session does not exist or contractid/userid doesn't match
-        }
-        session.duration = event.Timestamp;
-        session.lastUpdate = new Date();
-
-        if (session.timerEnd !== 0 && event.Timestamp > session.timerEnd) {
-            // Do not handle events that occur after exiting the level
-            // Todo: ExitInventory, ContractEnd, etc. will probably end up here.
-            response.push(process.hrtime.bigint().toString());
+    const endedContracts = new Set();
+    const editedSessions = new Map();
+    for (const event of events) {
+        if (!ContractSessionIdRegex.test(event.ContractSessionId)) {
+            console.warn('Invalid session id in event');
             return;
         }
-
-        // Todo: handle more events
-        if (event.Name === 'Ghost_PlayerDied') {
-            session.ghost.deaths += 1;
-        } else if (event.Name === 'Ghost_TargetUnnoticed') {
-            session.ghost.unnoticedKills += 1;
-        } else if (event.Name === 'Kill') {
-            // Todo?: check for event.Value.KillContext === 1
-            if (session.lastKill.timestamp === event.Timestamp) {
-                session.lastKill.repositoryIds.push(event.Value.RepositoryId);
-            } else {
-                session.lastKill = {
-                    timestamp: event.Timestamp,
-                    repositoryIds: [event.Value.RepositoryId],
-                };
-            }
-            if (event.Value.IsTarget) {
-                session.targetKills.add(event.Value.RepositoryId);
-            } else {
-                session.npcKills.add(event.Value.RepositoryId);
-            }
-        } else if (event.Name === 'CrowdNPC_Died') {
-            session.crowdNpcKills += 1;
-        } else if (event.Name === 'Pacify') {
-            session.pacifications.add(event.Value.RepositoryId);
-        } else if (event.Name === 'BodyHidden') {
-            session.bodiesHidden.add(event.Value.RepositoryId);
-        } else if (event.Name === 'Disguise') {
-            session.disguisesUsed.add(event.Value);
-        } else if (event.Name === 'ContractStart') {
-            session.disguisesUsed.add(event.Value.Disguise);
-        } else if (event.Name === 'Opponents') {
-            session.ghost.Opponents = event.Value.ConnectedSessions;
-        } else if (event.Name === 'MatchOver') {
-            session.ghost.Score = event.Value.MyScore;
-            session.ghost.OpponentScore = event.Value.OpponentScore;
-            session.ghost.IsWinner = event.Value.IsWinner;
-            session.ghost.IsDraw = event.Value.IsDraw;
-            session.timerEnd = event.Timestamp;
-        } else if (event.Name === 'DisguiseBlown') {
-            session.disguisesRuined.add(event.Value);
-        } else if (event.Name === 'BrokenDisguiseCleared') {
-            session.disguisesRuined.delete(event.Value);
-        } else if (event.Name === 'Spotted') {
-            session.spottedBy.add(...event.Value);
-        } else if (event.Name === 'Witnesses') {
-            session.witnesses.add(...event.Value);
-        } else if (event.Name === 'SecuritySystemRecorder') {
-            if (event.Value.event === 'spotted' && session.recording !== 'ERASED') {
-                session.recording = 'SPOTTED';
-            } else if (event.Value.event === 'destroyed' || event.Value.event === 'erased') {
-                session.recording = 'ERASED';
-            }
-        } else if (event.Name === 'IntroCutEnd') {
-            session.timerStart = event.Timestamp;
-        } else if (event.Name === 'exit_gate') {
-            session.timerEnd = event.Timestamp;
-        } else if (event.Name === 'ContractEnd') {
-            if (!session.timerEnd) {
-                session.timerEnd = event.Timestamp;
-            }
-        } else if (event.Name === 'ObjectiveCompleted') {
-            session.completedObjectives.add(event.Value.Id);
-        } else if (event.Name === 'AccidentBodyFound') {
-            session.lastAccident = event.Timestamp;
-        } else if (event.Name === 'MurderedBodySeen') {
-            if (event.Timestamp !== session.lastAccident) {
-                session.bodiesFoundBy.add(event.Value.Witness);
-                if (event.Timestamp === session.lastKill.timestamp) {
-                    session.killsNoticedBy.add(event.Value.Witness);
-                }
-            }
+        if (!editedSessions.has(event.ContractSessionId)) {
+            editedSessions.set(event.ContractSessionId, await getContractSession(event.ContractSessionId, gameVersion));
         }
-        response.push(process.hrtime.bigint().toString());
-    });
+        const session = editedSessions.get(event.ContractSessionId);
+        if (!session || session.contractId !== event.ContractId || session.userId !== userId) {
+            console.warn(`Invalid event received from user ${userId}`);
+            return; // session does not exist or contractid/userid doesn't match
+        }
+        session.lastUpdate = new Date();
+
+        let eventServerId = session.eventIdMap[event.Id];
+        if (eventServerId) { // event was already added
+            response.push(eventServerId);
+        } else { // new event
+            if (event.Name === 'ContractEnd') {
+                // todo: or contractfailed I guess?
+                endedContracts.add(event.ContractSessionId);
+            }
+
+            eventServerId = process.hrtime.bigint().toString();
+            event.eventServerId = eventServerId;
+            session.eventIdMap[event.Id] = eventServerId;
+            response.push(eventServerId);
+            session.events.push(event);
+
+            // delete unneccessary fields
+            // some of these could in theory be used by some statemachines, but that sounds stupid
+            delete event.ContractId;
+            delete event.ContractSessionId;
+            delete event.UserId;
+            delete event.Origin;
+            delete event.Id;
+            delete event.SessionId;
+        }
+    }
+
+    for(const [sessionId, sessionDetails] of editedSessions) {
+        await writeFile(path.join('userdata', gameVersion, 'contractsessions', `${sessionId}.json`), JSON.stringify(sessionDetails));
+    }
+
+    for(const sessionId of endedContracts) {
+        endSession(sessionId, gameVersion).catch(err => {
+            console.error(err);
+            // todo: better error handling
+        });
+    }
+
     return response;
 }
 
+async function getContractSession(sessionId, gameVersion) {
+    return JSON.parse(await readFile(path.join('userdata', gameVersion, 'contractsessions', `${sessionId}.json`)))
+}
+
 function cleanupOldSessions() {
-    for (const [sessionId, sessionDetails] of contractSessions) {
-        if (new Date() - sessionDetails.lastUpdate > 1000 * 60 * 60) { // if session has not received an event in the past hour
-            contractSessions.delete(sessionId);
-        }
-    }
+    // todo
 }
 
 module.exports = {
     router: app,
     enqueuePushMessage,
     enqueueEvent,
-    contractSessions,
+    getContractSession,
     newSession,
     cleanupOldSessions,
 };

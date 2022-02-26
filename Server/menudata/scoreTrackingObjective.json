@@ -1,0 +1,395 @@
+{
+  "Id": "64994ead-60e4-43db-b3d5-9adf2b43e49c",
+  "Type": "statemachine",
+  "Definition": {
+    "Scope": "session",
+    "Context": {
+      "ghost": {
+        "opponents": [],
+        "deaths": [],
+        "unnoticedKills": 0,
+        "score": 0,
+        "opponentScore": 0,
+        "isWinner": false,
+        "isDraw": false
+      },
+      "timerStart": 0,
+      "timerEnd": 0,
+      "nonTargetKills": 0,
+      "deadNpcs": [],
+      "bodiesHidden": [],
+      "pacifications": [],
+      "disguisesUsed": [],
+      "disguisesRuined": [],
+      "spottedBy": [],
+      "witnesses": [],
+      "bodiesFoundBy": [],
+      "killsNoticedBy": [],
+      "completedObjectives": [],
+      "recording": "NOT_SPOTTED",
+      "lastAccident": 0,
+      "lastKill": {
+        "timestamp": 0,
+        "repositoryIds": []
+      }
+    },
+    "States": {
+      "Start": {
+        "Ghost_PlayerDied": {
+          "Actions": {
+            "$inc": "ghostDeaths"
+          }
+        },
+        "Ghost_TargetUnnoticed": {
+          "Actions": {
+            "$inc": "ghostUnnoticedKills"
+          }
+        },
+        "Kill": [
+          {
+            "Condition": {
+              "$eq": [
+                "$Timestamp",
+                "$.lastKill.timestamp"
+              ]
+            },
+            "Actions": {
+              "$pushunique": [
+                "lastKill.repositoryIds",
+                "$Value.RepositoryId"
+              ]
+            }
+          },
+          {
+            "Condition": {
+              "$not": {
+                "$eq": [
+                  "$Timestamp",
+                  "$.lastKill.timestamp"
+                ]
+              }
+            },
+            "Actions": [
+              {
+                "$set": [
+                  "lastKill.timestamp",
+                  "$Timestamp"
+                ]
+              },
+              {
+                "$reset": "lastKill.repositoryIds"
+              },
+              {
+                "$pushunique": [
+                  "lastKill.repositoryIds",
+                  "$Value.RepositoryId"
+                ]
+              }
+            ]
+          },
+          {
+            "Actions": {
+              "$pushunique": [
+                "deadNpcs",
+                "$Value.RepositoryId"
+              ]
+            }
+          },
+          {
+            "Condition": {
+              "$and": [
+                {
+                  "$eq": [
+                    "$Value.IsTarget",
+                    false
+                  ]
+                },
+                {
+                  "$not": {
+                    "$eq": [
+                      "$Value.KillContext",
+                      1
+                    ],
+                    "_comment": "EDeathContext enum. 1 = eDC_NOT_HERO"
+                  }
+                }
+              ]
+            },
+            "Actions": {
+              "$inc": "nonTargetKills"
+            }
+          }
+        ],
+        "CrowdNPC_Died": {
+          "Actions": {
+            "$inc": "nonTargetKills"
+          }
+        },
+        "Pacify": {
+          "Actions": {
+            "$pushunique": [
+              "pacifications",
+              "$Value.RepositoryId"
+            ]
+          }
+        },
+        "BodyHidden": {
+          "Actions:": {
+            "$pushunique": [
+              "bodiesHidden",
+              "$Value.RepositoryId"
+            ]
+          }
+        },
+        "Disguise": {
+          "Actions": {
+            "$pushunique": [
+              "disguisesUsed",
+              "$Value"
+            ]
+          }
+        },
+        "ContractStart": {
+          "Actions": {
+            "$pushunique": [
+              "disguisesUsed",
+              "$Value.Disguise"
+            ]
+          }
+        },
+        "Opponents": {
+          "Actions": {
+            "$set": [
+              "ghost.opponents",
+              "$Value.ConnectedSessions"
+            ]
+          }
+        },
+        "MatchOver": {
+          "Actions": [
+            {
+              "$set": [
+                "ghost.score",
+                "$Value.MyScore"
+              ]
+            },
+            {
+              "$set": [
+                "ghost.opponentScore",
+                "$Value.OpponentScore"
+              ]
+            },
+            {
+              "$set": [
+                "ghost.isWinner",
+                "$Value.IsWinner"
+              ]
+            },
+            {
+              "$set": [
+                "ghost.isDraw",
+                "$Value.IsDraw"
+              ]
+            },
+            {
+              "$set": [
+                "timerEnd",
+                "$Timestamp"
+              ]
+            }
+          ]
+        },
+        "DisguiseBlown": {
+          "Actions": {
+            "$pushunique": [
+              "disguisesRuined",
+              "$Value"
+            ]
+          }
+        },
+        "BrokenDisguiseCleared": {
+          "Actions": {
+            "$remove": [
+              "disguisesRuined",
+              "$Value"
+            ]
+          }
+        },
+        "Spotted": {
+          "Condition": {
+            "$any": {
+              "in": "$Value",
+              "?": {
+                "$pushunique": [
+                  "spottedBy",
+                  "$.#"
+                ]
+              }
+            }
+          }
+        },
+        "Witnesses": {
+          "Condition": {
+            "$any": {
+              "in": "$Value",
+              "?": {
+                "$pushunique": [
+                  "witnesses",
+                  "$.#"
+                ]
+              }
+            }
+          }
+        },
+        "SecuritySystemRecorder": [
+          {
+            "Condition": {
+              "$and": [
+                {
+                  "$eq": [
+                    "$Value.event",
+                    "spotted"
+                  ]
+                },
+                {
+                  "$not": {
+                    "$eq": [
+                      "$.recording",
+                      "ERASED"
+                    ]
+                  }
+                }
+              ]
+            },
+            "Actions": {
+              "$set": [
+                "recording",
+                "SPOTTED"
+              ]
+            }
+          },
+          {
+            "Condition": {
+              "$or": [
+                {
+                  "$eq": [
+                    "$Value.event",
+                    "destroyed"
+                  ]
+                },
+                {
+                  "$eq": [
+                    "$Value.event",
+                    "erased"
+                  ]
+                }
+              ]
+            },
+            "Actions": {
+              "$set": [
+                "recording",
+                "ERASED"
+              ]
+            }
+          }
+        ],
+        "IntroCutEnd": {
+          "Condition": {
+            "$eq": [
+              "$.timerStart",
+              0
+            ]
+          },
+          "Actions": {
+            "$set": [
+              "timerStart",
+              "$Timestamp"
+            ]
+          }
+        },
+        "exit_gate": {
+          "Actions": {
+            "$set": [
+              "timerEnd",
+              "$Timestamp"
+            ]
+          }
+        },
+        "ContractEnd": {
+          "Condition": {
+            "$eq": [
+              "$.timerEnd",
+              0
+            ]
+          },
+          "Actions": {
+            "$set": [
+              "timerEnd",
+              "$Timestamp"
+            ]
+          }
+        },
+        "ObjectiveCompleted": {
+          "Actions": {
+            "$pushunique": [
+              "completedObjectives",
+              "$Value.Id"
+            ]
+          }
+        },
+        "AccidentBodyFound": {
+          "Actions": {
+            "$set": [
+              "lastAccident",
+              "$Timestamp"
+            ]
+          }
+        },
+        "MurderedBodySeen": [
+          {
+            "Condition": {
+              "$not": {
+                "$eq": [
+                  "$.lastAccident",
+                  "$Timestamp"
+                ]
+              }
+            },
+            "Actions": {
+              "$pushunique": [
+                "bodiesFoundBy",
+                "$Value.Witness"
+              ]
+            }
+          },
+          {
+            "Condition": {
+              "$and": [
+                {
+                  "$not": {
+                    "$eq": [
+                      "$.lastAccident",
+                      "$Timestamp"
+                    ]
+                  }
+                },
+                {
+                  "$eq": [
+                    "$.lastKill.timestamp",
+                    "$Timestamp"
+                  ]
+                }
+              ]
+            },
+            "Actions": {
+              "$pushunique": [
+                "killsNoticedBy",
+                "$Value.Witness"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}

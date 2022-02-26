@@ -269,6 +269,9 @@ function generateBlobConfig(req) {
 
 // configName=pc-prod&lockedContentDisabled=false&isFreePrologueUser=false&isIntroPackUser=false&isFullExperienceUser=false
 app.get('/authentication/api/configuration/Init?*', extractToken, (req, res) => {
+
+    // todo: call eventHandler.endSession if current session
+
     let ver = getServerVerObj(req.gameVersion);
     res.json({
         token: `${req.jwt.exp}-${req.jwt.nbf}-${req.jwt.platform}-${req.jwt.userid}`,

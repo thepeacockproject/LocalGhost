@@ -5,7 +5,7 @@ const express = require('express');
 const path = require('path');
 const { readFile } = require('atomically');
 const { extractToken, getTemplate, UUIDRegex, getDefaultLoadout } = require('../utils.js');
-const { contractSessions } = require('../h3/eventHandler.js');
+const { getContractSession } = require('../h3/eventHandler.js');
 const { generateUserCentric } = require('../h3/menuData.js');
 const scoreHandler = require('../h3/scoreHandler.js');
 
@@ -129,7 +129,7 @@ app.get('/stashpoint', extractToken, async (req, res) => {
 
 // /profiles/page/scoreoverview?contractSessionId=5873269880175-0f35f154-671b-4ddb-ba18-8efcc72935f8
 app.get('/scoreoverview', extractToken, async (req, res) => {
-    const sessionDetails = contractSessions.get(req.query.contractSessionId);
+    const sessionDetails = await getContractSession(req.query.contractSessionId, req.gameVersion);
     if (!sessionDetails) { // contract session not found
         res.status(404).end();
         return;

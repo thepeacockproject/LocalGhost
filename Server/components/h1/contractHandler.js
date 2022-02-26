@@ -103,7 +103,7 @@ app.post('/Start', express.json(), extractToken, async (req, res) => {
 
     res.json(contractSessionId);
 
-    eventHandler.newSession(contractSessionId, req.body.contractId, req.jwt.unique_name);
+    await eventHandler.newSession(contractSessionId, req.body.contractId, req.jwt.unique_name, req.gameVersion);
 });
 
 module.exports = app;

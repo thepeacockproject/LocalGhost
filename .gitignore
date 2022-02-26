@@ -21,6 +21,11 @@ Server/userdata/*/*ids/**
 # but keep the folders
 !Server/userdata/*/*ids/.gitkeep
 
+# no contract sessions
+Server/userdata/*/contractsessions/**
+# but keep the folders
+!Server/userdata/*/contractsessions/.gitkeep
+
 # no contract data
 Server/contractdata/**
 # except for the two ghost mode contracts
