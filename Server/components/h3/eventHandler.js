@@ -223,7 +223,16 @@ async function saveEvents(userId, events, gameVersion) {
             return;
         }
         if (!editedSessions.has(event.ContractSessionId)) {
-            editedSessions.set(event.ContractSessionId, await getContractSession(event.ContractSessionId, gameVersion));
+            const sessionDetails = await getContractSession(event.ContractSessionId, gameVersion).catch(err => {
+                if (err.code !== 'ENOENT') { // error other than non-existant session
+                    console.error(err);
+                }
+                return null;
+            });
+            if (sessionDetails === null) {
+                return;
+            }
+            editedSessions.set(event.ContractSessionId, sessionDetails);
         }
         const session = editedSessions.get(event.ContractSessionId);
         if (!session || session.contractId !== event.ContractId || session.userId !== userId) {

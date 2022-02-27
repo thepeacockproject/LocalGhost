@@ -129,8 +129,13 @@ app.get('/stashpoint', extractToken, async (req, res) => {
 
 // /profiles/page/scoreoverview?contractSessionId=5873269880175-0f35f154-671b-4ddb-ba18-8efcc72935f8
 app.get('/scoreoverview', extractToken, async (req, res) => {
-    const sessionDetails = await getContractSession(req.query.contractSessionId, req.gameVersion);
-    if (!sessionDetails) { // contract session not found
+    const sessionDetails = await getContractSession(req.query.contractSessionId, req.gameVersion).catch(err => {
+        if (err.code !== 'ENOENT') { // error other than non-existant session
+            console.error(err);
+        }
+        return null;
+    });
+    if (sessionDetails === null) { // contract session not found
         res.status(404).end();
         return;
     }

@@ -576,11 +576,16 @@ app.get([
     }
 
     const sessionDetails = await getContractSession(req.query.contractSessionId, req.gameVersion).catch(err => {
-        if (err.code === 'ENOENT') { // session doesn't exist
-            res.status(404).end();
-            return;
+        if (err.code !== 'ENOENT') { // error other than non-existant session
+            console.error(err);
         }
+        return null;
     });
+    if (sessionDetails === null) {
+        res.status(404).end();
+        return;
+    }
+
     const ready = sessionDetails.isParsed;
     let template;
     if (!ready && retryCount < 100) {
@@ -610,11 +615,16 @@ app.post('/multiplayermatchstats', async (req, res) => {
     }
 
     const sessionDetails = await getContractSession(req.query.contractSessionId, req.gameVersion).catch(err => {
-        if (err.code === 'ENOENT') { // session doesn't exist
-            res.status(404).end();
-            return;
+        if (err.code !== 'ENOENT') { // error other than non-existant session
+            console.error(err);
         }
+        return null;
     });
+    if (sessionDetails === null) {
+        res.status(404).end();
+        return;
+    }
+
     const scoreTrackerContext = sessionDetails.results.scoretracker.endContext;
     const scores = [calculateMpScore(sessionDetails)];
     for (const opponentId in scoreTrackerContext.ghost.Opponents) {
@@ -642,11 +652,15 @@ app.get('/missionend', extractToken, async (req, res) => {
         return;
     }
     const sessionDetails = await getContractSession(req.query.contractSessionId, req.gameVersion).catch(err => {
-        if (err.code === 'ENOENT') { // session doesn't exist
-            res.status(404).end();
-            return;
+        if (err.code !== 'ENOENT') { // error other than non-existant session
+            console.error(err);
         }
+        return null;
     });
+    if (sessionDetails === null) {
+        res.status(404).end();
+        return;
+    }
     if (sessionDetails.userId != req.jwt.unique_name) { // requested score for other user's session
         res.status(401).end();
         return;
@@ -656,6 +670,7 @@ app.get('/missionend', extractToken, async (req, res) => {
         res.status(400).send('contract id was not a uuid');
         return;
     }
+
     const scoreData = await scoreHandler.getMissionEndData(sessionDetails, req.gameVersion);
     if (scoreData === null) { // session wasn't parsed yet
         res.status(500).end();
