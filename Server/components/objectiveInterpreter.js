@@ -81,7 +81,15 @@ function handleEvents(objectives, events) {
         })
     ];
 
+    let exited = false;
+
     for (const event of events) {
+        if (event.Name === 'exit_gate' || event.Name === 'ContractEnd' || event.Name === 'ContractFailed') {
+            exited = true;
+        } else if (exited) {
+            continue; // don't process events after we have exited the level
+        }
+
         for (const objectiveId in stateMachines) {
             const stateMachine = stateMachines[objectiveId];
             const eventListeners = stateMachine.stateEventMap[stateMachine.currentState];
