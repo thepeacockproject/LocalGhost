@@ -586,7 +586,25 @@ app.get([
         return;
     }
 
-    const ready = sessionDetails.isParsed;
+    let ready = sessionDetails.isParsed;
+    if (ready && req.path === '/multiplayermatchstatsready') {
+        for (const opponentUserId of sessionDetails.results.scoretracker.endContext.ghost.opponents) {
+            const opponentSessionId = sessionDetails.results.scoretracker.endContext.ghost.opponents[opponentUserId];
+            const opponentSessionDetails = await getContractSession(opponentSessionId, req.gameVersion).catch(err => {
+                if (err.code !== 'ENOENT') { // error other than non-existant session
+                    console.error(err);
+                }
+                return null;
+            });
+            if (opponentSessionDetails === null) {
+                res.status(404).end();
+                return;
+            }
+            ready &= opponentSessionDetails.isParsed;
+        }
+    }
+
+
     let template;
     if (!ready && retryCount < 100) {
         // wait some time proportional to the amount of retries
@@ -627,13 +645,18 @@ app.post('/multiplayermatchstats', async (req, res) => {
 
     const scoreTrackerContext = sessionDetails.results.scoretracker.endContext;
     const scores = [calculateMpScore(sessionDetails)];
-    for (const opponentId in scoreTrackerContext.ghost.Opponents) {
-        const opponentSessionId = scoreTrackerContext.ghost.Opponents[opponentId];
-        const opponentSessionDetails = await getContractSession(opponentSessionId, req.gameVersion);
-        if (opponentSessionDetails) {
-            scores.push(calculateMpScore(opponentSessionDetails));
-        } else { // opponent contract session not found
+    for (const opponentId in scoreTrackerContext.ghost.opponents) {
+        const opponentSessionId = scoreTrackerContext.ghost.opponents[opponentId];
+        const opponentSessionDetails = await getContractSession(opponentSessionId, req.gameVersion).catch(err => {
+            if (err.code !== 'ENOENT') { // error other than non-existant session
+                console.error(err);
+            }
+            return null;
+        });
+        if (opponentSessionDetails === null || !opponentSessionDetails.isParsed) {
             scores.push({});
+        } else {
+            scores.push(calculateMpScore(opponentSessionDetails));
         }
     }
     res.json({
@@ -899,24 +922,25 @@ async function generateUserCentric(contractData, userData, gameVersion, repoData
 }
 
 function calculateMpScore(sessionDetails) {
-    // TODO: fix for new sessions rewrite
+    const scoreTrackerContext = sessionDetails.results.scoretracker.endContext;
+
     return {
         Header: {
             GameMode: "Ghost",
-            Result: sessionDetails.ghost.IsWinner ? 'Win' : 'Loss', // TODO: opponent left?
+            Result: scoreTrackerContext.ghost.IsWinner ? 'Win' : 'Loss', // TODO: opponent left?
         },
         Metadata: {},
         Data: {
-            Score: sessionDetails.ghost.Score,
-            OpponentScore: sessionDetails.ghost.OpponentScore,
-            PacifiedNpcs: [...sessionDetails.pacifications].filter(id => !sessionDetails.npcKills.has(id) && !sessionDetails.targetKills.has(id)).length,
-            DisguisesUsed: sessionDetails.disguisesUsed.size,
-            DisguisesRuined: sessionDetails.disguisesRuined.size, // custom
-            BodiesHidden: sessionDetails.bodiesHidden.size,
-            UnnoticedKills: sessionDetails.ghost.unnoticedKills,
-            KilledNpcs: sessionDetails.npcKills.size + sessionDetails.crowdNpcKills,
-            Deaths: sessionDetails.ghost.deaths,
-            Duration: sessionDetails.duration,
+            Score: scoreTrackerContext.ghost.Score,
+            OpponentScore: scoreTrackerContext.ghost.OpponentScore,
+            PacifiedNpcs: [...scoreTrackerContext.pacifications].filter(id => !scoreTrackerContext.deadNpcs.includes(id)).length,
+            DisguisesUsed: scoreTrackerContext.disguisesUsed.length,
+            DisguisesRuined: scoreTrackerContext.disguisesRuined.length, // custom
+            BodiesHidden: scoreTrackerContext.bodiesHidden.length,
+            UnnoticedKills: scoreTrackerContext.ghost.unnoticedKills,
+            KilledNpcs: scoreTrackerContext.nonTargetKills,
+            Deaths: scoreTrackerContext.ghost.deaths,
+            Duration: scoreTrackerContext.timerEnd - scoreTrackerContext.timerStart,
         }
     }
 }
