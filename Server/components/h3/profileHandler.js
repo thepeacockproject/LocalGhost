@@ -7,7 +7,7 @@ const { writeFile, readFile } = require('atomically');
 const uuid = require('uuid');
 
 
-const { extractToken, MaxPlayerLevel, UUIDRegex } = require('../utils.js');
+const { MaxPlayerLevel, UUIDRegex } = require('../utils.js');
 const { getEntitlements } = require('./platformEntitlements.js');
 
 const app = express.Router();
@@ -54,7 +54,7 @@ app.post('/ProfileService/GetUserConfig', (req, res) => {
     res.json({});
 });
 
-app.post('/ProfileService/GetProfile', extractToken, express.json(), async (req, res) => {
+app.post('/ProfileService/GetProfile', express.json(), async (req, res) => {
     if (req.body.id !== req.jwt.unique_name) {
         res.status(403).end(); // data requested for different profile id
         console.log(`user ${req.jwt.unique_name} requested profile of ${req.body.id}`);
@@ -70,11 +70,11 @@ app.post('/ProfileService/GetProfile', extractToken, express.json(), async (req,
     res.json(userdata);
 });
 
-app.post('/UnlockableService/GetInventory', extractToken, async (req, res) => {
+app.post('/UnlockableService/GetInventory', async (req, res) => {
     res.json(JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`))).Extensions.inventory);
 });
 
-app.post('/ProfileService/UpdateExtensions', extractToken, express.json(), async (req, res) => {
+app.post('/ProfileService/UpdateExtensions', express.json(), async (req, res) => {
     if (req.body.id !== req.jwt.unique_name) { // data requested for different profile id
         res.status(403).end();
         return;
@@ -92,7 +92,7 @@ app.post('/ProfileService/UpdateExtensions', extractToken, express.json(), async
     res.json(response);
 });
 
-app.post('/ProfileService/SynchroniseGameStats', extractToken, express.json(), async (req, res) => {
+app.post('/ProfileService/SynchroniseGameStats', express.json(), async (req, res) => {
     if (req.body.profileId !== req.jwt.unique_name) { // data requested for different profile id
         res.status(403).end();
         return;
@@ -152,13 +152,13 @@ app.post('/ProfileService/ResolveGamerTags', express.json(), async (req, res) =>
     res.json(result);
 });
 
-app.post('/ProfileService/GetFriendsCount', extractToken, async (req, res) => {
+app.post('/ProfileService/GetFriendsCount', async (req, res) => {
     let userdata = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
     // TODO: This should actually return the number of friends that also own the game
     res.json(userdata.Extensions.friends.length);
 });
 
-app.post('/GamePersistentDataService/GetData', extractToken, express.json(), async (req, res) => {
+app.post('/GamePersistentDataService/GetData', express.json(), async (req, res) => {
     if (req.jwt.unique_name !== req.body.userId) {
         res.status(403).end();
         return;
@@ -167,7 +167,7 @@ app.post('/GamePersistentDataService/GetData', extractToken, express.json(), asy
     res.json(userdata.Extensions.gamepersistentdata[req.body.key]);
 })
 
-app.post('/GamePersistentDataService/SaveData', extractToken, express.json(), async (req, res) => {
+app.post('/GamePersistentDataService/SaveData', express.json(), async (req, res) => {
     if (req.jwt.unique_name !== req.body.userId) {
         res.status(403).end();
         return;
@@ -179,7 +179,7 @@ app.post('/GamePersistentDataService/SaveData', extractToken, express.json(), as
     res.status(204).end();
 })
 
-app.post('/ChallengesService/GetActiveChallengesAndProgression', extractToken, express.json(), async (req, res) => {
+app.post('/ChallengesService/GetActiveChallengesAndProgression', express.json(), async (req, res) => {
     const challenges = [];
     challenges.push(...JSON.parse(await readFile(path.join('challenges', 'globalChallenges.json')))); // TODO: more challenges
     // TODO: location specific challenges
@@ -200,7 +200,7 @@ app.post('/ChallengesService/GetActiveChallengesAndProgression', extractToken, e
     res.json(result);
 });
 
-app.post('/HubPagesService/GetChallengeTreeFor', extractToken, express.json(), (req, res) => {
+app.post('/HubPagesService/GetChallengeTreeFor', express.json(), (req, res) => {
     res.json({
         Data: {
             Children: [], // TODO: Challenges for location
@@ -218,7 +218,7 @@ app.post('/HubPagesService/GetChallengeTreeFor', extractToken, express.json(), (
     });
 });
 
-app.post('/DefaultLoadoutService/Set', extractToken, express.json(), async (req, res) => {
+app.post('/DefaultLoadoutService/Set', express.json(), async (req, res) => {
     const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
     const inventory = userData.Extensions.inventory;
     const allunlockables = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'allunlockables.json')));
@@ -255,7 +255,7 @@ app.post('/DefaultLoadoutService/Set', extractToken, express.json(), async (req,
 app.post([
     '/ProfileService/UnconfirmedSignupIoIAccount',
     '/ProfileService/SubmitSemEmail',
-], extractToken, express.json(), async (req, res) => {
+], express.json(), async (req, res) => {
     res.json({
         Success: true,
         ErrorCode: null,
@@ -265,7 +265,7 @@ app.post([
     });
 });
 
-app.post('/ProfileService/GetSemLinkStatus', extractToken, express.json(), async (req, res) => {
+app.post('/ProfileService/GetSemLinkStatus', express.json(), async (req, res) => {
     res.json({
         IsConfirmed: true,
         LinkedEmail: 'mail@example.com',

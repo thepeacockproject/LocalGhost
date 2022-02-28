@@ -4,7 +4,7 @@
 const express = require('express');
 const path = require('path');
 const { readFile } = require('atomically');
-const { extractToken, getTemplate, UUIDRegex, getDefaultLoadout } = require('../utils.js');
+const { getTemplate, UUIDRegex, getDefaultLoadout } = require('../utils.js');
 const { contractSessions } = require('../h3/eventHandler.js');
 const { generateUserCentric } = require('../h3/menuData.js');
 const scoreHandler = require('../h3/scoreHandler.js');
@@ -18,7 +18,7 @@ app.get('/dashboard//Dashboard_Category_:category/:subscriptionId/:type/:id', as
     next();
 });
 
-app.get('/Safehouse', extractToken, async (req, res, next) => {
+app.get('/Safehouse', async (req, res, next) => {
     const template = await getTemplate('Safehouse', req.gameVersion);
 
     // call /SafehouseCategory but rewrite the result a bit
@@ -37,7 +37,7 @@ app.get('/Safehouse', extractToken, async (req, res, next) => {
     next();
 });
 
-app.get('/stashpoint', extractToken, async (req, res) => {
+app.get('/stashpoint', async (req, res) => {
     // stashpoint?contractid=4e45e91a-94ca-4d89-89fc-1b250e608e73&stashpoint=&allowlargeitems=true&slotname=concealedweapon2
     if (!UUIDRegex.test(req.query.contractid)) {
         res.status(400).send('contract id was not a uuid');
@@ -128,7 +128,7 @@ app.get('/stashpoint', extractToken, async (req, res) => {
 });
 
 // /profiles/page/scoreoverview?contractSessionId=5873269880175-0f35f154-671b-4ddb-ba18-8efcc72935f8
-app.get('/scoreoverview', extractToken, async (req, res) => {
+app.get('/scoreoverview', async (req, res) => {
     const sessionDetails = contractSessions.get(req.query.contractSessionId);
     if (!sessionDetails) { // contract session not found
         res.status(404).end();

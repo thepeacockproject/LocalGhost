@@ -7,7 +7,6 @@ const uuid = require('uuid');
 const { readFile } = require('atomically');
 
 const {
-    extractToken,
     MaxPlayerLevel,
     xpRequiredForLevel,
     maxLevelForLocation,
@@ -24,7 +23,7 @@ const app = express.Router();
 
 // /profiles/page/
 
-app.get('/dashboard/Dashboard_Category_:category/:subscriptionId/:type/:id/:mode', extractToken, async (req, res) => {
+app.get('/dashboard/Dashboard_Category_:category/:subscriptionId/:type/:id/:mode', async (req, res) => {
     const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
     const repoData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'allunlockables.json')));
     let contractIds = [];
@@ -95,7 +94,7 @@ app.get('/dashboard/Dashboard_Category_:category/:subscriptionId/:type/:id/:mode
     });
 });
 
-app.get('/Hub', extractToken, async (req, res) => {
+app.get('/Hub', async (req, res) => {
     const userdata = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
     const serverTile = await readFile(path.join('menudata', 'h3', 'serverTile.json')).then(file => {
         return JSON.parse(file);
@@ -148,7 +147,7 @@ app.get('/Hub', extractToken, async (req, res) => {
     });
 });
 
-app.get('/SafehouseCategory', extractToken, async (req, res) => {
+app.get('/SafehouseCategory', async (req, res) => {
     const inventory = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`))).Extensions.inventory;
     let safehousedata = {
         template: null,
@@ -228,7 +227,7 @@ app.get('/SafehouseCategory', extractToken, async (req, res) => {
     res.json(safehousedata);
 })
 
-app.get('/stashpoint', extractToken, async (req, res) => {
+app.get('/stashpoint', async (req, res) => {
     // /stashpoint?contractid=e5b6ccf4-1f29-4ec6-bfb8-2e9b78882c85&slotid=4&slotname=gear4&stashpoint=&allowlargeitems=true&allowcontainers=true
     // /stashpoint?contractid=c1d015b4-be08-4e44-808e-ada0f387656f&slotid=3&slotname=disguise3&stashpoint=&allowlargeitems=true&allowcontainers=true
     // /stashpoint?contractid=&slotid=3&slotname=disguise&stashpoint=&allowlargeitems=true&allowcontainers=false
@@ -302,7 +301,7 @@ app.get('/stashpoint', extractToken, async (req, res) => {
     res.json(stashData);
 });
 
-app.get('/multiplayerpresets', extractToken, async (req, res) => { // /multiplayerpresets?gamemode=versus&disguiseUnlockableId=TOKEN_OUTFIT_HOT_SUMMER_SUIT
+app.get('/multiplayerpresets', async (req, res) => { // /multiplayerpresets?gamemode=versus&disguiseUnlockableId=TOKEN_OUTFIT_HOT_SUMMER_SUIT
     if (req.query.gamemode !== 'versus') { // not sure what happens here
         next();
     }
@@ -350,7 +349,7 @@ async function getLoadoutData(userData, disguiseUnlockableId, gameVersion) {
     }];
 }
 
-app.get('/multiplayer', extractToken, async (req, res) => { // /multiplayer?gamemode=versus&disguiseUnlockableId=TOKEN_OUTFIT_ELUSIVE_COMPLETE_15_SUIT
+app.get('/multiplayer', async (req, res) => { // /multiplayer?gamemode=versus&disguiseUnlockableId=TOKEN_OUTFIT_ELUSIVE_COMPLETE_15_SUIT
     if (req.query.gamemode !== 'versus') { // not sure what happens here
         return
     }
@@ -363,7 +362,7 @@ app.get('/multiplayer', extractToken, async (req, res) => { // /multiplayer?game
     });
 });
 
-app.get('/Planning', extractToken, async (req, res) => {
+app.get('/Planning', async (req, res) => {
     if (!UUIDRegex.test(req.query.contractid)) {
         res.status(400).send('contract id was not a uuid');
         return;
@@ -467,7 +466,7 @@ app.get('/Planning', extractToken, async (req, res) => {
     });
 });
 
-app.get('/leaderboardsview', extractToken, async (req, res) => {
+app.get('/leaderboardsview', async (req, res) => {
     res.json({
         template: await getTemplate('leaderboardsview', req.gameVersion),
         data: {
@@ -477,7 +476,7 @@ app.get('/leaderboardsview', extractToken, async (req, res) => {
     });
 });
 
-app.get('/selectagencypickup', extractToken, async (req, res) => {
+app.get('/selectagencypickup', async (req, res) => {
     if (!UUIDRegex.test(req.query.contractId)) {
         res.status(400).send('contract id was not a uuid');
         return;
@@ -520,7 +519,7 @@ app.get('/selectagencypickup', extractToken, async (req, res) => {
 });
 
 
-app.get('/selectentrance', extractToken, async (req, res) => {
+app.get('/selectentrance', async (req, res) => {
     if (!UUIDRegex.test(req.query.contractId)) {
         res.status(400).send('contract id was not a uuid');
         return;
@@ -610,7 +609,7 @@ app.post('/multiplayermatchstats', (req, res) => {
 });
 
 // /profiles/page/missionend
-app.get('/missionend', extractToken, async (req, res) => {
+app.get('/missionend', async (req, res) => {
     const sessionDetails = contractSessions.get(req.query.contractSessionId);
     if (!sessionDetails) { // contract session not found
         res.status(404).end();

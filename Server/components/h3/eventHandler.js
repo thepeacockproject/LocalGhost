@@ -3,8 +3,6 @@
 
 const express = require('express');
 
-const { extractToken } = require('../utils.js');
-
 const app = express.Router();
 
 
@@ -132,7 +130,7 @@ function newSession(sessionId, contractId, userId) {
     });
 }
 
-app.post('/SaveAndSynchronizeEvents4', extractToken, express.json({ limit: '5Mb' }), (req, res) => {
+app.post('/SaveAndSynchronizeEvents4', express.json({ limit: '5Mb' }), (req, res) => {
     if (req.body.userId !== req.jwt.unique_name) {
         res.status(403).end(); // Trying to save events for other user
         return;
@@ -169,7 +167,7 @@ app.post('/SaveAndSynchronizeEvents4', extractToken, express.json({ limit: '5Mb'
     });
 });
 
-app.post('/SaveEvents2', extractToken, express.json({ limit: '5Mb' }), (req, res) => {
+app.post('/SaveEvents2', express.json({ limit: '5Mb' }), (req, res) => {
     if (req.jwt.unique_name !== req.body.userId) {
         res.status(403).end(); // Trying to save events for other user
         return;

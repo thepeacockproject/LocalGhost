@@ -3,11 +3,9 @@
 
 const express = require('express');
 
-const { extractToken } = require('../utils');
-
 const app = express.Router();
 
-app.post('/SaveAndSynchronizeEvents3', extractToken, express.json({ limit: '5Mb' }), (req, res, next) => {
+app.post('/SaveAndSynchronizeEvents3', express.json({ limit: '5Mb' }), (req, res, next) => {
     // call /SaveAndSynchronizeEvents4 but add/remove dummy pushMessages
     req.url = '/SaveAndSynchronizeEvents4';
     req.body.lastPushDt = '0';
