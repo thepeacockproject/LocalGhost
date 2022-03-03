@@ -5,7 +5,7 @@ const { writeFile, readFile } = require('atomically');
 const express = require('express');
 const path = require('path');
 
-const { extractToken, scoreTrackingObjective, ContractSessionIdRegex } = require('../utils.js');
+const { extractToken, scoreTrackingObjective, ContractSessionIdRegex, UUIDRegex } = require('../utils.js');
 const objectiveInterpreter = require('../objectiveInterpreter.js');
 
 const app = express.Router();
@@ -118,10 +118,19 @@ async function newSession(sessionId, contractId, userId, gameVersion) {
 async function endSession(sessionId, gameVersion) {
     const contractSession = await getContractSession(sessionId, gameVersion);
     const contractData = JSON.parse(await readFile(path.join('contractdata', `${contractSession.contractId}.json`)));
+    const objectives = [...contractData.Data.Objectives];
+    const gameChangerData = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'GameChangerProperties.json')));
+    for (const gameChangerId of contractData.Data.GameChangers) {
+        if (!UUIDRegex.test(gameChangerId) || !Object.hasOwn(gameChangerData, gameChangerId)) {
+            console.error(`Encountered unknown gamechanger id: ${gameChangerId}`);
+            continue;
+        }
+        const gameChanger = gameChangerData[gameChangerId];
+        objectives.push(...gameChanger.Objectives);
+    }
 
     const results = objectiveInterpreter.handleEvents([
-        ...contractData.Data.Objectives,
-        // ...gamechanger objectives // TODO
+        ...objectives,
         scoreTrackingObjective,
         // ...challenges, // TODO
         // ...playStyles, // TODO
@@ -131,7 +140,7 @@ async function endSession(sessionId, gameVersion) {
 
     // save all results in contractSession
     contractSession.results = {
-        objectives: contractData.Data.Objectives.map(obj => ({
+        objectives: objectives.map(obj => ({
             Id: obj.Id,
             endState: results[obj.Id].endState,
             excludeFromScoring: obj.ExcludeFromScoring || false,
