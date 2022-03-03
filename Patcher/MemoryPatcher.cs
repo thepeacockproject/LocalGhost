@@ -139,11 +139,22 @@ namespace HitmanPatcher
 			byte[] buffer = { 0 };
 			UIntPtr bytesread;
 			bool ready = true;
+			MemProtection newmemprotection = MemProtection.PAGE_READWRITE;
+			// It should already be READWRITE, but this is to remove possible PAGE_GUARD temporarily
 			foreach (Patch p in version.configdomain.Where(p => p.customPatch == "configdomain"))
 			{
+				MemProtection oldprotectflags;
+				if (!Pinvoke.VirtualProtectEx(hProcess, baseAddress + p.offset, (UIntPtr)p.patch.Length, newmemprotection, out oldprotectflags))
+				{
+					throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at vpe1Check for offset {0:X}", p.offset));
+				}
 				if (!Pinvoke.ReadProcessMemory(hProcess, baseAddress + p.offset, buffer, (UIntPtr)1, out bytesread))
 				{
-					throw new Win32Exception(Marshal.GetLastWin32Error());
+					throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at rpmCheck for offset {0:X}", p.offset));
+				}
+				if (!Pinvoke.VirtualProtectEx(hProcess, baseAddress + p.offset, (UIntPtr)p.patch.Length, oldprotectflags, out oldprotectflags))
+				{
+					throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at vpe2Check for offset {0:X}", p.offset));
 				}
 				ready &= buffer[0] != 0;
 			}
