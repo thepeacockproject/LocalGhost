@@ -563,10 +563,7 @@ app.get('/selectentrance', extractToken, async (req, res) => {
     });
 });
 
-app.get([
-    '/missionendready',
-    '/multiplayermatchstatsready'
-], async (req, res) => {
+app.get('/missionendready', async (req, res) => {
     const retryCount = 1 + Number(req.query.retryCount) || 0;
 
     if (!ContractSessionIdRegex.test(req.query.contractSessionId)) {
@@ -587,23 +584,6 @@ app.get([
     }
 
     let ready = sessionDetails.isParsed;
-    if (ready && req.path === '/multiplayermatchstatsready') {
-        for (const opponentUserId of sessionDetails.results.scoretracker.endContext.ghost.opponents) {
-            const opponentSessionId = sessionDetails.results.scoretracker.endContext.ghost.opponents[opponentUserId];
-            const opponentSessionDetails = await getContractSession(opponentSessionId, req.gameVersion).catch(err => {
-                if (err.code !== 'ENOENT') { // error other than non-existant session
-                    console.error(err);
-                }
-                return null;
-            });
-            if (opponentSessionDetails === null) {
-                res.status(404).end();
-                return;
-            }
-            ready &= opponentSessionDetails.isParsed;
-        }
-    }
-
 
     let template;
     if (!ready && retryCount < 100) {
@@ -620,6 +600,54 @@ app.get([
         data: {
             contractSessionId: req.query.contractSessionId,
             missionEndReady: ready,
+            retryCount: retryCount,
+        }
+    });
+});
+
+app.post('/multiplayermatchstatsready', async (req, res) => {
+    const retryCount = 1 + Number(req.query.retryCount) || 0;
+
+    if (!ContractSessionIdRegex.test(req.query.contractSessionId)) {
+        res.status(400).end();
+        console.warn('Invalid session id in multiplayermatchstatsready');
+        return;
+    }
+
+    const sessionDetails = await getContractSession(req.query.contractSessionId, req.gameVersion).catch(err => {
+        if (err.code !== 'ENOENT') { // error other than non-existant session
+            console.error(err);
+        }
+        return null;
+    });
+    if (sessionDetails === null) {
+        res.status(404).end();
+        return;
+    }
+
+    let ready = sessionDetails.isParsed;
+    if (ready) {
+        for (const opponentUserId in sessionDetails.results.scoretracker.endContext.ghost.opponents) {
+            const opponentSessionId = sessionDetails.results.scoretracker.endContext.ghost.opponents[opponentUserId];
+            const opponentSessionDetails = await getContractSession(opponentSessionId, req.gameVersion).catch(err => {
+                if (err.code !== 'ENOENT') { // error other than non-existant session
+                    console.error(err);
+                }
+                return null;
+            });
+            if (opponentSessionDetails === null) {
+                res.status(404).end();
+                return;
+            }
+            ready = ready && opponentSessionDetails.isParsed;
+        }
+    }
+
+    res.json({
+        template: null,
+        data: {
+            contractSessionId: req.query.contractSessionId,
+            isReady: ready,
             retryCount: retryCount,
         }
     });
@@ -645,8 +673,8 @@ app.post('/multiplayermatchstats', async (req, res) => {
 
     const scoreTrackerContext = sessionDetails.results.scoretracker.endContext;
     const scores = [calculateMpScore(sessionDetails)];
-    for (const opponentId in scoreTrackerContext.ghost.opponents) {
-        const opponentSessionId = scoreTrackerContext.ghost.opponents[opponentId];
+    for (const opponentUserId in scoreTrackerContext.ghost.opponents) {
+        const opponentSessionId = scoreTrackerContext.ghost.opponents[opponentUserId];
         const opponentSessionDetails = await getContractSession(opponentSessionId, req.gameVersion).catch(err => {
             if (err.code !== 'ENOENT') { // error other than non-existant session
                 console.error(err);
