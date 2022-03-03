@@ -267,11 +267,11 @@ async function saveEvents(userId, events, gameVersion) {
         }
     }
 
-    for(const [sessionId, sessionDetails] of editedSessions) {
+    for (const [sessionId, sessionDetails] of editedSessions) {
         await writeFile(path.join('userdata', gameVersion, 'contractsessions', `${sessionId}.json`), JSON.stringify(sessionDetails));
     }
 
-    for(const sessionId of endedContracts) {
+    for (const sessionId of endedContracts) {
         endSession(sessionId, gameVersion).catch(err => {
             console.error(err);
             // todo: better error handling
