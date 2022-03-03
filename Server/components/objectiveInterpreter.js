@@ -597,7 +597,7 @@ function parseVariableWriter(string, initialContext) {
                 return;
             }
 
-            parent[lastpart] = initialValue;
+            parent[lastpart] = cloneDeep(initialValue);
         },
         push: (context, newValue) => {
             let parent = context;
