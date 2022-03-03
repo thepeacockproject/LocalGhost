@@ -99,7 +99,7 @@ async function getMissionEndData(sessionDetails, gameVersion) {
         {
             headline: 'UI_SCORING_SUMMARY_OBJECTIVES',
             bonusId: 'AllObjectivesCompletedBonus',
-            condition: sessionDetails.results.objectives.every(objResult => objResult.endState === 'Success'),
+            condition: sessionDetails.results.objectives.every(objResult => objResult.endState === 'Success' || objResult.excludeFromScoring),
         },
         {
             headline: 'UI_SCORING_SUMMARY_NOT_SPOTTED',

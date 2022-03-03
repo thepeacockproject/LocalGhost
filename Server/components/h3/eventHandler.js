@@ -132,7 +132,11 @@ async function endSession(sessionId, gameVersion) {
 
     // save all results in contractSession
     contractSession.results = {
-        objectives: contractData.Data.Objectives.map(obj => results[obj.Id]),
+        objectives: contractData.Data.Objectives.map(obj => ({
+            Id: obj.Id,
+            endState: results[obj.Id].endState,
+            excludeFromScoring: obj.ExcludeFromScoring || false,
+        })),
         scoretracker: results[scoreTrackingObjective.Id],
         // playStyles: playStyles.map(obj => results[obj.Id]),
     };
