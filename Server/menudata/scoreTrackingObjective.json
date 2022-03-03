@@ -37,12 +37,12 @@
       "Start": {
         "Ghost_PlayerDied": {
           "Actions": {
-            "$inc": "ghostDeaths"
+            "$inc": "ghost.deaths"
           }
         },
         "Ghost_TargetUnnoticed": {
           "Actions": {
-            "$inc": "ghostUnnoticedKills"
+            "$inc": "ghost.unnoticedKills"
           }
         },
         "Kill": [
@@ -134,7 +134,7 @@
           }
         },
         "BodyHidden": {
-          "Actions:": {
+          "Actions": {
             "$pushunique": [
               "bodiesHidden",
               "$Value.RepositoryId"

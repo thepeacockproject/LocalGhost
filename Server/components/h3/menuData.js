@@ -955,12 +955,12 @@ function calculateMpScore(sessionDetails) {
     return {
         Header: {
             GameMode: "Ghost",
-            Result: scoreTrackerContext.ghost.IsWinner ? 'Win' : 'Loss', // TODO: opponent left?
+            Result: scoreTrackerContext.ghost.isWinner ? 'Win' : 'Loss', // TODO: opponent left?
         },
         Metadata: {},
         Data: {
-            Score: scoreTrackerContext.ghost.Score,
-            OpponentScore: scoreTrackerContext.ghost.OpponentScore,
+            Score: scoreTrackerContext.ghost.score,
+            OpponentScore: scoreTrackerContext.ghost.opponentScore,
             PacifiedNpcs: [...scoreTrackerContext.pacifications].filter(id => !scoreTrackerContext.deadNpcs.includes(id)).length,
             DisguisesUsed: scoreTrackerContext.disguisesUsed.length,
             DisguisesRuined: scoreTrackerContext.disguisesRuined.length, // custom
