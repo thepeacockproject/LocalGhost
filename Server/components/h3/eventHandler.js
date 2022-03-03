@@ -107,8 +107,7 @@ async function newSession(sessionId, contractId, userId, gameVersion) {
         contractId: contractId,
         userId: userId,
         isParsed: false,
-        eventIdMap: {},
-        events: [],
+        events: {},
     };
 
     // todo: set userdata current session
@@ -126,7 +125,7 @@ async function endSession(sessionId, gameVersion) {
         scoreTrackingObjective,
         // ...challenges, // TODO
         // ...playStyles, // TODO
-    ], contractSession.events);
+    ], Object.values(contractSession.events));
 
     // TODO: handle progression here
 
@@ -245,9 +244,9 @@ async function saveEvents(userId, events, gameVersion) {
         }
         session.lastUpdate = new Date();
 
-        let eventServerId = session.eventIdMap[event.Id];
-        if (eventServerId) { // event was already added
-            response.push(eventServerId);
+        let savedEvent = session.events[event.Id];
+        if (savedEvent) { // event was already added
+            response.push(savedEvent.eventServerId);
         } else { // new event
             if (event.Name === 'ContractEnd') {
                 // todo: or contractfailed I guess?
@@ -256,9 +255,8 @@ async function saveEvents(userId, events, gameVersion) {
 
             eventServerId = process.hrtime.bigint().toString();
             event.eventServerId = eventServerId;
-            session.eventIdMap[event.Id] = eventServerId;
+            session.events[event.Id] = event;
             response.push(eventServerId);
-            session.events.push(event);
 
             // delete unneccessary fields
             // some of these could in theory be used by some statemachines, but that sounds stupid
