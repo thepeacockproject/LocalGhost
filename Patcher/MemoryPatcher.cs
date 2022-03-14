@@ -144,7 +144,7 @@ namespace HitmanPatcher
 			foreach (Patch p in version.configdomain.Where(p => p.customPatch == "configdomain"))
 			{
 				MemProtection oldprotectflags;
-				if (!Pinvoke.VirtualProtectEx(hProcess, baseAddress + p.offset, (UIntPtr)p.patch.Length, newmemprotection, out oldprotectflags))
+				if (!Pinvoke.VirtualProtectEx(hProcess, baseAddress + p.offset, (UIntPtr)1, newmemprotection, out oldprotectflags))
 				{
 					throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at vpe1Check for offset {0:X}", p.offset));
 				}
@@ -152,7 +152,7 @@ namespace HitmanPatcher
 				{
 					throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at rpmCheck for offset {0:X}", p.offset));
 				}
-				if (!Pinvoke.VirtualProtectEx(hProcess, baseAddress + p.offset, (UIntPtr)p.patch.Length, oldprotectflags, out oldprotectflags))
+				if (!Pinvoke.VirtualProtectEx(hProcess, baseAddress + p.offset, (UIntPtr)1, oldprotectflags, out oldprotectflags))
 				{
 					throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at vpe2Check for offset {0:X}", p.offset));
 				}
