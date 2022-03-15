@@ -313,11 +313,8 @@ function parseCondition(conditionObj) {
             if (!Object.hasOwn(val, '?') || !Object.hasOwn(val, 'in')) {
                 throw new SyntaxError('$all condition without "?" or "in"');
             }
-            if (Array.isArray(val['?'])) {
-                throw new SyntaxError('$all condition where "?" is an array');
-            }
-            if (typeof val['?'] === 'null' || typeof val['?'] === 'number') {
-                throw new SyntaxError('$all condition where "?" is null or a number');
+            if (typeof val['?'] !== 'object' || Array.isArray(val['?'])) {
+                throw new SyntaxError('$all condition where "?" is not an object');
             }
 
             if (Array.isArray(val.in)) { // literal array
