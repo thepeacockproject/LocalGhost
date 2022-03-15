@@ -19,6 +19,8 @@ function handleEvents(objectives, events) {
 
     // todo?: maybe cache the stateEventMap?
 
+    // Step 1: Parse (compile) json into functions
+
     for (const obj of objectives) {
         if (!obj.Id) {
             console.error('Objective with no Id encountered!');
@@ -73,6 +75,8 @@ function handleEvents(objectives, events) {
     }
 
 
+    // Step 2: Run the relevant functions for all events
+
     events = [
         {
             Name: '-', // init event
@@ -87,7 +91,7 @@ function handleEvents(objectives, events) {
         if (event.Name === 'exit_gate' || event.Name === 'ContractEnd' || event.Name === 'ContractFailed') {
             exited = true;
         } else if (exited) {
-            continue; // don't process events after we have exited the level
+            continue; // don't process events that happened after we have exited the level
         }
 
         for (const objectiveId in stateMachines) {
@@ -504,6 +508,8 @@ function parseVariableReader(string) {
             get: (context, eventVars, loopVars) => {
                 let obj;
                 if (parts[0].startsWith('#')) { // loopvar
+                    // The amount of '#' chars dictate the var depth
+                    // $.# is the loopvar of the outer most loop, $.## is the loopvar of the loop nested one layer within, etc.
                     obj = loopVars[parts[0].length - 1];
                 } else { // context var
                     obj = context[parts[0]];
@@ -518,7 +524,7 @@ function parseVariableReader(string) {
                 return obj;
             },
         };
-    } else {
+    } else { // event value
         const parts = string.substring(1).split('.');
         // TODO?: weird objective completion status thingy ($uuid)?
         return {
@@ -568,7 +574,7 @@ function parseVariableWriter(string, initialContext) {
             let parent = context;
             for (const part of parts.slice(0, -1)) {
                 if (typeof parent !== 'object' || Array.isArray(parent)) {
-                    console.log('Objective action specified context subprop could not be found');
+                    console.log('An objective action specified a context subprop that could not be found');
                     return;
                 }
 
@@ -587,7 +593,7 @@ function parseVariableWriter(string, initialContext) {
             let parent = context;
             for (const part of parts.slice(0, -1)) {
                 if (typeof parent !== 'object' || Array.isArray(parent)) {
-                    console.log('Objective action specified context subprop could not be found');
+                    console.log('An objective action specified a context subprop that could not be found');
                     return;
                 }
 
@@ -603,7 +609,7 @@ function parseVariableWriter(string, initialContext) {
             let parent = context;
             for (const part of parts) {
                 if (typeof parent !== 'object' || Array.isArray(parent)) {
-                    console.log('Objective action specified context subprop could not be found');
+                    console.log('An objective action specified a context subprop that could not be found');
                     return;
                 }
 
@@ -624,7 +630,7 @@ function parseVariableWriter(string, initialContext) {
             let parent = context;
             for (const part of parts) {
                 if (typeof parent !== 'object' || Array.isArray(parent)) {
-                    console.log('Objective action specified context subprop could not be found');
+                    console.log('An objective action specified a context subprop that could not be found');
                     return;
                 }
 
