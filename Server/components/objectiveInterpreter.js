@@ -12,11 +12,6 @@ function handleEvents(objectives, events) {
     // TODO: Activations
     // TODO: Timers
 
-    /*
-    todo test:
-    "#" in the name of a context var
-    */
-
     // todo?: maybe cache the stateEventMap?
 
     // Step 1: Parse (compile) json into functions
@@ -192,7 +187,6 @@ function parseCondition(conditionObj) {
     //and, or, not, gt, lt, ge, le, eq, inarray, any, all, pushunique
     switch (key) {
         case '$and':
-            // TODO: check if $and works with an array larger than 2
             if (!Array.isArray(val)) {
                 throw new SyntaxError('$and condition with something else than an array');
             }
@@ -205,7 +199,6 @@ function parseCondition(conditionObj) {
                 return parseCondition(subval);
             }));
         case '$or':
-            // TODO: check if $or works with an array larger than 2
             if (!Array.isArray(val)) {
                 throw new SyntaxError('$or condition with something else than an array');
             }
