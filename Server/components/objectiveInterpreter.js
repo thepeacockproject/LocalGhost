@@ -490,7 +490,7 @@ function parseVariableReader(string) {
         return {
             get: (context, eventVars, loopVars) => {
                 let obj;
-                if (parts[0].startsWith('#')) { // loopvar
+                if (/^#+$/.test(parts[0])) { // loopvar
                     // The amount of '#' chars dictate the var depth
                     // $.# is the loopvar of the outer most loop, $.## is the loopvar of the loop nested one layer within, etc.
                     obj = loopVars[parts[0].length - 1];
