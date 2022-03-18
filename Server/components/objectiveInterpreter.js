@@ -294,13 +294,7 @@ function parseCondition(conditionObj) {
             }
 
             if (Array.isArray(val.in)) { // literal array
-                return conditions.any(val.in.map(element => {
-                    if (typeof element === 'object') {
-                        throw new SyntaxError('$any/$inarray "in" literal array contains an object');
-                    }
-
-                    return parseVariableReader(element);
-                }), parseCondition(val['?']));
+                return conditions.any(val.in.map(element => parseVariableReader(element)), parseCondition(val['?']));
             } else if (typeof val.in === 'string') { // array getter
                 return conditions.any(parseVariableReader(val.in), parseCondition(val['?']));
             } else {
@@ -318,13 +312,7 @@ function parseCondition(conditionObj) {
             }
 
             if (Array.isArray(val.in)) { // literal array
-                return conditions.all(val.in.map(element => {
-                    if (typeof element === 'object') {
-                        throw new SyntaxError('$any/$inarray "in" literal array contains an object');
-                    }
-
-                    return parseVariableReader(element);
-                }), parseCondition(val['?']));
+                return conditions.all(val.in.map(element => parseVariableReader(element)), parseCondition(val['?']));
             } else if (typeof val.in === 'string') { // array getter
                 return conditions.all(parseVariableReader(val.in), parseCondition(val['?']));
             } else {
@@ -486,14 +474,12 @@ function createSimpleEventHandler(eventValues, targetState) {
 
 function parseVariableReader(string) {
     const typeString = typeof string;
-    if (typeString === 'object') {
-        throw new Error('Tried to parse literal but was object (bad type checking?)');
-    }
-    if (typeString === 'number' ||
+    if (typeString === 'object' ||
+        typeString === 'number' ||
         typeString === 'boolean' ||
         typeString === 'null' ||
         !string.startsWith('$')) {
-        // string, boolean, null or number literal
+        // object, number, boolean, null or string literal
         return {
             get: () => string,
         };
@@ -754,7 +740,7 @@ const conditions = {
         };
     },
     any: function any(items, condition) {
-        if (Array.isArray(items)) { // array of getters
+        if (Array.isArray(items)) { // literal array
             return (context, eventVars, loopVars) => {
                 for (const item of items) {
                     const itemValue = item.get(context, eventVars, loopVars);
@@ -789,7 +775,7 @@ const conditions = {
         }
     },
     all: function all(items, condition) {
-        if (Array.isArray(items)) { // array of getters
+        if (Array.isArray(items)) { // literal array
             return (context, eventVars, loopVars) => {
                 for (const item of items) {
                     const itemValue = item.get(context, eventVars, loopVars)
