@@ -175,12 +175,12 @@ function parseStateMachine(states, initialContext) {
 
 function parseCondition(conditionObj) {
     if (typeof conditionObj !== 'object' || Array.isArray(conditionObj)) {
-        throw new Error('Tried to parse a condition that is not an object!');
+        throw new SyntaxError('Tried to parse a condition that is not an object!');
     }
 
     objectEntries = Object.entries(conditionObj).filter(([key]) => key.startsWith('$'));
     if (objectEntries.length != 1) {
-        throw new Error('Unexpected number of elements in condition object (should be 1)');
+        throw new SyntaxError('Unexpected number of elements in condition object (should be 1)');
     }
 
     const [key, val] = objectEntries[0];
@@ -327,12 +327,12 @@ function parseCondition(conditionObj) {
 
 function parseAction(actionObj, initialContext) {
     if (typeof actionObj !== 'object' || Array.isArray(actionObj)) {
-        throw new Error('Tried to parse an action that is not an object!');
+        throw new SyntaxError('Tried to parse an action that is not an object!');
     }
 
     objectEntries = Object.entries(actionObj);
     if (objectEntries.length != 1) {
-        throw new Error('Unexpected number of elements in action object (should be 1)');
+        throw new SyntaxError('Unexpected number of elements in action object (should be 1)');
     }
 
     const [key, val] = objectEntries[0];
