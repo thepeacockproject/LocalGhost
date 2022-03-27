@@ -93,9 +93,19 @@ namespace HitmanPatcher
 					patchedprocesses.Add(process.Id);
 					try
 					{
-						if (patchedprocesses.Contains(Pinvoke.GetProcessParentPid(process)))
+						bool dontPatch = false;
+						try
+						{
+							dontPatch = patchedprocesses.Contains(Pinvoke.GetProcessParentPid(process));
+						}
+						catch (Win32Exception) // The process has exited already
+						{
+							dontPatch = true;
+						}
+						if (dontPatch)
 						{
 							// if we patched this process' parent before, this is probably an error reporter, so don't patch it.
+							log(String.Format("Skipping PID {0}...", process.Id));
 							process.Dispose();
 							continue;
 						}
