@@ -10,9 +10,17 @@ function handleEvents(objectives, events) {
     // TODO: repeatable (relevant for challenges)
 
     // TODO: Activations
-    // TODO: Timers
 
-    // todo?: maybe cache the stateEventMap?
+    // todo?: maybe cache the stateHandlers?
+
+    // TODO: trigger '-' eventhandler after every transition
+    // todo test:
+    //   check what happens when the game fires 'Heartbeat' events
+    //   check what happens when the game fires '$timer' events
+    //   multiple matching conditions actions
+    //   matching conditions after transition to same state
+    //   $after condition with literal boolean/null
+    //   over/underflow?
 
     // Step 1: Parse (compile) json into functions
 
@@ -27,45 +35,20 @@ function handleEvents(objectives, events) {
             if (obj.Definition) { // custom statemachine
                 stateMachines[obj.Id] = {
                     currentState: 'Start',
+                    inStateSince: 0,
                     context: cloneDeep(obj.Definition.Context),
-                    stateEventMap: parseStateMachine(obj.Definition.States, obj.Definition.Context),
+                    stateHandlers: parseStateMachine(obj.Definition.States, obj.Definition.Context),
                 }
+            } else {
+                console.warn(`Objective is a statemachine without definition: ${objective.Id}`);
             }
         } else {
             stateMachines[obj.Id] = {
                 currentState: 'Start',
+                inStateSince: 0,
                 context: {},
-                stateEventMap: {},
+                stateHandlers: createSimpleStateMachine(obj),
             };
-            if (obj.SuccessEvent) { // simple trigger(s)
-                const eventHandler = createSimpleEventHandler(obj.SuccessEvent.EventValues, 'Success');
-                stateMachines[obj.Id].stateEventMap['Start'][obj.SuccessEvent.EventName] = [eventHandler];
-                if (obj.SuccessEvent.EventValues) { // not sure why this is a thing
-                    stateMachines[obj.Id].stateEventMap['Failure'][obj.SuccessEvent.EventName] = [eventHandler];
-                }
-            }
-            if (obj.FailedEvent) {
-                if (!Object.hasOwn(stateMachines[obj.Id].stateEventMap['Start'], obj.FailedEvent.EventName)) {
-                    const eventHandler = createSimpleEventHandler(obj.FailedEvent.EventValues, 'Failure');
-
-                    stateMachines[obj.Id].stateEventMap['Start'][obj.FailedEvent.EventName] = [eventHandler];
-                    if (obj.FailedEvent.EventValues) { // not sure why this is a thing
-                        stateMachines[obj.Id].stateEventMap['Success'][obj.FailedEvent.EventName] = [eventHandler];
-                    }
-                }
-            }
-            if (obj.ResetEvent) {
-                if (!Object.hasOwn(stateMachines[obj.Id].stateEventMap['Start'], obj.ResetEvent.EventName)) {
-                    const eventHandler = createSimpleEventHandler(obj.ResetEvent.EventValues, 'Start');
-
-                    stateMachines[obj.Id].stateEventMap['Success'][obj.ResetEvent.EventName] = [eventHandler];
-                    stateMachines[obj.Id].stateEventMap['Failure'][obj.ResetEvent.EventName] = [eventHandler];
-                }
-            }
-
-            if (!obj.SuccessEvent && !obj.FailedEvent) {
-                console.warn(`Objective is not a statemachine and has no SuccessEvent: ${obj.Id}`);
-            }
         }
     }
 
@@ -75,12 +58,14 @@ function handleEvents(objectives, events) {
     events = [
         {
             Name: '-', // init event
+            Timestamp: 0,
         }, ...events.sort((a, b) => {
             return (a.Timestamp - b.Timestamp) || Number(BigInt(a.eventServerId) - BigInt(b.eventServerId));
         })
     ];
 
     let exited = false;
+    let lastHeartbeat = 0;
 
     for (const event of events) {
         if (event.Name === 'exit_gate' || event.Name === 'ContractEnd' || event.Name === 'ContractFailed') {
@@ -89,31 +74,19 @@ function handleEvents(objectives, events) {
             continue; // don't process events that happened after we have exited the level
         }
 
-        for (const objectiveId in stateMachines) {
-            const stateMachine = stateMachines[objectiveId];
-            const eventListeners = stateMachine.stateEventMap[stateMachine.currentState];
-            if (!eventListeners) {
-                continue;
-            }
-            const eventHandlers = eventListeners[event.Name];
-            if (!eventHandlers) {
-                continue;
-            }
-
-            for (const eventHandler of eventHandlers) {
-                if (!Object.hasOwn(eventHandler, 'condition') ||
-                    eventHandler.condition(stateMachine.context, event, [])) {
-                    if (Object.hasOwn(eventHandler, 'actions')) {
-                        for (const action of eventHandler.actions) {
-                            action(stateMachine.context, event, []);
-                        }
-                    }
-                    if (Object.hasOwn(eventHandler, 'transition')) {
-                        stateMachine.currentState = eventHandler.transition;
-                    }
-                }
-            }
+        // First: tick timers
+        // I'm ticking all proper timers with a 'Heartbeat' event every second,
+        // which is approximately what the game does aswell
+        while (lastHeartbeat < event.Timestamp) {
+            handleEvent(stateMachines, {
+                Name: 'Heartbeat',
+                Timestamp: lastHeartbeat
+            }, true);
+            lastHeartbeat += 1;
         }
+
+        // Then: handle this event
+        handleEvent(stateMachines, event);
     }
 
     const result = {};
@@ -127,11 +100,114 @@ function handleEvents(objectives, events) {
     return result;
 }
 
+function handleEvent(stateMachines, event, timerTick) {
+    for (const objectiveId in stateMachines) {
+        const stateMachine = stateMachines[objectiveId];
+        const stateHandler = stateMachine.stateHandlers[stateMachine.currentState];
+        if (!stateHandler) {
+            continue;
+        }
+        const {
+            eventListeners,
+            properTimers,
+            dollarEventHandlers,
+        } = stateHandler;
+        let eventHandlersForEvent = eventListeners[event.Name] || [];
+        // only run proper timers on timerTick, and run dollarEventHandlers for every (non-timerTick) event
+        const eventHandlers = timerTick ? properTimers : [...eventHandlersForEvent, ...dollarEventHandlers];
+        const timeInState = event.Timestamp - stateMachine.inStateSince;
+
+        for (const eventHandler of eventHandlers) {
+            if (!Object.hasOwn(eventHandler, 'condition') ||
+                eventHandler.condition(stateMachine.context, event, [], timeInState)) {
+                if (Object.hasOwn(eventHandler, 'actions')) {
+                    for (const action of eventHandler.actions) {
+                        action(stateMachine.context, event, []);
+                    }
+                }
+                if (Object.hasOwn(eventHandler, 'transition')) {
+                    stateMachine.currentState = eventHandler.transition;
+                    stateMachine.inStateSince = event.Timestamp;
+                }
+            }
+        }
+    }
+}
+
+function createSimpleStateMachine(objective) {
+    const stateHandlers = {
+        Start: {
+            eventListeners: {},
+            properTimers: [],
+            dollarEventHandlers: [],
+        },
+        Failure: {
+            eventListeners: {},
+            properTimers: [],
+            dollarEventHandlers: [],
+        },
+        Success: {
+            eventListeners: {},
+            properTimers: [],
+            dollarEventHandlers: [],
+        },
+    };
+
+    if (objective.SuccessEvent) { // simple trigger(s)
+        const eventHandler = createSimpleEventHandler(objective.SuccessEvent.EventValues, 'Success');
+        stateHandlers['Start'].eventListeners[objective.SuccessEvent.EventName] = [eventHandler];
+        if (objective.SuccessEvent.EventValues) { // not sure why this is a thing
+            stateHandlers['Failure'].eventListeners[objective.SuccessEvent.EventName] = [eventHandler];
+        }
+    }
+    if (objective.FailedEvent) {
+        if (!Object.hasOwn(stateHandlers['Start'].eventListeners, objective.FailedEvent.EventName)) {
+            const eventHandler = createSimpleEventHandler(objective.FailedEvent.EventValues, 'Failure');
+
+            stateHandlers['Start'].eventListeners[objective.FailedEvent.EventName] = [eventHandler];
+            if (objective.FailedEvent.EventValues) { // not sure why this is a thing
+                stateHandlers['Success'].eventListeners[objective.FailedEvent.EventName] = [eventHandler];
+            }
+        }
+    }
+    if (objective.ResetEvent) {
+        if (!Object.hasOwn(stateHandlers['Start'].eventListeners, objective.ResetEvent.EventName)) {
+            const eventHandler = createSimpleEventHandler(objective.ResetEvent.EventValues, 'Start');
+
+            stateHandlers['Success'].eventListeners[objective.ResetEvent.EventName] = [eventHandler];
+            stateHandlers['Failure'].eventListeners[objective.ResetEvent.EventName] = [eventHandler];
+        }
+    }
+
+    if (!objective.SuccessEvent && !objective.FailedEvent) {
+        console.warn(`Objective is not a statemachine and has no SuccessEvent: ${objective.Id}`);
+    }
+
+    return stateHandlers;
+}
+
+function createSimpleEventHandler(eventValues, targetState) {
+    if (eventValues === undefined) {
+        return {
+            transition: targetState,
+        };
+    } else {
+        return {
+            condition: conditions.and(Object.entries(eventValues).map(([key, value]) =>
+                conditions.eq(parseVariableReader(`$Value.${key}`), parseVariableReader(value))
+            )),
+            transition: targetState,
+        };
+    }
+}
+
 function parseStateMachine(states, initialContext) {
-    const output = {};
+    const stateHandlers = {};
     for (const stateName in states) {
         const stateObj = states[stateName];
         const eventListeners = {};
+        const properTimers = [];
+        const dollarEventHandlers = [];
 
         for (const eventName in stateObj) {
             let thingsToDo = stateObj[eventName];
@@ -142,25 +218,31 @@ function parseStateMachine(states, initialContext) {
             }
             const eventHandlersForEvent = [];
 
-            if (eventName == '$timer') {
-                // TODO: implement timers
-            } else {
-                for (const thingToDo of thingsToDo) {
-                    const eventHandler = {};
-                    if (Object.hasOwn(thingToDo, 'Condition')) {
-                        eventHandler.condition = parseCondition(thingToDo.Condition);
+            for (const thingToDo of thingsToDo) {
+                const eventHandler = {};
+                if (Object.hasOwn(thingToDo, 'Condition')) {
+                    eventHandler.condition = parseCondition(thingToDo.Condition);
+                }
+                if (Object.hasOwn(thingToDo, 'Actions')) {
+                    let actions = thingToDo.Actions
+                    if (!Array.isArray(actions)) {
+                        actions = [actions];
                     }
-                    if (Object.hasOwn(thingToDo, 'Actions')) {
-                        let actions = thingToDo.Actions
-                        if (!Array.isArray(actions)) {
-                            actions = [actions];
-                        }
 
-                        eventHandler.actions = actions.map(action => parseAction(action, initialContext));
+                    eventHandler.actions = actions.map(action => parseAction(action, initialContext));
+                }
+                if (Object.hasOwn(thingToDo, 'Transition')) {
+                    eventHandler.transition = thingToDo.Transition;
+                }
+
+                if (eventName.startsWith('$')) {
+                    if (eventName === '$timer' &&
+                        Object.hasOwn(thingToDo, 'Condition') && Object.hasOwn(thingToDo.Condition, '$after')) {
+                        properTimers.push(eventHandler);
                     }
-                    if (Object.hasOwn(thingToDo, 'Transition')) {
-                        eventHandler.transition = thingToDo.Transition;
-                    }
+                    // Timers get ticked on every heartbeat, but also on every regular event
+                    dollarEventHandlers.push(eventHandler);
+                } else {
                     eventHandlersForEvent.push(eventHandler);
                 }
             }
@@ -168,9 +250,13 @@ function parseStateMachine(states, initialContext) {
             eventListeners[eventName] = eventHandlersForEvent;
         }
 
-        output[stateName] = eventListeners;
+        stateHandlers[stateName] = {
+            eventListeners,
+            properTimers,
+            dollarEventHandlers,
+        };
     }
-    return output;
+    return stateHandlers;
 }
 
 function parseCondition(conditionObj) {
@@ -320,6 +406,12 @@ function parseCondition(conditionObj) {
             }
 
             return conditions.pushunique(parseVariableWriter(val[0]), parseVariableReader(val[1]));
+        case '$after':
+            if (typeof val === 'object') {
+                throw SyntaxError('$after operand is an object');
+            }
+
+            return conditions.after(parseVariableReader(val));
         default:
             throw new Error(`Unknown condition encountered: ${key}`);
     }
@@ -448,21 +540,6 @@ function parseAction(actionObj, initialContext) {
             throw new Error(`Unknown action encountered: ${key}`);
     }
 
-}
-
-function createSimpleEventHandler(eventValues, targetState) {
-    if (eventValues === undefined) {
-        return {
-            transition: targetState,
-        };
-    } else {
-        return {
-            condition: conditions.and(Object.entries(eventValues).map(([key, value]) =>
-                conditions.eq(parseVariableReader(`$Value.${key}`), parseVariableReader(value))
-            )),
-            transition: targetState,
-        };
-    }
 }
 
 function parseVariableReader(string) {
@@ -650,11 +727,11 @@ function parseVariableWriter(string, initialContext) {
 }
 
 const conditions = {
-    //and, or, not, gt, lt, ge, le, eq, inarray, any, all, pushunique
+    //and, or, not, gt, lt, ge, le, eq, inarray, any, all, pushunique, after
     and: function and(conditions) {
-        return (context, eventVars, loopVars) => {
+        return (context, eventVars, loopVars, timeInState) => {
             for (const condition of conditions) {
-                if (!condition(context, eventVars, loopVars)) {
+                if (!condition(context, eventVars, loopVars, timeInState)) {
                     return false;
                 }
             }
@@ -662,9 +739,9 @@ const conditions = {
         };
     },
     or: function or(conditions) {
-        return (context, eventVars, loopVars) => {
+        return (context, eventVars, loopVars, timeInState) => {
             for (const condition of conditions) {
-                if (condition(context, eventVars, loopVars)) {
+                if (condition(context, eventVars, loopVars, timeInState)) {
                     return true;
                 }
             }
@@ -672,8 +749,8 @@ const conditions = {
         };
     },
     not: function not(condition) {
-        return (context, eventVars, loopVars) => {
-            return !condition(context, eventVars, loopVars);
+        return (context, eventVars, loopVars, timeInState) => {
+            return !condition(context, eventVars, loopVars, timeInState);
         };
     },
     gt: function gt(a, b) {
@@ -734,12 +811,12 @@ const conditions = {
     },
     any: function any(items, condition) {
         if (Array.isArray(items)) { // literal array
-            return (context, eventVars, loopVars) => {
+            return (context, eventVars, loopVars, timeInState) => {
                 for (const item of items) {
                     const itemValue = item.get(context, eventVars, loopVars);
                     loopVars.push(itemValue);
                     // treat condition as false if item is null or undefined
-                    if (condition(context, eventVars, loopVars) && itemValue != null) {
+                    if (condition(context, eventVars, loopVars, timeInState) && itemValue != null) {
                         loopVars.pop();
                         return true;
                     }
@@ -748,7 +825,7 @@ const conditions = {
                 return false;
             };
         } else { // array getter
-            return (context, eventVars, loopVars) => {
+            return (context, eventVars, loopVars, timeInState) => {
                 const arrayObj = items.get(context, eventVars, loopVars);
                 if (!Array.isArray(arrayObj)) {
                     return false;
@@ -757,7 +834,7 @@ const conditions = {
                 for (const item of arrayObj) {
                     loopVars.push(item);
                     // treat condition as false if item is null or undefined
-                    if (condition(context, eventVars, loopVars) && item != null) {
+                    if (condition(context, eventVars, loopVars, timeInState) && item != null) {
                         loopVars.pop();
                         return true;
                     }
@@ -769,12 +846,12 @@ const conditions = {
     },
     all: function all(items, condition) {
         if (Array.isArray(items)) { // literal array
-            return (context, eventVars, loopVars) => {
+            return (context, eventVars, loopVars, timeInState) => {
                 for (const item of items) {
                     const itemValue = item.get(context, eventVars, loopVars)
                     loopVars.push(itemValue);
                     // treat condition as false if item is null or undefined
-                    if (!condition(context, eventVars, loopVars) || itemValue == null) {
+                    if (!condition(context, eventVars, loopVars, timeInState) || itemValue == null) {
                         loopVars.pop();
                         return false;
                     }
@@ -783,7 +860,7 @@ const conditions = {
                 return true;
             };
         } else { // array getter
-            return (context, eventVars, loopVars) => {
+            return (context, eventVars, loopVars, timeInState) => {
                 const arrayObj = items.get(context, eventVars, loopVars);
                 if (!Array.isArray(arrayObj)) {
                     return false;
@@ -792,7 +869,7 @@ const conditions = {
                 for (const item of arrayObj) {
                     loopVars.push(item);
                     // treat condition as false if item is null or undefined
-                    if (!condition(context, eventVars, loopVars) || item == null) {
+                    if (!condition(context, eventVars, loopVars, timeInState) || item == null) {
                         loopVars.pop();
                         return false;
                     }
@@ -808,6 +885,11 @@ const conditions = {
             return array.pushunique(context, itemValue);
         };
     },
+    after: function after(timeout) {
+        return (context, eventVars, loopVars, timeInState) => {
+            return timeInState > timeout.get(context, eventVars, loopVars);
+        }
+    }
 }
 
 const actions = {
