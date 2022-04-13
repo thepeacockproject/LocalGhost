@@ -140,6 +140,7 @@ function handleEvent(stateMachines, event, timerTick = false, initEvent = false,
                     stateMachine.currentState = eventHandler.transition;
                     stateMachine.inStateSince = event.Timestamp;
                     hasTransitioned.push(stateMachine);
+                    break;
                 }
             }
         }
