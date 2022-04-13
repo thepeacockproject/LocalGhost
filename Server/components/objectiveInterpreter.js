@@ -17,6 +17,7 @@ function handleEvents(objectives, events) {
     // todo test:
     //   check what happens when the game fires 'Heartbeat' events
     //   check what happens when the game fires '$timer' events
+    //   check what happens when the game fires '-' events
     //   multiple matching conditions actions
     //   matching conditions after transition to same state
     //   $after condition with literal boolean/null
@@ -55,17 +56,18 @@ function handleEvents(objectives, events) {
 
     // Step 2: Run the relevant functions for all events
 
-    events = [
-        {
-            Name: '-', // init event
-            Timestamp: 0,
-        }, ...events.sort((a, b) => {
-            return (a.Timestamp - b.Timestamp) || Number(BigInt(a.eventServerId) - BigInt(b.eventServerId));
-        })
-    ];
+    events.sort((a, b) => {
+        return (a.Timestamp - b.Timestamp) || Number(BigInt(a.eventServerId) - BigInt(b.eventServerId));
+    });
 
     let exited = false;
     let lastHeartbeat = 0;
+
+    // Run init eventHandlers for all state machines
+    handleEvent(stateMachines, {
+        Name: '-',
+        Timestamp: 0,
+    }, false, true, true);
 
     for (const event of events) {
         if (event.Name === 'exit_gate' || event.Name === 'ContractEnd' || event.Name === 'ContractFailed') {
@@ -100,7 +102,8 @@ function handleEvents(objectives, events) {
     return result;
 }
 
-function handleEvent(stateMachines, event, timerTick) {
+function handleEvent(stateMachines, event, timerTick = false, initEvent = false, doRecurse = true) {
+    let hasTransitioned = [];
     for (const objectiveId in stateMachines) {
         const stateMachine = stateMachines[objectiveId];
         const stateHandler = stateMachine.stateHandlers[stateMachine.currentState];
@@ -113,25 +116,49 @@ function handleEvent(stateMachines, event, timerTick) {
             dollarEventHandlers,
         } = stateHandler;
         let eventHandlersForEvent = eventListeners[event.Name] || [];
-        // only run proper timers on timerTick, and run dollarEventHandlers for every (non-timerTick) event
-        const eventHandlers = timerTick ? properTimers : [...eventHandlersForEvent, ...dollarEventHandlers];
+        let eventHandlers = [...eventHandlersForEvent, ...dollarEventHandlers];
+        let eventVars = event;
+
+        if (timerTick) {
+            eventHandlers = properTimers;
+        }
+        if (initEvent) {
+            eventHandlers = eventHandlersForEvent;
+            eventVars = {};
+        }
         const timeInState = event.Timestamp - stateMachine.inStateSince;
 
         for (const eventHandler of eventHandlers) {
             if (!Object.hasOwn(eventHandler, 'condition') ||
-                eventHandler.condition(stateMachine.context, event, [], timeInState)) {
+                eventHandler.condition(stateMachine.context, eventVars, [], timeInState)) {
                 if (Object.hasOwn(eventHandler, 'actions')) {
                     for (const action of eventHandler.actions) {
-                        action(stateMachine.context, event, []);
+                        action(stateMachine.context, eventVars, []);
                     }
                 }
                 if (Object.hasOwn(eventHandler, 'transition')) {
                     stateMachine.currentState = eventHandler.transition;
                     stateMachine.inStateSince = event.Timestamp;
+                    hasTransitioned.push(stateMachine);
                 }
             }
         }
     }
+
+    let numberOfLoops = 0;
+    while (hasTransitioned.length > 0 && doRecurse) {
+        hasTransitioned = handleEvent(hasTransitioned, {
+            Name: '-',
+            Timestamp: event.Timestamp,
+        }, false, true, false);
+        if (numberOfLoops++ > 100000) {
+            // The game might freeze, but there is no reason the server should as well :)
+            console.warn(`Objectives init looped more than 100000 times: ${hasTransitioned}`);
+            break;
+        }
+    }
+
+    return hasTransitioned;
 }
 
 function createSimpleStateMachine(objective) {
