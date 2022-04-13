@@ -247,20 +247,35 @@ function parseStateMachine(states, initialContext) {
             const eventHandlersForEvent = [];
 
             for (const thingToDo of thingsToDo) {
-                const eventHandler = {};
-                if (Object.hasOwn(thingToDo, 'Condition')) {
-                    eventHandler.condition = parseCondition(thingToDo.Condition);
-                }
-                if (Object.hasOwn(thingToDo, 'Actions')) {
-                    let actions = thingToDo.Actions
-                    if (!Array.isArray(actions)) {
-                        actions = [actions];
+                const eventHandler = {
+                    actions: [],
+                };
+                for (const property in thingToDo) {
+                    if (property === 'Condition') {
+                        eventHandler.condition = parseCondition(thingToDo.Condition);
                     }
+                    else if (property === 'Actions') {
+                        let actions = thingToDo.Actions
+                        if (!Array.isArray(actions)) {
+                            actions = [actions];
+                        }
 
-                    eventHandler.actions = actions.map(action => parseAction(action, initialContext));
-                }
-                if (Object.hasOwn(thingToDo, 'Transition')) {
-                    eventHandler.transition = thingToDo.Transition;
+                        eventHandler.actions.push(...actions.map(action => parseAction(action, initialContext)));
+                    }
+                    else if (property === 'Transition') {
+                        eventHandler.transition = thingToDo.Transition;
+                    }
+                    else if (property.startsWith('$')) {
+                        // Assume it's a loose action
+                        eventHandler.actions.push(parseAction({
+                            [property]: thingToDo[property]
+                        }));
+                    }
+                    else {
+                        // The game crashes if this happens, so print a warning I guess.
+                        console.warn('Invalid property encountered in state machine');
+                        continue;
+                    }
                 }
 
                 if (eventName.startsWith('$')) {
