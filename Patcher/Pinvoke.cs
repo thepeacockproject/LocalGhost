@@ -90,7 +90,7 @@ namespace HitmanPatcher
 
 			PROCESS_BASIC_INFORMATION PEB = new PROCESS_BASIC_INFORMATION();
 			uint returnlength;
-			int result = NtQueryInformationProcess(process.Handle, PROCESSINFOCLASS.ProcessBasicInformation, out PEB, (uint)Marshal.SizeOf(PEB), out returnlength);
+			int result = NtQueryInformationProcess(hProcess, PROCESSINFOCLASS.ProcessBasicInformation, out PEB, (uint)Marshal.SizeOf(PEB), out returnlength);
 			CloseHandle(hProcess);
 			if (result != 0)
 			{
