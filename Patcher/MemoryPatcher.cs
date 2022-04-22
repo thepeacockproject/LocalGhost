@@ -13,6 +13,89 @@ namespace HitmanPatcher
 {
 	public class MemoryPatcher
 	{
+		public static HashSet<int> patchedprocesses = new HashSet<int>();
+
+		private static List<Process> GetProcessesByName(params string[] names)
+		{
+			Process[] allProcesses = Process.GetProcesses();
+			List<Process> result = new List<Process>();
+			foreach (Process p in allProcesses)
+			{
+				try
+				{
+					if (names.Contains(p.ProcessName, StringComparer.OrdinalIgnoreCase))
+					{
+						result.Add(p);
+					}
+					else
+					{
+						p.Dispose();
+					}
+				}
+				catch (InvalidOperationException) // Process has exited or has no name
+				{
+					p.Dispose();
+				}
+			}
+			return result;
+		}
+
+		public static void timer_Tick(object sender, EventArgs e)
+		{
+			IEnumerable<Process> hitmans = GetProcessesByName("HITMAN", "HITMAN2", "HITMAN3");
+			MainForm form = (MainForm)((System.Windows.Forms.Timer)sender).Tag;
+			foreach (Process process in hitmans)
+			{
+				if (!patchedprocesses.Contains(process.Id))
+				{
+					patchedprocesses.Add(process.Id);
+					try
+					{
+						bool dontPatch = false;
+						try
+						{
+							dontPatch = patchedprocesses.Contains(Pinvoke.GetProcessParentPid(process));
+						}
+						catch (Win32Exception) // The process has exited already
+						{
+							dontPatch = true;
+						}
+						if (dontPatch)
+						{
+							// if we patched this process' parent before, this is probably an error reporter, so don't patch it.
+							form.log(String.Format("Skipping PID {0}...", process.Id));
+							process.Dispose();
+							continue;
+						}
+
+						if (MemoryPatcher.Patch(process, form.currentSettings.patchOptions))
+						{
+							form.log(String.Format("Successfully patched processid {0}", process.Id));
+							if (form.currentSettings.patchOptions.SetCustomConfigDomain)
+							{
+								form.log(String.Format("Injected server: {0}", form.currentSettings.patchOptions.CustomConfigDomain));
+							}
+						}
+						else
+						{
+							// else: process not yet ready for patching, try again next timer tick
+							patchedprocesses.Remove(process.Id);
+						}
+					}
+					catch (Win32Exception err)
+					{
+						form.log(String.Format("Failed to patch processid {0}: error code {1}", process.Id, err.NativeErrorCode));
+						form.log(err.Message);
+					}
+					catch (NotImplementedException)
+					{
+						form.log(String.Format("Failed to patch processid {0}: unknown version", process.Id));
+					}
+				}
+				process.Dispose();
+			}
+		}
+
 		public static bool Patch(Process process, Options patchOptions)
 		{
 			IntPtr hProcess = Pinvoke.OpenProcess(
