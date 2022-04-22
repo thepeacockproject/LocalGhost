@@ -1,15 +1,12 @@
-// Copyright (C) 2020-2021 grappigegovert <grappigegovert@hotmail.com>
+// Copyright (C) 2020-2022 grappigegovert <grappigegovert@hotmail.com>
 // Licensed under the zlib license. See LICENSE for more info
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
-using System.IO;
 
 namespace HitmanPatcher
 {
