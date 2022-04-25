@@ -11,6 +11,21 @@ using System.Text;
 
 namespace HitmanPatcher
 {
+	/// <summary>
+	/// Describes a class that provides a logging implementation.
+	/// </summary>
+	/// <remarks>
+	/// Please inform the Peacock team before changing or removing this API!
+	/// </remarks>
+	public interface ILoggingProvider
+	{
+		/// <summary>
+		/// Logs the provided message.
+		/// </summary>
+		/// <param name="msg">The message.</param>
+		void log(string msg);
+	}
+	
 	public class MemoryPatcher
 	{
 		public static HashSet<int> patchedprocesses = new HashSet<int>();
@@ -40,10 +55,9 @@ namespace HitmanPatcher
 			return result;
 		}
 
-		public static void timer_Tick(object sender, EventArgs e)
+		public static void PatchAllProcesses(ILoggingProvider logger, Options patchOptions)
 		{
 			IEnumerable<Process> hitmans = GetProcessesByName("HITMAN", "HITMAN2", "HITMAN3");
-			MainForm form = (MainForm)((System.Windows.Forms.Timer)sender).Tag;
 			foreach (Process process in hitmans)
 			{
 				if (!patchedprocesses.Contains(process.Id))
@@ -63,17 +77,17 @@ namespace HitmanPatcher
 						if (dontPatch)
 						{
 							// if we patched this process' parent before, this is probably an error reporter, so don't patch it.
-							form.log(String.Format("Skipping PID {0}...", process.Id));
+							logger.log(String.Format("Skipping PID {0}...", process.Id));
 							process.Dispose();
 							continue;
 						}
 
-						if (MemoryPatcher.Patch(process, form.currentSettings.patchOptions))
+						if (MemoryPatcher.Patch(process, patchOptions))
 						{
-							form.log(String.Format("Successfully patched processid {0}", process.Id));
-							if (form.currentSettings.patchOptions.SetCustomConfigDomain)
+							logger.log(String.Format("Successfully patched processid {0}", process.Id));
+							if (patchOptions.SetCustomConfigDomain)
 							{
-								form.log(String.Format("Injected server: {0}", form.currentSettings.patchOptions.CustomConfigDomain));
+								logger.log(String.Format("Injected server: {0}", patchOptions.CustomConfigDomain));
 							}
 						}
 						else
@@ -84,12 +98,12 @@ namespace HitmanPatcher
 					}
 					catch (Win32Exception err)
 					{
-						form.log(String.Format("Failed to patch processid {0}: error code {1}", process.Id, err.NativeErrorCode));
-						form.log(err.Message);
+						logger.log(String.Format("Failed to patch processid {0}: error code {1}", process.Id, err.NativeErrorCode));
+						logger.log(err.Message);
 					}
 					catch (NotImplementedException)
 					{
-						form.log(String.Format("Failed to patch processid {0}: unknown version", process.Id));
+						logger.log(String.Format("Failed to patch processid {0}: unknown version", process.Id));
 					}
 				}
 				process.Dispose();

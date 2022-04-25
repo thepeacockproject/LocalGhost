@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace HitmanPatcher
 {
-	public partial class MainForm : Form
+	public partial class MainForm : Form, ILoggingProvider
 	{
 		private static readonly Dictionary<string, string> publicServers = new Dictionary<string, string>
 		{
@@ -27,7 +27,7 @@ namespace HitmanPatcher
 			Timer timer = new Timer();
 			timer.Interval = 1000;
 			timer.Tag = this;
-			timer.Tick += MemoryPatcher.timer_Tick;
+			timer.Tick += (sender, args) => MemoryPatcher.PatchAllProcesses(this, currentSettings.patchOptions);
 			timer.Enabled = true;
 
 			try
@@ -53,7 +53,7 @@ namespace HitmanPatcher
 			}			
 		}
 
-		public void log(String msg)
+		public void log(string msg)
 		{
 			foreach (string line in msg.Split('\n'))
 			{
