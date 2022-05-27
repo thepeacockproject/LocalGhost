@@ -230,7 +230,7 @@
     "Resource": [],
     "Objectives": [
       {
-        "Id": "fe54e62b-3279-46c4-88ab-76844164850f",
+        "Id": "84af2b0a-ad44-41e0-852e-a0539af8b0ae",
         "Category": "primary",
         "OnActive": {
           "IfCompleted": {
@@ -319,6 +319,7 @@
             "Visible": false
           }
         },
+        "AllowEtRestartOnSuccess": true,
         "BriefingText": "$loc UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_NO_DISGUISE_CHANGES_PRIMARY_FAIL",
         "HUDTemplate": {
           "display": "$loc UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_NO_DISGUISE_CHANGES_PRIMARY_OBJ"
@@ -399,9 +400,11 @@
             "Visible": false
           }
         },
+        "AllowEtRestartOnSuccess": true,
         "BriefingText": "$loc UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_HIDE_ALL_BODIES_PRIMARY_OBJ",
         "HUDTemplate": {
-          "display": "$loc UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_HIDE_ALL_BODIES_PRIMARY_OBJ"
+          "display": "$loc UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_HIDE_ALL_BODIES_PRIMARY_OBJ",
+          "iconType": 17
         },
         "Type": "statemachine",
         "Definition": {
@@ -776,10 +779,36 @@
     "Description": "UI_GAMECHANGERS_GLOBAL_RESTRICTED_LOADOUT_DESC",
     "TileImage": "Images/Contracts/Gamechangers/Gamechanger_Global_Restricted_Loadout.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
-    "ObjectivesCategory": "secondary",
+    "ObjectivesCategory": "primary",
     "IsHidden": null,
     "Resource": [],
-    "Objectives": []
+    "Objectives": [
+      {
+        "Id": "a34b27b5-2141-4ad8-871c-94f262e0ebfe",
+        "Category": "primary",
+        "OnActive": {
+          "IfCompleted": {
+            "Visible": false
+          }
+        },
+        "AllowEtRestartOnSuccess": true,
+        "BriefingText": "",
+        "HUDTemplate": {
+          "display": ""
+        },
+        "Type": "statemachine",
+        "Definition": {
+          "Scope": "session",
+          "States": {
+            "Start": {
+              "-": {
+                "Transition": "Success"
+              }
+            }
+          }
+        }
+      }
+    ]
   },
   "9f409781-0a06-4748-b08d-784e78c6d481": {
     "Name": "UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_DO_NOT_GET_SPOTTED_PRIMARY_NAME",
@@ -798,6 +827,7 @@
             "Visible": false
           }
         },
+        "AllowEtRestartOnSuccess": true,
         "BriefingText": "$loc UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_DO_NOT_GET_SPOTTED_PRIMARY_FAIL",
         "HUDTemplate": {
           "display": "$loc UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_DO_NOT_GET_SPOTTED_PRIMARY_OBJ"
@@ -953,6 +983,7 @@
             "Visible": false
           }
         },
+        "AllowEtRestartOnSuccess": true,
         "BriefingText": "$loc UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_TARGETS_ONLY_PRIMARY_FAIL",
         "HUDTemplate": {
           "display": "$loc UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_TARGETS_ONLY_PRIMARY_OBJ"
@@ -1039,6 +1070,7 @@
             "State": "Completed"
           }
         },
+        "AllowEtRestartOnSuccess": true,
         "BriefingText": "$loc UI_GAMECHANGERS_GLOBAL_COMPLETE_MISSION_WITHIN_5_MINUTES_OBJ_1",
         "HUDTemplate": {
           "display": "$loc UI_GAMECHANGERS_GLOBAL_COMPLETE_MISSION_WITHIN_5_MINUTES_OBJ_1"
@@ -1086,6 +1118,7 @@
             "Visible": false
           }
         },
+        "AllowEtRestartOnSuccess": true,
         "BriefingText": "$loc UI_GAMECHANGERS_GLOBAL_HIDE_DEAD_BODY_WITHIN_90_SECONDS_DESC",
         "HUDTemplate": {
           "display": "$loc UI_GAMECHANGERS_GLOBAL_HIDE_DEAD_BODY_WITHIN_90_SECONDS_OBJ_1"
@@ -1742,6 +1775,7 @@
             "Visible": false
           }
         },
+        "AllowEtRestartOnSuccess": true,
         "BriefingText": "$loc UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_NO_RECORDINGS_PRIMARY_OBJ",
         "HUDTemplate": {
           "display": "$loc UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_NO_RECORDINGS_PRIMARY_OBJ"
@@ -1813,6 +1847,7 @@
             "Visible": false
           }
         },
+        "AllowEtRestartOnSuccess": true,
         "BriefingText": "$loc UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_NO_BODIES_FOUND_PRIMARY_FAIL",
         "HUDTemplate": {
           "display": "$loc UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_NO_BODIES_FOUND_PRIMARY_OBJ"
@@ -1828,6 +1863,9 @@
             },
             "Success": {
               "DeadBodySeen": {
+                "Transition": "BodyFoundTimer"
+              },
+              "MurderedBodySeen": {
                 "Transition": "BodyFoundTimer"
               },
               "BodyFound": {
@@ -1867,6 +1905,7 @@
             "Visible": false
           }
         },
+        "AllowEtRestartOnSuccess": true,
         "BriefingText": "$loc UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_HEADSHOTS_ONLY_PRIMARY_FAIL",
         "HUDTemplate": {
           "display": "$loc UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_HEADSHOTS_ONLY_PRIMARY_OBJ"
@@ -1907,6 +1946,7 @@
             "Visible": false
           }
         },
+        "AllowEtRestartOnSuccess": true,
         "BriefingText": "$loc UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_NO_MISSED_SHOTS_PRIMARY_FAIL",
         "HUDTemplate": {
           "display": "$loc UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_NO_MISSED_SHOTS_PRIMARY_OBJ"
@@ -1947,6 +1987,7 @@
             "Visible": false
           }
         },
+        "AllowEtRestartOnSuccess": true,
         "BriefingText": "$loc UI_GAMECHANGERS_GLOBAL_ONE_DISGUISE_CHANGE_BRIEF",
         "Type": "statemachine",
         "Definition": {
@@ -2006,6 +2047,8 @@
             "Visible": false
           }
         },
+        "ExcludeFromScoring": true,
+        "AllowEtRestartOnSuccess": true,
         "BriefingText": "$loc UI_GAMECHANGERS_GLOBAL_ONE_PACIFICATION_BRIEF",
         "Type": "statemachine",
         "Definition": {
@@ -2066,6 +2109,7 @@
             "Visible": false
           }
         },
+        "AllowEtRestartOnSuccess": true,
         "BriefingText": "$loc UI_GAMECHANGERS_GLOBAL_CAMERA_MISSION_COUNTDOWN_FAIL",
         "HUDTemplate": {
           "display": "$loc UI_GAMECHANGERS_GLOBAL_CAMERA_MISSION_COUNTDOWN_OBJ_1"
@@ -2211,6 +2255,7 @@
             "Visible": false
           }
         },
+        "AllowEtRestartOnSuccess": true,
         "BriefingText": "$loc UI_GAMECHANGERS_GLOBAL_NO_CIVILIAN_CASUALTIES_OBJ_1",
         "Type": "statemachine",
         "Definition": {
@@ -2224,11 +2269,24 @@
             "Success": {
               "Kill": {
                 "Condition": {
-                  "$eq": [
-                    "$Value.ActorType",
-                    0
+                  "$and": [
+                    {
+                      "$eq": [
+                        "$Value.ActorType",
+                        0
+                      ]
+                    },
+                    {
+                      "$eq": [
+                        "$Value.IsTarget",
+                        false
+                      ]
+                    }
                   ]
                 },
+                "Transition": "Failure"
+              },
+              "CrowdNPC_Died": {
                 "Transition": "Failure"
               }
             }
@@ -2254,6 +2312,7 @@
             "Visible": false
           }
         },
+        "AllowEtRestartOnSuccess": true,
         "BriefingText": "$loc UI_GAMECHANGERS_GLOBAL_DO_NOT_KILL_WITH_BULLETS_OBJ_1",
         "Type": "statemachine",
         "Definition": {
@@ -2705,6 +2764,7 @@
             "Visible": false
           }
         },
+        "AllowEtRestartOnSuccess": true,
         "BriefingText": "$loc UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_NO_PACIFICATIONS_PRIMARY_FAIL",
         "HUDTemplate": {
           "display": "$loc UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_NO_PACIFICATIONS_PRIMARY_OBJ"
@@ -2796,7 +2856,7 @@
     "Resource": [],
     "Objectives": [
       {
-        "Id": "fe54e62b-3279-46c4-88ab-76844164850f",
+        "Id": "01e9f3d7-35a0-40f0-a200-fc364854843c",
         "Category": "primary",
         "OnActive": {
           "IfCompleted": {
@@ -2942,6 +3002,7 @@
             "Visible": false
           }
         },
+        "AllowEtRestartOnSuccess": true,
         "BriefingText": "$loc UI_GAMECHANGERS_DELETE_EVIDENCE_OBJ_1",
         "HUDTemplate": {
           "display": "$loc UI_GAMECHANGERS_DELETE_EVIDENCE_OBJ_1"
@@ -2995,7 +3056,7 @@
   "e06e5d9c-36ac-4ba4-a97b-d439c900d81b": {
     "Name": "UI_GAMECHANGERS_GLOBAL_FROM_COMBAT_STATE_TO_CLEAR_NAME",
     "Description": "UI_GAMECHANGERS_GLOBAL_FROM_COMBAT_STATE_TO_CLEAR_DESC",
-    "TileImage": null,
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Global_Combat_DeEscalation_90s.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
@@ -3009,6 +3070,7 @@
             "Visible": false
           }
         },
+        "AllowEtRestartOnSuccess": true,
         "BriefingText": "$loc UI_GAMECHANGERS_GLOBAL_FROM_COMBAT_STATE_TO_CLEAR_OBJ_1",
         "HUDTemplate": {
           "display": "$loc UI_GAMECHANGERS_GLOBAL_FROM_COMBAT_STATE_TO_CLEAR_OBJ_1"
@@ -3170,6 +3232,7 @@
             "Visible": false
           }
         },
+        "AllowEtRestartOnSuccess": true,
         "BriefingText": "$loc UI_GAMECHANGERS_GLOBAL_SUIT_ONLY_FAIL",
         "Type": "statemachine",
         "Definition": {
@@ -3295,6 +3358,220 @@
     "IsHidden": null,
     "Resource": [],
     "Objectives": []
+  },
+  "8517bf91-67df-4225-88f6-ce9211057aee": {
+    "Name": "UI_GAMECHANGERS_GLOBAL_ADDITIONAL_ENFORCERS_NAME",
+    "Description": "UI_GAMECHANGERS_GLOBAL_ADDITIONAL_ENFORCERS_DESC",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Global_AdditionalEnforcers.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "primary",
+    "IsHidden": null,
+    "Resource": [],
+    "Objectives": [
+      {
+        "Id": "a8507766-05b0-4443-8f30-65651995acfe",
+        "Category": "primary",
+        "OnActive": {
+          "IfCompleted": {
+            "Visible": false
+          }
+        },
+        "AllowEtRestartOnSuccess": true,
+        "BriefingText": "",
+        "HUDTemplate": {
+          "display": ""
+        },
+        "Type": "statemachine",
+        "Definition": {
+          "Scope": "session",
+          "States": {
+            "Start": {
+              "-": {
+                "Transition": "Success"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "507daf18-e076-44a7-8e37-9cc8da784776": {
+    "Name": "UI_GAMECHANGERS_GLOBAL_ONE_PACIFICATION_NAME",
+    "Description": "UI_GAMECHANGERS_GLOBAL_ONE_PACIFICATION_DESC",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Global_NoPacifications.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "secondary",
+    "IsHidden": null,
+    "Resource": [],
+    "Objectives": [
+      {
+        "Id": "6c23e152-f9b7-4cd3-b00a-13f1eef008f5",
+        "Category": "secondary",
+        "OnActive": {
+          "IfCompleted": {
+            "Visible": false
+          }
+        },
+        "ExcludeFromScoring": true,
+        "AllowEtRestartOnSuccess": true,
+        "BriefingText": "$loc UI_GAMECHANGERS_GLOBAL_ONE_PACIFICATION_BRIEF",
+        "Type": "statemachine",
+        "Definition": {
+          "Scope": "session",
+          "Context": {
+            "NumberOfDisguiseChanges": 2
+          },
+          "States": {
+            "Start": {
+              "-": {
+                "Transition": "Success"
+              }
+            },
+            "Success": {
+              "Pacify": {
+                "Actions": {
+                  "$dec": "NumberOfDisguiseChanges"
+                },
+                "Transition": "CheckCount"
+              }
+            },
+            "CheckCount": {
+              "-": [
+                {
+                  "Condition": {
+                    "$eq": [
+                      "$.NumberOfDisguiseChanges",
+                      0
+                    ]
+                  },
+                  "Transition": "Failure"
+                },
+                {
+                  "Transition": "Start"
+                }
+              ]
+            }
+          }
+        }
+      }
+    ]
+  },
+  "f0f53067-2617-4128-8cb7-2a0ae4757a3f": {
+    "Name": "UI_GAMECHANGERS_GLOBAL_ONE_DISGUISE_CHANGE_NAME",
+    "Description": "UI_GAMECHANGERS_GLOBAL_ONE_DISGUISE_CHANGE_DESC",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Global_NoDisguiseChange.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "secondary",
+    "IsHidden": null,
+    "Resource": [],
+    "Objectives": [
+      {
+        "Id": "19a6fef4-5a23-4bdc-8cd9-d07e97f66e34",
+        "Category": "secondary",
+        "OnActive": {
+          "IfCompleted": {
+            "Visible": false
+          }
+        },
+        "AllowEtRestartOnSuccess": true,
+        "BriefingText": "$loc UI_GAMECHANGERS_GLOBAL_ONE_DISGUISE_CHANGE_BRIEF",
+        "Type": "statemachine",
+        "Definition": {
+          "Scope": "session",
+          "Context": {
+            "NumberOfDisguiseChanges": 2
+          },
+          "States": {
+            "Start": {
+              "-": {
+                "Transition": "Success"
+              }
+            },
+            "Success": {
+              "Disguise": {
+                "Actions": {
+                  "$dec": "NumberOfDisguiseChanges"
+                },
+                "Transition": "CheckCount"
+              }
+            },
+            "CheckCount": {
+              "-": [
+                {
+                  "Condition": {
+                    "$eq": [
+                      "$.NumberOfDisguiseChanges",
+                      0
+                    ]
+                  },
+                  "Transition": "Failure"
+                },
+                {
+                  "Transition": "Start"
+                }
+              ]
+            }
+          }
+        }
+      }
+    ]
+  },
+  "cfaaac79-432f-4159-83c6-03128b4770d0": {
+    "Name": "UI_GAMECHANGERS_GLOBAL_NO_CIVILIAN_CASUALTIES_NAME",
+    "Description": "UI_GAMECHANGERS_GLOBAL_NO_CIVILIAN_CASUALTIES_DESC",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Global_NoCivilianCasualties.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "secondary",
+    "IsHidden": null,
+    "Resource": [],
+    "Objectives": [
+      {
+        "Id": "8e4bd3af-5567-4e33-b18e-665edb878d53",
+        "Category": "secondary",
+        "OnActive": {
+          "IfCompleted": {
+            "Visible": false
+          }
+        },
+        "AllowEtRestartOnSuccess": true,
+        "BriefingText": "$loc UI_GAMECHANGERS_GLOBAL_NO_CIVILIAN_CASUALTIES_OBJ_1",
+        "Type": "statemachine",
+        "Definition": {
+          "Scope": "session",
+          "States": {
+            "Start": {
+              "-": {
+                "Transition": "Success"
+              }
+            },
+            "Success": {
+              "Kill": {
+                "Condition": {
+                  "$and": [
+                    {
+                      "$eq": [
+                        "$Value.ActorType",
+                        0
+                      ]
+                    },
+                    {
+                      "$eq": [
+                        "$Value.IsTarget",
+                        false
+                      ]
+                    }
+                  ]
+                },
+                "Transition": "Failure"
+              },
+              "CrowdNPC_Died": {
+                "Transition": "Failure"
+              }
+            }
+          }
+        }
+      }
+    ]
   },
   "1d58a82b-ff56-4d88-9d02-8a6a1f9c35b1": {
     "Name": "UI_GAMECHANGERS_MODULE_002_ALL_CAMERAS_NAME",
@@ -3484,7 +3761,6 @@
   "ab91b785-7914-4790-96f9-130eea842084": {
     "Name": "UI_GAMECHANGERS_GLOBAL_HOT_DISGUISE_NAME",
     "Description": "UI_GAMECHANGERS_PARIS_AUCTION_STAFF_TIMER_DESC",
-    "LongDescription": "",
     "TileImage": "images/contracts/gamechangers/Gamechanger_Paris_Hot_Disguise_Palace_Staff.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
@@ -3560,7 +3836,6 @@
   "30b2d229-c3d7-44f7-98d6-bf88b057e354": {
     "Name": "UI_GAMECHANGERS_GLOBAL_HOT_DISGUISE_NAME",
     "Description": "UI_GAMECHANGERS_PARIS_SECURITY_GUARD_TIMER_DESC",
-    "LongDescription": "",
     "TileImage": "images/contracts/gamechangers/Gamechanger_Paris_Hot_Disguise_Security_Guard.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
@@ -4649,14 +4924,11 @@
             "Success": {
               "Pistol_NotEquipped": {
                 "Transition": "TimerRunning"
-              },
-              "exit_gate": {
-                "Transition": "End_Contract"
               }
             },
             "TimerRunning": {
               "exit_gate": {
-                "Transition": "End_Contract"
+                "Transition": "Success"
               },
               "$timer": {
                 "Condition": {
@@ -4667,9 +4939,6 @@
               "Pistol_Equipped": {
                 "Transition": "Success"
               }
-            },
-            "End_Contract": {
-              "Transition": "Success"
             }
           }
         }
@@ -5584,7 +5853,6 @@
   "eb4c8e84-ca1f-4242-b72a-cf90175d223f": {
     "Name": "UI_GAMECHANGERS_GLOBAL_HOT_DISGUISE_NAME",
     "Description": "UI_GAMECHANGERS_HOKKAIDO_NAILS_HOT_DISGUISE_DESC",
-    "LongDescription": "",
     "TileImage": "images/contracts/gamechangers/Gamechanger_Hokkaido_Hot_Disguise_Heli_Pilot.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
@@ -6610,7 +6878,6 @@
           "Scope": "session",
           "States": {
             "Start": {
-              "Transition": "Success",
               "FoodVendorDisguiseChanged": {
                 "Transition": "Failure"
               }
@@ -7038,9 +7305,6 @@
                   "Transition": "Start"
                 }
               ]
-            },
-            "CAO": {
-              "Transition": "Success"
             }
           }
         }
@@ -7211,7 +7475,6 @@
   "3ff7f4a5-3410-428e-a635-2dce2c0eedf5": {
     "Name": "UI_GAMECHANGERS_GLOBAL_HOT_DISGUISE_NAME",
     "Description": "UI_GAMECHANGERS_MUMBAI_HOT_DISGUISES_DESC",
-    "LongDescription": "",
     "TileImage": "images/contracts/gamechangers/Gamechanger_Mumbai_Hot_Disguises.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
@@ -8304,7 +8567,6 @@
           "Context": {},
           "States": {
             "Start": {
-              "Transition": "Success",
               "Fish_Dropped": {
                 "Transition": "Failure"
               }
@@ -8387,7 +8649,7 @@
     "Name": "UI_GAMECHANGERS_WET_LOCKED_DOORS_NAME",
     "Description": "UI_GAMECHANGERS_WET_LOCKED_DOORS_DESC",
     "TileImage": "images/contracts/gamechangers/Gamechanger_Magnolia_LockedDoors.jpg",
-    "Icon": null,
+    "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
     "Resource": [
@@ -8399,7 +8661,7 @@
     "Name": "UI_GAMECHANGERS_WET_SWAP_CROWBARS_NAME",
     "Description": "UI_GAMECHANGERS_WET_SWAP_CROWBARS_DESC",
     "TileImage": "images/contracts/gamechangers/Gamechanger_Magnolia_RustyCrowbars.jpg",
-    "Icon": null,
+    "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
     "Resource": [
