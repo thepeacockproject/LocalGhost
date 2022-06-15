@@ -70,9 +70,18 @@ namespace HitmanPatcher
 						{
 							dontPatch = patchedprocesses.Contains(Pinvoke.GetProcessParentPid(process));
 						}
-						catch (Win32Exception) // The process has exited already
+						catch (Win32Exception ex)
 						{
-							dontPatch = true;
+							if (ex.NativeErrorCode == 5 && !Program.HasAdmin)
+							{
+								logger.log(String.Format("Access denied, try running the patcher as admin."));
+								process.Dispose();
+								continue;
+							}
+							else // The process has exited already
+							{
+								dontPatch = true;
+							}
 						}
 						if (dontPatch)
 						{
