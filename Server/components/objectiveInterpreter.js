@@ -20,8 +20,11 @@ function handleEvents(objectives, events) {
     //   check what happens when the game fires '-' events
     //   multiple matching conditions actions
     //   matching conditions after transition to same state
+    //   actions after transition?
+    //   multiple actions/transition/condition blocks?
     //   $after condition with literal boolean/null
     //   over/underflow?
+    //   Definition.Constants ?
 
     // Step 1: Parse (compile) json into functions
 
@@ -56,18 +59,18 @@ function handleEvents(objectives, events) {
 
     // Step 2: Run the relevant functions for all events
 
+    // Run init eventHandlers for all state machines
+    handleEventAndTransitions(stateMachines, {
+        Name: '-',
+        Timestamp: 0,
+    }, false, true);
+
     events.sort((a, b) => {
         return (a.Timestamp - b.Timestamp) || Number(BigInt(a.eventServerId) - BigInt(b.eventServerId));
     });
 
     let exited = false;
     let lastHeartbeat = 0;
-
-    // Run init eventHandlers for all state machines
-    handleEvent(stateMachines, {
-        Name: '-',
-        Timestamp: 0,
-    }, false, true, true);
 
     for (const event of events) {
         if (event.Name === 'exit_gate' || event.Name === 'ContractEnd' || event.Name === 'ContractFailed') {
@@ -80,7 +83,7 @@ function handleEvents(objectives, events) {
         // I'm ticking all proper timers with a 'Heartbeat' event every second,
         // which is approximately what the game does aswell
         while (lastHeartbeat < event.Timestamp) {
-            handleEvent(stateMachines, {
+            handleEventAndTransitions(stateMachines, {
                 Name: 'Heartbeat',
                 Timestamp: lastHeartbeat
             }, true);
@@ -88,7 +91,7 @@ function handleEvents(objectives, events) {
         }
 
         // Then: handle this event
-        handleEvent(stateMachines, event);
+        handleEventAndTransitions(stateMachines, event);
     }
 
     const result = {};
@@ -102,7 +105,25 @@ function handleEvents(objectives, events) {
     return result;
 }
 
-function handleEvent(stateMachines, event, timerTick = false, initEvent = false, doRecurse = true) {
+function handleEventAndTransitions(stateMachines, event, timerTick = false, initEvent = false) {
+    let transitionedSMs = handleSingleEvent(stateMachines, event, timerTick, initEvent);
+
+    // Trigger init events for every SM that has transitioned to a new state
+    let numberOfLoops = 0;
+    while (transitionedSMs > 0) {
+        transitionedSMs = handleSingleEvent(transitionedSMs, {
+            Name: '-',
+            Timestamp: event.Timestamp,
+        }, false, true);
+        if (numberOfLoops++ > 100000) {
+            // The game might freeze, but there is no reason the server should as well :)
+            console.warn(`Objectives init looped more than 100000 times: ${transitionedSMs}`);
+            break;
+        }
+    }
+}
+
+function handleSingleEvent(stateMachines, event, timerTick = false, initEvent = false) {
     let hasTransitioned = [];
     for (const objectiveId in stateMachines) {
         const stateMachine = stateMachines[objectiveId];
@@ -143,19 +164,6 @@ function handleEvent(stateMachines, event, timerTick = false, initEvent = false,
                     break;
                 }
             }
-        }
-    }
-
-    let numberOfLoops = 0;
-    while (hasTransitioned.length > 0 && doRecurse) {
-        hasTransitioned = handleEvent(hasTransitioned, {
-            Name: '-',
-            Timestamp: event.Timestamp,
-        }, false, true, false);
-        if (numberOfLoops++ > 100000) {
-            // The game might freeze, but there is no reason the server should as well :)
-            console.warn(`Objectives init looped more than 100000 times: ${hasTransitioned}`);
-            break;
         }
     }
 
