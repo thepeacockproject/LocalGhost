@@ -303,7 +303,8 @@ app.get('/stashpoint', async (req, res) => {
 
 app.get('/multiplayerpresets', async (req, res) => { // /multiplayerpresets?gamemode=versus&disguiseUnlockableId=TOKEN_OUTFIT_HOT_SUMMER_SUIT
     if (req.query.gamemode !== 'versus') { // not sure what happens here
-        next();
+        res.status(400).send('invalid gamemode');
+        return;
     }
     const presets = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'multiplayerpresets.json')));
     const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
