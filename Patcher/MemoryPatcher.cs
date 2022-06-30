@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2020-2021 grappigegovert <grappigegovert@hotmail.com>
+﻿// Copyright (C) 2020-2022 grappigegovert <grappigegovert@hotmail.com>
 // Licensed under the zlib license. See LICENSE for more info
 
 using System;
@@ -11,8 +11,114 @@ using System.Text;
 
 namespace HitmanPatcher
 {
+	/// <summary>
+	/// Describes a class that provides a logging implementation.
+	/// </summary>
+	/// <remarks>
+	/// Please inform the Peacock team before changing or removing this API!
+	/// </remarks>
+	public interface ILoggingProvider
+	{
+		/// <summary>
+		/// Logs the provided message.
+		/// </summary>
+		/// <param name="msg">The message.</param>
+		void log(string msg);
+	}
+	
 	public class MemoryPatcher
 	{
+		public static HashSet<int> patchedprocesses = new HashSet<int>();
+
+		private static List<Process> GetProcessesByName(params string[] names)
+		{
+			Process[] allProcesses = Process.GetProcesses();
+			List<Process> result = new List<Process>();
+			foreach (Process p in allProcesses)
+			{
+				try
+				{
+					if (names.Contains(p.ProcessName, StringComparer.OrdinalIgnoreCase))
+					{
+						result.Add(p);
+					}
+					else
+					{
+						p.Dispose();
+					}
+				}
+				catch (InvalidOperationException) // Process has exited or has no name
+				{
+					p.Dispose();
+				}
+			}
+			return result;
+		}
+
+		public static void PatchAllProcesses(ILoggingProvider logger, Options patchOptions)
+		{
+			IEnumerable<Process> hitmans = GetProcessesByName("HITMAN", "HITMAN2", "HITMAN3");
+			foreach (Process process in hitmans)
+			{
+				if (!patchedprocesses.Contains(process.Id))
+				{
+					patchedprocesses.Add(process.Id);
+					try
+					{
+						bool dontPatch = false;
+						try
+						{
+							dontPatch = patchedprocesses.Contains(Pinvoke.GetProcessParentPid(process));
+						}
+						catch (Win32Exception ex)
+						{
+							if (ex.NativeErrorCode == 5 && !Program.HasAdmin)
+							{
+								logger.log(String.Format("Access denied, try running the patcher as admin."));
+								process.Dispose();
+								continue;
+							}
+							else // The process has exited already
+							{
+								dontPatch = true;
+							}
+						}
+						if (dontPatch)
+						{
+							// if we patched this process' parent before, this is probably an error reporter, so don't patch it.
+							logger.log(String.Format("Skipping PID {0}...", process.Id));
+							process.Dispose();
+							continue;
+						}
+
+						if (MemoryPatcher.Patch(process, patchOptions))
+						{
+							logger.log(String.Format("Successfully patched processid {0}", process.Id));
+							if (patchOptions.SetCustomConfigDomain)
+							{
+								logger.log(String.Format("Injected server: {0}", patchOptions.CustomConfigDomain));
+							}
+						}
+						else
+						{
+							// else: process not yet ready for patching, try again next timer tick
+							patchedprocesses.Remove(process.Id);
+						}
+					}
+					catch (Win32Exception err)
+					{
+						logger.log(String.Format("Failed to patch processid {0}: error code {1}", process.Id, err.NativeErrorCode));
+						logger.log(err.Message);
+					}
+					catch (NotImplementedException)
+					{
+						logger.log(String.Format("Failed to patch processid {0}: unknown version", process.Id));
+					}
+				}
+				process.Dispose();
+			}
+		}
+
 		public static bool Patch(Process process, Options patchOptions)
 		{
 			IntPtr hProcess = Pinvoke.OpenProcess(
@@ -139,11 +245,22 @@ namespace HitmanPatcher
 			byte[] buffer = { 0 };
 			UIntPtr bytesread;
 			bool ready = true;
+			MemProtection newmemprotection = MemProtection.PAGE_READWRITE;
+			// It should already be READWRITE, but this is to remove possible PAGE_GUARD temporarily
 			foreach (Patch p in version.configdomain.Where(p => p.customPatch == "configdomain"))
 			{
+				MemProtection oldprotectflags;
+				if (!Pinvoke.VirtualProtectEx(hProcess, baseAddress + p.offset, (UIntPtr)1, newmemprotection, out oldprotectflags))
+				{
+					throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at vpe1Check for offset {0:X}", p.offset));
+				}
 				if (!Pinvoke.ReadProcessMemory(hProcess, baseAddress + p.offset, buffer, (UIntPtr)1, out bytesread))
 				{
-					throw new Win32Exception(Marshal.GetLastWin32Error());
+					throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at rpmCheck for offset {0:X}", p.offset));
+				}
+				if (!Pinvoke.VirtualProtectEx(hProcess, baseAddress + p.offset, (UIntPtr)1, oldprotectflags, out oldprotectflags))
+				{
+					throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at vpe2Check for offset {0:X}", p.offset));
 				}
 				ready &= buffer[0] != 0;
 			}

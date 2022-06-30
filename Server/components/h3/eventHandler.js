@@ -5,7 +5,7 @@ const { writeFile, readFile } = require('atomically');
 const express = require('express');
 const path = require('path');
 
-const { extractToken, scoreTrackingObjective, ContractSessionIdRegex, UUIDRegex } = require('../utils.js');
+const { scoreTrackingObjective, ContractSessionIdRegex, UUIDRegex } = require('../utils.js');
 const objectiveInterpreter = require('../objectiveInterpreter.js');
 
 const app = express.Router();
@@ -156,7 +156,7 @@ async function endSession(sessionId, gameVersion) {
     await writeFile(path.join('userdata', gameVersion, 'contractsessions', `${sessionId}.json`), JSON.stringify(contractSession));
 }
 
-app.post('/SaveAndSynchronizeEvents4', extractToken, express.json({ limit: '5Mb' }), async (req, res) => {
+app.post('/SaveAndSynchronizeEvents4', express.json({ limit: '5Mb' }), async (req, res) => {
     if (req.body.userId !== req.jwt.unique_name) {
         res.status(403).end(); // Trying to save events for other user
         return;
@@ -203,7 +203,7 @@ app.post('/SaveAndSynchronizeEvents4', extractToken, express.json({ limit: '5Mb'
     });
 });
 
-app.post('/SaveEvents2', extractToken, express.json({ limit: '5Mb' }), async (req, res) => {
+app.post('/SaveEvents2', express.json({ limit: '5Mb' }), async (req, res) => {
     if (req.jwt.unique_name !== req.body.userId) {
         res.status(403).end();
         console.warn('/SaveEvents2: Trying to save events for other user');

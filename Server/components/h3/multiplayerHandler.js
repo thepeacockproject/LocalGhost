@@ -6,7 +6,6 @@ const path = require('path');
 const uuid = require('uuid');
 const { readFile } = require('atomically');
 
-const { extractToken } = require('../utils.js');
 const eventHandler = require('./eventHandler.js');
 const { generateUserCentricMultiple } = require('./menuData.js');
 
@@ -34,7 +33,7 @@ app.post('/GetRequiredResourcesForPreset', express.json(), async (req, res) => {
 
 let activeMatches = new Map();
 
-app.post('/RegisterToMatch', extractToken, express.json(), async (req, res) => {
+app.post('/RegisterToMatch', express.json(), async (req, res) => {
     // get a random contract from the list of possible ones in the selected preset
     let multiplayerPresets = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'multiplayerpresets.json')));
     if (!req.body.presetId) {
@@ -89,7 +88,7 @@ app.post('/RegisterToMatch', extractToken, express.json(), async (req, res) => {
     });
 });
 
-app.post('/SetMatchData', extractToken, express.json(), (req, res) => {
+app.post('/SetMatchData', express.json(), (req, res) => {
     let match = activeMatches.get(req.body.matchId)
     if (match && match.Players.includes(req.jwt.unique_name)) {
         match.MatchData[req.body.key] = req.body.value;
@@ -107,7 +106,7 @@ app.post('/SetMatchData', extractToken, express.json(), (req, res) => {
     }
 });
 
-app.post('/RegisterToPreset', extractToken, express.json(), (req, res) => { // matchmaking
+app.post('/RegisterToPreset', express.json(), (req, res) => { // matchmaking
     // TODO: implement matchmaking
     // req.body.presetId
     // req.body.lobbyId (this is just a timestamp?)

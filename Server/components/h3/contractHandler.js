@@ -6,12 +6,12 @@ const path = require('path');
 const uuid = require('uuid');
 const { readFile } = require('atomically');
 
-const { extractToken, getServerVerObj, UUIDRegex } = require('../utils.js');
+const { getServerVerObj, UUIDRegex } = require('../utils.js');
 const eventHandler = require('./eventHandler.js');
 
 const app = express.Router();
 
-app.post('/GetForPlay2', express.json(), extractToken, async (req, res) => {
+app.post('/GetForPlay2', express.json(), async (req, res) => {
     if (!UUIDRegex.test(req.body.id)) {
         res.status(400).end();
         return; // user sent a non-uuid contract id

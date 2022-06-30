@@ -5,7 +5,6 @@ const express = require('express');
 const path = require('path');
 const { readFile } = require('atomically');
 
-const { extractToken } = require('../utils.js');
 const { getEntitlements } = require('./platformEntitlements.js');
 
 const app = express.Router();
@@ -20,7 +19,7 @@ app.post('/AuthenticationService/GetBlobOfflineCacheDatabaseDiff', (req, res) =>
     res.json([]);
 });
 
-app.post('/ChallengesService/GetActiveChallenges', extractToken, express.json(), async (req, res) => {
+app.post('/ChallengesService/GetActiveChallenges', express.json(), async (req, res) => {
     const challenges = [];
     challenges.push(...JSON.parse(await readFile(path.join('challenges', 'globalChallenges.json')))); // TODO: more challenges
     // TODO: location specific challenges
@@ -28,7 +27,7 @@ app.post('/ChallengesService/GetActiveChallenges', extractToken, express.json(),
     res.json(challenges);
 });
 
-app.post('/ChallengesService/GetProgression', extractToken, express.json(), async (req, res) => {
+app.post('/ChallengesService/GetProgression', express.json(), async (req, res) => {
     const challenges = [];
     challenges.push(...JSON.parse(await readFile(path.join('challenges', 'globalChallenges.json')))); // TODO: more challenges
     // TODO: location specific challenges

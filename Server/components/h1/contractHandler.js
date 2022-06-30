@@ -7,12 +7,12 @@ const uuid = require('uuid');
 const { readFile } = require('atomically');
 const fs = require('fs');
 
-const { extractToken, getServerVerObj, UUIDRegex } = require('../utils');
+const { getServerVerObj, UUIDRegex } = require('../utils');
 const eventHandler = require('../h3/eventHandler.js');
 
 const app = express.Router();
 
-app.post('/GetForPlay', express.json(), extractToken, async (req, res, next) => {
+app.post('/GetForPlay', express.json(), async (req, res, next) => {
     if (!UUIDRegex.test(req.body.id)) {
         res.status(400).end();
         return; // contract id was not a uuid
@@ -57,7 +57,7 @@ app.post('/GetForPlay', express.json(), extractToken, async (req, res, next) => 
     });
 });
 
-app.post('/Start', express.json(), extractToken, async (req, res) => {
+app.post('/Start', express.json(), async (req, res) => {
     if (req.body.profileId != req.jwt.unique_name) {
         res.status(400).end(); // requested for different user id
         return;

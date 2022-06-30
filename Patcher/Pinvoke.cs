@@ -27,6 +27,7 @@ namespace HitmanPatcher
 	[Flags]
 	public enum ProcessAccess : uint
 	{
+		PROCESS_QUERY_INFORMATION = 0x0400, // Required to retrieve certain information about a process
 		PROCESS_VM_READ = 0x0010, // Required to read memory in a process using ReadProcessMemory.
 		PROCESS_VM_WRITE = 0x0020, // Required to write to memory in a process using WriteProcessMemory.
 		PROCESS_VM_OPERATION = 0x0008 // Required to perform an operation on the address space of a process using VirtualProtectEx
@@ -77,9 +78,20 @@ namespace HitmanPatcher
 
 		public static int GetProcessParentPid(Process process)
 		{
+			IntPtr hProcess = OpenProcess(
+				ProcessAccess.PROCESS_VM_READ
+				| ProcessAccess.PROCESS_QUERY_INFORMATION,
+				false, process.Id);
+
+			if (hProcess == IntPtr.Zero)
+			{
+				throw new Win32Exception(Marshal.GetLastWin32Error(), "Failed to get a process handle.");
+			}
+
 			PROCESS_BASIC_INFORMATION PEB = new PROCESS_BASIC_INFORMATION();
 			uint returnlength;
-			int result = NtQueryInformationProcess(process.Handle, PROCESSINFOCLASS.ProcessBasicInformation, out PEB, (uint)Marshal.SizeOf(PEB), out returnlength);
+			int result = NtQueryInformationProcess(hProcess, PROCESSINFOCLASS.ProcessBasicInformation, out PEB, (uint)Marshal.SizeOf(PEB), out returnlength);
+			CloseHandle(hProcess);
 			if (result != 0)
 			{
 				throw new Win32Exception(result, "(NTSTATUS)"); // not a w32 status code, but an NTSTATUS
