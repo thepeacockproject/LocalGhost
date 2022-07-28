@@ -38,7 +38,6 @@ namespace HitmanPatcher
 			{
 				currentSettings = new Settings();
 			}
-			updateTrayDomains();
 
 			log("Patcher ready");
 			log("Select a server and start hitman");
@@ -124,7 +123,6 @@ namespace HitmanPatcher
 			if (result == DialogResult.OK)
 			{
 				currentSettings = optionsForm.settings;
-				updateTrayDomains();
 			}
 		}
 
@@ -155,11 +153,8 @@ namespace HitmanPatcher
 
 				comboBox1.Items.Clear();
 				comboBox1.Items.AddRange(publicServers.Keys.ToArray<object>());
-				if (value.showTestingDomains)
-				{
-					comboBox1.Items.Add("localhost");
-					comboBox1.Items.Add("config.hitman.io");
-				}
+				comboBox1.Items.AddRange(value.domains.ToArray<object>());
+				updateTrayDomains();
 			}
 		}
 
@@ -210,7 +205,7 @@ namespace HitmanPatcher
 			{
 				foreach (ToolStripMenuItem item in domainsTrayMenu.DropDownItems)
 				{
-					if (item == clickedItem)
+					if (item.Text == clickedItem.Text)
 					{
 						item.Checked = true;
 					}
@@ -227,13 +222,18 @@ namespace HitmanPatcher
 		private void updateTrayDomains()
 		{
 			domainsTrayMenu.DropDownItems.Clear();
-			foreach (string domain in currentSettings.trayDomains)
+			string selectedHostname = getSelectedServerHostname();
+			foreach (string domain in publicServers.Values.Concat(currentSettings.domains))
 			{
 				if (!string.IsNullOrWhiteSpace(domain))
 				{
 					ToolStripMenuItem item = new ToolStripMenuItem();
 					item.Text = domain;
 					item.Click += domainItem_Click;
+					if (domain == selectedHostname)
+					{
+						item.Checked = true;
+					}
 
 					domainsTrayMenu.DropDownItems.Add(item);
 				}

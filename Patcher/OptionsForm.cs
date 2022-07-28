@@ -11,8 +11,6 @@ namespace HitmanPatcher
 	public partial class OptionsForm : Form
 	{
 		private string customDomain;
-		private bool startInTray, minimizeToTray;
-		private List<string> trayDomains;
 
 		public OptionsForm(Settings currentSettings)
 		{
@@ -43,10 +41,9 @@ namespace HitmanPatcher
 						DisableForceOfflineOnFailedDynamicResources = checkBoxNoForceOffline.Checked,
 						ForcedVersion = comboBoxVersion.Text == null ? "" : comboBoxVersion.Text
 					},
-					showTestingDomains = checkBoxTestingDomains.Checked,
-					startInTray = this.startInTray,
-					minimizeToTray = this.minimizeToTray,
-					trayDomains = this.trayDomains
+					startInTray = checkBoxTrayStart.Checked,
+					minimizeToTray = checkBoxTrayMinimize.Checked,
+					domains = textBoxDomains.Lines.Where(d => !string.IsNullOrWhiteSpace(d)).ToList()
 				};
 			}
 			private set
@@ -57,12 +54,11 @@ namespace HitmanPatcher
 				this.customDomain = value.patchOptions.CustomConfigDomain;
 				checkBoxHttp.Checked = value.patchOptions.UseHttp;
 				checkBoxNoForceOffline.Checked = value.patchOptions.DisableForceOfflineOnFailedDynamicResources;
-				checkBoxTestingDomains.Checked = value.showTestingDomains;
 				checkBoxForceVersion.Checked = value.patchOptions.ForcedVersion != "";
 				comboBoxVersion.Text = value.patchOptions.ForcedVersion;
-				this.startInTray = value.startInTray;
-				this.minimizeToTray = value.minimizeToTray;
-				this.trayDomains = value.trayDomains;
+				checkBoxTrayStart.Checked = value.startInTray;
+				checkBoxTrayMinimize.Checked = value.minimizeToTray;
+				textBoxDomains.Lines = value.domains.ToArray();
 			}
 		}
 
@@ -91,15 +87,21 @@ namespace HitmanPatcher
 			}
 		}
 
-		private void buttonTrayOptions_Click(object sender, EventArgs e)
+		private void textBoxDomains_Validating(object sender, System.ComponentModel.CancelEventArgs e)
 		{
-			TrayOptionsForm trayOptionsForm = new TrayOptionsForm(startInTray, minimizeToTray, trayDomains);
-			DialogResult result = trayOptionsForm.ShowDialog();
-			if (result == DialogResult.OK)
+			bool invalid = false;
+			foreach (string line in textBoxDomains.Lines)
 			{
-				this.startInTray = trayOptionsForm.startInTray;
-				this.minimizeToTray = trayOptionsForm.minimizeToTray;
-				this.trayDomains = trayOptionsForm.trayDomains;
+				if (line.Length > 160)
+				{
+					invalid = true;
+				}
+			}
+			if (invalid)
+			{
+				MessageBox.Show("One or more domains are more than 160 characters long;"
+								+ Environment.NewLine + "Don't.", "Error");
+				e.Cancel = true;
 			}
 		}
 	}

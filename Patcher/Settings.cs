@@ -12,10 +12,9 @@ namespace HitmanPatcher
 	public class Settings
 	{
 		public MemoryPatcher.Options patchOptions;
-		public bool showTestingDomains;
 		public bool startInTray;
 		public bool minimizeToTray;
-		public List<string> trayDomains;
+		public List<string> domains;
 
 		private static string localpath = "patcher.conf";
 		private static string appdatapath =
@@ -34,10 +33,9 @@ namespace HitmanPatcher
 				DisableForceOfflineOnFailedDynamicResources = true,
 				ForcedVersion = ""
 			};
-			this.showTestingDomains = false;
 			this.startInTray = false;
 			this.minimizeToTray = false;
-			this.trayDomains = new List<string>();
+			this.domains = new List<string>();
 		}
 
 		public void saveToFile(string path)
@@ -50,13 +48,12 @@ namespace HitmanPatcher
 			lines.Add(String.Format("UseHttp={0}", patchOptions.UseHttp));
 			lines.Add(String.Format("DisableForceOfflineOnFailedDynamicResources={0}", patchOptions.DisableForceOfflineOnFailedDynamicResources));
 			lines.Add(String.Format("forcedVersion={0}", patchOptions.ForcedVersion));
-			lines.Add(String.Format("showTestingDomains={0}", showTestingDomains));
 			lines.Add(String.Format("startInTray={0}", startInTray));
 			lines.Add(String.Format("minToTray={0}", minimizeToTray));
 
-			foreach (string domain in trayDomains)
+			foreach (string domain in domains)
 			{
-				lines.Add(String.Format("trayDomain={0}", domain));
+				lines.Add(String.Format("domain={0}", domain));
 			}
 
 			File.WriteAllLines(path, lines);
@@ -103,8 +100,12 @@ namespace HitmanPatcher
 							case "forcedVersion":
 								result.patchOptions.ForcedVersion = HitmanVersion.Versions.Contains(linecontents[1]) ? linecontents[1] : "";
 								break;
-							case "showTestingDomains":
-								result.showTestingDomains = Boolean.Parse(linecontents[1]);
+							case "showTestingDomains": // legacy
+								if (Boolean.Parse(linecontents[1]))
+								{
+									result.domains.Add("localhost");
+									result.domains.Add("config.hitman.io");
+								}
 								break;
 							case "startInTray":
 								result.startInTray = Boolean.Parse(linecontents[1]);
@@ -112,12 +113,16 @@ namespace HitmanPatcher
 							case "minToTray":
 								result.minimizeToTray = Boolean.Parse(linecontents[1]);
 								break;
-							case "trayDomain":
-								result.trayDomains.Add(linecontents[1]);
+							case "trayDomain": // legacy
+								result.domains.Add(linecontents[1]);
+								break;
+							case "domain":
+								result.domains.Add(linecontents[1]);
 								break;
 						}
 					}
 				}
+				result.domains = result.domains.Where(d => !string.IsNullOrWhiteSpace(d)).ToList();
 			}
 
 			return result;

@@ -33,24 +33,32 @@ namespace HitmanPatcher
 		{
 			this.buttonSave = new System.Windows.Forms.Button();
 			this.buttonCancel = new System.Windows.Forms.Button();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.checkBoxNoForceOffline = new System.Windows.Forms.CheckBox();
 			this.checkBoxHttp = new System.Windows.Forms.CheckBox();
 			this.checkBoxSetDomain = new System.Windows.Forms.CheckBox();
 			this.checkBoxAuthHead = new System.Windows.Forms.CheckBox();
 			this.checkBoxCertPin = new System.Windows.Forms.CheckBox();
-			this.checkBoxTestingDomains = new System.Windows.Forms.CheckBox();
 			this.buttonReset = new System.Windows.Forms.Button();
 			this.comboBoxVersion = new System.Windows.Forms.ComboBox();
 			this.checkBoxForceVersion = new System.Windows.Forms.CheckBox();
-			this.buttonTrayOptions = new System.Windows.Forms.Button();
-			this.groupBox1.SuspendLayout();
+			this.tabControl = new System.Windows.Forms.TabControl();
+			this.tabPagePatchOptions = new System.Windows.Forms.TabPage();
+			this.tabPageDomains = new System.Windows.Forms.TabPage();
+			this.labelCustomDomains = new System.Windows.Forms.Label();
+			this.textBoxDomains = new System.Windows.Forms.TextBox();
+			this.tabPageTrayOptions = new System.Windows.Forms.TabPage();
+			this.checkBoxTrayMinimize = new System.Windows.Forms.CheckBox();
+			this.checkBoxTrayStart = new System.Windows.Forms.CheckBox();
+			this.tabControl.SuspendLayout();
+			this.tabPagePatchOptions.SuspendLayout();
+			this.tabPageDomains.SuspendLayout();
+			this.tabPageTrayOptions.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// buttonSave
 			// 
-			this.buttonSave.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.buttonSave.Location = new System.Drawing.Point(283, 159);
+			this.buttonSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonSave.Location = new System.Drawing.Point(273, 190);
 			this.buttonSave.Margin = new System.Windows.Forms.Padding(0);
 			this.buttonSave.Name = "buttonSave";
 			this.buttonSave.Size = new System.Drawing.Size(73, 32);
@@ -61,8 +69,8 @@ namespace HitmanPatcher
 			// 
 			// buttonCancel
 			// 
-			this.buttonCancel.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.buttonCancel.Location = new System.Drawing.Point(363, 159);
+			this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonCancel.Location = new System.Drawing.Point(348, 190);
 			this.buttonCancel.Margin = new System.Windows.Forms.Padding(0);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(73, 32);
@@ -71,28 +79,10 @@ namespace HitmanPatcher
 			this.buttonCancel.UseVisualStyleBackColor = true;
 			this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
 			// 
-			// groupBox1
-			// 
-			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-			this.groupBox1.Controls.Add(this.checkBoxNoForceOffline);
-			this.groupBox1.Controls.Add(this.checkBoxHttp);
-			this.groupBox1.Controls.Add(this.checkBoxSetDomain);
-			this.groupBox1.Controls.Add(this.checkBoxAuthHead);
-			this.groupBox1.Controls.Add(this.checkBoxCertPin);
-			this.groupBox1.Location = new System.Drawing.Point(12, 12);
-			this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-			this.groupBox1.Size = new System.Drawing.Size(252, 154);
-			this.groupBox1.TabIndex = 2;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Patch options";
-			// 
 			// checkBoxNoForceOffline
 			// 
 			this.checkBoxNoForceOffline.AutoSize = true;
-			this.checkBoxNoForceOffline.Location = new System.Drawing.Point(5, 129);
+			this.checkBoxNoForceOffline.Location = new System.Drawing.Point(8, 105);
 			this.checkBoxNoForceOffline.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.checkBoxNoForceOffline.Name = "checkBoxNoForceOffline";
 			this.checkBoxNoForceOffline.Size = new System.Drawing.Size(241, 21);
@@ -103,7 +93,7 @@ namespace HitmanPatcher
 			// checkBoxHttp
 			// 
 			this.checkBoxHttp.AutoSize = true;
-			this.checkBoxHttp.Location = new System.Drawing.Point(5, 102);
+			this.checkBoxHttp.Location = new System.Drawing.Point(8, 80);
 			this.checkBoxHttp.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.checkBoxHttp.Name = "checkBoxHttp";
 			this.checkBoxHttp.Size = new System.Drawing.Size(184, 21);
@@ -114,7 +104,7 @@ namespace HitmanPatcher
 			// checkBoxSetDomain
 			// 
 			this.checkBoxSetDomain.AutoSize = true;
-			this.checkBoxSetDomain.Location = new System.Drawing.Point(5, 75);
+			this.checkBoxSetDomain.Location = new System.Drawing.Point(8, 55);
 			this.checkBoxSetDomain.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.checkBoxSetDomain.Name = "checkBoxSetDomain";
 			this.checkBoxSetDomain.Size = new System.Drawing.Size(240, 21);
@@ -125,7 +115,7 @@ namespace HitmanPatcher
 			// checkBoxAuthHead
 			// 
 			this.checkBoxAuthHead.AutoSize = true;
-			this.checkBoxAuthHead.Location = new System.Drawing.Point(5, 48);
+			this.checkBoxAuthHead.Location = new System.Drawing.Point(8, 30);
 			this.checkBoxAuthHead.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.checkBoxAuthHead.Name = "checkBoxAuthHead";
 			this.checkBoxAuthHead.Size = new System.Drawing.Size(190, 21);
@@ -136,7 +126,7 @@ namespace HitmanPatcher
 			// checkBoxCertPin
 			// 
 			this.checkBoxCertPin.AutoSize = true;
-			this.checkBoxCertPin.Location = new System.Drawing.Point(5, 21);
+			this.checkBoxCertPin.Location = new System.Drawing.Point(8, 5);
 			this.checkBoxCertPin.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.checkBoxCertPin.Name = "checkBoxCertPin";
 			this.checkBoxCertPin.Size = new System.Drawing.Size(155, 21);
@@ -144,22 +134,10 @@ namespace HitmanPatcher
 			this.checkBoxCertPin.Text = "Disable cert pinning";
 			this.checkBoxCertPin.UseVisualStyleBackColor = true;
 			// 
-			// checkBoxTestingDomains
-			// 
-			this.checkBoxTestingDomains.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.checkBoxTestingDomains.AutoSize = true;
-			this.checkBoxTestingDomains.Location = new System.Drawing.Point(19, 172);
-			this.checkBoxTestingDomains.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-			this.checkBoxTestingDomains.Name = "checkBoxTestingDomains";
-			this.checkBoxTestingDomains.Size = new System.Drawing.Size(248, 21);
-			this.checkBoxTestingDomains.TabIndex = 3;
-			this.checkBoxTestingDomains.Text = "Show testing domains in dropdown";
-			this.checkBoxTestingDomains.UseVisualStyleBackColor = true;
-			// 
 			// buttonReset
 			// 
-			this.buttonReset.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.buttonReset.Location = new System.Drawing.Point(283, 119);
+			this.buttonReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.buttonReset.Location = new System.Drawing.Point(4, 190);
 			this.buttonReset.Margin = new System.Windows.Forms.Padding(0);
 			this.buttonReset.Name = "buttonReset";
 			this.buttonReset.Size = new System.Drawing.Size(153, 34);
@@ -170,22 +148,20 @@ namespace HitmanPatcher
 			// 
 			// comboBoxVersion
 			// 
-			this.comboBoxVersion.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.comboBoxVersion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxVersion.Enabled = false;
 			this.comboBoxVersion.FormattingEnabled = true;
-			this.comboBoxVersion.Location = new System.Drawing.Point(284, 37);
+			this.comboBoxVersion.Location = new System.Drawing.Point(127, 128);
 			this.comboBoxVersion.Margin = new System.Windows.Forms.Padding(0);
 			this.comboBoxVersion.Name = "comboBoxVersion";
-			this.comboBoxVersion.Size = new System.Drawing.Size(151, 24);
+			this.comboBoxVersion.Size = new System.Drawing.Size(205, 24);
 			this.comboBoxVersion.TabIndex = 5;
 			// 
 			// checkBoxForceVersion
 			// 
-			this.checkBoxForceVersion.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.checkBoxForceVersion.AutoSize = true;
-			this.checkBoxForceVersion.Location = new System.Drawing.Point(284, 14);
-			this.checkBoxForceVersion.Margin = new System.Windows.Forms.Padding(0);
+			this.checkBoxForceVersion.Location = new System.Drawing.Point(8, 130);
+			this.checkBoxForceVersion.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.checkBoxForceVersion.Name = "checkBoxForceVersion";
 			this.checkBoxForceVersion.Size = new System.Drawing.Size(116, 21);
 			this.checkBoxForceVersion.TabIndex = 6;
@@ -193,28 +169,109 @@ namespace HitmanPatcher
 			this.checkBoxForceVersion.UseVisualStyleBackColor = true;
 			this.checkBoxForceVersion.CheckedChanged += new System.EventHandler(this.checkBoxForceVersion_CheckedChanged);
 			// 
-			// buttonTrayOptions
+			// tabControl
 			// 
-			this.buttonTrayOptions.Location = new System.Drawing.Point(283, 67);
-			this.buttonTrayOptions.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-			this.buttonTrayOptions.Name = "buttonTrayOptions";
-			this.buttonTrayOptions.Size = new System.Drawing.Size(152, 34);
-			this.buttonTrayOptions.TabIndex = 9;
-			this.buttonTrayOptions.Text = "Tray Options";
-			this.buttonTrayOptions.UseVisualStyleBackColor = true;
-			this.buttonTrayOptions.Click += new System.EventHandler(this.buttonTrayOptions_Click);
+			this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.tabControl.Controls.Add(this.tabPagePatchOptions);
+			this.tabControl.Controls.Add(this.tabPageDomains);
+			this.tabControl.Controls.Add(this.tabPageTrayOptions);
+			this.tabControl.Location = new System.Drawing.Point(0, 0);
+			this.tabControl.Name = "tabControl";
+			this.tabControl.SelectedIndex = 0;
+			this.tabControl.Size = new System.Drawing.Size(425, 187);
+			this.tabControl.TabIndex = 10;
+			// 
+			// tabPagePatchOptions
+			// 
+			this.tabPagePatchOptions.Controls.Add(this.checkBoxNoForceOffline);
+			this.tabPagePatchOptions.Controls.Add(this.checkBoxCertPin);
+			this.tabPagePatchOptions.Controls.Add(this.checkBoxForceVersion);
+			this.tabPagePatchOptions.Controls.Add(this.checkBoxHttp);
+			this.tabPagePatchOptions.Controls.Add(this.comboBoxVersion);
+			this.tabPagePatchOptions.Controls.Add(this.checkBoxAuthHead);
+			this.tabPagePatchOptions.Controls.Add(this.checkBoxSetDomain);
+			this.tabPagePatchOptions.Location = new System.Drawing.Point(4, 25);
+			this.tabPagePatchOptions.Name = "tabPagePatchOptions";
+			this.tabPagePatchOptions.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPagePatchOptions.Size = new System.Drawing.Size(417, 158);
+			this.tabPagePatchOptions.TabIndex = 0;
+			this.tabPagePatchOptions.Text = "Patch Options";
+			this.tabPagePatchOptions.UseVisualStyleBackColor = true;
+			// 
+			// tabPageDomains
+			// 
+			this.tabPageDomains.Controls.Add(this.labelCustomDomains);
+			this.tabPageDomains.Controls.Add(this.textBoxDomains);
+			this.tabPageDomains.Location = new System.Drawing.Point(4, 25);
+			this.tabPageDomains.Name = "tabPageDomains";
+			this.tabPageDomains.Size = new System.Drawing.Size(417, 158);
+			this.tabPageDomains.TabIndex = 2;
+			this.tabPageDomains.Text = "Domains";
+			this.tabPageDomains.UseVisualStyleBackColor = true;
+			// 
+			// labelCustomDomains
+			// 
+			this.labelCustomDomains.AutoSize = true;
+			this.labelCustomDomains.Location = new System.Drawing.Point(8, 10);
+			this.labelCustomDomains.Name = "labelCustomDomains";
+			this.labelCustomDomains.Size = new System.Drawing.Size(281, 17);
+			this.labelCustomDomains.TabIndex = 1;
+			this.labelCustomDomains.Text = "Enter custom domains below (one per line):";
+			// 
+			// textBoxDomains
+			// 
+			this.textBoxDomains.Location = new System.Drawing.Point(8, 32);
+			this.textBoxDomains.Multiline = true;
+			this.textBoxDomains.Name = "textBoxDomains";
+			this.textBoxDomains.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textBoxDomains.Size = new System.Drawing.Size(401, 123);
+			this.textBoxDomains.TabIndex = 0;
+			this.textBoxDomains.WordWrap = false;
+			this.textBoxDomains.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxDomains_Validating);
+			// 
+			// tabPageTrayOptions
+			// 
+			this.tabPageTrayOptions.Controls.Add(this.checkBoxTrayMinimize);
+			this.tabPageTrayOptions.Controls.Add(this.checkBoxTrayStart);
+			this.tabPageTrayOptions.Location = new System.Drawing.Point(4, 25);
+			this.tabPageTrayOptions.Name = "tabPageTrayOptions";
+			this.tabPageTrayOptions.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPageTrayOptions.Size = new System.Drawing.Size(417, 158);
+			this.tabPageTrayOptions.TabIndex = 1;
+			this.tabPageTrayOptions.Text = "Tray Options";
+			this.tabPageTrayOptions.UseVisualStyleBackColor = true;
+			// 
+			// checkBoxTrayMinimize
+			// 
+			this.checkBoxTrayMinimize.AutoSize = true;
+			this.checkBoxTrayMinimize.Location = new System.Drawing.Point(8, 30);
+			this.checkBoxTrayMinimize.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+			this.checkBoxTrayMinimize.Name = "checkBoxTrayMinimize";
+			this.checkBoxTrayMinimize.Size = new System.Drawing.Size(128, 21);
+			this.checkBoxTrayMinimize.TabIndex = 5;
+			this.checkBoxTrayMinimize.Text = "Minimize to tray";
+			this.checkBoxTrayMinimize.UseVisualStyleBackColor = true;
+			// 
+			// checkBoxTrayStart
+			// 
+			this.checkBoxTrayStart.AutoSize = true;
+			this.checkBoxTrayStart.Location = new System.Drawing.Point(8, 5);
+			this.checkBoxTrayStart.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+			this.checkBoxTrayStart.Name = "checkBoxTrayStart";
+			this.checkBoxTrayStart.Size = new System.Drawing.Size(103, 21);
+			this.checkBoxTrayStart.TabIndex = 4;
+			this.checkBoxTrayStart.Text = "Start in tray";
+			this.checkBoxTrayStart.UseVisualStyleBackColor = true;
 			// 
 			// OptionsForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(448, 199);
-			this.Controls.Add(this.buttonTrayOptions);
-			this.Controls.Add(this.checkBoxForceVersion);
-			this.Controls.Add(this.comboBoxVersion);
+			this.ClientSize = new System.Drawing.Size(425, 226);
+			this.Controls.Add(this.tabControl);
 			this.Controls.Add(this.buttonReset);
-			this.Controls.Add(this.checkBoxTestingDomains);
-			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.buttonCancel);
 			this.Controls.Add(this.buttonSave);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -223,10 +280,14 @@ namespace HitmanPatcher
 			this.ShowIcon = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Advanced Options";
-			this.groupBox1.ResumeLayout(false);
-			this.groupBox1.PerformLayout();
+			this.tabControl.ResumeLayout(false);
+			this.tabPagePatchOptions.ResumeLayout(false);
+			this.tabPagePatchOptions.PerformLayout();
+			this.tabPageDomains.ResumeLayout(false);
+			this.tabPageDomains.PerformLayout();
+			this.tabPageTrayOptions.ResumeLayout(false);
+			this.tabPageTrayOptions.PerformLayout();
 			this.ResumeLayout(false);
-			this.PerformLayout();
 
 		}
 
@@ -234,16 +295,21 @@ namespace HitmanPatcher
 
 		private System.Windows.Forms.Button buttonSave;
 		private System.Windows.Forms.Button buttonCancel;
-		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.CheckBox checkBoxAuthHead;
 		private System.Windows.Forms.CheckBox checkBoxCertPin;
 		private System.Windows.Forms.CheckBox checkBoxSetDomain;
 		private System.Windows.Forms.CheckBox checkBoxHttp;
-		private System.Windows.Forms.CheckBox checkBoxTestingDomains;
 		private System.Windows.Forms.Button buttonReset;
 		private System.Windows.Forms.ComboBox comboBoxVersion;
 		private System.Windows.Forms.CheckBox checkBoxForceVersion;
 		private System.Windows.Forms.CheckBox checkBoxNoForceOffline;
-		private System.Windows.Forms.Button buttonTrayOptions;
+		private System.Windows.Forms.TabControl tabControl;
+		private System.Windows.Forms.TabPage tabPagePatchOptions;
+		private System.Windows.Forms.TabPage tabPageDomains;
+		private System.Windows.Forms.TabPage tabPageTrayOptions;
+		private System.Windows.Forms.CheckBox checkBoxTrayMinimize;
+		private System.Windows.Forms.CheckBox checkBoxTrayStart;
+		private System.Windows.Forms.Label labelCustomDomains;
+		private System.Windows.Forms.TextBox textBoxDomains;
 	}
 }
