@@ -2572,6 +2572,79 @@
     "Rarity": null
   },
   {
+    "Id": "LOCATION_PARENT_ROCKY",
+    "Guid": "394b4e01-0706-444d-b60a-8980c0f025d4",
+    "Type": "location",
+    "Subtype": "location",
+    "ImageId": null,
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Icon": "images/locations/LOCATION_ROCKY/rocky_tile.jpg",
+      "Background": "images/locations/LOCATION_ROCKY/rocky_background.jpg",
+      "LockedIcon": "images/locations/LOCATION_ROCKY/rocky_tile.jpg",
+      "DlcImage": "images/livetile/dlc/tile_hitman3.jpg",
+      "DlcName": "GAME_STORE_METADATA_S3_GAME_TITLE",
+      "IsLocked": false,
+      "UpcomingContent": false,
+      "UpcomingKey": "UI_MENU_LIVETILE_CONTENT_UPCOMING_HEADLINE",
+      "Order": 360,
+      "LimitedLoadout": false,
+      "ProgressionKey": "LOCATION_ROCKY",
+      "Season": 3,
+      "CreateContractId": "0862d67a-e7a5-4092-a47d-6d3d57c83e37",
+      "RequiredResources": [
+        "[assembly:/_PRO/Scenes/Missions/Rocky/scene_dugong.entity].entitytemplate"
+      ],
+      "Entitlements": [
+        "LOCATION_ROCKY"
+      ]
+    },
+    "Rarity": null
+  },
+  {
+    "Id": "LOCATION_ROCKY_DUGONG",
+    "Guid": "90d8f477-7aa1-4f1d-8c16-5429a318c2b4",
+    "Type": "location",
+    "Subtype": "sublocation",
+    "ImageId": null,
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "ParentLocation": "LOCATION_PARENT_ROCKY",
+      "Icon": "images/locations/LOCATION_ROCKY/rocky_tile.jpg",
+      "Background": "images/locations/LOCATION_ROCKY/rocky_background.jpg",
+      "LockedIcon": "images/locations/LOCATION_ROCKY/rocky_tile.jpg",
+      "DlcImage": "images/livetile/dlc/tile_hitman3.jpg",
+      "DlcName": "GAME_STORE_METADATA_S3_GAME_TITLE",
+      "IsLocked": false,
+      "UpcomingContent": false,
+      "UpcomingKey": "UI_MENU_LIVETILE_CONTENT_UPCOMING_HEADLINE",
+      "Order": 1,
+      "LimitedLoadout": false,
+      "ProgressionKey": "LOCATION_ROCKY",
+      "Season": 3,
+      "CreateContractId": "0862d67a-e7a5-4092-a47d-6d3d57c83e37",
+      "RequiredResources": [
+        "[assembly:/_PRO/Scenes/Missions/Rocky/scene_dugong.entity].entitytemplate"
+      ],
+      "Entitlements": [
+        "LOCATION_ROCKY"
+      ]
+    },
+    "Rarity": null
+  },
+  {
     "Id": "PACKAGE_S1_PLAYER_REWARD",
     "Guid": "4323f3bf-4897-4df7-a941-7bc395625260",
     "Type": "package",
@@ -2711,7 +2784,7 @@
       "LoadoutSlot": "disguise",
       "IsConsumable": false,
       "RepositoryId": "054f443b-824f-4913-8b29-64dfcd82b089",
-      "OrderIndex": 750
+      "OrderIndex": 753
     },
     "Rarity": "common"
   },
@@ -3914,6 +3987,26 @@
     "Rarity": null
   },
   {
+    "Id": "STARTING_LOCATION_HOKKAIDO_SNOWCRANE_DEFAULT",
+    "Guid": "7282d4f7-481e-4e39-8e92-88f9ea14b81e",
+    "Type": "access",
+    "Subtype": "startinglocation",
+    "ImageId": null,
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Location": "LOCATION_PARENT_HOKKAIDO",
+      "RepositoryId": "a786fc74-b379-41f4-a4ac-ce970ee88b2c",
+      "UnlockedByDefault": true
+    },
+    "Rarity": null
+  },
+  {
     "Id": "STARTING_LOCATION_HOKKAIDO_SNOWCRANE_NINJA",
     "Guid": "2c64b955-a2fa-4398-a1ec-7f65364990d3",
     "Type": "access",
@@ -4689,7 +4782,7 @@
       "LoadoutSlot": "disguise",
       "IsConsumable": false,
       "RepositoryId": "08022e2c-4954-4b63-b632-3ac50d018292",
-      "OrderIndex": 752
+      "OrderIndex": 750
     },
     "Rarity": "common"
   },
@@ -8481,6 +8574,27 @@
     "Rarity": "common"
   },
   {
+    "Id": "FIREARMS_HERO_PISTOL_STRIKER_V3",
+    "Guid": "f1b5ea65-e830-4865-9b5a-7fa0885d2c89",
+    "Type": "weapon",
+    "Subtype": "pistol",
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Gameplay": {},
+      "Quality": 4,
+      "Rarity": "common",
+      "LoadoutSlot": "concealedweapon",
+      "RepositoryId": "6576f6aa-8d77-48f1-a4c7-f57fb5ddcc51"
+    },
+    "Rarity": "common"
+  },
+  {
     "Id": "FIREARMS_HERO_SNIPER_JAEGER",
     "Guid": "910add56-0aea-4bbc-93b7-a27ab727734f",
     "Type": "weapon",
@@ -8859,6 +8973,27 @@
       "LoadoutSlot": "gear",
       "Rarity": "common",
       "RepositoryId": "2eacd4f6-0018-41a5-800d-5fd85f9ecefe"
+    },
+    "Rarity": "common"
+  },
+  {
+    "Id": "PROP_TOOL_LOCK_PICK_BONE",
+    "Guid": "e2584b67-f0a4-412e-b249-982d5121ad1c",
+    "Type": "gear",
+    "Subtype": "tool",
+    "ImageId": "",
+    "RMTPrice": 149,
+    "GamePrice": 149,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Quality": 5,
+      "LoadoutSlot": "gear",
+      "Rarity": "common",
+      "RepositoryId": "99ad5567-2734-44c7-a7db-5d0aaf01932e"
     },
     "Rarity": "common"
   },
@@ -11335,6 +11470,55 @@
     "Rarity": "common"
   },
   {
+    "Id": "FIREARMS_SNIPER_RIFLE_RUDE_RUBY",
+    "Guid": "76802c06-d719-46bf-bf76-4c73bc8abf0f",
+    "Type": "weapon",
+    "Subtype": "sniperrifle",
+    "ImageId": "",
+    "RMTPrice": 99,
+    "GamePrice": 99,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Gameplay": {
+        "range": 0.9,
+        "damage": 0.9,
+        "clipsize": 0.4,
+        "rateoffire": 0.5
+      },
+      "Quality": 4,
+      "Rarity": "common",
+      "LoadoutSlot": "carriedweapon",
+      "RepositoryId": "93a95f8a-a1bb-4d6c-bfd5-e6eec4eeaa1e",
+      "UnlockOrder": 20
+    },
+    "Rarity": "common"
+  },
+  {
+    "Id": "PROP_MELEE_KATANA_NEON",
+    "Guid": "febc0ffc-dd1b-45c8-bd14-c83e28e606d5",
+    "Type": "weapon",
+    "Subtype": "melee",
+    "ImageId": "",
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "LoadoutSlot": "carriedweapon",
+      "Rarity": "common",
+      "RepositoryId": "c03498c1-db54-402a-9923-63ada447a4b8",
+      "Quality": "1"
+    },
+    "Rarity": "common"
+  },
+  {
     "Id": "FIREARMS_PISTOL_DARTGUN_SEDATIVE",
     "Guid": "286c31fd-7fce-44aa-82e1-5fd0d61bbd83",
     "Type": "weapon",
@@ -12044,6 +12228,34 @@
     "Rarity": "common"
   },
   {
+    "Id": "FIREARMS_HERO_PISTOL_FLOWERBALLER",
+    "Guid": "fae2f769-6532-4319-a9a6-c0d971314e3a",
+    "Type": "weapon",
+    "Subtype": "pistol",
+    "ImageId": "",
+    "RMTPrice": 99,
+    "GamePrice": 99,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Gameplay": {
+        "range": 0.5,
+        "damage": 0.6,
+        "clipsize": 0.2,
+        "rateoffire": 0.6
+      },
+      "Quality": 4,
+      "Rarity": "common",
+      "LoadoutSlot": "concealedweapon",
+      "RepositoryId": "2dfacef2-57f6-4b8d-a1ae-f1f7ada4ec22",
+      "UnlockOrder": 10
+    },
+    "Rarity": "common"
+  },
+  {
     "Id": "FIREARMS_PISTOL_ICA_STEALTH_DTI",
     "Guid": "4515d566-1c64-4bef-8bd3-9bb52dcef393",
     "Type": "weapon",
@@ -12366,6 +12578,27 @@
     "Rarity": "common"
   },
   {
+    "Id": "PROP_MELEE_DUGONG_GRIPHOOK",
+    "Guid": "7acda9b1-9233-444a-a7be-ff26a0dd86db",
+    "Type": "weapon",
+    "Subtype": "melee",
+    "ImageId": "",
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": true,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "LoadoutSlot": "gear",
+      "Rarity": "common",
+      "RepositoryId": "58a036dc-79d4-4d64-8bf5-3faafa3cfead",
+      "Quality": 4
+    },
+    "Rarity": "common"
+  },
+  {
     "Id": "PROP_MELEE_SNOWBALL",
     "Guid": "50cbd12c-36f8-446c-b140-fc1d6b3d4d35",
     "Type": "weapon",
@@ -12473,6 +12706,27 @@
       "Rarity": "common",
       "LoadoutSlot": "carriedweapon",
       "RepositoryId": "d5f8e067-5b44-4ddf-91e2-3c29e9222eae"
+    },
+    "Rarity": "common"
+  },
+  {
+    "Id": "FIREARMS_PISTOL_CUSTOM_5MM_DUCKY",
+    "Guid": "efe655b7-93a8-4a64-be29-6ea46607a5fd",
+    "Type": "weapon",
+    "Subtype": "pistol",
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Gameplay": {},
+      "Quality": 4,
+      "Rarity": "common",
+      "LoadoutSlot": "concealedweapon",
+      "RepositoryId": "8d7a3342-1229-4619-ae51-f4a462f9130d"
     },
     "Rarity": "common"
   },
@@ -17600,7 +17854,7 @@
       "Rarity": "common",
       "LoadoutSlot": "disguise",
       "RepositoryId": "16be233a-1eb8-4736-b87f-c2a69a2db14b",
-      "OrderIndex": 907,
+      "OrderIndex": 938,
       "AllowUpSync": true
     },
     "IsDroppable": false,
@@ -17679,7 +17933,7 @@
     "Id": "TOKEN_OUTFIT_HERO_EASTER_RAVER_SUIT",
     "Guid": "c3a71288-0b64-4092-9a70-632e78f38658",
     "Type": "disguise",
-    "Subtype": "themed",
+    "Subtype": "casual",
     "ImageId": "",
     "RMTPrice": 99,
     "GamePrice": 99,
@@ -17692,7 +17946,122 @@
       "Rarity": "common",
       "LoadoutSlot": "disguise",
       "RepositoryId": "e21c192f-429b-404a-9be7-bc2d0473ea9d",
-      "OrderIndex": 650,
+      "OrderIndex": 647,
+      "AllowUpSync": true
+    },
+    "IsDroppable": false,
+    "Rarity": "common"
+  },
+  {
+    "Id": "TOKEN_OUTFIT_HERO_EASTER_RAVER_BUNNY_SUIT",
+    "Guid": "da4f6106-0585-4a69-815d-51336d581a9b",
+    "Type": "disguise",
+    "Subtype": "themed",
+    "ImageId": "",
+    "RMTPrice": 99,
+    "GamePrice": 99,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Quality": 1,
+      "Rarity": "common",
+      "LoadoutSlot": "disguise",
+      "RepositoryId": "167b22d7-d4e9-42a3-947e-e0f1c2b384ea",
+      "OrderIndex": 652,
+      "AllowUpSync": true
+    },
+    "IsDroppable": false,
+    "Rarity": "common"
+  },
+  {
+    "Id": "TOKEN_OUTFIT_REWARD_HERO_RUBYRUDE_SUIT",
+    "Guid": "aacf5b35-0715-434f-ac79-53ad8a300e99",
+    "Type": "disguise",
+    "Subtype": "themed",
+    "ImageId": "",
+    "RMTPrice": 99,
+    "GamePrice": 99,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Quality": 1,
+      "Rarity": "common",
+      "LoadoutSlot": "disguise",
+      "RepositoryId": "bb1115ba-d250-4f8f-b486-f5aba8499ebb",
+      "OrderIndex": 938,
+      "AllowUpSync": true
+    },
+    "IsDroppable": false,
+    "Rarity": "common"
+  },
+  {
+    "Id": "TOKEN_OUTFIT_REWARD_HERO_NEON_SUIT",
+    "Guid": "28840c8a-607a-4459-9a24-cbbc650dca91",
+    "Type": "disguise",
+    "Subtype": "themed",
+    "ImageId": "",
+    "RMTPrice": 99,
+    "GamePrice": 99,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Quality": 1,
+      "Rarity": "common",
+      "LoadoutSlot": "disguise",
+      "RepositoryId": "9b1083cd-c745-4dfd-9c77-b81f87819a90",
+      "OrderIndex": 936,
+      "AllowUpSync": true
+    },
+    "IsDroppable": false,
+    "Rarity": "common"
+  },
+  {
+    "Id": "TOKEN_OUTFIT_REWARD_HERO_DUCKY_SUIT",
+    "Guid": "cf7e3694-d544-4792-a046-9cb06ff5bd61",
+    "Type": "disguise",
+    "Subtype": "casual",
+    "ImageId": "",
+    "RMTPrice": 99,
+    "GamePrice": 99,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Quality": 1,
+      "Rarity": "common",
+      "LoadoutSlot": "disguise",
+      "RepositoryId": "7459c8b3-4f09-4d72-bf3f-84bab1f9a2ff",
+      "OrderIndex": 648,
+      "AllowUpSync": true
+    },
+    "IsDroppable": false,
+    "Rarity": "common"
+  },
+  {
+    "Id": "TOKEN_OUTFIT_REWARD_HERO_HALLOWEENSANSPUMPKIN_SUIT",
+    "Guid": "3184c551-4577-45fe-818d-02282ede9db9",
+    "Type": "disguise",
+    "Subtype": "themed",
+    "ImageId": "",
+    "RMTPrice": 99,
+    "GamePrice": 99,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Quality": 1,
+      "Rarity": "common",
+      "LoadoutSlot": "disguise",
+      "RepositoryId": "2afecc9a-4fe9-411f-a34f-b038ef91ee98",
+      "OrderIndex": 960,
       "AllowUpSync": true
     },
     "IsDroppable": false,
@@ -21442,6 +21811,364 @@
     "Rarity": null
   },
   {
+    "Id": "TOKEN_OUTFIT_HERO_DUGONG_SUIT",
+    "Guid": "0bf78762-7137-45b0-973c-162a18a58386",
+    "Type": "disguise",
+    "Subtype": "tactical",
+    "ImageId": "",
+    "RMTPrice": 99,
+    "GamePrice": 99,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Quality": 1,
+      "Rarity": "common",
+      "LoadoutSlot": "disguise",
+      "RepositoryId": "8b74c103-ec0d-4e4e-8664-d06dfe869e8f",
+      "OrderIndex": 751,
+      "AllowUpSync": true
+    },
+    "Rarity": "common",
+    "IsDroppable": false
+  },
+  {
+    "Id": "TOKEN_OUTFIT_DUGONG_WORKER_FOODWORKER",
+    "Guid": "c60c723c-62f1-4f82-9567-78ef0e7444f2",
+    "Type": "disguise",
+    "Subtype": "disguise",
+    "ImageId": "",
+    "RMTPrice": 99,
+    "GamePrice": 99,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Quality": 1,
+      "Rarity": "common",
+      "LoadoutSlot": "disguise",
+      "RepositoryId": "d9d95b38-3708-4220-9838-597c078a1081",
+      "OrderIndex": 599,
+      "AllowUpSync": true
+    },
+    "Rarity": "common",
+    "IsDroppable": false
+  },
+  {
+    "Id": "TOKEN_OUTFIT_DUGONG_WORKER_ENGINEER",
+    "Guid": "e39a95ec-e781-42f2-a8c0-82c6ae4dbc17",
+    "Type": "disguise",
+    "Subtype": "disguise",
+    "ImageId": "",
+    "RMTPrice": 99,
+    "GamePrice": 99,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Quality": 1,
+      "Rarity": "common",
+      "LoadoutSlot": "disguise",
+      "RepositoryId": "c3af265c-7648-4ddb-a02b-ab605a053886",
+      "OrderIndex": 599,
+      "AllowUpSync": true
+    },
+    "Rarity": "common",
+    "IsDroppable": false
+  },
+  {
+    "Id": "TOKEN_OUTFIT_DUGONG_WORKER_METALWORKER",
+    "Guid": "a857641f-72bd-474a-8f88-9accd8113dbd",
+    "Type": "disguise",
+    "Subtype": "disguise",
+    "ImageId": "",
+    "RMTPrice": 99,
+    "GamePrice": 99,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Quality": 1,
+      "Rarity": "common",
+      "LoadoutSlot": "disguise",
+      "RepositoryId": "f011f287-ea39-42a4-be1d-17ba5b783611",
+      "OrderIndex": 599,
+      "AllowUpSync": true
+    },
+    "Rarity": "common",
+    "IsDroppable": false
+  },
+  {
+    "Id": "STARTING_LOCATION_ROCKY_DEFAULT",
+    "Guid": "66081048-c9ec-471e-963a-25bfd6442671",
+    "Type": "access",
+    "Subtype": "startinglocation",
+    "ImageId": null,
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Location": "LOCATION_PARENT_ROCKY",
+      "RepositoryId": "72f49b21-c240-4cf9-9b6b-8639f762f2d7",
+      "Equip": []
+    },
+    "Rarity": null
+  },
+  {
+    "Id": "STARTING_LOCATION_ROCKY_SHRINE",
+    "Guid": "ac9dc272-673a-40d0-88ea-671b1a84be85",
+    "Type": "access",
+    "Subtype": "startinglocation",
+    "ImageId": null,
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Location": "LOCATION_PARENT_ROCKY",
+      "RepositoryId": "ba619c92-9c55-4009-aa03-bf207c370548",
+      "UnlockOrder": 3
+    },
+    "Rarity": null
+  },
+  {
+    "Id": "STARTING_LOCATION_ROCKY_SOCIALHUB",
+    "Guid": "1c074aca-4b8d-452b-bf59-2b8c7c58d181",
+    "Type": "access",
+    "Subtype": "startinglocation",
+    "ImageId": null,
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Location": "LOCATION_PARENT_ROCKY",
+      "RepositoryId": "af29c8d3-45cd-4b36-b7ed-5acc9398556d",
+      "UnlockOrder": 2
+    },
+    "Rarity": null
+  },
+  {
+    "Id": "STARTING_LOCATION_ROCKY_WATERVILLAGE",
+    "Guid": "d43269ed-a1b2-4e0e-bcb9-87cba504e22e",
+    "Type": "access",
+    "Subtype": "startinglocation",
+    "ImageId": null,
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Location": "LOCATION_PARENT_ROCKY",
+      "RepositoryId": "cd368a51-7a36-4f98-8d1b-fa8a34c3092a",
+      "UnlockOrder": 1
+    },
+    "Rarity": null
+  },
+  {
+    "Id": "STARTING_LOCATION_ROCKY_MILITIACAMP",
+    "Guid": "19b8b49d-d76c-46d1-9d75-cd52dc684dc3",
+    "Type": "access",
+    "Subtype": "startinglocation",
+    "ImageId": null,
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Location": "LOCATION_PARENT_ROCKY",
+      "RepositoryId": "8b444765-d082-4c34-932f-796084a5a819",
+      "Equip": [
+        "TOKEN_OUTFIT_DUGONG_WORKER_FOODWORKER"
+      ],
+      "UnlockOrder": 5
+    },
+    "Rarity": null
+  },
+  {
+    "Id": "STARTING_LOCATION_ROCKY_PIRATECAMP",
+    "Guid": "40d6df47-7815-4b6b-8b78-556dc8e95d8f",
+    "Type": "access",
+    "Subtype": "startinglocation",
+    "ImageId": null,
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Location": "LOCATION_PARENT_ROCKY",
+      "RepositoryId": "a0b501e9-e693-4a67-9e95-8887855cc5c2",
+      "Equip": [
+        "TOKEN_OUTFIT_DUGONG_WORKER_METALWORKER"
+      ],
+      "UnlockOrder": 4
+    },
+    "Rarity": null
+  },
+  {
+    "Id": "AGENCYPICKUP_ROCKY_SMALL_SHRINE",
+    "Guid": "c1995f9e-5481-4476-a5d0-efe2ec4e8b4c",
+    "Type": "agencypickup",
+    "Subtype": "small",
+    "ImageId": null,
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Location": "LOCATION_PARENT_ROCKY",
+      "RepositoryId": "48e562d4-7cfc-4644-a713-73bb0e8cb370",
+      "UnlockOrder": 5
+    },
+    "Rarity": null
+  },
+  {
+    "Id": "AGENCYPICKUP_ROCKY_SMALL_BIGCENTRALTREE",
+    "Guid": "890dd8a4-c1ae-4c31-82a6-e4eece0e1ee3",
+    "Type": "agencypickup",
+    "Subtype": "small",
+    "ImageId": null,
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Location": "LOCATION_PARENT_ROCKY",
+      "RepositoryId": "3a84ae8e-0196-49ef-978e-39d9fdcf5591",
+      "UnlockOrder": 1
+    },
+    "Rarity": null
+  },
+  {
+    "Id": "AGENCYPICKUP_ROCKY_SMALL_TRASHCAN_SOCIALHUB",
+    "Guid": "06086dfc-290b-4d13-b526-29f3500188ed",
+    "Type": "agencypickup",
+    "Subtype": "small",
+    "ImageId": null,
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Location": "LOCATION_PARENT_ROCKY",
+      "RepositoryId": "05d93ed4-b32f-4459-8f8d-b391a5bccacc",
+      "UnlockOrder": 2
+    },
+    "Rarity": null
+  },
+  {
+    "Id": "AGENCYPICKUP_ROCKY_LARGE_RUINS",
+    "Guid": "96297892-476d-4255-b668-55e38c6d368e",
+    "Type": "agencypickup",
+    "Subtype": "large",
+    "ImageId": null,
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Location": "LOCATION_PARENT_ROCKY",
+      "RepositoryId": "01bb6b88-f985-474c-a6f3-5658abcde74c",
+      "UnlockOrder": 7
+    },
+    "Rarity": null
+  },
+  {
+    "Id": "AGENCYPICKUP_ROCKY_LARGE_RADARTOWER",
+    "Guid": "fd42163a-eeac-43b2-8335-48d5f895c783",
+    "Type": "agencypickup",
+    "Subtype": "large",
+    "ImageId": null,
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Location": "LOCATION_PARENT_ROCKY",
+      "RepositoryId": "20f0deca-5bf0-4fd8-befa-659e99d40da4",
+      "UnlockOrder": 6
+    },
+    "Rarity": null
+  },
+  {
+    "Id": "AGENCYPICKUP_ROCKY_LARGE_BOATNEARWORKSHOP",
+    "Guid": "f3eefee6-a2a0-43e4-ac2c-7deebaabf704",
+    "Type": "agencypickup",
+    "Subtype": "large",
+    "ImageId": null,
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Location": "LOCATION_PARENT_ROCKY",
+      "RepositoryId": "0d9d2beb-223d-4072-845f-a2faec8898a2",
+      "UnlockOrder": 3
+    },
+    "Rarity": null
+  },
+  {
+    "Id": "AGENCYPICKUP_ROCKY_LARGE_FOODSTORAGE_SOCIALHUB",
+    "Guid": "165a4c18-fb9b-4566-ac48-ab638b80b3fb",
+    "Type": "agencypickup",
+    "Subtype": "large",
+    "ImageId": null,
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Location": "LOCATION_PARENT_ROCKY",
+      "RepositoryId": "014b27fd-8fd0-488e-9b81-335ccba583a6",
+      "UnlockOrder": 4
+    },
+    "Rarity": null
+  },
+  {
     "Id": "ACCESS_HIT_BULLDOG",
     "Guid": "14419942-b997-4a7f-bc2e-40e370791ddf",
     "Type": "access",
@@ -21601,87 +22328,161 @@
     "Rarity": null
   },
   {
-    "Id": "EG_MASTERY_01",
-    "Guid": "7ffa974e-3332-422e-984b-ffdd60e19fe3",
-    "Type": "agencypickup",
-    "Subtype": "small",
-    "ImageId": null,
-    "RMTPrice": -1,
-    "GamePrice": -1,
+    "Id": "FIREARMS_HERO_PISTOL_BARTOLI_75_LUXURIOUS",
+    "Guid": "92d1f89c-b342-4207-ab51-4d15b6695ae2",
+    "Type": "weapon",
+    "Subtype": "pistol",
+    "ImageId": "",
+    "RMTPrice": 99,
+    "GamePrice": 99,
     "IsPurchasable": false,
     "IsPublished": true,
     "IsDroppable": false,
     "Capabilities": [],
     "Qualities": {},
     "Properties": {
-      "RepositoryId": "26adf6fb-0750-4bae-9363-f14881a7b118",
-      "UnlockOrder": 1
+      "Gameplay": {
+        "range": 0.5,
+        "damage": 0.6,
+        "clipsize": 0.2,
+        "rateoffire": 0.6
+      },
+      "Name": "Firearm_Hero_Luxurious_Pistol_NAME",
+      "Description": "Firearm_Hero_Luxurious_Pistol_DESC",
+      "Quality": 4,
+      "Rarity": "common",
+      "LoadoutSlot": "concealedweapon",
+      "RepositoryId": "f417bfec-a999-4b2f-adef-510323c75ccf",
+      "AllowUpSync": true
     },
-    "Rarity": null
+    "Rarity": "common"
   },
   {
-    "Id": "EG_MASTERY_02",
-    "Guid": "055ea116-d0f1-439c-b1ef-01f96bb18fd7",
-    "Type": "agencypickup",
-    "Subtype": "small",
-    "ImageId": null,
-    "RMTPrice": -1,
-    "GamePrice": -1,
+    "Id": "FIREARMS_HERO_SHOTGUN_SEMIAUTO_ENRAM_HV_LUXURIOUS",
+    "Guid": "6122f7a0-33d0-4f3b-9bea-661b9fc4f14d",
+    "Type": "weapon",
+    "Subtype": "shotgun",
+    "ImageId": "",
+    "RMTPrice": 99,
+    "GamePrice": 99,
     "IsPurchasable": false,
     "IsPublished": true,
     "IsDroppable": false,
     "Capabilities": [],
     "Qualities": {},
     "Properties": {
-      "RepositoryId": "1478dcec-8bc2-406f-bb46-f8540a319651",
-      "UnlockOrder": 2
+      "Gameplay": {
+        "range": 0.25,
+        "damage": 0.8,
+        "clipsize": 0.3,
+        "rateoffire": 0.4
+      },
+      "Name": "Firearm_Hero_Luxurious_Shotgun_NAME",
+      "Description": "Firearm_Hero_Luxurious_Shotgun_DESC",
+      "Quality": 4,
+      "Rarity": "common",
+      "LoadoutSlot": "carriedweapon",
+      "RepositoryId": "23e1031b-879d-4b04-ada9-b684d9d16c22",
+      "AllowUpSync": true
     },
-    "Rarity": null
+    "Rarity": "common"
   },
   {
-    "Id": "EG_MASTERY_03",
-    "Guid": "4666a9fa-e5a7-4269-96d0-2044b8393c01",
-    "Type": "agencypickup",
-    "Subtype": "small",
-    "ImageId": null,
-    "RMTPrice": -1,
-    "GamePrice": -1,
+    "Id": "FIREARMS_HERO_RIFLE_FULLAUTO_TAC_4_AUTO_LUXURIOUS",
+    "Guid": "9eb610e6-846e-4fbf-ac7a-595b15d35dbf",
+    "Type": "weapon",
+    "Subtype": "assaultrifle",
+    "ImageId": "",
+    "RMTPrice": 99,
+    "GamePrice": 99,
     "IsPurchasable": false,
     "IsPublished": true,
     "IsDroppable": false,
     "Capabilities": [],
     "Qualities": {},
     "Properties": {
-      "RepositoryId": "ae84dc25-7ad1-4486-9b51-b9a4f079d5f7",
-      "UnlockOrder": 3
+      "Gameplay": {
+        "range": 0.8,
+        "damage": 0.95,
+        "clipsize": 0.85,
+        "rateoffire": 0.75
+      },
+      "Name": "Firearm_Hero_Luxurious_Assault_Rifle_NAME",
+      "Description": "Firearm_Hero_Luxurious_Assault_Rifle_DESC",
+      "Quality": 4,
+      "Rarity": "common",
+      "LoadoutSlot": "carriedweapon",
+      "RepositoryId": "613b24eb-fdc1-47a3-9157-e3d0c5464baf",
+      "AllowUpSync": true
     },
-    "Rarity": null
+    "Rarity": "common"
   },
   {
-    "Id": "EG_MASTERY_04",
-    "Guid": "e5a9a9d2-e1c7-41d3-bb82-b807d7afc2ad",
-    "Type": "agencypickup",
-    "Subtype": "small",
-    "ImageId": null,
-    "RMTPrice": -1,
-    "GamePrice": -1,
+    "Id": "FIREARMS_HERO_SMG_TAC_SMG_LUXURIOUS",
+    "Guid": "3637821d-2d62-4eb9-8270-51f6e3f0d1b3",
+    "Type": "weapon",
+    "Subtype": "smg",
+    "ImageId": "",
+    "RMTPrice": 99,
+    "GamePrice": 99,
     "IsPurchasable": false,
     "IsPublished": true,
     "IsDroppable": false,
     "Capabilities": [],
     "Qualities": {},
     "Properties": {
-      "RepositoryId": "95268c32-165e-410a-add7-006d6dec4fed",
-      "UnlockOrder": 4
+      "Gameplay": {
+        "range": 0.8,
+        "damage": 0.95,
+        "clipsize": 0.85,
+        "rateoffire": 0.75
+      },
+      "Name": "Firearm_Hero_Luxurious_SMG_NAME",
+      "Description": "Firearm_Hero_Luxurious_SMG_DESC",
+      "Quality": 4,
+      "Rarity": "common",
+      "LoadoutSlot": "carriedweapon",
+      "RepositoryId": "10f0653c-fe9c-4a43-98f1-18d20d18d9ab",
+      "AllowUpSync": true
     },
-    "Rarity": null
+    "Rarity": "common"
   },
   {
-    "Id": "EG_MASTERY_05",
-    "Guid": "4b572e21-21f6-4f56-ade4-ee9868f0e20c",
-    "Type": "agencypickup",
-    "Subtype": "small",
-    "ImageId": null,
+    "Id": "FIREARMS_HERO_SNIPER_MEDIUM_SIEGER_300_LUXURIOUS",
+    "Guid": "d49900f2-2023-4dd7-9484-66d2f6c54719",
+    "Type": "weapon",
+    "Subtype": "sniperrifle",
+    "ImageId": "",
+    "RMTPrice": 99,
+    "GamePrice": 99,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Gameplay": {
+        "range": 0.8,
+        "damage": 0.95,
+        "clipsize": 0.85,
+        "rateoffire": 0.75
+      },
+      "Name": "Firearm_Hero_Luxurious_Sniper_NAME",
+      "Description": "Firearm_Hero_Luxurious_Sniper_DESC",
+      "Quality": 4,
+      "Rarity": "common",
+      "LoadoutSlot": "carriedweapon",
+      "RepositoryId": "2d0393e2-49a8-43c1-b8f3-110e4b0b0c83",
+      "AllowUpSync": true
+    },
+    "Rarity": "common"
+  },
+  {
+    "Id": "PROP_MELEE_KATANA_LUXURIOUS",
+    "Guid": "01c46e9f-d3f5-4399-a516-a08c9605b865",
+    "Type": "weapon",
+    "Subtype": "melee",
+    "ImageId": "",
     "RMTPrice": -1,
     "GamePrice": -1,
     "IsPurchasable": false,
@@ -21690,9 +22491,200 @@
     "Capabilities": [],
     "Qualities": {},
     "Properties": {
-      "RepositoryId": "71336065-bfe3-4c1e-8244-c0644199ce17",
+      "LoadoutSlot": "carriedweapon",
+      "Rarity": "common",
+      "RepositoryId": "af2b1a36-a7f0-4003-aae4-a6076402542d",
+      "Quality": "1"
+    },
+    "Rarity": "common"
+  },
+  {
+    "Id": "TOKEN_OUTFIT_HERO_LUXURIOUS_SUIT",
+    "Guid": "b7969ac3-49d6-4b60-ae09-b64f4aa02b7d",
+    "Type": "disguise",
+    "Subtype": "themed",
+    "ImageId": "",
+    "RMTPrice": 99,
+    "GamePrice": 99,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Quality": 1,
+      "Rarity": "common",
+      "LoadoutSlot": "disguise",
+      "RepositoryId": "6c7c7200-d1f4-49f7-8bf8-260ad6d1f469",
+      "OrderIndex": 1021,
+      "AllowUpSync": true
+    },
+    "IsDroppable": false,
+    "Rarity": "common"
+  },
+  {
+    "Id": "FIREARMS_HERO_PISTOL_KRUGERMEIER_ANCESTRAL",
+    "Guid": "200eff20-5b1d-4f8a-94dd-13648e8f98e0",
+    "Type": "weapon",
+    "Subtype": "pistol",
+    "ImageId": "",
+    "RMTPrice": 99,
+    "GamePrice": 99,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Gameplay": {
+        "range": 0.4,
+        "damage": 0.3,
+        "clipsize": 0.7,
+        "rateoffire": 0.6
+      },
+      "Quality": 4,
+      "Rarity": "common",
+      "LoadoutSlot": "concealedweapon",
+      "RepositoryId": "d3dc2ef7-da65-4cdf-bf47-771aa5797ae0",
+      "UnlockOrder": 20
+    },
+    "Rarity": "common"
+  },
+  {
+    "Id": "HUNTING_SHOTGUN_REWARD_DELUXE_ANCESTRAL",
+    "Guid": "0f19e6a5-9bc0-42cb-9ec7-94f714cbba23",
+    "Type": "weapon",
+    "Subtype": "shotgun",
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Gameplay": {},
+      "Quality": 4,
+      "Rarity": "common",
+      "LoadoutSlot": "carriedweapon",
+      "RepositoryId": "935fd34c-e58c-45d3-bc66-3144752b001b"
+    },
+    "Rarity": "common"
+  },
+  {
+    "Id": "FIREARMS_HERO_RIFLE_SHASKA_ANCESTRAL",
+    "Guid": "c2eeaf9c-2158-41cd-b382-8d2f27f8e622",
+    "Type": "weapon",
+    "Subtype": "assaultrifle",
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Gameplay": {},
+      "Quality": 4,
+      "Rarity": "common",
+      "LoadoutSlot": "carriedweapon",
+      "RepositoryId": "dd57a213-3e76-4a38-ba47-0ac5040ce5e4"
+    },
+    "Rarity": "common"
+  },
+  {
+    "Id": "FIREARMS_HERO_SNIPER_ANCESTRAL",
+    "Guid": "094f2611-358f-4f42-b46f-935c365b79b4",
+    "Type": "weapon",
+    "Subtype": "sniperrifle",
+    "ImageId": "",
+    "RMTPrice": 99,
+    "GamePrice": 99,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Gameplay": {
+        "range": 1.0,
+        "damage": 1.0,
+        "clipsize": 0.2,
+        "rateoffire": 0.3
+      },
+      "Name": "Firearm_Hero_Ancestral_Sniper_NAME",
+      "Description": "Firearm_Hero_Ancestral_Sniper_DESC",
+      "Quality": 4,
+      "Rarity": "common",
+      "LoadoutSlot": "carriedweapon",
+      "RepositoryId": "370580fc-7fcf-47f8-b994-cebd279f69f9",
       "UnlockOrder": 5
     },
-    "Rarity": null
+    "Rarity": "common"
+  },
+  {
+    "Id": "PROP_MELEE_COMBAT_KNIFE_ANCESTRAL",
+    "Guid": "43f5a322-3233-4579-8bfc-730a6fcfcc59",
+    "Type": "weapon",
+    "Subtype": "melee",
+    "ImageId": "",
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "LoadoutSlot": "gear",
+      "Rarity": "common",
+      "RepositoryId": "e82b61a6-c534-495a-bbe2-b45e9ae9a030",
+      "Quality": "2",
+      "UnlockOrder": 5
+    },
+    "Rarity": "common"
+  },
+  {
+    "Id": "PROP_DEVICE_REMOTE_EXPLOSIVE_ANCESTRAL",
+    "Guid": "099afc37-609b-48c9-9278-d3389b45829b",
+    "Type": "gear",
+    "Subtype": "explosive",
+    "ImageId": "",
+    "RMTPrice": 149,
+    "GamePrice": 149,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Quality": 2,
+      "LoadoutSlot": "gear",
+      "Rarity": "common",
+      "RepositoryId": "89957566-316c-4014-88c2-6a8bdfc31108"
+    },
+    "Rarity": "common"
+  },
+  {
+    "Id": "TOKEN_OUTFIT_HERO_ANCESTRAL_SUIT",
+    "Guid": "c4202ed3-f890-4e5d-bfe8-668b49161e9a",
+    "Type": "disguise",
+    "Subtype": "sins",
+    "ImageId": "",
+    "RMTPrice": 99,
+    "GamePrice": 99,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Quality": 1,
+      "Rarity": "common",
+      "LoadoutSlot": "disguise",
+      "RepositoryId": "32bff4c3-6bb5-4db2-bc50-e85eacd069cd",
+      "OrderIndex": 1021,
+      "AllowUpSync": true
+    },
+    "IsDroppable": false,
+    "Rarity": "common"
   }
 ]
