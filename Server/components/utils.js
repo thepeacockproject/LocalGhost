@@ -197,6 +197,8 @@ function getDefaultLoadout(location, gameVersion) {
                     return 'TOKEN_OUTFIT_ELEGANT_HERO_LLAMASUIT';
                 case 'LOCATION_PARENT_TRAPPED':
                     return 'TOKEN_OUTFIT_TRAPPED_WOLVERINE_SUIT';
+                case 'LOCATION_PARENT_ROCKY':
+                    return 'TOKEN_OUTFIT_HERO_DUGONG_SUIT';
                 default:
                     return 'TOKEN_OUTFIT_HITMANSUIT';
             }
