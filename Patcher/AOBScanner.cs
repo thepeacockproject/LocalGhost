@@ -147,7 +147,7 @@ namespace HitmanPatcher
 				return new[]
 				{
 					new Patch(offsetspart1.First(), "0F85B5000000", "909090909090", MemProtection.PAGE_EXECUTE_READ),
-					new Patch(offsetspart2.First(), "0F84B8000000", "909090909090", MemProtection.PAGE_EXECUTE_READ)
+					new Patch(offsetspart2.First(), "0F84 ? 000000", "909090909090", MemProtection.PAGE_EXECUTE_READ)
 				};
 			});
 		}
@@ -174,7 +174,7 @@ namespace HitmanPatcher
 				return new[]
 				{
 					new Patch(offsetspart1.First(), "75", "EB", MemProtection.PAGE_EXECUTE_READ),
-					new Patch(offsetspart2.First(), "0F8486000000", "909090909090", MemProtection.PAGE_EXECUTE_READ)
+					new Patch(offsetspart2.First(), "0F84 ? 000000", "909090909090", MemProtection.PAGE_EXECUTE_READ)
 				};
 			});
 		}
