@@ -23,6 +23,7 @@ namespace HitmanPatcher
 			Task<IEnumerable<Patch[]>> getCertpinPatches = Task.Factory.ContinueWhenAll(new Task<Patch[]>[]
 			{
 				findCertpin_nearjump(exeData),
+				findCertpin_nearjump_new(exeData),
 				findCertpin_shortjump(exeData),
 			}, tasks => tasks.Select(task => task.Result).Where(x => x != null));
 
@@ -83,18 +84,27 @@ namespace HitmanPatcher
 		{
 			return Task.Factory.ContinueWhenAll(new[]
 			{
-				Task.Factory.StartNew(() => findPattern(data, 0xe,
-					"? ? 9afdffffc747302f000000c7471803000000")),
-				Task.Factory.StartNew(() => findPattern(data, 0xc,
-					"? ? 9afdffffc747302f000000c7471803000000")), // 1.15
-				Task.Factory.StartNew(() => findPattern(data, 0xd,
-					"? ? 6ffdffffc747302f000000c7471804000000"))
+				Task.Factory.StartNew(() => findPattern(data, 0xe, "? ? 9afdffffc747302f000000c7471803000000")), // 2.x
+				Task.Factory.StartNew(() => findPattern(data, 0xc, "? ? 9afdffffc747302f000000c7471803000000")), // 1.15
 			}, tasks =>
 			{
 				IEnumerable<int> offsets = tasks.SelectMany(task => task.Result);
 				if (offsets.Count() != 1)
 					return null;
 				return new[] { new Patch(offsets.First(), "0F85", "90E9", MemProtection.PAGE_EXECUTE_READ) };
+			});
+		}
+
+		private static Task<Patch[]> findCertpin_nearjump_new(byte[] data)
+        {
+			return Task.Factory.StartNew(() => findPattern(data, 0x4, "0f8478fdffff4584f6 ? ? 6ffdffff")).ContinueWith(task =>
+			{
+				if (task.Result.Length != 1)
+					return null; // pattern should occur only once
+				return new[]
+				{
+					new Patch(task.Result[0] + 9, "0F85", "90E9", MemProtection.PAGE_EXECUTE_READ),
+				};
 			});
 		}
 
@@ -121,10 +131,12 @@ namespace HitmanPatcher
 		{
 			return Task.Factory.ContinueWhenAll(new[]
 			{
-				Task.Factory.StartNew(() => findPattern(data, 0xd, "0f85b50000004883f90675e8")),
-				Task.Factory.StartNew(() => findPattern(data, 0xd, "9090909090904883f90675e8")),
-				Task.Factory.StartNew(() => findPattern(data, 0x3, "0f84b800000084db0f85b0000000")),
-				Task.Factory.StartNew(() => findPattern(data, 0x3, "90909090909084db0f85b0000000"))
+				Task.Factory.StartNew(() => findPattern(data, 0xd, "0f85b50000004883f90675e8")), // unpatched
+				Task.Factory.StartNew(() => findPattern(data, 0xd, "9090909090904883f90675e8")), // patched
+				Task.Factory.StartNew(() => findPattern(data, 0x3, "0f84b800000084db0f85b0000000")), // unpatched
+				Task.Factory.StartNew(() => findPattern(data, 0x3, "90909090909084db0f85b0000000")), // patched
+				Task.Factory.StartNew(() => findPattern(data, 0x3, "0f84b500000084db0f85ad000000")), // unpatched gamepass
+				Task.Factory.StartNew(() => findPattern(data, 0x3, "90909090909084db0f85ad000000")), // patched gamepass
 			}, tasks =>
 			{
 				// concat results for non-patched and patched
@@ -144,6 +156,7 @@ namespace HitmanPatcher
 		{
 			return Task.Factory.ContinueWhenAll(new[]
 			{
+				Task.Factory.StartNew(() => findPattern(data, 0x8, "? 18488d15bfb8ce00")), // v2.72 dx12
 				Task.Factory.StartNew(() => findPattern(data, 0x8, "? 18488d15ff02cd00")),
 				Task.Factory.StartNew(() => findPattern(data, 0x8, "? 18488d155fd6cc00")),
 				Task.Factory.StartNew(() => findPattern(data, 0x7, "? 18488d152018cc00")), // v2.13
