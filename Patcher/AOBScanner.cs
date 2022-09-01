@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2021 grappigegovert <grappigegovert@hotmail.com>
+﻿// Copyright (C) 2021-2022 grappigegovert <grappigegovert@hotmail.com>
 // Licensed under the zlib license. See LICENSE for more info
 
 using System;
@@ -40,7 +40,7 @@ namespace HitmanPatcher
 
 			Task<IEnumerable<Patch[]>> getProtocolPatches = Task.Factory.ContinueWhenAll(new Task<Patch[]>[]
 			{
-				findProtocol3_30(exeData),
+				findProtocolCombined(exeData),
 			}, tasks => tasks.Select(task => task.Result).Where(x => x != null));
 
 			Task<IEnumerable<Patch[]>> getDynresForceofflinePatches = Task.Factory.ContinueWhenAll(new Task<Patch[]>[]
@@ -229,12 +229,14 @@ namespace HitmanPatcher
 
 		#region protocol
 
-		private static Task<Patch[]> findProtocol3_30(byte[] data)
+		private static Task<Patch[]> findHttpsString(byte[] data)
 		{
 			return Task.Factory.ContinueWhenAll(new[]
 			{
-				Task.Factory.StartNew(() => findPattern(data, 0x0, "? 747470733a2f2f7b307d00")),
-				Task.Factory.StartNew(() => findPattern(data, 0x8, "? 747470733a2f2f7b307d00"))
+				Task.Factory.StartNew(() => findPattern(data, 0x8, "68747470733a2f2f7b307d00")), // "https://{0}"
+				Task.Factory.StartNew(() => findPattern(data, 0x8, "687474703a2f2f7b307d00")), // "http://{0}"
+				Task.Factory.StartNew(() => findPattern(data, 0x0, "68747470733a2f2f7b307d00")), // "https://{0}"
+				Task.Factory.StartNew(() => findPattern(data, 0x0, "687474703a2f2f7b307d00")), // "http://{0}"
 			}, tasks =>
 			{
 				IEnumerable<int> offsets = tasks.SelectMany(task => task.Result);
@@ -242,8 +244,78 @@ namespace HitmanPatcher
 					return null;
 				return new[]
 				{
-					new Patch(offsets.First(), "68", "61", MemProtection.PAGE_READONLY)
+					new Patch(offsets.First(), Patch.https, Patch.http, MemProtection.PAGE_READONLY)
 				};
+			});
+		}
+
+		private static Task<Patch[]> findHttpsLengths1_16(byte[] data)
+		{
+			return Task.Factory.StartNew(() => findPattern(data, 0xC, "c745B7 ? 000080488d05 ? ? ? 0148894dd7")).ContinueWith(task =>
+			{
+				if (task.Result.Length != 1)
+					return null; // pattern should occur only once
+				return new[]
+				{
+					new Patch(task.Result[0] + 3, "0B", "0A", MemProtection.PAGE_EXECUTE_READ),
+				};
+			});
+		}
+
+		private static Task<Patch[]> findHttpsLengthsPre3_30(byte[] data)
+		{
+			return Task.Factory.ContinueWhenAll(new[]
+			{
+				Task.Factory.StartNew(() => findPattern(data, 0xC, "488d55c7488d4d17e8 ? ? ? ff41b8")),
+				Task.Factory.StartNew(() => findPattern(data, 0x5, "488d55c7488d4d17e8 ? ? ? ff41b8")),
+			}, tasks =>
+			{
+				IEnumerable<int> offsets = tasks.SelectMany(task => task.Result);
+				if (offsets.Count() != 1)
+					return null; // pattern should occur only once
+				return new[]
+				{
+					new Patch(offsets.First() + 15, "0C", "0B", MemProtection.PAGE_EXECUTE_READ),
+				};
+			});
+		}
+
+		private static Task<Patch[]> findHttpsLengths3_30(byte[] data)
+		{
+			return Task.Factory.ContinueWhenAll(new[]
+			{
+				Task.Factory.StartNew(() => findPattern(data, 0x6, "c74547 ? 0000800fbae81f")),
+				Task.Factory.StartNew(() => findPattern(data, 0x9, "85d2750cc703 ? 000080")),
+			}, tasks =>
+			{
+				int[][] offsets = tasks.Select(task => task.Result).ToArray();
+				if (offsets[0].Length != 1 || offsets[1].Length != 1)
+					return null; // fail if not both patterns occur once
+				return new[]
+				{
+					new Patch(offsets[0][0] + 3, "0B", "0A", MemProtection.PAGE_EXECUTE_READ),
+					new Patch(offsets[1][0] + 6, "0B", "0A", MemProtection.PAGE_EXECUTE_READ),
+				};
+			});
+		}
+
+		private static Task<Patch[]> findProtocolCombined(byte[] data)
+		{
+			return Task.Factory.ContinueWhenAll(new[]
+			{
+				findHttpsString(data),
+				findHttpsLengths1_16(data),
+				findHttpsLengthsPre3_30(data),
+				findHttpsLengths3_30(data),
+			}, tasks =>
+			{
+				if (tasks[0].Result == null)
+					return null; // fail if string offset not found
+				IEnumerable<Patch[]> lengthPatches = tasks.Skip(1).Select(t => t.Result).Where(result => result != null);
+				if (lengthPatches.Count() != 1)
+					return null; // fail if not exactly one set of length offsets found
+
+				return tasks[0].Result.Concat(lengthPatches.First()).ToArray();
 			});
 		}
 
