@@ -163,7 +163,6 @@ namespace HitmanPatcher
 				if (!IsReadyForPatching(hProcess, b, v))
 				{
 					// Online_ConfigDomain variable is not initialized yet, try again in 1 second.
-					Pinvoke.CloseHandle(hProcess);
 					return false;
 				}
 
@@ -232,9 +231,19 @@ namespace HitmanPatcher
 					}
 				}
 			}
+			catch
+            {
+				// close the process handle in case of any uncaught exception
+				// Apparently, the finally block might not be ran (according to https://stackoverflow.com/a/10260233)
+				Pinvoke.CloseHandle(hProcess);
+				hProcess = IntPtr.Zero;
+				throw;
+            }
 			finally
 			{
-				Pinvoke.CloseHandle(hProcess);
+				// close handle if not already closed by the code above
+				if (hProcess != IntPtr.Zero)
+					Pinvoke.CloseHandle(hProcess);
 			}
 
 			return true;
