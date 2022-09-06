@@ -45,17 +45,23 @@ function getServerVerObj(gameVersion) {
 const UUIDRegex = /^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/;
 
 function extractToken(req, res, next) {
-    let auth = req.header('Authorization') ? req.header('Authorization').split(' ') : [];
-    if (auth.length === 2 && auth[0].toLowerCase() === "bearer") {
-        req.jwt = jwt.decode(auth[1]); // I'm not going to verify the token
-        if (!UUIDRegex.test(req.jwt.unique_name)) {
-            console.warn('user sent jwt with non-uuid user id');
-            res.status(400).end();
+    for (const headerName of [
+        'Authorization',
+        'X-GPS-Authorization'
+    ]) {
+        let auth = req.header(headerName) ? req.header(headerName).split(' ') : [];
+        if (auth.length === 2 && auth[0].toLowerCase() === "bearer") {
+            req.jwt = jwt.decode(auth[1]); // I'm not going to verify the token
+            if (!UUIDRegex.test(req.jwt.unique_name)) {
+                console.warn('user sent jwt with non-uuid user id');
+                res.status(400).end();
+                return;
+            }
+            next && next();
             return;
         }
-        next && next();
-        return;
     }
+
     console.warn(`invalid auth token for url ${req.originalUrl}`);
     res.status(401).end();
 }
@@ -121,6 +127,7 @@ function getGameVersionFromJWTPis(pis) {
         case 'fghi4567xQOCheZIin0pazB47qGUvZw4': // hitman 3 epic
         case '1659040': // hitman 3 retail steam appid
         case '1847520': // hitman 3 demo steam appid
+        case 'h3-xbox': // custom string to identify xbox
             return 'h3';
     }
     console.error(`Could not get version from jwt pis: ${pis}`);

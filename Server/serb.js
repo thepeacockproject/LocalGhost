@@ -122,6 +122,26 @@ app.post('/oauth/token', async (req, res) => {
         external_platform = 'gog';
         external_userid = req.body.gog_userid;
         external_users_folder = 'gogids';
+    } else if (req.body.grant_type === 'external_xbox') {
+        if (!/^\d{1,50}$/.test(req.body.xbox_userid)) { // no clue what the format is
+            res.status(400).end(); // invalid xbox user id
+            return;
+        }
+        let authheader = req.header('Authorization');
+        /*
+        // It looks like the game doesn't send the xsts token to http sites,
+        // but I don't think we'll be able to decode it anyway
+        if (!authheader || !authheader.startsWith('Bearer: XBL3.0 x=')) {
+            res.status(400).end(); // no xbox token included
+            return;
+        }
+        let [userhash, token] = authheader.slice(17).split(';');
+        */
+
+        external_appid = 'h3-xbox'; // I made it up
+        external_platform = 'xbox';
+        external_userid = req.body.xbox_userid;
+        external_users_folder = 'xboxids';
     } else {
         res.status(501).end(); // unsupported auth method
         return;
@@ -180,6 +200,8 @@ app.post('/oauth/token', async (req, res) => {
             userdata.SteamId = req.body.steam_userid;
         } else if (external_platform === 'epic') {
             userdata.EpicId = req.body.epic_userid;
+        } else if (external_platform === 'xbox') {
+            userdata.XboxLiveId = req.body.xbox_userid;
         }
         // add all unlockables to player's inventory
         const allunlockables = JSON.parse(await readFile(path.join('userdata', gameVersion, 'allunlockables.json')))
