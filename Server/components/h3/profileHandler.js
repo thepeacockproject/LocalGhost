@@ -16,6 +16,10 @@ const app = express.Router();
 
 app.post('/ProfileService/GetPlatformEntitlements', express.json(), getEntitlements);
 
+app.post('/ProfileService/SetClientEntitlements', express.json(), (req, res) => {
+    res.json(null);
+});
+
 app.post('/AuthenticationService/GetBlobOfflineCacheDatabaseDiff', (req, res) => {
     // Which menu files should be loaded from the server?
     res.json([
