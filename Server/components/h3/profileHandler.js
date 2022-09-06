@@ -159,7 +159,10 @@ app.post('/ProfileService/ResolveGamerTags', express.json(), async (req, res) =>
 app.post('/ProfileService/GetFriendsCount', async (req, res) => {
     let userdata = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
     // TODO: This should actually return the number of friends that also own the game
-    res.json(userdata.Extensions.friends.length);
+    if (userdata.Extensions.friends && userdata.Extensions.friends.length)
+        res.json(userdata.Extensions.friends.length);
+    else
+        res.json(0);
 });
 
 app.post('/GamePersistentDataService/GetData', express.json(), async (req, res) => {
