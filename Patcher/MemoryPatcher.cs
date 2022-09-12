@@ -232,13 +232,13 @@ namespace HitmanPatcher
 				}
 			}
 			catch
-            {
+			{
 				// close the process handle in case of any uncaught exception
 				// Apparently, the finally block might not be ran (according to https://stackoverflow.com/a/10260233)
 				Pinvoke.CloseHandle(hProcess);
 				hProcess = IntPtr.Zero;
 				throw;
-            }
+			}
 			finally
 			{
 				// close handle if not already closed by the code above
