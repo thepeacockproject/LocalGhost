@@ -1,0 +1,84 @@
+{
+  "Description": "Kill objective using a SuccessEvent",
+  "Contract": {
+    "Data": {
+      "Objectives": [
+        {
+          "Id": "729edf5b-b6cb-437f-a691-e9314dff3cc1",
+          "Primary": true,
+          "SuccessEvent": {
+            "EventName": "Kill",
+            "EventValues": {
+              "RepositoryId": "853b4070-99b1-45da-938b-6fa7947eb7cd"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "Tests": [
+    {
+      "Description": "SuccessEvent triggered with correct values",
+      "Events": [
+        {
+          "Timestamp": 13.550517,
+          "Name": "Kill",
+          "Value": {
+            "RepositoryId": "853b4070-99b1-45da-938b-6fa7947eb7cd"
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "729edf5b-b6cb-437f-a691-e9314dff3cc1",
+          "ExpectedSuccess": true
+        }
+      ]
+    },
+    {
+      "Description": "SuccessEvent triggered with incorrect values",
+      "Events": [
+        {
+          "Timestamp": 13.351848,
+          "Name": "Kill",
+          "Value": {
+            "RepositoryId": "bfe6eff9-fb04-4621-bf18-963bd9b3ffb2"
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "729edf5b-b6cb-437f-a691-e9314dff3cc1",
+          "ExpectedSuccess": false
+        }
+      ]
+    },
+    {
+      "Description": "Pacify event instead of Kill event",
+      "Events": [
+        {
+          "Timestamp": 19.784622,
+          "Name": "Pacify",
+          "Value": {
+            "RepositoryId": "853b4070-99b1-45da-938b-6fa7947eb7cd"
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "729edf5b-b6cb-437f-a691-e9314dff3cc1",
+          "ExpectedSuccess": false
+        }
+      ]
+    },
+    {
+      "Description": "No event triggered",
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "729edf5b-b6cb-437f-a691-e9314dff3cc1",
+          "ExpectedSuccess": false
+        }
+      ]
+    }
+  ]
+}

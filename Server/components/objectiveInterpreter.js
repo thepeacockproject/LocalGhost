@@ -2,6 +2,7 @@
 // Licensed under the zlib license. See LICENSE for more info
 
 const cloneDeep = require('lodash.clonedeep');
+require('./utils.js'); // make sure we have Object.getOwn
 
 function handleEvents(objectives, events) {
     const stateMachines = {};
