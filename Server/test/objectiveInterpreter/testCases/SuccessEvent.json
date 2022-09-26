@@ -1,16 +1,33 @@
 {
-  "Description": "Kill objective using a SuccessEvent",
+  "Description": "Objectives with SuccessEvent only",
   "Contract": {
     "Data": {
       "Objectives": [
         {
           "Id": "729edf5b-b6cb-437f-a691-e9314dff3cc1",
-          "Primary": true,
           "SuccessEvent": {
             "EventName": "Kill",
             "EventValues": {
               "RepositoryId": "853b4070-99b1-45da-938b-6fa7947eb7cd"
             }
+          }
+        },
+        {
+          "Id": "64bd1b42-5b54-49f8-9327-61291a4bf1e3",
+          "SuccessEvent": {
+            "EventName": "Kill"
+          }
+        },
+        {
+          "Id": "239e4340-7c30-42ad-925c-084647460d3d",
+          "SuccessEvent": {
+            "EventName": "-"
+          }
+        },
+        {
+          "Id": "cdd581d6-68aa-40ad-8954-b1696eaf0634",
+          "SuccessEvent": {
+            "EventName": "$"
           }
         }
       ]
@@ -18,7 +35,7 @@
   },
   "Tests": [
     {
-      "Description": "SuccessEvent triggered with correct values",
+      "Description": "SuccessEvent triggered with matching values",
       "Events": [
         {
           "Timestamp": 13.550517,
@@ -32,11 +49,15 @@
         {
           "ObjectiveId": "729edf5b-b6cb-437f-a691-e9314dff3cc1",
           "ExpectedSuccess": true
+        },
+        {
+          "ObjectiveId": "64bd1b42-5b54-49f8-9327-61291a4bf1e3",
+          "ExpectedSuccess": true
         }
       ]
     },
     {
-      "Description": "SuccessEvent triggered with incorrect values",
+      "Description": "SuccessEvent triggered with different values",
       "Events": [
         {
           "Timestamp": 13.351848,
@@ -50,11 +71,15 @@
         {
           "ObjectiveId": "729edf5b-b6cb-437f-a691-e9314dff3cc1",
           "ExpectedSuccess": false
+        },
+        {
+          "ObjectiveId": "64bd1b42-5b54-49f8-9327-61291a4bf1e3",
+          "ExpectedSuccess": true
         }
       ]
     },
     {
-      "Description": "Pacify event instead of Kill event",
+      "Description": "Different event triggered",
       "Events": [
         {
           "Timestamp": 19.784622,
@@ -68,6 +93,10 @@
         {
           "ObjectiveId": "729edf5b-b6cb-437f-a691-e9314dff3cc1",
           "ExpectedSuccess": false
+        },
+        {
+          "ObjectiveId": "64bd1b42-5b54-49f8-9327-61291a4bf1e3",
+          "ExpectedSuccess": false
         }
       ]
     },
@@ -77,6 +106,64 @@
         {
           "ObjectiveId": "729edf5b-b6cb-437f-a691-e9314dff3cc1",
           "ExpectedSuccess": false
+        },
+        {
+          "ObjectiveId": "64bd1b42-5b54-49f8-9327-61291a4bf1e3",
+          "ExpectedSuccess": false
+        }
+      ]
+    },
+    {
+      "Description": "'-' SuccessEvent should not get triggered on start",
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "239e4340-7c30-42ad-925c-084647460d3d",
+          "ExpectedSuccess": false
+        }
+      ]
+    },
+    {
+      "Description": "'$$' SuccessEvent should not get triggered by any event",
+      "Events": [
+        {
+          "Timestamp": 19.784622,
+          "Name": "Kill"
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "cdd581d6-68aa-40ad-8954-b1696eaf0634",
+          "ExpectedSuccess": false
+        }
+      ]
+    },
+    {
+      "Description": "'$$' SuccessEvent triggered",
+      "Events": [
+        {
+          "Timestamp": 19.784622,
+          "Name": "$"
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "cdd581d6-68aa-40ad-8954-b1696eaf0634",
+          "ExpectedSuccess": true
+        }
+      ]
+    },
+    {
+      "Description": "'-' SuccessEvent triggered",
+      "Events": [
+        {
+          "Timestamp": 19.784622,
+          "Name": "-"
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "239e4340-7c30-42ad-925c-084647460d3d",
+          "ExpectedSuccess": true
         }
       ]
     }

@@ -20,6 +20,10 @@ describe('Test the objective interpreter', () => {
                     expect(interpreterResults[expectedResult.ObjectiveId].endState).toBe('Success');
                 else if (expectedResult.ExpectedSuccess === false)
                     expect(interpreterResults[expectedResult.ObjectiveId].endState).not.toBe('Success');
+                else if (expectedResult.ExpectedFailure === true)
+                    expect(interpreterResults[expectedResult.ObjectiveId].endState).toBe('Failure');
+                else if (expectedResult.ExpectedFailure === false)
+                    expect(interpreterResults[expectedResult.ObjectiveId].endState).not.toBe('Failure');
                 else
                     throw new Error('Test did not check any results');
             }

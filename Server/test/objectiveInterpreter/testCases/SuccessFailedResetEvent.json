@@ -1,0 +1,506 @@
+{
+  "Description": "Objectives with mixed Success/Failed/ResetEvent",
+  "Contract": {
+    "Data": {
+      "Objectives": [
+        {
+          "Id": "22f138ce-c7af-458d-8106-bc198ea9d8b2",
+          "SuccessEvent": {
+            "EventName": "Kill"
+          },
+          "FailedEvent": null,
+          "ResetEvent": null
+        },
+        {
+          "Id": "7edf3dbb-cedf-49dc-8593-02d0b1d4825b",
+          "SuccessEvent": {
+            "EventName": "Kill"
+          },
+          "ResetEvent": {
+            "EventName": "Pacify"
+          }
+        },
+        {
+          "Id": "62bfe95d-515e-4cf7-b31b-7ce644fce8fc",
+          "Category": "secondary",
+          "FailedEvent": {
+            "EventName": "Kill"
+          },
+          "ResetEvent": {
+            "EventName": "Pacify"
+          }
+        },
+        {
+          "Id": "86202cd7-3036-4b50-8a63-4c40229b0436",
+          "Category": "secondary",
+          "FailedEvent": {
+            "EventName": "Kill"
+          },
+          "SuccessEvent": {
+            "EventName": "Pacify"
+          }
+        },
+        {
+          "Id": "638cc128-4a16-4334-a7f0-1bedd37f2440",
+          "Category": "secondary",
+          "FailedEvent": {
+            "EventName": "Kill"
+          },
+          "SuccessEvent": {
+            "EventName": "Pacify"
+          },
+          "ResetEvent": {
+            "EventName": "setpieces"
+          }
+        },
+        {
+          "Id": "ad63466b-0fa1-43ac-8342-788e7b1f1ee6",
+          "SuccessEvent": {
+            "EventName": "Pacify"
+          },
+          "FailedEvent": {
+            "EventName": "Pacify"
+          }
+        },
+        {
+          "Id": "76f52a13-8114-4da6-b7e5-4fb0259580b9",
+          "_Comment": "Same as above, but different order",
+          "FailedEvent": {
+            "EventName": "Pacify"
+          },
+          "SuccessEvent": {
+            "EventName": "Pacify"
+          }
+        },
+        {
+          "Id": "881bbb35-0bb2-417b-922c-35a666035c98",
+          "FailedEvent": {
+            "EventName": "Pacify",
+            "EventValues": {
+              "RepositoryId": "dab6ebca-cd7d-467a-b569-ab5a1a6e693f"
+            }
+          },
+          "SuccessEvent": {
+            "EventName": "Pacify",
+            "EventValues": {
+              "RepositoryId": "5a3a3205-75d6-4cd9-b397-fee70e878601"
+            }
+          }
+        },
+        {
+          "Id": "1fd1209d-876b-47a6-b459-67019ff43a8f",
+          "SuccessEvent": {
+            "EventName": "Pacify"
+          },
+          "ResetEvent": {
+            "EventName": "Pacify"
+          }
+        },
+        {
+          "Id": "6693a027-2608-47e3-8c6f-b9ad4633f61f",
+          "Category": "secondary",
+          "FailedEvent": {
+            "EventName": "Pacify"
+          },
+          "ResetEvent": {
+            "EventName": "Pacify"
+          }
+        },
+        {
+          "Id": "354cf1d0-d611-44a9-8f6c-6e3c5939f72c",
+          "Category": "secondary",
+          "SuccessEvent": {
+            "EventName": "Pacify"
+          },
+          "FailedEvent": {
+            "EventName": "Pacify"
+          },
+          "ResetEvent": {
+            "EventName": "Pacify"
+          }
+        }
+      ]
+    }
+  },
+  "Tests": [
+    {
+      "Description": "Triggered SuccessEvent works with Failed/ResetEvent = null",
+      "Events": [
+        {
+          "Timestamp": 13.550517,
+          "Name": "Kill",
+          "Value": {
+            "RepositoryId": "853b4070-99b1-45da-938b-6fa7947eb7cd"
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "22f138ce-c7af-458d-8106-bc198ea9d8b2",
+          "ExpectedSuccess": true
+        }
+      ]
+    },
+    {
+      "Description": "Trigger SuccessEvent, then ResetEvent",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "Kill",
+          "Value": {
+            "RepositoryId": "853b4070-99b1-45da-938b-6fa7947eb7cd"
+          }
+        },
+        {
+          "Timestamp": 10,
+          "Name": "Pacify",
+          "Value": {
+            "RepositoryId": "6f592c07-601b-4574-ba39-f6d397ba1a10"
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "7edf3dbb-cedf-49dc-8593-02d0b1d4825b",
+          "ExpectedSuccess": false,
+          "ExpectedFailure": false
+        }
+      ]
+    },
+    {
+      "Description": "Trigger ResetEvent, then SuccessEvent",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "Pacify",
+          "Value": {
+            "RepositoryId": "6f592c07-601b-4574-ba39-f6d397ba1a10"
+          }
+        },
+        {
+          "Timestamp": 10,
+          "Name": "Kill",
+          "Value": {
+            "RepositoryId": "853b4070-99b1-45da-938b-6fa7947eb7cd"
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "7edf3dbb-cedf-49dc-8593-02d0b1d4825b",
+          "ExpectedSuccess": true
+        }
+      ]
+    },
+    {
+      "Description": "Trigger FailedEvent, then ResetEvent",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "Kill",
+          "Value": {
+            "RepositoryId": "853b4070-99b1-45da-938b-6fa7947eb7cd"
+          }
+        },
+        {
+          "Timestamp": 10,
+          "Name": "Pacify",
+          "Value": {
+            "RepositoryId": "6f592c07-601b-4574-ba39-f6d397ba1a10"
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "62bfe95d-515e-4cf7-b31b-7ce644fce8fc",
+          "ExpectedSuccess": false,
+          "ExpectedFailure": false
+        }
+      ]
+    },
+    {
+      "Description": "Trigger ResetEvent, then FailedEvent",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "Pacify",
+          "Value": {
+            "RepositoryId": "6f592c07-601b-4574-ba39-f6d397ba1a10"
+          }
+        },
+        {
+          "Timestamp": 10,
+          "Name": "Kill",
+          "Value": {
+            "RepositoryId": "853b4070-99b1-45da-938b-6fa7947eb7cd"
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "62bfe95d-515e-4cf7-b31b-7ce644fce8fc",
+          "ExpectedFailure": true
+        }
+      ]
+    },
+    {
+      "Description": "Trigger FailedEvent, then SuccessEvent",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "Kill",
+          "Value": {
+            "RepositoryId": "6f592c07-601b-4574-ba39-f6d397ba1a10"
+          }
+        },
+        {
+          "Timestamp": 10,
+          "Name": "Pacify",
+          "Value": {
+            "RepositoryId": "853b4070-99b1-45da-938b-6fa7947eb7cd"
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "86202cd7-3036-4b50-8a63-4c40229b0436",
+          "ExpectedSuccess": true
+        }
+      ]
+    },
+    {
+      "Description": "Trigger SuccessEvent, then FailedEvent",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "Pacify",
+          "Value": {
+            "RepositoryId": "6f592c07-601b-4574-ba39-f6d397ba1a10"
+          }
+        },
+        {
+          "Timestamp": 10,
+          "Name": "Kill",
+          "Value": {
+            "RepositoryId": "853b4070-99b1-45da-938b-6fa7947eb7cd"
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "86202cd7-3036-4b50-8a63-4c40229b0436",
+          "ExpectedSuccess": true
+        }
+      ]
+    },
+    {
+      "Description": "Trigger FailedEvent, then SuccessEvent, then FailedEvent",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "Kill",
+          "Value": {
+            "RepositoryId": "5a3a3205-75d6-4cd9-b397-fee70e878601"
+          }
+        },
+        {
+          "Timestamp": 10,
+          "Name": "Pacify",
+          "Value": {
+            "RepositoryId": "6f592c07-601b-4574-ba39-f6d397ba1a10"
+          }
+        },
+        {
+          "Timestamp": 15,
+          "Name": "Kill",
+          "Value": {
+            "RepositoryId": "853b4070-99b1-45da-938b-6fa7947eb7cd"
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "86202cd7-3036-4b50-8a63-4c40229b0436",
+          "ExpectedSuccess": true
+        }
+      ]
+    },
+    {
+      "Description": "Trigger FailedEvent, then ResetEvent, then SuccessEvent",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "Kill",
+          "Value": {
+            "RepositoryId": "5a3a3205-75d6-4cd9-b397-fee70e878601"
+          }
+        },
+        {
+          "Timestamp": 10,
+          "Name": "setpieces",
+          "Value": {
+            "RepositoryId": "ec18a22f-a8a2-48e8-b9c0-198ae13a1354"
+          }
+        },
+        {
+          "Timestamp": 15,
+          "Name": "Pacify",
+          "Value": {
+            "RepositoryId": "853b4070-99b1-45da-938b-6fa7947eb7cd"
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "638cc128-4a16-4334-a7f0-1bedd37f2440",
+          "ExpectedSuccess": true
+        }
+      ]
+    },
+    {
+      "Description": "Trigger SuccessEvent, then ResetEvent, then Failedvent",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "Pacify",
+          "Value": {
+            "RepositoryId": "5a3a3205-75d6-4cd9-b397-fee70e878601"
+          }
+        },
+        {
+          "Timestamp": 10,
+          "Name": "setpieces",
+          "Value": {
+            "RepositoryId": "ec18a22f-a8a2-48e8-b9c0-198ae13a1354"
+          }
+        },
+        {
+          "Timestamp": 15,
+          "Name": "Kill",
+          "Value": {
+            "RepositoryId": "853b4070-99b1-45da-938b-6fa7947eb7cd"
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "638cc128-4a16-4334-a7f0-1bedd37f2440",
+          "ExpectedFailure": true
+        }
+      ]
+    },
+    {
+      "Description": "SuccessEvent and FailedEvent with same event without values",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "Pacify",
+          "Value": {
+            "RepositoryId": "5a3a3205-75d6-4cd9-b397-fee70e878601"
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "ad63466b-0fa1-43ac-8342-788e7b1f1ee6",
+          "ExpectedSuccess": true
+        },
+        {
+          "ObjectiveId": "76f52a13-8114-4da6-b7e5-4fb0259580b9",
+          "ExpectedSuccess": true
+        }
+      ]
+    },
+    {
+      "Description": "SuccessEvent and FailedEvent with same event with values: SuccessEvent works",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "Pacify",
+          "Value": {
+            "RepositoryId": "5a3a3205-75d6-4cd9-b397-fee70e878601"
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "881bbb35-0bb2-417b-922c-35a666035c98",
+          "ExpectedSuccess": true
+        }
+      ]
+    },
+    {
+      "Description": "SuccessEvent and FailedEvent with same event with values: FailedEvent does not work",
+      "_Comment": "Weird behaviour imo, but it's not like IOI does this anywhere",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "Pacify",
+          "Value": {
+            "RepositoryId": "dab6ebca-cd7d-467a-b569-ab5a1a6e693f"
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "881bbb35-0bb2-417b-922c-35a666035c98",
+          "ExpectedFailure": false
+        }
+      ]
+    },
+    {
+      "Description": "SuccessEvent and ResetEvent with same event",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "Pacify",
+          "Value": {
+            "RepositoryId": "5a3a3205-75d6-4cd9-b397-fee70e878601"
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "1fd1209d-876b-47a6-b459-67019ff43a8f",
+          "ExpectedSuccess": true
+        }
+      ]
+    },
+    {
+      "Description": "FailedEvent and ResetEvent with same event",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "Pacify",
+          "Value": {
+            "RepositoryId": "5a3a3205-75d6-4cd9-b397-fee70e878601"
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "6693a027-2608-47e3-8c6f-b9ad4633f61f",
+          "ExpectedFailure": true
+        }
+      ]
+    },
+    {
+      "Description": "SuccessEvent, FailedEvent, and ResetEvent with same event",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "Pacify",
+          "Value": {
+            "RepositoryId": "5a3a3205-75d6-4cd9-b397-fee70e878601"
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "354cf1d0-d611-44a9-8f6c-6e3c5939f72c",
+          "ExpectedSuccess": true
+        }
+      ]
+    }
+  ]
+}

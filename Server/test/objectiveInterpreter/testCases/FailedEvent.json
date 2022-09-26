@@ -1,0 +1,105 @@
+{
+  "Description": "Objectives with FailedEvent only",
+  "Contract": {
+    "Data": {
+      "Objectives": [
+        {
+          "Id": "729edf5b-b6cb-437f-a691-e9314dff3cc1",
+          "FailedEvent": {
+            "EventName": "Kill",
+            "EventValues": {
+              "RepositoryId": "853b4070-99b1-45da-938b-6fa7947eb7cd"
+            }
+          }
+        },
+        {
+          "Id": "64bd1b42-5b54-49f8-9327-61291a4bf1e3",
+          "FailedEvent": {
+            "EventName": "Kill"
+          }
+        }
+      ]
+    }
+  },
+  "Tests": [
+    {
+      "Description": "FailedEvent triggered with matching values",
+      "Events": [
+        {
+          "Timestamp": 13.550517,
+          "Name": "Kill",
+          "Value": {
+            "RepositoryId": "853b4070-99b1-45da-938b-6fa7947eb7cd"
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "729edf5b-b6cb-437f-a691-e9314dff3cc1",
+          "ExpectedFailure": true
+        },
+        {
+          "ObjectiveId": "64bd1b42-5b54-49f8-9327-61291a4bf1e3",
+          "ExpectedFailure": true
+        }
+      ]
+    },
+    {
+      "Description": "FailedEvent triggered with different values",
+      "Events": [
+        {
+          "Timestamp": 13.351848,
+          "Name": "Kill",
+          "Value": {
+            "RepositoryId": "bfe6eff9-fb04-4621-bf18-963bd9b3ffb2"
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "729edf5b-b6cb-437f-a691-e9314dff3cc1",
+          "ExpectedFailure": false
+        },
+        {
+          "ObjectiveId": "64bd1b42-5b54-49f8-9327-61291a4bf1e3",
+          "ExpectedFailure": true
+        }
+      ]
+    },
+    {
+      "Description": "Different event triggered",
+      "Events": [
+        {
+          "Timestamp": 19.784622,
+          "Name": "Pacify",
+          "Value": {
+            "RepositoryId": "853b4070-99b1-45da-938b-6fa7947eb7cd"
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "729edf5b-b6cb-437f-a691-e9314dff3cc1",
+          "ExpectedFailure": false
+        },
+        {
+          "ObjectiveId": "64bd1b42-5b54-49f8-9327-61291a4bf1e3",
+          "ExpectedFailure": false
+        }
+      ]
+    },
+    {
+      "Description": "No event triggered",
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "729edf5b-b6cb-437f-a691-e9314dff3cc1",
+          "ExpectedFailure": false
+        },
+        {
+          "ObjectiveId": "64bd1b42-5b54-49f8-9327-61291a4bf1e3",
+          "ExpectedFailure": false
+        }
+      ]
+    }
+  ]
+}
