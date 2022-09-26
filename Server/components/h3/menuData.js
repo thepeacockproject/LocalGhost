@@ -772,6 +772,7 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
         if (!objective.Category) {
             objective.Category = objective.Primary ? 'primary' : 'secondary';
         }
+        // TODO: improve the check below
         if (objective.Activation
             || (objective.OnActive && objective.OnActive.IfInProgress && objective.OnActive.IfInProgress.Visible === false)
             || (objective.OnActive && objective.OnActive.IfCompleted && objective.OnActive.IfCompleted.Visible === false

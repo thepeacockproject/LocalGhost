@@ -14,7 +14,6 @@ function handleEvents(objectives, events) {
 
     // todo?: maybe cache the stateHandlers?
 
-    // TODO: trigger '-' eventhandler after every transition
     // todo test:
     //   check what happens when the game fires 'Heartbeat' events
     //   check what happens when the game fires '$timer' events
@@ -26,6 +25,12 @@ function handleEvents(objectives, events) {
     //   $after condition with literal boolean/null
     //   over/underflow?
     //   Definition.Constants ?
+    //   array .Count ?
+    //   should $after be truncated, and/or <= instead of < ?
+    //   "RepeatSuccess", "RepeatFailed" in combination with SuccesEvent, FailedEvent
+
+    // TODO: add conditions: $contains, $remove
+    // TODO: add actions: $resetcontext, $select
 
     // Step 1: Parse (compile) json into functions
 
@@ -48,6 +53,8 @@ function handleEvents(objectives, events) {
                 console.warn(`Objective is a statemachine without definition: ${objective.Id}`);
             }
         } else {
+            // The game handles SuccessEvent/FailedEvent objectives separately;
+            // I convert it to a state machine so all objectives are handled together
             stateMachines[obj.Id] = {
                 currentState: 'Start',
                 inStateSince: 0,
@@ -779,7 +786,7 @@ function parseVariableWriter(string, initialContext) {
 }
 
 const conditions = {
-    //and, or, not, gt, lt, ge, le, eq, inarray, any, all, pushunique, after
+    //and, or, not, gt, lt, ge, le, eq, inarray, any, all, pushunique, after, contains, remove
     and: function and(conditions) {
         return (context, eventVars, loopVars, timeInState) => {
             for (const condition of conditions) {
@@ -945,7 +952,7 @@ const conditions = {
 }
 
 const actions = {
-    //set, reset, inc, dec, mul, div, push, pushunique, remove
+    //set, reset, inc, dec, mul, div, push, pushunique, remove, resetcontext, select
     set: function set(item, value) {
         return (context, eventVars, loopVars) => {
             item.set(context, value.get(context, eventVars, loopVars));
