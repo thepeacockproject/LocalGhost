@@ -200,18 +200,13 @@ function createSimpleStateMachine(objective) {
     if (objective.SuccessEvent) { // simple trigger(s)
         const eventHandler = createSimpleEventHandler(objective.SuccessEvent.EventValues, 'Success');
         stateHandlers['Start'].eventListeners[objective.SuccessEvent.EventName] = [eventHandler];
-        if (objective.SuccessEvent.EventValues) { // not sure why this is a thing
-            stateHandlers['Failure'].eventListeners[objective.SuccessEvent.EventName] = [eventHandler];
-        }
+        stateHandlers['Failure'].eventListeners[objective.SuccessEvent.EventName] = [eventHandler];
     }
     if (objective.FailedEvent) {
         if (!Object.hasOwn(stateHandlers['Start'].eventListeners, objective.FailedEvent.EventName)) {
             const eventHandler = createSimpleEventHandler(objective.FailedEvent.EventValues, 'Failure');
 
             stateHandlers['Start'].eventListeners[objective.FailedEvent.EventName] = [eventHandler];
-            if (objective.FailedEvent.EventValues) { // not sure why this is a thing
-                stateHandlers['Success'].eventListeners[objective.FailedEvent.EventName] = [eventHandler];
-            }
         }
     }
     if (objective.ResetEvent) {
