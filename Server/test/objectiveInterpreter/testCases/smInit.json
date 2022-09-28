@@ -1,0 +1,150 @@
+{
+  "Description": "Statemachines with init ('-') eventhandler",
+  "Contract": {
+    "Data": {
+      "Objectives": [
+        {
+          "Type": "statemachine",
+          "Id": "239e4340-7c30-42ad-925c-084647460d3d",
+          "Category": "secondary",
+          "Definition": {
+            "States": {
+              "Start": {
+                "-": {
+                  "Transition": "Success"
+                }
+              }
+            }
+          }
+        },
+        {
+          "Type": "statemachine",
+          "Id": "6b6e48c2-b45b-4ae0-9de8-764f4d3820a3",
+          "Category": "secondary",
+          "Definition": {
+            "States": {
+              "Start": {
+                "-": {
+                  "Transition": "Failure"
+                }
+              }
+            }
+          }
+        },
+        {
+          "Type": "statemachine",
+          "Id": "708c3dca-86a4-404a-92fa-c472aa960f5f",
+          "Category": "secondary",
+          "Definition": {
+            "Context": {
+              "counter": 0
+            },
+            "States": {
+              "Start": {
+                "-": [
+                  {
+                    "Condition": {
+                      "$eq": [
+                        "$.counter",
+                        5
+                      ]
+                    },
+                    "Transition": "Success"
+                  },
+                  {
+                    "Actions": {
+                      "$inc": "counter"
+                    },
+                    "Transition": "Start"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "Type": "statemachine",
+          "Id": "8ac57486-c645-485d-a09d-35e5e1e7a6e8",
+          "Category": "secondary",
+          "Definition": {
+            "Context": {
+              "counter": 0
+            },
+            "States": {
+              "Start": {
+                "-": [
+                  {
+                    "Actions": {
+                      "$inc": "counter"
+                    }
+                  },
+                  {
+                    "Condition": {
+                      "$eq": [
+                        "$.counter",
+                        2
+                      ]
+                    },
+                    "Transition": "Success"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "Tests": [
+    {
+      "Description": "Init eventhandler gets triggered once on contract start",
+      "Events": [],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "239e4340-7c30-42ad-925c-084647460d3d",
+          "ExpectedSuccess": true
+        },
+        {
+          "ObjectiveId": "6b6e48c2-b45b-4ae0-9de8-764f4d3820a3",
+          "ExpectedFailure": true
+        },
+        {
+          "ObjectiveId": "8ac57486-c645-485d-a09d-35e5e1e7a6e8",
+          "ExpectedSuccess": false
+        }
+      ]
+    },
+    {
+      "Description": "Init eventhandler gets triggered after each state transition (even to same state)",
+      "Events": [],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "708c3dca-86a4-404a-92fa-c472aa960f5f",
+          "ExpectedEndContext": {
+            "counter": 5
+          },
+          "ExpectedSuccess": true
+        }
+      ]
+    },
+    {
+      "Description": "Init eventhandler gets triggered by '-' events",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "-",
+          "Value": ""
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "8ac57486-c645-485d-a09d-35e5e1e7a6e8",
+          "ExpectedEndContext": {
+            "counter": 2
+          },
+          "ExpectedSuccess": true
+        }
+      ]
+    }
+  ]
+}

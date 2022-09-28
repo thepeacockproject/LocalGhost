@@ -11,6 +11,20 @@ const testCases = testCaseFiles.map(fileName => {
     return [fileName, testCase.Description, testCase];
 });
 
+function checkProperties(expected, actual) {
+    if (typeof expected === 'object') {
+        expect(typeof actual).toBe('object');
+        if (Array.isArray(expected))
+            expect(Array.isArray(actual)).toBe(true);
+
+        for (const prop in expected) {
+            checkProperties(expected[prop], actual[prop]);
+        }
+    } else {
+        expect(actual).toBe(expected);
+    }
+}
+
 describe('Test the objective interpreter', () => {
     describe.each(testCases)('%s: %s', (fileName, description, testCase) => {
         test.each(testCase.Tests)('$Description', (test) => {
@@ -18,14 +32,16 @@ describe('Test the objective interpreter', () => {
             for (const expectedResult of test.ExpectedResults) {
                 if (expectedResult.ExpectedSuccess === true)
                     expect(interpreterResults[expectedResult.ObjectiveId].endState).toBe('Success');
-                else if (expectedResult.ExpectedSuccess === false)
+                if (expectedResult.ExpectedSuccess === false)
                     expect(interpreterResults[expectedResult.ObjectiveId].endState).not.toBe('Success');
-                else if (expectedResult.ExpectedFailure === true)
+                if (expectedResult.ExpectedFailure === true)
                     expect(interpreterResults[expectedResult.ObjectiveId].endState).toBe('Failure');
-                else if (expectedResult.ExpectedFailure === false)
+                if (expectedResult.ExpectedFailure === false)
                     expect(interpreterResults[expectedResult.ObjectiveId].endState).not.toBe('Failure');
-                else
-                    throw new Error('Test did not check any results');
+
+                if (expectedResult.ExpectedEndContext) {
+                    checkProperties(expectedResult.ExpectedEndContext, interpreterResults[expectedResult.ObjectiveId].endContext);
+                }
             }
         });
     });
