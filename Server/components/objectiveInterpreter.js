@@ -118,7 +118,7 @@ function handleEventAndTransitions(stateMachines, event, timerTick = false, init
 
     // Trigger init events for every SM that has transitioned to a new state
     let numberOfLoops = 0;
-    while (transitionedSMs > 0) {
+    while (transitionedSMs.length > 0) {
         transitionedSMs = handleSingleEvent(transitionedSMs, {
             Name: '-',
             Timestamp: event.Timestamp,
