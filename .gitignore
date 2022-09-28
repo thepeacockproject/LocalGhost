@@ -11,6 +11,9 @@ Patcher/obj/
 Server/.vscode/
 Server/node_modules/
 
+# jest-vscode coverage
+Server/coverage
+
 # no user profile data
 Server/userdata/*/users/**
 # except IOI profile
