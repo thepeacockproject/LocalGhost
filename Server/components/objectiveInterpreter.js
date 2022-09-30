@@ -4,34 +4,10 @@
 const cloneDeep = require('lodash.clonedeep');
 require('./utils.js'); // make sure we have Object.getOwn
 
-function handleEvents(objectives, events) {
+//#region Parsing
+
+function parseObjectives(objectives) {
     const stateMachines = {};
-
-    // TODO: scope: session/hit/Hit (same thing?) or profile (challenges and such)
-    // TODO: repeatable (relevant for challenges)
-
-    // TODO: Activations
-
-    // todo?: maybe cache the stateHandlers?
-
-    // todo test:
-    //   check what happens when the game fires 'Heartbeat' events
-    //   check what happens when the game fires '$timer' events
-    //   multiple matching conditions actions
-    //   matching conditions after transition to same state
-    //   actions after transition?
-    //   multiple actions/transition/condition blocks?
-    //   $after condition with literal boolean/null
-    //   over/underflow?
-    //   Definition.Constants ?
-    //   array .Count ?
-    //   should $after be truncated, and/or <= instead of < ?
-    //   "RepeatSuccess", "RepeatFailed" in combination with SuccesEvent, FailedEvent
-
-    // TODO: add conditions: $contains, $remove
-    // TODO: add actions: $resetcontext, $select
-
-    // Step 1: Parse (compile) json into functions
 
     for (const obj of objectives) {
         if (!obj.Id) {
@@ -65,122 +41,7 @@ function handleEvents(objectives, events) {
         }
     }
 
-
-    // Step 2: Run the relevant functions for all events
-
-    // Run init eventHandlers for all state machines
-    handleEventAndTransitions(stateMachines, {
-        Name: '-',
-        Timestamp: 0,
-    }, false, true);
-
-    events.sort((a, b) => {
-        return (a.Timestamp - b.Timestamp) || Number(BigInt(a.eventServerId) - BigInt(b.eventServerId));
-    });
-
-    let exited = false;
-    let lastHeartbeat = 0;
-
-    for (const event of events) {
-        if (event.Name === 'exit_gate' || event.Name === 'ContractEnd' || event.Name === 'ContractFailed') {
-            exited = true;
-        } else if (exited) {
-            continue; // don't process events that happened after we have exited the level
-        }
-
-        // First: tick timers
-        // I'm ticking all proper timers with a 'Heartbeat' event every second,
-        // which is approximately what the game does aswell
-        while (lastHeartbeat < event.Timestamp) {
-            handleEventAndTransitions(stateMachines, {
-                Name: 'Heartbeat',
-                Timestamp: lastHeartbeat
-            }, true);
-            lastHeartbeat += 1;
-        }
-
-        // Then: handle this event
-        handleEventAndTransitions(stateMachines, event);
-    }
-
-    const result = {};
-    for (const objectiveId in stateMachines) {
-        const stateMachine = stateMachines[objectiveId];
-        result[objectiveId] = {
-            endState: stateMachine.currentState,
-            endContext: stateMachine.context,
-        };
-    }
-    return result;
-}
-
-function handleEventAndTransitions(stateMachines, event, timerTick = false, initEvent = false) {
-    let transitionedSMs = handleSingleEvent(stateMachines, event, timerTick, initEvent);
-
-    // Trigger init events for every SM that has transitioned to a new state
-    let numberOfLoops = 0;
-    while (transitionedSMs.length > 0) {
-        transitionedSMs = handleSingleEvent(transitionedSMs, {
-            Name: '-',
-            Timestamp: event.Timestamp,
-        }, false, true);
-        if (numberOfLoops++ > 100000) {
-            // The game might freeze, but there is no reason the server should as well :)
-            console.warn(`Objectives init looped more than 100000 times: ${transitionedSMs}`);
-            break;
-        }
-    }
-}
-
-function handleSingleEvent(stateMachines, event, timerTick = false, initEvent = false) {
-    let hasTransitioned = [];
-    for (const objectiveId in stateMachines) {
-        const stateMachine = stateMachines[objectiveId];
-        const stateHandler = stateMachine.stateHandlers[stateMachine.currentState];
-        if (!stateHandler) {
-            continue;
-        }
-        const {
-            eventListeners,
-            properTimers,
-            dollarEventHandlers,
-        } = stateHandler;
-        let eventHandlersForEvent = eventListeners[event.Name] || [];
-        let eventHandlers = [...eventHandlersForEvent, ...dollarEventHandlers];
-        let eventVars = event;
-
-        if (timerTick) {
-            eventHandlers = properTimers;
-        }
-        if (initEvent) {
-            // 'event' objectives don't receive init events
-            if (stateMachine.type === 'events')
-                continue;
-
-            eventHandlers = eventHandlersForEvent;
-            eventVars = {};
-        }
-        const timeInState = event.Timestamp - stateMachine.inStateSince;
-
-        for (const eventHandler of eventHandlers) {
-            if (!Object.hasOwn(eventHandler, 'condition') ||
-                eventHandler.condition(stateMachine.context, eventVars, [], timeInState)) {
-                if (Object.hasOwn(eventHandler, 'actions')) {
-                    for (const action of eventHandler.actions) {
-                        action(stateMachine.context, eventVars, []);
-                    }
-                }
-                if (Object.hasOwn(eventHandler, 'transition')) {
-                    stateMachine.currentState = eventHandler.transition;
-                    stateMachine.inStateSince = event.Timestamp;
-                    hasTransitioned.push(stateMachine);
-                    break;
-                }
-            }
-        }
-    }
-
-    return hasTransitioned;
+    return stateMachines;
 }
 
 function createSimpleStateMachine(objective) {
@@ -783,6 +644,153 @@ function parseVariableWriter(string, initialContext) {
             }
         },
     };
+}
+
+//#endregion
+
+function handleEvents(objectives, events) {
+    // TODO: scope: session/hit/Hit (same thing?) or profile (challenges and such)
+    // TODO: repeatable (relevant for challenges)
+
+    // TODO: Activations
+
+    // todo?: maybe cache the stateHandlers?
+
+    // todo test:
+    //   check what happens when the game fires 'Heartbeat' events
+    //   check what happens when the game fires '$timer' events
+    //   multiple matching conditions actions
+    //   matching conditions after transition to same state
+    //   actions after transition?
+    //   multiple actions/transition/condition blocks?
+    //   $after condition with literal boolean/null
+    //   over/underflow?
+    //   Definition.Constants ?
+    //   array .Count ?
+    //   should $after be truncated, and/or <= instead of < ?
+    //   "RepeatSuccess", "RepeatFailed" in combination with SuccesEvent, FailedEvent
+
+    // TODO: add conditions: $contains, $remove
+    // TODO: add actions: $resetcontext, $select
+
+    // Step 1: Parse (compile) json into functions
+    const stateMachines = parseObjectives(objectives);
+
+    // Step 2: Run the relevant functions for all events
+
+    // Run init eventHandlers for all state machines
+    handleEventAndTransitions(stateMachines, {
+        Name: '-',
+        Timestamp: 0,
+    }, false, true);
+
+    events.sort((a, b) => {
+        return (a.Timestamp - b.Timestamp) || Number(BigInt(a.eventServerId) - BigInt(b.eventServerId));
+    });
+
+    let exited = false;
+    let lastHeartbeat = 0;
+
+    for (const event of events) {
+        if (event.Name === 'exit_gate' || event.Name === 'ContractEnd' || event.Name === 'ContractFailed') {
+            exited = true;
+        } else if (exited) {
+            continue; // don't process events that happened after we have exited the level
+        }
+
+        // First: tick timers in between the last event and this one
+        // I'm ticking all proper timers with a 'Heartbeat' event every second,
+        // which is approximately what the game does aswell
+        while (lastHeartbeat < event.Timestamp) {
+            handleEventAndTransitions(stateMachines, {
+                Name: 'Heartbeat',
+                Timestamp: lastHeartbeat
+            }, true);
+            lastHeartbeat += 1;
+        }
+
+        // Then: handle this event
+        handleEventAndTransitions(stateMachines, event);
+    }
+
+    const result = {};
+    for (const objectiveId in stateMachines) {
+        const stateMachine = stateMachines[objectiveId];
+        result[objectiveId] = {
+            endState: stateMachine.currentState,
+            endContext: stateMachine.context,
+        };
+    }
+    return result;
+}
+
+function handleEventAndTransitions(stateMachines, event, timerTick = false, initEvent = false) {
+    let transitionedSMs = handleSingleEvent(stateMachines, event, timerTick, initEvent);
+
+    // Trigger init events for every SM that has transitioned to a new state
+    let numberOfLoops = 0;
+    while (transitionedSMs.length > 0) {
+        transitionedSMs = handleSingleEvent(transitionedSMs, {
+            Name: '-',
+            Timestamp: event.Timestamp,
+        }, false, true);
+        if (numberOfLoops++ > 100000) {
+            // The game might freeze, but there is no reason the server should as well :)
+            console.warn(`Objectives init looped more than 100000 times: ${transitionedSMs}`);
+            break;
+        }
+    }
+}
+
+function handleSingleEvent(stateMachines, event, timerTick = false, initEvent = false) {
+    let transitionedSMs = [];
+    for (const objectiveId in stateMachines) {
+        const stateMachine = stateMachines[objectiveId];
+        const stateHandler = stateMachine.stateHandlers[stateMachine.currentState];
+        if (!stateHandler) {
+            continue;
+        }
+        const {
+            eventListeners,
+            properTimers,
+            dollarEventHandlers,
+        } = stateHandler;
+        let eventHandlersForEvent = eventListeners[event.Name] || [];
+        let eventHandlers = [...eventHandlersForEvent, ...dollarEventHandlers];
+        let eventVars = event;
+
+        if (timerTick) {
+            eventHandlers = properTimers;
+        }
+        if (initEvent) {
+            // 'event' objectives don't receive init events
+            if (stateMachine.type === 'events')
+                continue;
+
+            eventHandlers = eventHandlersForEvent;
+            eventVars = {};
+        }
+        const timeInState = event.Timestamp - stateMachine.inStateSince;
+
+        for (const eventHandler of eventHandlers) {
+            if (!Object.hasOwn(eventHandler, 'condition') ||
+                eventHandler.condition(stateMachine.context, eventVars, [], timeInState)) {
+                if (Object.hasOwn(eventHandler, 'actions')) {
+                    for (const action of eventHandler.actions) {
+                        action(stateMachine.context, eventVars, []);
+                    }
+                }
+                if (Object.hasOwn(eventHandler, 'transition')) {
+                    stateMachine.currentState = eventHandler.transition;
+                    stateMachine.inStateSince = event.Timestamp;
+                    transitionedSMs.push(stateMachine);
+                    break;
+                }
+            }
+        }
+    }
+
+    return transitionedSMs;
 }
 
 const conditions = {
