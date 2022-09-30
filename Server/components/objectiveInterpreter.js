@@ -17,7 +17,6 @@ function handleEvents(objectives, events) {
     // todo test:
     //   check what happens when the game fires 'Heartbeat' events
     //   check what happens when the game fires '$timer' events
-    //   check what happens when the game fires '-' events
     //   multiple matching conditions actions
     //   matching conditions after transition to same state
     //   actions after transition?
@@ -48,6 +47,7 @@ function handleEvents(objectives, events) {
                     inStateSince: 0,
                     context: cloneDeep(obj.Definition.Context),
                     stateHandlers: parseStateMachine(obj.Definition.States, obj.Definition.Context),
+                    type: 'statemachine',
                 }
             } else {
                 console.warn(`Objective is a statemachine without definition: ${objective.Id}`);
@@ -60,6 +60,7 @@ function handleEvents(objectives, events) {
                 inStateSince: 0,
                 context: {},
                 stateHandlers: createSimpleStateMachine(obj),
+                type: 'events',
             };
         }
     }
@@ -152,6 +153,10 @@ function handleSingleEvent(stateMachines, event, timerTick = false, initEvent = 
             eventHandlers = properTimers;
         }
         if (initEvent) {
+            // 'event' objectives don't receive init events
+            if (stateMachine.type === 'events')
+                continue;
+
             eventHandlers = eventHandlersForEvent;
             eventVars = {};
         }
