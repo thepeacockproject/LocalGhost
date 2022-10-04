@@ -36,6 +36,16 @@
           "SuccessEvent": {
             "EventName": "Kill"
           }
+        },
+        {
+          "Id": "aa4d0d40-19aa-4997-8695-576370f66caa",
+          "SuccessEvent": {
+            "EventName": "Pacify",
+            "EventValues": {
+              "KillMethodBroad": "throw",
+              "RepositoryId": "5a3a3205-75d6-4cd9-b397-fee70e878601"
+            }
+          }
         }
       ]
     }
@@ -214,6 +224,43 @@
         {
           "ObjectiveId": "5b11f648-276f-40cf-bc7e-b3456c359ca3",
           "ExpectedSuccess": true
+        }
+      ]
+    },
+    {
+      "Description": "SuccessEvent with multiple required EventValues completes if all values match",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "Pacify",
+          "Value": {
+            "KillMethodBroad": "throw",
+            "RepositoryId": "5a3a3205-75d6-4cd9-b397-fee70e878601"
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "aa4d0d40-19aa-4997-8695-576370f66caa",
+          "ExpectedSuccess": true
+        }
+      ]
+    },
+    {
+      "Description": "SuccessEvent with multiple required EventValues does not complete if not all values match",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "Pacify",
+          "Value": {
+            "KillMethodBroad": "throw"
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "aa4d0d40-19aa-4997-8695-576370f66caa",
+          "ExpectedSuccess": false
         }
       ]
     }
