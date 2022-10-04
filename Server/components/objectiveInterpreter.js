@@ -668,7 +668,6 @@ function handleEvents(objectives, events) {
     //   Definition.Constants ?
     //   array .Count ?
     //   should $after be truncated, and/or <= instead of < ?
-    //   "RepeatSuccess", "RepeatFailed" in combination with SuccesEvent, FailedEvent
 
     // TODO: add conditions: $contains, $remove
     // TODO: add actions: $resetcontext, $select

@@ -17,6 +17,13 @@
           "FailedEvent": {
             "EventName": "Kill"
           }
+        },
+        {
+          "Id": "5b11f648-276f-40cf-bc7e-b3456c359ca3",
+          "RepeatFailed": 2,
+          "FailedEvent": {
+            "EventName": "Kill"
+          }
         }
       ]
     }
@@ -98,6 +105,49 @@
         {
           "ObjectiveId": "64bd1b42-5b54-49f8-9327-61291a4bf1e3",
           "ExpectedFailure": false
+        }
+      ]
+    },
+    {
+      "Description": "FailedEvent with RepeatFailed doesn't fail after less than the required amount",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "Kill",
+          "Value": {
+            "RepositoryId": "6f592c07-601b-4574-ba39-f6d397ba1a10"
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "5b11f648-276f-40cf-bc7e-b3456c359ca3",
+          "ExpectedFailure": false
+        }
+      ]
+    },
+    {
+      "Description": "FailedEvent with RepeatFailed fails after the required amount",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "Kill",
+          "Value": {
+            "RepositoryId": "6f592c07-601b-4574-ba39-f6d397ba1a10"
+          }
+        },
+        {
+          "Timestamp": 10,
+          "Name": "Kill",
+          "Value": {
+            "RepositoryId": "ab6d4ee5-6252-4592-8ea6-76dd77ec708d"
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "5b11f648-276f-40cf-bc7e-b3456c359ca3",
+          "ExpectedFailure": true
         }
       ]
     }

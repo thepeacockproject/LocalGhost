@@ -118,6 +118,37 @@
           "ResetEvent": {
             "EventName": "Pacify"
           }
+        },
+        {
+          "Id": "2abc7c32-6f2b-40f6-9463-fa23a8a2e22d",
+          "RepeatSuccess": 2,
+          "SuccessEvent": {
+            "EventName": "Pacify"
+          },
+          "ResetEvent": {
+            "EventName": "Kill"
+          }
+        },
+        {
+          "Id": "022ea244-60e1-4f52-a51c-c93f87443758",
+          "RepeatFailed": 2,
+          "FailedEvent": {
+            "EventName": "Pacify"
+          },
+          "ResetEvent": {
+            "EventName": "Kill"
+          }
+        },
+        {
+          "Id": "f240d616-4d82-4237-8b71-29e10c05db34",
+          "Category": "secondary",
+          "RepeatSuccess": 2,
+          "SuccessEvent": {
+            "EventName": "Pacify"
+          },
+          "FailedEvent": {
+            "EventName": "Kill"
+          }
         }
       ]
     }
@@ -499,6 +530,119 @@
         {
           "ObjectiveId": "354cf1d0-d611-44a9-8f6c-6e3c5939f72c",
           "ExpectedSuccess": true
+        }
+      ]
+    },
+    {
+      "Description": "ResetEvent does not reset the counter for RepeatFailed/RepeatSuccess",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "Pacify",
+          "Value": {
+            "RepositoryId": "5a3a3205-75d6-4cd9-b397-fee70e878601"
+          }
+        },
+        {
+          "Timestamp": 10,
+          "Name": "Kill",
+          "Value": {
+            "RepositoryId": "853b4070-99b1-45da-938b-6fa7947eb7cd"
+          }
+        },
+        {
+          "Timestamp": 15,
+          "Name": "Pacify",
+          "Value": {
+            "RepositoryId": "ab6d4ee5-6252-4592-8ea6-76dd77ec708d"
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "2abc7c32-6f2b-40f6-9463-fa23a8a2e22d",
+          "ExpectedSuccess": true
+        },
+        {
+          "ObjectiveId": "022ea244-60e1-4f52-a51c-c93f87443758",
+          "ExpectedFailure": true
+        }
+      ]
+    },
+    {
+      "Description": "FailedEvent does not reset the counter for RepeatSuccess",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "Pacify"
+        },
+        {
+          "Timestamp": 10,
+          "Name": "Kill"
+        },
+        {
+          "Timestamp": 15,
+          "Name": "Pacify"
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "f240d616-4d82-4237-8b71-29e10c05db34",
+          "ExpectedSuccess": true
+        }
+      ]
+    },
+    {
+      "Description": "RepeatSuccess counter gets reset on completion",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "Pacify"
+        },
+        {
+          "Timestamp": 10,
+          "Name": "Pacify"
+        },
+        {
+          "Timestamp": 15,
+          "Name": "Kill"
+        },
+        {
+          "Timestamp": 20,
+          "Name": "Pacify"
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "2abc7c32-6f2b-40f6-9463-fa23a8a2e22d",
+          "ExpectedSuccess": false
+        }
+      ]
+    },
+    {
+      "Description": "RepeatFailed counter gets reset on failure",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "Pacify"
+        },
+        {
+          "Timestamp": 10,
+          "Name": "Pacify"
+        },
+        {
+          "Timestamp": 15,
+          "Name": "Kill"
+        },
+        {
+          "Timestamp": 20,
+          "Name": "Pacify"
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "022ea244-60e1-4f52-a51c-c93f87443758",
+          "ExpectedFailure": false
         }
       ]
     }
