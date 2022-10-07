@@ -9394,6 +9394,28 @@
     "Rarity": "common"
   },
   {
+    "Id": "PROP_DEVICE_EXPLOSIVE_PRESENT",
+    "Guid": "0a447781-8552-4b55-9651-c95bde9e5a7e",
+    "Type": "gear",
+    "Subtype": "explosive",
+    "ImageId": null,
+    "RMTPrice": 149,
+    "GamePrice": 149,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Quality": 4,
+      "LoadoutSlot": "gear",
+      "Rarity": "common",
+      "RepositoryId": "c601c095-e1dc-4490-aeae-e8e200dd9ac8",
+      "UnlockOrder": 10
+    },
+    "Rarity": "common"
+  },
+  {
     "Id": "PROP_DEVICE_EXPLODING_FOUNTAIN_PEN",
     "Guid": "6bcf2cdc-f8b7-4f6b-a0b7-99cc13293a6a",
     "Type": "gear",
@@ -9411,6 +9433,28 @@
       "LoadoutSlot": "gear",
       "Rarity": "common",
       "RepositoryId": "d64f77a8-6271-484a-9450-ad75740ce461",
+      "UnlockOrder": 10
+    },
+    "Rarity": "common"
+  },
+  {
+    "Id": "PROP_DEVICE_EXPLODING_FOUNTAIN_PEN_ANCESTRAL",
+    "Guid": "c8e923a7-0d31-47f0-bd75-8f92d5dbc060",
+    "Type": "gear",
+    "Subtype": "explosive",
+    "ImageId": null,
+    "RMTPrice": 149,
+    "GamePrice": 149,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Quality": 4,
+      "LoadoutSlot": "gear",
+      "Rarity": "common",
+      "RepositoryId": "89957566-316c-4014-88c2-6a8bdfc31108",
       "UnlockOrder": 10
     },
     "Rarity": "common"
@@ -10450,6 +10494,27 @@
     "Rarity": "common"
   },
   {
+    "Id": "PROP_EXPLOSIVE_NITROGLYCERINE",
+    "Guid": "433fade7-7454-4e46-b52f-68c5a96101d2",
+    "Type": "gear",
+    "Subtype": "explosive",
+    "ImageId": "",
+    "RMTPrice": 149,
+    "GamePrice": 149,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Quality": 3,
+      "LoadoutSlot": "gear",
+      "Rarity": "common",
+      "RepositoryId": "af8a7b6c-692c-4a76-b9bc-2b91ce32bcbc"
+    },
+    "Rarity": "common"
+  },
+  {
     "Id": "PROP_EXPLOSIVE_GRENADE_MOLOTOV",
     "Guid": "62ed4c2d-3611-45ad-9412-8728847b17e3",
     "Type": "gear",
@@ -11235,6 +11300,27 @@
       "Rarity": "common",
       "LoadoutSlot": "carriedweapon",
       "RepositoryId": "74562c61-4405-413f-8d69-353688942390"
+    },
+    "Rarity": "common"
+  },
+  {
+    "Id": "FIREARMS_HERO_RIFLE_SHASKA_A33_GOLD",
+    "Guid": "d80388e4-2d12-469a-8cf5-2b50aa5a2c89",
+    "Type": "weapon",
+    "Subtype": "assaultrifle",
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Gameplay": {},
+      "Quality": 4,
+      "Rarity": "common",
+      "LoadoutSlot": "carriedweapon",
+      "RepositoryId": "79b48d90-26aa-4b17-9332-599ed8e0bd7f"
     },
     "Rarity": "common"
   },
@@ -12256,6 +12342,34 @@
     "Rarity": "common"
   },
   {
+    "Id": "FIREARMS_HERO_PISTOL_ICEBALLER",
+    "Guid": "276c8916-83d0-4367-b4b8-7574658e7a06",
+    "Type": "weapon",
+    "Subtype": "pistol",
+    "ImageId": "",
+    "RMTPrice": 99,
+    "GamePrice": 99,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": false,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Gameplay": {
+        "range": 0.5,
+        "damage": 0.6,
+        "clipsize": 0.2,
+        "rateoffire": 0.6
+      },
+      "Quality": 4,
+      "Rarity": "common",
+      "LoadoutSlot": "concealedweapon",
+      "RepositoryId": "77f644ef-6dbb-4f30-afef-5c3a6a26a665",
+      "UnlockOrder": 10
+    },
+    "Rarity": "common"
+  },
+  {
     "Id": "FIREARMS_PISTOL_ICA_STEALTH_DTI",
     "Guid": "4515d566-1c64-4bef-8bd3-9bb52dcef393",
     "Type": "weapon",
@@ -12617,6 +12731,28 @@
       "RepositoryId": "a6706101-3aaf-4797-a0f8-a5b6aac9cdfe",
       "Quality": 4,
       "AllowUpSync": true,
+      "OrderIndex": 680
+    },
+    "Rarity": "common"
+  },
+  {
+    "Id": "PROP_MELEE_BANANA",
+    "Guid": "8f255278-3244-42d6-aae1-9d335503af39",
+    "Type": "weapon",
+    "Subtype": "melee",
+    "ImageId": "",
+    "RMTPrice": -1,
+    "GamePrice": -1,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "IsDroppable": true,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "LoadoutSlot": "gear",
+      "Rarity": "common",
+      "RepositoryId": "903d273c-c750-441d-916a-31557fea3382",
+      "Quality": 4,
       "OrderIndex": 680
     },
     "Rarity": "common"
@@ -17907,6 +18043,29 @@
     "Rarity": "common"
   },
   {
+    "Id": "TOKEN_OUTFIT_HERO_BBW_SUIT",
+    "Guid": "94f55803-dfe0-48c1-bdf5-9a2d69309f47",
+    "Type": "disguise",
+    "Subtype": "themed",
+    "ImageId": "",
+    "RMTPrice": 99,
+    "GamePrice": 99,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Quality": 1,
+      "Rarity": "common",
+      "LoadoutSlot": "disguise",
+      "RepositoryId": "a0f26534-0fb5-4762-83e6-f7dcd674614c",
+      "OrderIndex": 939,
+      "AllowUpSync": true
+    },
+    "Rarity": "common",
+    "IsDroppable": false
+  },
+  {
     "Id": "TOKEN_OUTFIT_HERO_ASYLUM_SUIT",
     "Guid": "09f02352-627f-4f15-bccb-8584d9161b05",
     "Type": "disguise",
@@ -18085,6 +18244,29 @@
       "LoadoutSlot": "disguise",
       "RepositoryId": "99ab8f84-6488-4362-ab6a-9e7343128f15",
       "OrderIndex": 622,
+      "AllowUpSync": true
+    },
+    "IsDroppable": false,
+    "Rarity": "common"
+  },
+  {
+    "Id": "TOKEN_OUTFIT_REWARD_HERO_AGENT17_SUIT",
+    "Guid": "94347f56-9158-496d-b459-53d10e25449e",
+    "Type": "disguise",
+    "Subtype": "classic",
+    "ImageId": "",
+    "RMTPrice": 99,
+    "GamePrice": 99,
+    "IsPurchasable": false,
+    "IsPublished": true,
+    "Capabilities": [],
+    "Qualities": {},
+    "Properties": {
+      "Quality": 1,
+      "Rarity": "common",
+      "LoadoutSlot": "disguise",
+      "RepositoryId": "a54b89f2-4d3b-4801-a202-1b95a98d7ced",
+      "OrderIndex": 160,
       "AllowUpSync": true
     },
     "IsDroppable": false,
@@ -22442,7 +22624,7 @@
       "Quality": 4,
       "Rarity": "common",
       "LoadoutSlot": "carriedweapon",
-      "RepositoryId": "10f0653c-fe9c-4a43-98f1-18d20d18d9ab",
+      "RepositoryId": "4ad2be0d-e24f-47a2-bcc9-4c6d5f73d4ff",
       "AllowUpSync": true
     },
     "Rarity": "common"
@@ -22616,7 +22798,7 @@
       "Quality": 4,
       "Rarity": "common",
       "LoadoutSlot": "carriedweapon",
-      "RepositoryId": "370580fc-7fcf-47f8-b994-cebd279f69f9",
+      "RepositoryId": "cdf9db81-14a9-4047-9c95-8a3e65cd6a00",
       "UnlockOrder": 5
     },
     "Rarity": "common"
