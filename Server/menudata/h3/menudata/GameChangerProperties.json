@@ -1610,6 +1610,171 @@
       }
     ]
   },
+  "5d9ec93b-3b00-4e53-a706-d9b171fb7da0": {
+    "Name": "UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_HIDE_ALL_BODIES_SECONDARY_NAME",
+    "Description": "UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_HIDE_ALL_BODIES_SECONDARY_DESC",
+    "TileImage": "images/contractconditions/condition_contrac_hide_all_bodies.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "secondary",
+    "IsHidden": null,
+    "Resource": [],
+    "Objectives": [
+      {
+        "Id": "103e3e7c-20f3-4274-b21d-cdb8f97ddb3d",
+        "Category": "secondary",
+        "OnActive": {
+          "IfCompleted": {
+            "Visible": false
+          }
+        },
+        "BriefingText": "$loc UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_HIDE_ALL_BODIES_SECONDARY_OBJ",
+        "HUDTemplate": {
+          "display": "$loc UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_HIDE_ALL_BODIES_SECONDARY_OBJ"
+        },
+        "Type": "statemachine",
+        "Definition": {
+          "Scope": "session",
+          "Context": {
+            "IsExiting": 0,
+            "PacifiedBodiesHidden": true,
+            "DeadBodiesHidden": true
+          },
+          "States": {
+            "Start": {
+              "-": {
+                "Transition": "Success"
+              }
+            },
+            "Success": {
+              "Kill": {
+                "Condition": {
+                  "$eq": [
+                    "$.IsExiting",
+                    0
+                  ]
+                },
+                "Actions": {
+                  "$set": [
+                    "DeadBodiesHidden",
+                    false
+                  ]
+                },
+                "Transition": "NeedToHideBodies"
+              },
+              "Pacify": {
+                "Condition": {
+                  "$eq": [
+                    "$.IsExiting",
+                    0
+                  ]
+                },
+                "Actions": {
+                  "$set": [
+                    "PacifiedBodiesHidden",
+                    false
+                  ]
+                },
+                "Transition": "NeedToHideBodies"
+              },
+              "exit_gate": {
+                "Actions": {
+                  "$inc": "IsExiting"
+                }
+              },
+              "BodyBagged": {
+                "Condition": {
+                  "$eq": [
+                    "$.IsExiting",
+                    0
+                  ]
+                },
+                "Transition": "Failure"
+              }
+            },
+            "NeedToHideBodies": {
+              "BodyBagged": {
+                "Transition": "Failure"
+              },
+              "Kill": {
+                "Actions": {
+                  "$set": [
+                    "DeadBodiesHidden",
+                    false
+                  ]
+                }
+              },
+              "Pacify": {
+                "Actions": {
+                  "$set": [
+                    "PacifiedBodiesHidden",
+                    false
+                  ]
+                }
+              },
+              "AllBodiesHidden": [
+                {
+                  "Actions": {
+                    "$set": [
+                      "DeadBodiesHidden",
+                      true
+                    ]
+                  }
+                },
+                {
+                  "Condition": {
+                    "$and": [
+                      {
+                        "$eq": [
+                          "$.PacifiedBodiesHidden",
+                          true
+                        ]
+                      },
+                      {
+                        "$eq": [
+                          "$.DeadBodiesHidden",
+                          true
+                        ]
+                      }
+                    ]
+                  },
+                  "Transition": "Success"
+                }
+              ],
+              "AllPacifiedHidden": [
+                {
+                  "Actions": {
+                    "$set": [
+                      "PacifiedBodiesHidden",
+                      true
+                    ]
+                  }
+                },
+                {
+                  "Condition": {
+                    "$and": [
+                      {
+                        "$eq": [
+                          "$.PacifiedBodiesHidden",
+                          true
+                        ]
+                      },
+                      {
+                        "$eq": [
+                          "$.DeadBodiesHidden",
+                          true
+                        ]
+                      }
+                    ]
+                  },
+                  "Transition": "Success"
+                }
+              ]
+            }
+          }
+        }
+      }
+    ]
+  },
   "008d2eb9-c1c8-44e0-a636-ccca63629f3c": {
     "Name": "UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_NO_DISGUISE_CHANGES_SECONDARY_NAME",
     "Description": "UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_NO_DISGUISE_CHANGES_SECONDARY_DESC",
@@ -3397,7 +3562,7 @@
   },
   "507daf18-e076-44a7-8e37-9cc8da784776": {
     "Name": "UI_GAMECHANGERS_GLOBAL_ONE_PACIFICATION_NAME",
-    "Description": "UI_GAMECHANGERS_GLOBAL_ONE_PACIFICATION_DESC",
+    "Description": "UI_GAMECHANGERS_GLOBAL_ONE_PACIFICATION_OPTIONAL_DESC",
     "TileImage": "images/contracts/gamechangers/Gamechanger_Global_NoPacifications.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
@@ -3412,7 +3577,6 @@
             "Visible": false
           }
         },
-        "ExcludeFromScoring": true,
         "AllowEtRestartOnSuccess": true,
         "BriefingText": "$loc UI_GAMECHANGERS_GLOBAL_ONE_PACIFICATION_BRIEF",
         "Type": "statemachine",
@@ -3457,8 +3621,8 @@
     ]
   },
   "f0f53067-2617-4128-8cb7-2a0ae4757a3f": {
-    "Name": "UI_GAMECHANGERS_GLOBAL_ONE_DISGUISE_CHANGE_NAME",
-    "Description": "UI_GAMECHANGERS_GLOBAL_ONE_DISGUISE_CHANGE_DESC",
+    "Name": "UI_GAMECHANGERS_GLOBAL_ONE_DISGUISE_CHANGE_OPTIONAL_NAME",
+    "Description": "UI_GAMECHANGERS_GLOBAL_ONE_DISGUISE_CHANGE_OPTIONAL_DESC",
     "TileImage": "images/contracts/gamechangers/Gamechanger_Global_NoDisguiseChange.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
@@ -3474,7 +3638,7 @@
           }
         },
         "AllowEtRestartOnSuccess": true,
-        "BriefingText": "$loc UI_GAMECHANGERS_GLOBAL_ONE_DISGUISE_CHANGE_BRIEF",
+        "BriefingText": "$loc UI_GAMECHANGERS_GLOBAL_ONE_DISGUISE_CHANGE_OPTIONAL_BRIEF",
         "Type": "statemachine",
         "Definition": {
           "Scope": "session",
@@ -3565,6 +3729,250 @@
                 "Transition": "Failure"
               },
               "CrowdNPC_Died": {
+                "Transition": "Failure"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "b43f84f7-6c26-4adf-b74a-6d598f03cbe3": {
+    "Name": "UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_LETHALMELEE_ONLY_SECONDARY_NAME",
+    "Description": "UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_LETHALMELEE_ONLY_SECONDARY_DESC",
+    "TileImage": "images/contractconditions/Condition_Killmethod_Melee_Lethal.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "secondary",
+    "IsHidden": null,
+    "Resource": [],
+    "Objectives": [
+      {
+        "Id": "7538e2bf-77f6-4028-9440-53da1fe1094b",
+        "Category": "secondary",
+        "AllowEtRestartOnSuccess": true,
+        "BriefingText": "$loc UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_LETHALMELEE_ONLY_SECONDARY_OBJ",
+        "HUDTemplate": {
+          "display": "$loc UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_LETHALMELEE_ONLY_SECONDARY_OBJ",
+          "iconType": 17
+        },
+        "Type": "statemachine",
+        "Definition": {
+          "Scope": "session",
+          "States": {
+            "Start": {
+              "-": {
+                "Transition": "Success"
+              }
+            },
+            "Success": {
+              "Kill": {
+                "Condition": {
+                  "$and": [
+                    {
+                      "$eq": [
+                        "$Value.IsTarget",
+                        true
+                      ]
+                    },
+                    {
+                      "$not": {
+                        "$eq": [
+                          "$Value.KillItemCategory",
+                          "melee_lethal"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "Transition": "Failure"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "bb0c22b7-f5e4-4a91-bc7a-9070177a87e4": {
+    "Name": "UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_NOPOISONKILL_SECONDARY_NAME",
+    "Description": "UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_NOPOISONKILL_SECONDARY_DESC",
+    "TileImage": "images/contractconditions/Condition_Contract_NoPoison_Elimination.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "secondary",
+    "IsHidden": null,
+    "Resource": [],
+    "Objectives": [
+      {
+        "Id": "0ea2cc69-e74a-415c-a612-b1cbd39a6012",
+        "Category": "secondary",
+        "AllowEtRestartOnSuccess": true,
+        "BriefingText": "$loc UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_NOPOISONKILL_SECONDARY_OBJ",
+        "HUDTemplate": {
+          "display": "$loc UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_NOPOISONKILL_SECONDARY_OBJ",
+          "iconType": 17
+        },
+        "Type": "statemachine",
+        "Definition": {
+          "Scope": "session",
+          "States": {
+            "Start": {
+              "-": {
+                "Transition": "Success"
+              }
+            },
+            "Success": {
+              "Kill": {
+                "Condition": {
+                  "$and": [
+                    {
+                      "$eq": [
+                        "$Value.IsTarget",
+                        true
+                      ]
+                    },
+                    {
+                      "$or": [
+                        {
+                          "$eq": [
+                            "$Value.KillMethodBroad",
+                            "poison"
+                          ]
+                        },
+                        {
+                          "$any": {
+                            "?": {
+                              "$eq": [
+                                "$.#",
+                                "Poison"
+                              ]
+                            },
+                            "in": "$Value.DamageEvents"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "Transition": "Failure"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "61b1203e-84a0-4b77-bf88-8ba956ebd2bd": {
+    "Name": "UI_GAMECHANGERS_GLOBAL_KILLMETHOD_ACCIDENT_NAME",
+    "Description": "UI_GAMECHANGERS_GLOBAL_KILLMETHOD_ACCIDENT_DESC",
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Global_BodyRemover.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "secondary",
+    "IsHidden": null,
+    "Resource": [],
+    "Objectives": [
+      {
+        "Id": "ca4a20d2-2a04-41db-86d8-a5564558aec3",
+        "Category": "secondary",
+        "OnActive": {
+          "IfCompleted": {
+            "Visible": false
+          }
+        },
+        "AllowEtRestartOnSuccess": true,
+        "BriefingText": "$loc UI_GAMECHANGERS_GLOBAL_KILLMETHOD_ACCIDENT_OBJ_1",
+        "Type": "statemachine",
+        "Definition": {
+          "Scope": "session",
+          "States": {
+            "Start": {
+              "-": {
+                "Transition": "Success"
+              }
+            },
+            "Success": {
+              "Kill": {
+                "Condition": {
+                  "$and": [
+                    {
+                      "$eq": [
+                        "$Value.IsTarget",
+                        true
+                      ]
+                    },
+                    {
+                      "$not": {
+                        "$eq": [
+                          "$Value.KillMethodBroad",
+                          "accident"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "Transition": "Failure"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "915e9254-7e61-4b62-839e-ee917b36cdce": {
+    "Name": "UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_EXPLOSIVEKILL_ONLY_SECONDARY_NAME",
+    "Description": "UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_EXPLOSIVEKILL_ONLY_SECONDARY_DESC",
+    "TileImage": "images/contractconditions/Condition_Killmethod_Explosion.jpg",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "ObjectivesCategory": "secondary",
+    "IsHidden": null,
+    "Resource": [],
+    "Objectives": [
+      {
+        "Id": "4cee6682-e89d-4ae5-a780-daf8a3f89f52",
+        "Category": "secondary",
+        "AllowEtRestartOnSuccess": true,
+        "BriefingText": "$loc UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_EXPLOSIVEKILL_ONLY_SECONDARY_OBJ",
+        "HUDTemplate": {
+          "display": "$loc UI_GAMECHANGERS_GLOBAL_CONTRACTCONDITION_EXPLOSIVEKILL_ONLY_SECONDARY_OBJ",
+          "iconType": 17
+        },
+        "Type": "statemachine",
+        "Definition": {
+          "Scope": "session",
+          "States": {
+            "Start": {
+              "-": {
+                "Transition": "Success"
+              }
+            },
+            "Success": {
+              "Kill": {
+                "Condition": {
+                  "$and": [
+                    {
+                      "$eq": [
+                        "$Value.IsTarget",
+                        true
+                      ]
+                    },
+                    {
+                      "$not": {
+                        "$or": [
+                          {
+                            "$eq": [
+                              "$Value.KillMethodBroad",
+                              "explosive"
+                            ]
+                          },
+                          {
+                            "$eq": [
+                              "$Value.KillMethodStrict",
+                              "accident_explosion"
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
                 "Transition": "Failure"
               }
             }
