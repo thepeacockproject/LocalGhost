@@ -1,0 +1,199 @@
+{
+  "Description": "Statemachine transitions",
+  "Contract": {
+    "Data": {
+      "Objectives": [
+        {
+          "Id": "79caa201-aa93-49b0-804e-0d11d3b9f37f",
+          "Type": "statemachine",
+          "Definition": {
+            "States": {
+              "Start": {
+                "ItemPickedUp": {
+                  "Transition": "Success"
+                }
+              }
+            }
+          }
+        },
+        {
+          "Id": "951edf74-db26-49ea-bc97-f30c103f3ad0",
+          "Type": "statemachine",
+          "Definition": {
+            "States": {
+              "Start": {
+                "Pacify": {
+                  "Transition": "CustomState"
+                }
+              },
+              "CustomState": {
+                "Kill": {
+                  "Transition": "foobar"
+                }
+              },
+              "foobar": {
+                "ItemPickedUp": {
+                  "Transition": "Success"
+                }
+              }
+            }
+          }
+        },
+        {
+          "Id": "99cc93d9-9b1b-4624-97dc-62d94dfebdba",
+          "Type": "statemachine",
+          "Definition": {
+            "States": {
+              "Start": {
+                "Pacify": {
+                  "Transition": "newstate"
+                }
+              },
+              "NewState": {
+                "Pacify": {
+                  "Transition": "Success"
+                }
+              }
+            }
+          }
+        },
+        {
+          "Id": "7bbb1a2f-e854-4a5a-9457-a6d0cea4d89a",
+          "Type": "statemachine",
+          "Definition": {
+            "States": {
+              "Start": {
+                "Pacify": {
+                  "Transition": "NewState"
+                }
+              },
+              "NewState": {
+                "Pacify": {
+                  "Transition": "Success"
+                }
+              }
+            }
+          }
+        },
+        {
+          "Id": "b496dd3c-9a26-4475-a522-8b25bc05e30c",
+          "Type": "statemachine",
+          "Definition": {
+            "States": {
+              "Start": {
+                "Pacify": [
+                  {
+                    "Transition": "Success"
+                  },
+                  {
+                    "Transition": "Failure"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "Id": "b40fd967-c1a2-4985-9083-d968eff0a683",
+          "Type": "statemachine",
+          "Definition": {
+            "States": {
+              "Start": {
+                "Pacify": [
+                  {
+                    "Transition": "Failure"
+                  },
+                  {
+                    "Transition": "Success"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "Tests": [
+    {
+      "Description": "Transition to 'Success' on event",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "ItemPickedUp"
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "79caa201-aa93-49b0-804e-0d11d3b9f37f",
+          "ExpectedSuccess": true
+        }
+      ]
+    },
+    {
+      "Description": "Transition to arbitrary states on events",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "Pacify"
+        },
+        {
+          "Timestamp": 10,
+          "Name": "Kill"
+        },
+        {
+          "Timestamp": 15,
+          "Name": "ItemPickedUp"
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "951edf74-db26-49ea-bc97-f30c103f3ad0",
+          "ExpectedSuccess": true
+        }
+      ]
+    },
+    {
+      "Description": "State names are case sensitive",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "Pacify"
+        },
+        {
+          "Timestamp": 10,
+          "Name": "Pacify"
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "99cc93d9-9b1b-4624-97dc-62d94dfebdba",
+          "ExpectedSuccess": false
+        },
+        {
+          "ObjectiveId": "7bbb1a2f-e854-4a5a-9457-a6d0cea4d89a",
+          "ExpectedSuccess": true
+        }
+      ]
+    },
+    {
+      "Description": "Eventhandlers after a Transition are not ran",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "Pacify"
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "b496dd3c-9a26-4475-a522-8b25bc05e30c",
+          "ExpectedSuccess": true
+        },
+        {
+          "ObjectiveId": "b40fd967-c1a2-4985-9083-d968eff0a683",
+          "ExpectedFailure": true
+        }
+      ]
+    }
+  ]
+}
