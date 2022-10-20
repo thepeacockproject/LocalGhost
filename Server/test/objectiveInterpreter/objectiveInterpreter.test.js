@@ -30,18 +30,43 @@ describe('Test the objective interpreter', () => {
         test.each(testCase.Tests)('$Description', (test) => {
             const interpreterResults = objectiveInterpreter.handleEvents(testCase.Contract.Data.Objectives, test.Events || []);
             for (const expectedResult of test.ExpectedResults) {
-                if (expectedResult.ExpectedSuccess === true)
+                for (const prop in expectedResult) {
+                    if (![
+                        'ObjectiveId',
+                        'ExpectedSuccess',
+                        'ExpectedFailure',
+                        'ExpectedEndContext',
+                    ].includes(prop)) {
+                        throw Error(`Unknown expect: ${prop}`);
+                    }
+                }
+
+                let checkedSomething = false;
+
+                if (expectedResult.ExpectedSuccess === true) {
                     expect(interpreterResults[expectedResult.ObjectiveId].endState).toBe('Success');
-                if (expectedResult.ExpectedSuccess === false)
+                    checkedSomething = true;
+                }
+                if (expectedResult.ExpectedSuccess === false) {
                     expect(interpreterResults[expectedResult.ObjectiveId].endState).not.toBe('Success');
-                if (expectedResult.ExpectedFailure === true)
+                    checkedSomething = true;
+                }
+                if (expectedResult.ExpectedFailure === true) {
                     expect(interpreterResults[expectedResult.ObjectiveId].endState).toBe('Failure');
-                if (expectedResult.ExpectedFailure === false)
+                    checkedSomething = true;
+                }
+                if (expectedResult.ExpectedFailure === false) {
                     expect(interpreterResults[expectedResult.ObjectiveId].endState).not.toBe('Failure');
+                    checkedSomething = true;
+                }
 
                 if (expectedResult.ExpectedEndContext) {
                     checkProperties(expectedResult.ExpectedEndContext, interpreterResults[expectedResult.ObjectiveId].endContext);
+                    checkedSomething = true;
                 }
+
+                if (!checkedSomething)
+                    throw Error('Nothing was checked in this test');
             }
         });
     });
