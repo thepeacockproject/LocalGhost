@@ -34,7 +34,11 @@ function parseObjectives(objectives) {
             stateMachines[obj.Id] = {
                 currentState: 'Start',
                 inStateSince: 0,
-                context: {},
+                context: {
+                    "SuccessCounter": 0,
+                    "FailureCounter": 0,
+                    "StartCounter": 0,
+                },
                 stateHandlers: createSimpleStateMachine(obj),
                 type: 'events',
             };
@@ -64,23 +68,23 @@ function createSimpleStateMachine(objective) {
     };
 
     if (objective.SuccessEvent) { // simple trigger(s)
-        const eventHandler = createSimpleEventHandler(objective.SuccessEvent.EventValues, 'Success');
-        stateHandlers['Start'].eventListeners[objective.SuccessEvent.EventName] = [eventHandler];
-        stateHandlers['Failure'].eventListeners[objective.SuccessEvent.EventName] = [eventHandler];
+        const eventHandlers = createSimpleEventHandlers(objective.SuccessEvent.EventValues, 'Success', objective.RepeatSuccess);
+        stateHandlers['Start'].eventListeners[objective.SuccessEvent.EventName] = eventHandlers;
+        stateHandlers['Failure'].eventListeners[objective.SuccessEvent.EventName] = eventHandlers;
     }
     if (objective.FailedEvent) {
         if (!Object.hasOwn(stateHandlers['Start'].eventListeners, objective.FailedEvent.EventName)) {
-            const eventHandler = createSimpleEventHandler(objective.FailedEvent.EventValues, 'Failure');
+            const eventHandlers = createSimpleEventHandlers(objective.FailedEvent.EventValues, 'Failure', objective.RepeatFailed);
 
-            stateHandlers['Start'].eventListeners[objective.FailedEvent.EventName] = [eventHandler];
+            stateHandlers['Start'].eventListeners[objective.FailedEvent.EventName] = eventHandlers;
         }
     }
     if (objective.ResetEvent) {
         if (!Object.hasOwn(stateHandlers['Start'].eventListeners, objective.ResetEvent.EventName)) {
-            const eventHandler = createSimpleEventHandler(objective.ResetEvent.EventValues, 'Start');
+            const eventHandlers = createSimpleEventHandlers(objective.ResetEvent.EventValues, 'Start');
 
-            stateHandlers['Success'].eventListeners[objective.ResetEvent.EventName] = [eventHandler];
-            stateHandlers['Failure'].eventListeners[objective.ResetEvent.EventName] = [eventHandler];
+            stateHandlers['Success'].eventListeners[objective.ResetEvent.EventName] = eventHandlers;
+            stateHandlers['Failure'].eventListeners[objective.ResetEvent.EventName] = eventHandlers;
         }
     }
 
@@ -91,19 +95,24 @@ function createSimpleStateMachine(objective) {
     return stateHandlers;
 }
 
-function createSimpleEventHandler(eventValues, targetState) {
-    if (eventValues === undefined) {
-        return {
-            transition: targetState,
-        };
-    } else {
-        return {
+function createSimpleEventHandlers(eventValues = {}, targetState, repeatsNeeded = 1) {
+    return [
+        {
             condition: conditions.and(Object.entries(eventValues).map(([key, value]) =>
                 conditions.eq(parseVariableReader(`$Value.${key}`), parseVariableReader(value))
             )),
+            actions: [actions.inc(parseVariableWriter(`${targetState}Counter`))]
+        },
+        {
+            condition: conditions.and([
+                conditions.ge(parseVariableReader(`$.${targetState}Counter`), parseVariableReader(repeatsNeeded)),
+                ...Object.entries(eventValues).map(([key, value]) =>
+                    conditions.eq(parseVariableReader(`$Value.${key}`), parseVariableReader(value))
+                )]),
+            actions: [actions.set(parseVariableWriter(`${targetState}Counter`), parseVariableReader(0))],
             transition: targetState,
-        };
-    }
+        }
+    ];
 }
 
 function parseStateMachine(states, initialContext) {
@@ -652,7 +661,7 @@ function handleEvents(objectives, events) {
     // TODO: scope: session/hit/Hit (same thing?) or profile (challenges and such)
     // TODO: repeatable (relevant for challenges)
 
-    // TODO: Activations
+    // TODO: Activations, IgnoreIfInactive
 
     // todo?: maybe cache the stateHandlers?
 
