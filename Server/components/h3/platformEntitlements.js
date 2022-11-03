@@ -31,8 +31,11 @@ function GetPlatformEntitlements(req, res) {
             '0403062df0d347619c8dcf043c65c02e', // (Deadly Sins 6: Wrath?)
             '9e936ed2507a473db6f53ad24d2da587', // (Deadly Sins 7: Envy?)
         ]);
-    } else if (req.body.issuerId === '1659040' // Hitman 3 steam retail appid
-        || req.body.issuerId === '1847520') { // Hitman 3 steam demo appid
+    } else if (
+        req.body.issuerId === '1659040' // Hitman 3 steam retail appid
+        || req.body.issuerId === '1847520' // Hitman 3 steam demo appid
+        || req.body.issuerId === '2183750' // hitman 3 closed technical test
+    ) {
         res.json([
             // Steam AppIDs of Hitman3 and its DLCs
             '1659040', // HITMAN 3
