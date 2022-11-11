@@ -98,7 +98,7 @@ function createSimpleEventHandlers(eventValues = {}, targetState, repeatsNeeded 
     return [
         {
             condition: conditions.and(Object.entries(eventValues).map(([key, value]) =>
-                conditions.eq(parseVariableReader(`$Value.${key}`), parseVariableReader(value))
+                conditions.eq([parseVariableReader(`$Value.${key}`), parseVariableReader(value)])
             )),
             actions: [actions.inc(parseVariableWriter(`${targetState}Counter`))]
         },
@@ -106,7 +106,7 @@ function createSimpleEventHandlers(eventValues = {}, targetState, repeatsNeeded 
             condition: conditions.and([
                 conditions.ge(parseVariableReader(`$.${targetState}Counter`), parseVariableReader(repeatsNeeded)),
                 ...Object.entries(eventValues).map(([key, value]) =>
-                    conditions.eq(parseVariableReader(`$Value.${key}`), parseVariableReader(value))
+                    conditions.eq([parseVariableReader(`$Value.${key}`), parseVariableReader(value)])
                 )]),
             actions: [actions.set(parseVariableWriter(`${targetState}Counter`), parseVariableReader(0))],
             transition: targetState,
@@ -277,8 +277,8 @@ function parseCondition(conditionObj) {
 
             return conditions.le(parseVariableReader(val[0]), parseVariableReader(val[1]));
         case '$eq':
-            if (!Array.isArray(val) || val.length != 2) {
-                throw new SyntaxError('$eq condition with something else than an array of size 2');
+            if (!Array.isArray(val)) {
+                throw new SyntaxError('$eq condition with something else than an array');
             }
 
             for (const subval of val) {
@@ -287,7 +287,7 @@ function parseCondition(conditionObj) {
                 }
             }
 
-            return conditions.eq(parseVariableReader(val[0]), parseVariableReader(val[1]));
+            return conditions.eq(val.map(parseVariableReader));
         case '$inarray': // TODO: check if there is any difference between $inarray and $any
         case '$any':
             if (typeof val !== 'object' || Array.isArray(val)) {
@@ -871,16 +871,33 @@ const conditions = {
             return aValue <= bValue;
         };
     },
-    eq: function eq(a, b) {
-        return (context, eventVars, loopVars) => {
-            const aValue = a.get(context, eventVars, loopVars);
-            const bValue = b.get(context, eventVars, loopVars);
+    eq: function eq(items) {
+        function checkEquality(aValue, bValue) {
+            if (Array.isArray(aValue) && Array.isArray(bValue) && aValue.length === bValue.length) {
+                for(let i = 0; i < aValue.length; i++) {
+                    if (!checkEquality(aValue[i], bValue[i]))
+                        return false;
+                }
+                return true;
+            }
             if (aValue === undefined || typeof aValue === 'object' ||
                 bValue === undefined || typeof bValue === 'object') {
                 return false;
             }
 
             return aValue === bValue;
+        }
+
+        return (context, eventVars, loopVars) => {
+            if (items.length === 0)
+                return true;
+
+            const firstValue = items[0].get(context, eventVars, loopVars);
+            for(const otherItems of items.slice(1)) {
+                if (!checkEquality(firstValue, otherItems.get(context, eventVars, loopVars)))
+                    return false;
+            }
+            return firstValue != null; // value is not null or undefined
         };
     },
     any: function any(items, condition) {
