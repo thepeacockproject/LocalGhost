@@ -28,7 +28,11 @@ function checkProperties(expected, actual) {
 describe('Test the objective interpreter', () => {
     describe.each(testCases)('%s: %s', (fileName, description, testCase) => {
         test.each(testCase.Tests)('Test $#: $Description', (test) => {
-            const interpreterResults = objectiveInterpreter.handleEvents(testCase.Contract.Data.Objectives, test.Events || []);
+            const objectiveIdsToTest = new Set(test.ExpectedResults.map(x => x.ObjectiveId));
+            const objectivesToTest = testCase.Contract.Data.Objectives.filter(objective => objectiveIdsToTest.has(objective.Id));
+
+            const interpreterResults = objectiveInterpreter.handleEvents(objectivesToTest, test.Events || []);
+
             for (const expectedResult of test.ExpectedResults) {
                 for (const prop in expectedResult) {
                     if (![
