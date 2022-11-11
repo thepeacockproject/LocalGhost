@@ -1,0 +1,650 @@
+{
+  "Description": "Statemachine $eq condition",
+  "Contract": {
+    "Data": {
+      "Objectives": [
+        {
+          "Id": "cbd6c965-b1e3-49b0-aaef-ec057b8d06c3",
+          "Category": "secondary",
+          "Type": "statemachine",
+          "Definition": {
+            "States": {
+              "Start": {
+                "TestEvent": [
+                  {
+                    "Condition": {
+                      "$eq": [
+                        "$Value.value1",
+                        "$Value.value2",
+                        "$Value.value3"
+                      ]
+                    },
+                    "Transition": "Success"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "Id": "b90803d0-489e-40ef-9932-39927c76b24c",
+          "Category": "secondary",
+          "Type": "statemachine",
+          "Definition": {
+            "States": {
+              "Start": {
+                "TestEvent": [
+                  {
+                    "Condition": {
+                      "$eq": [
+                        "$Value.value1",
+                        "$Value.value2"
+                      ]
+                    },
+                    "Transition": "Success"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "Id": "0dfba8c7-a282-4555-8da4-87db9254a74f",
+          "Category": "secondary",
+          "Type": "statemachine",
+          "Definition": {
+            "States": {
+              "Start": {
+                "TestEvent": [
+                  {
+                    "Condition": {
+                      "$eq": [
+                        "$Value.value1"
+                      ]
+                    },
+                    "Transition": "Success"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "Id": "8cb494f5-678a-4de3-a36e-b9adc1f21208",
+          "Category": "secondary",
+          "Type": "statemachine",
+          "Definition": {
+            "States": {
+              "Start": {
+                "TestEvent": [
+                  {
+                    "Condition": {
+                      "$eq": []
+                    },
+                    "Transition": "Success"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "Id": "ee61edd5-0fb6-41f8-a4d1-a52df6692beb",
+          "Category": "secondary",
+          "Type": "statemachine",
+          "Definition": {
+            "States": {
+              "Start": {
+                "TestEvent": [
+                  {
+                    "Condition": {
+                      "$eq": [
+                        47,
+                        47
+                      ]
+                    },
+                    "Transition": "Success"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "Tests": [
+    {
+      "Description": "$eq with equal strings returns true",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": "TestStringValue",
+            "value2": "TestStringValue"
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "b90803d0-489e-40ef-9932-39927c76b24c",
+          "ExpectedSuccess": true
+        }
+      ]
+    },
+    {
+      "Description": "$eq with inequal strings returns false",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": "TestStringValue",
+            "value2": "different string"
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "b90803d0-489e-40ef-9932-39927c76b24c",
+          "ExpectedSuccess": false
+        }
+      ]
+    },
+    {
+      "Description": "$eq with equal numbers returns true",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": 47,
+            "value2": 47
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "b90803d0-489e-40ef-9932-39927c76b24c",
+          "ExpectedSuccess": true
+        }
+      ]
+    },
+    {
+      "Description": "$eq with inequal numbers returns false",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": 47,
+            "value2": 80000
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "b90803d0-489e-40ef-9932-39927c76b24c",
+          "ExpectedSuccess": false
+        }
+      ]
+    },
+    {
+      "Description": "$eq with equal booleans returns true",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": false,
+            "value2": false
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "b90803d0-489e-40ef-9932-39927c76b24c",
+          "ExpectedSuccess": true
+        }
+      ]
+    },
+    {
+      "Description": "$eq with inequal booleans returns false",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": false,
+            "value2": true
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "b90803d0-489e-40ef-9932-39927c76b24c",
+          "ExpectedSuccess": false
+        }
+      ]
+    },
+    {
+      "Description": "$eq with empty objects returns false",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": {},
+            "value2": {}
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "b90803d0-489e-40ef-9932-39927c76b24c",
+          "ExpectedSuccess": false
+        }
+      ]
+    },
+    {
+      "Description": "$eq with equal objects returns false",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": {
+              "testProperty": "testValue"
+            },
+            "value2": {
+              "testProperty": "testValue"
+            }
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "b90803d0-489e-40ef-9932-39927c76b24c",
+          "ExpectedSuccess": false
+        }
+      ]
+    },
+    {
+      "Description": "$eq with empty arrays returns true",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": [],
+            "value2": []
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "b90803d0-489e-40ef-9932-39927c76b24c",
+          "ExpectedSuccess": true
+        }
+      ]
+    },
+    {
+      "Description": "$eq with equal arrays returns true",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": [
+              "foo",
+              "bar"
+            ],
+            "value2": [
+              "foo",
+              "bar"
+            ]
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "b90803d0-489e-40ef-9932-39927c76b24c",
+          "ExpectedSuccess": true
+        }
+      ]
+    },
+    {
+      "Description": "$eq with inequal arrays returns false",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": [
+              "foo",
+              "bar"
+            ],
+            "value2": [
+              "foo",
+              "hello, world!"
+            ]
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "b90803d0-489e-40ef-9932-39927c76b24c",
+          "ExpectedSuccess": false
+        }
+      ]
+    },
+    {
+      "Description": "$eq where first array is shorter than second returns false",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": [
+              "foo"
+            ],
+            "value2": [
+              "foo",
+              "bar"
+            ]
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "b90803d0-489e-40ef-9932-39927c76b24c",
+          "ExpectedSuccess": false
+        }
+      ]
+    },
+    {
+      "Description": "$eq where second array is shorter than first returns false",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": [
+              "foo",
+              "bar"
+            ],
+            "value2": [
+              "foo"
+            ]
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "b90803d0-489e-40ef-9932-39927c76b24c",
+          "ExpectedSuccess": false
+        }
+      ]
+    },
+    {
+      "Description": "$eq with equal arrays containing nested (equal) arrays returns true",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": [
+              "foo",
+              [
+                1,
+                2,
+                3
+              ]
+            ],
+            "value2": [
+              "foo",
+              [
+                1,
+                2,
+                3
+              ]
+            ]
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "b90803d0-489e-40ef-9932-39927c76b24c",
+          "ExpectedSuccess": true
+        }
+      ]
+    },
+    {
+      "Description": "$eq with equal arrays containing an object returns false",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": [
+              "foo",
+              {}
+            ],
+            "value2": [
+              "foo",
+              {}
+            ]
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "b90803d0-489e-40ef-9932-39927c76b24c",
+          "ExpectedSuccess": false
+        }
+      ]
+    },
+    {
+      "Description": "$eq with equal values of which one is wrapped in an array returns false",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": "TestStringValue",
+            "value2": [
+              "TestStringValue"
+            ]
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "b90803d0-489e-40ef-9932-39927c76b24c",
+          "ExpectedSuccess": false
+        }
+      ]
+    },
+    {
+      "Description": "$eq [null,null] returns false",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": null,
+            "value2": null
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "b90803d0-489e-40ef-9932-39927c76b24c",
+          "ExpectedSuccess": false
+        }
+      ]
+    },
+    {
+      "Description": "$eq [null,undefined] returns false",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": null
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "b90803d0-489e-40ef-9932-39927c76b24c",
+          "ExpectedSuccess": false
+        }
+      ]
+    },
+    {
+      "Description": "$eq [0,false] returns false",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": 0,
+            "value2": false
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "b90803d0-489e-40ef-9932-39927c76b24c",
+          "ExpectedSuccess": false
+        }
+      ]
+    },
+    {
+      "Description": "$eq with one boolean returns true",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": false
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "0dfba8c7-a282-4555-8da4-87db9254a74f",
+          "ExpectedSuccess": true
+        }
+      ]
+    },
+    {
+      "Description": "$eq with one (empty) object returns true",
+      "_Comment": "It has to be through a context/event value though, as an object literal crashes the game",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": {}
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "0dfba8c7-a282-4555-8da4-87db9254a74f",
+          "ExpectedSuccess": true
+        }
+      ]
+    },
+    {
+      "Description": "$eq [null] returns false",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": null
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "0dfba8c7-a282-4555-8da4-87db9254a74f",
+          "ExpectedSuccess": false
+        }
+      ]
+    },
+    {
+      "Description": "$eq [undefined] returns false",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {}
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "0dfba8c7-a282-4555-8da4-87db9254a74f",
+          "ExpectedSuccess": false
+        }
+      ]
+    },
+    {
+      "Description": "$eq [] returns true",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": null
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "8cb494f5-678a-4de3-a36e-b9adc1f21208",
+          "ExpectedSuccess": true
+        }
+      ]
+    },
+    {
+      "Description": "$eq with three equal values returns true",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": "foo",
+            "value2": "foo",
+            "value3": "foo"
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "cbd6c965-b1e3-49b0-aaef-ec057b8d06c3",
+          "ExpectedSuccess": true
+        }
+      ]
+    },
+    {
+      "Description": "$eq with literals works as well",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent"
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "ee61edd5-0fb6-41f8-a4d1-a52df6692beb",
+          "ExpectedSuccess": true
+        }
+      ]
+    }
+  ]
+}
