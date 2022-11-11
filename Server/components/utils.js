@@ -222,6 +222,26 @@ function unlockOrderComparer(a, b) {
     return a.Properties.UnlockOrder - b.Properties.UnlockOrder;
 }
 
+function cloneJsonObject(obj) {
+    if (typeof obj != 'object' || obj === null) {
+        return obj;
+    }
+    if (Array.isArray(obj)) {
+        let result = [];
+        result.length = obj.length;
+        for(let i = 0; i < obj.length; i++) {
+            result[i] = cloneJsonObject(obj[i]);
+        }
+        return result;
+    } else {
+        let result = {};
+        for(const prop in obj) {
+            result[prop] = cloneJsonObject(obj[prop]);
+        }
+        return result;
+    }
+}
+
 const scoreTrackingObjective = JSON.parse(readFileSync(path.join('menudata', 'scoreTrackingObjective.json')));
 
 module.exports = {
@@ -238,5 +258,6 @@ module.exports = {
     ContractSessionIdRegex,
     getDefaultLoadout,
     unlockOrderComparer,
+    cloneJsonObject,
     scoreTrackingObjective,
 };

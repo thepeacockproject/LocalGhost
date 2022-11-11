@@ -1,8 +1,7 @@
 // Copyright (C) 2022 grappigegovert <grappigegovert@hotmail.com>
 // Licensed under the zlib license. See LICENSE for more info
 
-const cloneDeep = require('lodash.clonedeep');
-require('./utils.js'); // make sure we have Object.getOwn
+const { cloneJsonObject } = require('./utils.js');
 
 //#region Parsing
 
@@ -21,7 +20,7 @@ function parseObjectives(objectives) {
                 stateMachines[obj.Id] = {
                     currentState: 'Start',
                     inStateSince: 0,
-                    context: cloneDeep(obj.Definition.Context),
+                    context: cloneJsonObject(obj.Definition.Context),
                     stateHandlers: parseStateMachine(obj.Definition.States, obj.Definition.Context),
                     type: 'statemachine',
                 }
@@ -585,7 +584,7 @@ function parseVariableWriter(string, initialContext) {
                 return;
             }
 
-            parent[lastpart] = cloneDeep(initialValue);
+            parent[lastpart] = cloneJsonObject(initialValue);
         },
         push: (context, newValue) => {
             let parent = context;
