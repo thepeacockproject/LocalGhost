@@ -1,0 +1,204 @@
+{
+  "Description": "Statemachine $lt condition",
+  "Contract": {
+    "Data": {
+      "Objectives": [
+        {
+          "Id": "795fe7b3-cf0e-4d4b-affa-9f4f6fd4b875",
+          "Category": "secondary",
+          "Type": "statemachine",
+          "Definition": {
+            "States": {
+              "Start": {
+                "TestEvent": [
+                  {
+                    "Condition": {
+                      "$lt": [
+                        "$Value.value1",
+                        "$Value.value2"
+                      ]
+                    },
+                    "Transition": "Success"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "Tests": [
+    {
+      "Description": "$lt with equal numbers returns false",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": 35,
+            "value2": 35
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "795fe7b3-cf0e-4d4b-affa-9f4f6fd4b875",
+          "ExpectedSuccess": false
+        }
+      ]
+    },
+    {
+      "Description": "$lt where first number is larger than second number returns false",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": 80,
+            "value2": 35
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "795fe7b3-cf0e-4d4b-affa-9f4f6fd4b875",
+          "ExpectedSuccess": false
+        }
+      ]
+    },
+    {
+      "Description": "$lt where first number is smaller than second number returns true",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": 35,
+            "value2": 80
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "795fe7b3-cf0e-4d4b-affa-9f4f6fd4b875",
+          "ExpectedSuccess": true
+        }
+      ]
+    },
+    {
+      "Description": "$lt with number and boolean returns false",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": 35,
+            "value2": false
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "795fe7b3-cf0e-4d4b-affa-9f4f6fd4b875",
+          "ExpectedSuccess": false
+        }
+      ]
+    },
+    {
+      "Description": "$lt with number and string returns false",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": 35,
+            "value2": "5"
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "795fe7b3-cf0e-4d4b-affa-9f4f6fd4b875",
+          "ExpectedSuccess": false
+        }
+      ]
+    },
+    {
+      "Description": "$lt with number and null returns false",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": 35,
+            "value2": null
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "795fe7b3-cf0e-4d4b-affa-9f4f6fd4b875",
+          "ExpectedSuccess": false
+        }
+      ]
+    },
+    {
+      "Description": "$lt with number and array with number returns false",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": 35,
+            "value2": [10]
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "795fe7b3-cf0e-4d4b-affa-9f4f6fd4b875",
+          "ExpectedSuccess": false
+        }
+      ]
+    },
+    {
+      "Description": "$lt with two arrays containing a single value returns false",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": [35],
+            "value2": [10]
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "795fe7b3-cf0e-4d4b-affa-9f4f6fd4b875",
+          "ExpectedSuccess": false
+        }
+      ]
+    },
+    {
+      "Description": "$lt with two arrays where the first has more elements returns false",
+      "Events": [
+        {
+          "Timestamp": 5,
+          "Name": "TestEvent",
+          "Value": {
+            "value1": [1, 2, 3],
+            "value2": [1, 2]
+          }
+        }
+      ],
+      "ExpectedResults": [
+        {
+          "ObjectiveId": "795fe7b3-cf0e-4d4b-affa-9f4f6fd4b875",
+          "ExpectedSuccess": false
+        }
+      ]
+    }
+  ]
+}
