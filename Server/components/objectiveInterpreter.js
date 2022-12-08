@@ -425,18 +425,6 @@ function parseAction(actionObj, initialContext) {
             }
 
             return actions.mul(parseVariableWriter(val[0]), parseVariableReader(val[1]));
-        case '$div':
-            if (!Array.isArray(val) || val.length != 2) {
-                throw new SyntaxError('$div action with something else than an array of size 2');
-            }
-            if (typeof val[0] !== 'string') {
-                throw new SyntaxError('$div action where first element is not a string');
-            }
-            if (typeof val[1] !== 'string' && typeof val[1] !== 'number') {
-                throw new SyntaxError('$div action where second element is neither a string nor a number literal');
-            }
-
-            return actions.div(parseVariableWriter(val[0]), parseVariableReader(val[1]));
         case '$push':
             if (!Array.isArray(val) || val.length != 2) {
                 throw new SyntaxError('$push action with something else than an array of size 2');
@@ -1078,19 +1066,6 @@ const actions = {
             }
             item.set(context, itemValue * multiplierValue);
         };
-    },
-    div: function div(item, divisor) {
-        return function $div(context, eventVars, loopVars) {
-            const itemValue = item.get(context, eventVars, loopVars);
-            if (typeof itemValue !== 'number') {
-                return;
-            }
-            const divisorValue = divisor.get(context, eventVars, loopVars);
-            if (typeof divisorValue !== 'number') {
-                return;
-            }
-            item.set(context, itemValue / divisorValue);
-        }
     },
     push: function push(array, item) {
         return function $push(context, eventVars, loopVars) {
