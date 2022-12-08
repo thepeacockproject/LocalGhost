@@ -590,7 +590,7 @@ function parseVariableWriter(string, initialContext) {
                 return;
             }
 
-            parent[lastpart] = newValue;
+            parent[lastpart] = cloneJsonObject(newValue);
         },
         reset: (context) => {
             if (initialValue === undefined) {
