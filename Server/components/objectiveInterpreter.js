@@ -803,7 +803,7 @@ function handleSingleEvent(stateMachines, event, timerTick = false, initEvent = 
 const conditions = {
     //and, or, not, gt, lt, ge, le, eq, inarray, any, all, pushunique, after, contains, remove
     and: function and(conditions) {
-        return (context, eventVars, loopVars, timeInState) => {
+        return function $and(context, eventVars, loopVars, timeInState) {
             for (const condition of conditions) {
                 if (!condition(context, eventVars, loopVars, timeInState)) {
                     return false;
@@ -813,7 +813,7 @@ const conditions = {
         };
     },
     or: function or(conditions) {
-        return (context, eventVars, loopVars, timeInState) => {
+        return function $or(context, eventVars, loopVars, timeInState) {
             for (const condition of conditions) {
                 if (condition(context, eventVars, loopVars, timeInState)) {
                     return true;
@@ -823,12 +823,12 @@ const conditions = {
         };
     },
     not: function not(condition) {
-        return (context, eventVars, loopVars, timeInState) => {
+        return function $not(context, eventVars, loopVars, timeInState) {
             return !condition(context, eventVars, loopVars, timeInState);
         };
     },
     gt: function gt(a, b) {
-        return (context, eventVars, loopVars) => {
+        return function $gt(context, eventVars, loopVars) {
             const aValue = a.get(context, eventVars, loopVars);
             const bValue = b.get(context, eventVars, loopVars);
             if (typeof aValue !== 'number' || typeof bValue !== 'number') {
@@ -839,7 +839,7 @@ const conditions = {
         };
     },
     lt: function lt(a, b) {
-        return (context, eventVars, loopVars) => {
+        return function $lt(context, eventVars, loopVars) {
             const aValue = a.get(context, eventVars, loopVars);
             const bValue = b.get(context, eventVars, loopVars);
             if (typeof aValue !== 'number' || typeof bValue !== 'number') {
@@ -850,7 +850,7 @@ const conditions = {
         };
     },
     ge: function ge(a, b) {
-        return (context, eventVars, loopVars) => {
+        return function $ge(context, eventVars, loopVars) {
             const aValue = a.get(context, eventVars, loopVars);
             const bValue = b.get(context, eventVars, loopVars);
             if (typeof aValue !== 'number' || typeof bValue !== 'number') {
@@ -861,7 +861,7 @@ const conditions = {
         };
     },
     le: function le(a, b) {
-        return (context, eventVars, loopVars) => {
+        return function $le(context, eventVars, loopVars) {
             const aValue = a.get(context, eventVars, loopVars);
             const bValue = b.get(context, eventVars, loopVars);
             if (typeof aValue !== 'number' || typeof bValue !== 'number') {
@@ -888,7 +888,7 @@ const conditions = {
             return aValue === bValue;
         }
 
-        return (context, eventVars, loopVars) => {
+        return function $eq(context, eventVars, loopVars) {
             if (items.length === 0)
                 return true;
 
@@ -902,7 +902,7 @@ const conditions = {
     },
     any: function any(items, condition) {
         if (Array.isArray(items)) { // literal array
-            return (context, eventVars, loopVars, timeInState) => {
+            return function $any(context, eventVars, loopVars, timeInState) {
                 for (const item of items) {
                     const itemValue = item.get(context, eventVars, loopVars);
                     loopVars.push(itemValue);
@@ -916,7 +916,7 @@ const conditions = {
                 return false;
             };
         } else { // array getter
-            return (context, eventVars, loopVars, timeInState) => {
+            return function $any(context, eventVars, loopVars, timeInState) {
                 const arrayObj = items.get(context, eventVars, loopVars);
                 if (!Array.isArray(arrayObj)) {
                     return false;
@@ -937,7 +937,7 @@ const conditions = {
     },
     all: function all(items, condition) {
         if (Array.isArray(items)) { // literal array
-            return (context, eventVars, loopVars, timeInState) => {
+            return function $all(context, eventVars, loopVars, timeInState) {
                 for (const item of items) {
                     const itemValue = item.get(context, eventVars, loopVars)
                     loopVars.push(itemValue);
@@ -951,7 +951,7 @@ const conditions = {
                 return true;
             };
         } else { // array getter
-            return (context, eventVars, loopVars, timeInState) => {
+            return function $all(context, eventVars, loopVars, timeInState) {
                 const arrayObj = items.get(context, eventVars, loopVars);
                 if (!Array.isArray(arrayObj)) {
                     return false;
@@ -971,13 +971,13 @@ const conditions = {
         }
     },
     pushunique: function pushunique(array, item) {
-        return (context, eventVars, loopVars) => {
+        return function $pushunique(context, eventVars, loopVars) {
             const itemValue = item.get(context, eventVars, loopVars);
             return array.pushunique(context, itemValue);
         };
     },
     after: function after(timeout) {
-        return (context, eventVars, loopVars, timeInState) => {
+        return function $after(context, eventVars, loopVars, timeInState) {
             return timeInState > timeout.get(context, eventVars, loopVars);
         }
     }
@@ -986,17 +986,17 @@ const conditions = {
 const actions = {
     //set, reset, inc, dec, mul, div, push, pushunique, remove, resetcontext, select
     set: function set(item, value) {
-        return (context, eventVars, loopVars) => {
+        return function $set(context, eventVars, loopVars) {
             item.set(context, value.get(context, eventVars, loopVars));
         };
     },
     reset: function reset(item) {
-        return (context, eventVars, loopVars) => {
+        return function $reset(context, eventVars, loopVars) {
             item.reset(context);
         };
     },
     inc: function inc(item) {
-        return (context, eventVars, loopVars) => {
+        return function $inc(context, eventVars, loopVars) {
             const itemValue = item.get(context, eventVars, loopVars);
             if (typeof itemValue !== 'number') {
                 return;
@@ -1006,7 +1006,7 @@ const actions = {
         };
     },
     add: function add(item, toAdd) {
-        return (context, eventVars, loopVars) => {
+        return function $add(context, eventVars, loopVars) {
             const itemValue = item.get(context, eventVars, loopVars);
             if (typeof itemValue !== 'number') {
                 return;
@@ -1019,7 +1019,7 @@ const actions = {
         };
     },
     dec: function dec(item) {
-        return (context, eventVars, loopVars) => {
+        return function $dec(context, eventVars, loopVars) {
             const itemValue = item.get(context, eventVars, loopVars);
             if (typeof itemValue !== 'number') {
                 return;
@@ -1029,7 +1029,7 @@ const actions = {
         };
     },
     sub: function sub(item, toSub) {
-        return (context, eventVars, loopVars) => {
+        return function $sub(context, eventVars, loopVars) {
             const itemValue = item.get(context, eventVars, loopVars);
             if (typeof itemValue !== 'number') {
                 return;
@@ -1042,7 +1042,7 @@ const actions = {
         };
     },
     mul: function mul(item, multiplier) {
-        return (context, eventVars, loopVars) => {
+        return function $mul(context, eventVars, loopVars) {
             const itemValue = item.get(context, eventVars, loopVars);
             if (typeof itemValue !== 'number') {
                 return;
@@ -1055,7 +1055,7 @@ const actions = {
         };
     },
     div: function div(item, divisor) {
-        return (context, eventVars, loopVars) => {
+        return function $div(context, eventVars, loopVars) {
             const itemValue = item.get(context, eventVars, loopVars);
             if (typeof itemValue !== 'number') {
                 return;
@@ -1068,17 +1068,17 @@ const actions = {
         }
     },
     push: function push(array, item) {
-        return (context, eventVars, loopVars) => {
+        return function $push(context, eventVars, loopVars) {
             array.push(context, item.get(context, eventVars, loopVars));
         };
     },
     pushunique: function pushunique(array, item) {
-        return (context, eventVars, loopVars) => {
+        return function $pushunique(context, eventVars, loopVars) {
             array.pushunique(context, item.get(context, eventVars, loopVars));
         };
     },
     remove: function remove(array, item) {
-        return (context, eventVars, loopVars) => {
+        return function $remove(context, eventVars, loopVars) {
             array.remove(item.get(context, eventVars, loopVars));
         };
     },
