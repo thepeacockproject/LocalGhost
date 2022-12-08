@@ -464,6 +464,31 @@ function parseAction(actionObj, initialContext) {
             }
 
             return actions.remove(parseVariableWriter(val[0]), parseVariableReader(val[1]));
+        case "$select":
+            if (typeof val !== 'object' || Array.isArray(val)) {
+                throw new SyntaxError('$select action with something else than an object');
+            }
+            if (!Object.hasOwn(val, '?') || !Object.hasOwn(val, 'in')) {
+                throw new SyntaxError('$select action without "?" or "in"');
+            }
+            if (typeof val['?'] !== 'object' || Array.isArray(val['?'])) {
+                throw new SyntaxError('$select action where "?" is not an object');
+            }
+            let actionsToRun = val['!'];
+            if (actionsToRun === undefined) {
+                actionsToRun = [];
+            }
+            if (!Array.isArray(actionsToRun)) {
+                throw new SyntaxError('$select action where "!" is not an array');
+            }
+
+            if (Array.isArray(val.in)) { // literal array
+                return actions.select(val.in.map(elem => parseVariableReader(elem)), parseCondition(val['?']), actionsToRun.map(elem => parseAction(elem, initialContext)));
+            } else if (typeof val.in === 'string') { // array getter
+                return actions.select(parseVariableReader(val.in), parseCondition(val['?']), actionsToRun.map(elem => parseAction(elem, initialContext)));
+            } else {
+                throw new SyntaxError('$select action where "in" is neither an array literal nor a string');
+            }
         default:
             throw new Error(`Unknown action encountered: ${key}`);
     }
@@ -784,7 +809,7 @@ function handleSingleEvent(stateMachines, event, timerTick = false, initEvent = 
                 eventHandler.condition(stateMachine.context, eventVars, [], timeInState)) {
                 if (Object.hasOwn(eventHandler, 'actions')) {
                     for (const action of eventHandler.actions) {
-                        action(stateMachine.context, eventVars, []);
+                        action(stateMachine.context, eventVars, [], timeInState);
                     }
                 }
                 if (Object.hasOwn(eventHandler, 'transition')) {
@@ -1082,6 +1107,43 @@ const actions = {
             array.remove(item.get(context, eventVars, loopVars));
         };
     },
+    select: function select(items, condition, actionsToRun) {
+        if (Array.isArray(items)) { // literal array
+            return function $select(context, eventVars, loopVars, timeInState) {
+                for (const item of items) {
+                    const itemValue = item.get(context, eventVars, loopVars)
+                    loopVars.push(itemValue);
+
+                    // treat condition as false if item is null or undefined
+                    if (condition(context, eventVars, loopVars, timeInState) && itemValue != null) {
+                        for(const action of actionsToRun) {
+                            action(context, eventVars, loopVars, timeInState);
+                        }
+                    }
+                    loopVars.pop();
+                }
+            };
+        } else { // array getter
+            return function $select(context, eventVars, loopVars, timeInState) {
+                const arrayObj = items.get(context, eventVars, loopVars);
+                if (!Array.isArray(arrayObj)) {
+                    return;
+                }
+
+                for (const item of arrayObj) {
+                    loopVars.push(item);
+
+                    // treat condition as false if item is null or undefined
+                    if (condition(context, eventVars, loopVars, timeInState) && item != null) {
+                        for(const action of actionsToRun) {
+                            action(context, eventVars, loopVars, timeInState);
+                        }
+                    }
+                    loopVars.pop();
+                }
+            };
+        }
+    }
 }
 
 
