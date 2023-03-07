@@ -188,6 +188,9 @@ function parseStateMachine(states, initialContext) {
 }
 
 function parseCondition(conditionObj) {
+    // Most of this function is just type-checking.
+    // In cases where this function throws an error, the game usually crashes upon loading the contract.
+
     if (typeof conditionObj !== 'object' || Array.isArray(conditionObj)) {
         throw new SyntaxError('Tried to parse a condition that is not an object!');
     }
@@ -346,6 +349,9 @@ function parseCondition(conditionObj) {
 }
 
 function parseAction(actionObj, initialContext) {
+    // Most of this function is just type-checking.
+    // In cases where this function throws an error, the game usually crashes upon loading the contract.
+
     if (typeof actionObj !== 'object' || Array.isArray(actionObj)) {
         throw new SyntaxError('Tried to parse an action that is not an object!');
     }
@@ -690,8 +696,8 @@ function handleEvents(objectives, events) {
     //   array .Count ?
     //   should $after be truncated, and/or <= instead of < ?
 
-    // TODO: add conditions: $contains, $remove
-    // TODO: add actions: $resetcontext, $select
+    // TODO: add conditions: $contains(string contains?), $remove
+    // TODO: add actions: $resetcontext
 
     // Step 1: Parse (compile) json into functions
     const stateMachines = parseObjectives(objectives);
@@ -887,7 +893,7 @@ const conditions = {
     eq: function eq(items) {
         function checkEquality(aValue, bValue) {
             if (Array.isArray(aValue) && Array.isArray(bValue) && aValue.length === bValue.length) {
-                for(let i = 0; i < aValue.length; i++) {
+                for (let i = 0; i < aValue.length; i++) {
                     if (!checkEquality(aValue[i], bValue[i]))
                         return false;
                 }
@@ -906,7 +912,7 @@ const conditions = {
                 return true;
 
             const firstValue = items[0].get(context, eventVars, loopVars);
-            for(const otherItems of items.slice(1)) {
+            for (const otherItems of items.slice(1)) {
                 if (!checkEquality(firstValue, otherItems.get(context, eventVars, loopVars)))
                     return false;
             }
@@ -1091,7 +1097,7 @@ const actions = {
 
                     // treat condition as false if item is null or undefined
                     if (condition(context, eventVars, loopVars, timeInState) && itemValue != null) {
-                        for(const action of actionsToRun) {
+                        for (const action of actionsToRun) {
                             action(context, eventVars, loopVars, timeInState);
                         }
                     }
@@ -1110,7 +1116,7 @@ const actions = {
 
                     // treat condition as false if item is null or undefined
                     if (condition(context, eventVars, loopVars, timeInState) && item != null) {
-                        for(const action of actionsToRun) {
+                        for (const action of actionsToRun) {
                             action(context, eventVars, loopVars, timeInState);
                         }
                     }

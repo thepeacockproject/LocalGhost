@@ -122,11 +122,11 @@ app.get('/Hub', async (req, res) => {
                     DashboardCategory: 'Dashboard_Category_Escalation',
                 },
             }], // TODO
-            DestinationsData: [], // TODO
-            CreateContractTutorial: {}, // TODO
-            LocationsData: {}, // TODO
+            DestinationsData: [], // TODO: for destinations menu
+            CreateContractTutorial: {}, // TODO: for contract creation menu
+            LocationsData: {}, // TODO: for contract creation menu
             ProfileData: {}, // TODO
-            StoryData: [], // TODO
+            StoryData: [], // TODO: for campaign menu
             FilterData: [], // TODO
             StoreData: {}, // TODO
             IOIAccountStatus: {
