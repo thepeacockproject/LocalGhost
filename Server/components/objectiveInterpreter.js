@@ -154,7 +154,7 @@ function parseStateMachine(states, initialContext) {
                         // Assume it's a loose action
                         eventHandler.actions.push(parseAction({
                             [property]: thingToDo[property]
-                        }));
+                        }, initialContext));
                     }
                     else {
                         // The game crashes if this happens, so print a warning I guess.
