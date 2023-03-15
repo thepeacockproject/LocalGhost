@@ -151,14 +151,14 @@ function parseStateMachine(states, initialContext) {
                             actions = [actions];
                         }
 
-                        eventHandler.actions.push(...actions.map(action => parseAction(action, initialContext)));
+                        eventHandler.actions.push(...actions.flatMap(action => parseAction(action, initialContext)));
                     }
                     else if (property === 'Transition') {
                         eventHandler.transition = thingToDo.Transition;
                     }
                     else if (property.startsWith('$')) {
                         // Assume it's a loose action
-                        eventHandler.actions.push(parseAction({
+                        eventHandler.actions.push(...parseAction({
                             [property]: thingToDo[property]
                         }, initialContext));
                     }
@@ -364,139 +364,134 @@ function parseAction(actionObj, initialContext) {
         throw new SyntaxError('Tried to parse an action that is not an object!');
     }
 
-    objectEntries = Object.entries(actionObj);
-    if (objectEntries.length != 1) {
-        throw new SyntaxError('Unexpected number of elements in action object (should be 1)');
-    }
-
-    const [key, val] = objectEntries[0];
-    //set, reset, inc, dec, mul, div, push, pushunique, remove
-    switch (key) {
-        case '$set':
-            if (!Array.isArray(val) || val.length != 2) {
-                throw new SyntaxError('$set action with something else than an array of size 2');
-            }
-            if (typeof val[0] !== 'string') {
-                throw new SyntaxError('$set action first element is not a string');
-            }
-
-            return actions.set(parseVariableWriter(val[0]), parseVariableReader(val[1]));
-        case '$reset':
-            if (typeof val !== 'string') {
-                throw new SyntaxError('$reset action with something else than a string');
-            }
-
-            return actions.reset(parseVariableWriter(val, initialContext));
-        case '$inc':
-            if (Array.isArray(val)) { // addition
-                if (val.length != 2) {
-                    throw new SyntaxError('$inc action with an array that has a size other than 2');
+    return Object.entries(actionObj).map(([key, val]) => {
+        //set, reset, inc, dec, mul, div, push, pushunique, remove
+        switch (key) {
+            case '$set':
+                if (!Array.isArray(val) || val.length != 2) {
+                    throw new SyntaxError('$set action with something else than an array of size 2');
                 }
                 if (typeof val[0] !== 'string') {
-                    throw new SyntaxError('$inc action (addition) where first element is not a string');
-                }
-                if (typeof val[1] !== 'string' && typeof val[1] !== 'number') {
-                    throw new SyntaxError('$inc action (addition) where second element is neither a string nor a number literal');
+                    throw new SyntaxError('$set action first element is not a string');
                 }
 
-                return actions.add(parseVariableWriter(val[0]), parseVariableReader(val[1]));
-            } else { // increment
+                return actions.set(parseVariableWriter(val[0]), parseVariableReader(val[1]));
+            case '$reset':
                 if (typeof val !== 'string') {
-                    throw new SyntaxError('$inc action (increment) with something else than a string');
+                    throw new SyntaxError('$reset action with something else than a string');
                 }
 
-                return actions.inc(parseVariableWriter(val));
-            }
-        case '$dec':
-            if (Array.isArray(val)) { // subtraction
-                if (val.length != 2) {
-                    throw new SyntaxError('$dec action with an array that has a size other than 2');
+                return actions.reset(parseVariableWriter(val, initialContext));
+            case '$inc':
+                if (Array.isArray(val)) { // addition
+                    if (val.length != 2) {
+                        throw new SyntaxError('$inc action with an array that has a size other than 2');
+                    }
+                    if (typeof val[0] !== 'string') {
+                        throw new SyntaxError('$inc action (addition) where first element is not a string');
+                    }
+                    if (typeof val[1] !== 'string' && typeof val[1] !== 'number') {
+                        throw new SyntaxError('$inc action (addition) where second element is neither a string nor a number literal');
+                    }
+
+                    return actions.add(parseVariableWriter(val[0]), parseVariableReader(val[1]));
+                } else { // increment
+                    if (typeof val !== 'string') {
+                        throw new SyntaxError('$inc action (increment) with something else than a string');
+                    }
+
+                    return actions.inc(parseVariableWriter(val));
+                }
+            case '$dec':
+                if (Array.isArray(val)) { // subtraction
+                    if (val.length != 2) {
+                        throw new SyntaxError('$dec action with an array that has a size other than 2');
+                    }
+                    if (typeof val[0] !== 'string') {
+                        throw new SyntaxError('$dec action (subtraction) where first element is not a string');
+                    }
+                    if (typeof val[1] !== 'string' && typeof val[1] !== 'number') {
+                        throw new SyntaxError('$dec action (subtraction) where second element is neither a string nor a number literal');
+                    }
+
+                    return actions.sub(parseVariableWriter(val[0]), parseVariableReader(val[1]));
+                } else { // decrement
+                    if (typeof val !== 'string') {
+                        throw new SyntaxError('$dec action (decrement) with something else than a string');
+                    }
+
+                    return actions.dec(parseVariableWriter(val));
+                }
+            case '$mul':
+                if (!Array.isArray(val) || val.length != 2) {
+                    throw new SyntaxError('$mul action with something else than an array of size 2');
                 }
                 if (typeof val[0] !== 'string') {
-                    throw new SyntaxError('$dec action (subtraction) where first element is not a string');
+                    throw new SyntaxError('$mul action where first element is not a string');
                 }
                 if (typeof val[1] !== 'string' && typeof val[1] !== 'number') {
-                    throw new SyntaxError('$dec action (subtraction) where second element is neither a string nor a number literal');
+                    throw new SyntaxError('$mul action where second element is neither a string nor a number literal');
                 }
 
-                return actions.sub(parseVariableWriter(val[0]), parseVariableReader(val[1]));
-            } else { // decrement
-                if (typeof val !== 'string') {
-                    throw new SyntaxError('$dec action (decrement) with something else than a string');
+                return actions.mul(parseVariableWriter(val[0]), parseVariableReader(val[1]));
+            case '$push':
+                if (!Array.isArray(val) || val.length != 2) {
+                    throw new SyntaxError('$push action with something else than an array of size 2');
+                }
+                if (typeof val[0] !== 'string') {
+                    throw new SyntaxError('$push action first element is not a string');
                 }
 
-                return actions.dec(parseVariableWriter(val));
-            }
-        case '$mul':
-            if (!Array.isArray(val) || val.length != 2) {
-                throw new SyntaxError('$mul action with something else than an array of size 2');
-            }
-            if (typeof val[0] !== 'string') {
-                throw new SyntaxError('$mul action where first element is not a string');
-            }
-            if (typeof val[1] !== 'string' && typeof val[1] !== 'number') {
-                throw new SyntaxError('$mul action where second element is neither a string nor a number literal');
-            }
+                return actions.push(parseVariableWriter(val[0]), parseVariableReader(val[1]));
+            case '$pushunique':
+                if (!Array.isArray(val) || val.length != 2) {
+                    throw new SyntaxError('$pushunique action with something else than an array of size 2');
+                }
+                if (typeof val[0] !== 'string') {
+                    throw new SyntaxError('$pushunique action first element is not a string');
+                }
 
-            return actions.mul(parseVariableWriter(val[0]), parseVariableReader(val[1]));
-        case '$push':
-            if (!Array.isArray(val) || val.length != 2) {
-                throw new SyntaxError('$push action with something else than an array of size 2');
-            }
-            if (typeof val[0] !== 'string') {
-                throw new SyntaxError('$push action first element is not a string');
-            }
+                return actions.pushunique(parseVariableWriter(val[0]), parseVariableReader(val[1]));
+            case '$remove':
+                if (!Array.isArray(val) || val.length != 2) {
+                    throw new SyntaxError('$remove action with something else than an array of size 2');
+                }
+                if (typeof val[0] !== 'string') {
+                    throw new SyntaxError('$remove action first element is not a string');
+                }
 
-            return actions.push(parseVariableWriter(val[0]), parseVariableReader(val[1]));
-        case '$pushunique':
-            if (!Array.isArray(val) || val.length != 2) {
-                throw new SyntaxError('$pushunique action with something else than an array of size 2');
-            }
-            if (typeof val[0] !== 'string') {
-                throw new SyntaxError('$pushunique action first element is not a string');
-            }
+                return actions.remove(parseVariableWriter(val[0]), parseVariableReader(val[1]));
+            case "$select":
+                if (typeof val !== 'object' || Array.isArray(val)) {
+                    throw new SyntaxError('$select action with something else than an object');
+                }
+                if (!Object.hasOwn(val, '?') || !Object.hasOwn(val, 'in')) {
+                    throw new SyntaxError('$select action without "?" or "in"');
+                }
+                if (typeof val['?'] !== 'object' || Array.isArray(val['?'])) {
+                    throw new SyntaxError('$select action where "?" is not an object');
+                }
+                let actionsToRun = val['!'];
+                if (actionsToRun === undefined) {
+                    actionsToRun = [];
+                }
+                if (!Array.isArray(actionsToRun)) {
+                    throw new SyntaxError('$select action where "!" is not an array');
+                }
 
-            return actions.pushunique(parseVariableWriter(val[0]), parseVariableReader(val[1]));
-        case '$remove':
-            if (!Array.isArray(val) || val.length != 2) {
-                throw new SyntaxError('$remove action with something else than an array of size 2');
-            }
-            if (typeof val[0] !== 'string') {
-                throw new SyntaxError('$remove action first element is not a string');
-            }
-
-            return actions.remove(parseVariableWriter(val[0]), parseVariableReader(val[1]));
-        case "$select":
-            if (typeof val !== 'object' || Array.isArray(val)) {
-                throw new SyntaxError('$select action with something else than an object');
-            }
-            if (!Object.hasOwn(val, '?') || !Object.hasOwn(val, 'in')) {
-                throw new SyntaxError('$select action without "?" or "in"');
-            }
-            if (typeof val['?'] !== 'object' || Array.isArray(val['?'])) {
-                throw new SyntaxError('$select action where "?" is not an object');
-            }
-            let actionsToRun = val['!'];
-            if (actionsToRun === undefined) {
-                actionsToRun = [];
-            }
-            if (!Array.isArray(actionsToRun)) {
-                throw new SyntaxError('$select action where "!" is not an array');
-            }
-
-            if (Array.isArray(val.in)) { // literal array
-                return actions.select(val.in.map(elem => parseVariableReader(elem)), parseCondition(val['?']), actionsToRun.map(elem => parseAction(elem, initialContext)));
-            } else if (typeof val.in === 'string') { // array getter
-                return actions.select(parseVariableReader(val.in), parseCondition(val['?']), actionsToRun.map(elem => parseAction(elem, initialContext)));
-            } else {
-                throw new SyntaxError('$select action where "in" is neither an array literal nor a string');
-            }
-        case '$resetcontext':
-            throw new Error(`Action not yet implemented: ${key}`);
-        default:
-            throw new SyntaxError(`Unknown action encountered: ${key}`);
-    }
-
+                if (Array.isArray(val.in)) { // literal array
+                    return actions.select(val.in.map(elem => parseVariableReader(elem)), parseCondition(val['?']), actionsToRun.flatMap(elem => parseAction(elem, initialContext)));
+                } else if (typeof val.in === 'string') { // array getter
+                    return actions.select(parseVariableReader(val.in), parseCondition(val['?']), actionsToRun.flatMap(elem => parseAction(elem, initialContext)));
+                } else {
+                    throw new SyntaxError('$select action where "in" is neither an array literal nor a string');
+                }
+            case '$resetcontext':
+                throw new Error(`Action not yet implemented: ${key}`);
+            default:
+                throw new SyntaxError(`Unknown action encountered: ${key}`);
+        }
+    });
 }
 
 function parseVariableReader(string) {
