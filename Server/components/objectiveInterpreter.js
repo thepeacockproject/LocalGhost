@@ -9,11 +9,16 @@ function parseObjectives(objectives) {
     const stateMachines = {};
 
     for (const obj of objectives) {
+
+        // The game seems to not mind objectives without an ID.
+        // Everywhere the game normally uses that id, an all-0 uuid gets used.
         if (!obj.Id) {
-            console.error('Objective with no Id encountered!');
+            throw new Error('Objective with no Id encountered!');
         }
+        // The game seems to not mind duplicate objective IDs.
+        // When checking the completion of an objective by its id, the last occurring matching objective gets checked.
         if (stateMachines[obj.Id]) {
-            console.error(`Duplicate objective Id encountered: ${obj.Id}`);
+            throw new Error(`Duplicate objective Id encountered: ${obj.Id}`);
         }
         if (obj.Type === 'statemachine') {
             if (obj.Definition) { // custom statemachine
@@ -25,7 +30,7 @@ function parseObjectives(objectives) {
                     type: 'statemachine',
                 }
             } else {
-                console.warn(`Objective is a statemachine without definition: ${objective.Id}`);
+                throw new SyntaxError(`Objective is a statemachine without definition: ${obj.Id}`);
             }
         } else {
             // The game handles SuccessEvent/FailedEvent objectives separately;
@@ -88,7 +93,8 @@ function createSimpleStateMachine(objective) {
     }
 
     if (!objective.SuccessEvent && !objective.FailedEvent) {
-        console.warn(`Objective is not a statemachine and has no SuccessEvent: ${objective.Id}`);
+        // This objective is not completable or failable. Not a big deal, but a warning might be nice.
+        console.warn(`Objective of type 'events' has has no SuccessEvent or FailedEvent: ${objective.Id}`);
     }
 
     return stateHandlers;
@@ -157,9 +163,8 @@ function parseStateMachine(states, initialContext) {
                         }, initialContext));
                     }
                     else {
-                        // The game crashes if this happens, so print a warning I guess.
-                        console.warn('Invalid property encountered in state machine');
-                        continue;
+                        // The game crashes if this happens
+                        throw new SyntaxError('Invalid property encountered in state machine');
                     }
                 }
 
@@ -343,8 +348,11 @@ function parseCondition(conditionObj) {
             }
 
             return conditions.after(parseVariableReader(val));
+        case '$contains':
+        case '$remove':
+            throw new Error(`Action not yet implemented: ${key}`);
         default:
-            throw new Error(`Unknown condition encountered: ${key}`);
+            throw new SyntaxError(`Unknown condition encountered: ${key}`);
     }
 }
 
@@ -483,8 +491,10 @@ function parseAction(actionObj, initialContext) {
             } else {
                 throw new SyntaxError('$select action where "in" is neither an array literal nor a string');
             }
+        case '$resetcontext':
+            throw new Error(`Action not yet implemented: ${key}`);
         default:
-            throw new Error(`Unknown action encountered: ${key}`);
+            throw new SyntaxError(`Unknown action encountered: ${key}`);
     }
 
 }
@@ -574,7 +584,7 @@ function parseVariableWriter(string, initialContext) {
             let parent = context;
             for (const part of parts.slice(0, -1)) {
                 if (typeof parent !== 'object' || Array.isArray(parent)) {
-                    console.log('An objective action specified a context subprop that could not be found');
+                    console.warn('An objective action specified a context subprop that could not be found');
                     return;
                 }
 
@@ -593,7 +603,7 @@ function parseVariableWriter(string, initialContext) {
             let parent = context;
             for (const part of parts.slice(0, -1)) {
                 if (typeof parent !== 'object' || Array.isArray(parent)) {
-                    console.log('An objective action specified a context subprop that could not be found');
+                    console.warn('An objective action specified a context subprop that could not be found');
                     return;
                 }
 
@@ -609,7 +619,7 @@ function parseVariableWriter(string, initialContext) {
             let parent = context;
             for (const part of parts) {
                 if (typeof parent !== 'object' || Array.isArray(parent)) {
-                    console.log('An objective action specified a context subprop that could not be found');
+                    console.warn('An objective action specified a context subprop that could not be found');
                     return;
                 }
 
@@ -630,7 +640,7 @@ function parseVariableWriter(string, initialContext) {
             let parent = context;
             for (const part of parts) {
                 if (typeof parent !== 'object' || Array.isArray(parent)) {
-                    console.log('An objective action specified a context subprop that could not be found');
+                    console.warn('An objective action specified a context subprop that could not be found');
                     return;
                 }
 
