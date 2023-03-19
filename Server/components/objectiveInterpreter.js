@@ -1,4 +1,4 @@
-// Copyright (C) 2022 grappigegovert <grappigegovert@hotmail.com>
+// Copyright (C) 2022-2023 grappigegovert <grappigegovert@hotmail.com>
 // Licensed under the zlib license. See LICENSE for more info
 
 const { cloneJsonObject } = require('./utils.js');
@@ -130,6 +130,12 @@ function parseStateMachine(states, initialContext) {
 
         for (const eventName in stateObj) {
             let thingsToDo = stateObj[eventName];
+
+            // The game just ignores this
+            if (typeof thingsToDo !== 'object') {
+                continue;
+            }
+
             // It can be an array of objects or a single object
             // If single object, put it in an array for easier handling
             if (!Array.isArray(thingsToDo)) {
@@ -164,7 +170,7 @@ function parseStateMachine(states, initialContext) {
                     }
                     else {
                         // The game crashes if this happens
-                        throw new SyntaxError('Invalid property encountered in state machine');
+                        throw new SyntaxError(`Invalid property "${property}" encountered in state machine`);
                     }
                 }
 
@@ -200,7 +206,7 @@ function parseCondition(conditionObj) {
         throw new SyntaxError('Tried to parse a condition that is not an object!');
     }
 
-    objectEntries = Object.entries(conditionObj).filter(([key]) => key.startsWith('$'));
+    objectEntries = Object.entries(conditionObj);
     if (objectEntries.length != 1) {
         throw new SyntaxError('Unexpected number of elements in condition object (should be 1)');
     }
