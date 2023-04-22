@@ -428,8 +428,8 @@ function parseAction(actionObj, initialContext, constants) {
                     return actions.dec(parseVariableWriter(val));
                 }
             case '$mul':
-                if (!Array.isArray(val) || val.length != 2) {
-                    throw new SyntaxError('$mul action with something else than an array of size 2');
+                if (!Array.isArray(val) || (val.length != 2 && val.length != 3)) {
+                    throw new SyntaxError('$mul action with something else than an array of size 2 or 3');
                 }
                 if (typeof val[0] !== 'string') {
                     throw new SyntaxError('$mul action where first element is not a string');
@@ -438,7 +438,20 @@ function parseAction(actionObj, initialContext, constants) {
                     throw new SyntaxError('$mul action where second element is neither a string nor a number literal');
                 }
 
-                return actions.mul(parseVariableWriter(val[0]), parseVariableReader(val[1], constants));
+                if (val.length == 2) {
+                    // $mul: [a, b]  ->  a = a * b
+                    return actions.mul(parseVariableWriter(val[0]), parseVariableReader(val[1], constants));
+                } else { // val.length is 3
+                    if (typeof val[2] !== 'string') {
+                        throw new SyntaxError('$mul action where third element is not a string');
+                    }
+                    const constantValue = parseConstant(val[0], constants);
+                    if (typeof constantValue !== 'number') {
+                        throw new SyntaxError('$mul action where constant is not a number');
+                    }
+                    // $mul: [a, b, c]  ->  c = a * b
+                    return actions.mul(parseVariableWriter(val[2]), parseVariableReader(val[1], constants), constantValue);
+                }
             case '$push':
                 if (!Array.isArray(val) || val.length != 2) {
                     throw new SyntaxError('$push action with something else than an array of size 2');
@@ -499,6 +512,23 @@ function parseAction(actionObj, initialContext, constants) {
                 throw new SyntaxError(`Unknown action encountered: ${key}`);
         }
     });
+}
+
+function parseConstant(string, constants) {
+    // TODO: check this
+    if (typeof string !== 'string') {
+        console.trace('invalid contstant');
+    }
+    const parts = string.split('.');
+    let obj = constants[parts[0]];
+
+    for (const part of parts.slice(1)) {
+        if (typeof obj !== 'object' || Array.isArray(obj)) {
+            return undefined;
+        }
+        obj = obj[part];
+    }
+    return obj;
 }
 
 function parseVariableReader(string, constants = {}) {
@@ -1086,18 +1116,28 @@ const actions = {
             item.set(context, itemValue - toSubValue);
         };
     },
-    mul: function mul(item, multiplier) {
-        return function $mul(context, eventVars, loopVars) {
-            const itemValue = item.get(context, eventVars, loopVars);
-            if (typeof itemValue !== 'number') {
-                return;
-            }
-            const multiplierValue = multiplier.get(context, eventVars, loopVars);
-            if (typeof multiplierValue !== 'number') {
-                return;
-            }
-            item.set(context, itemValue * multiplierValue);
-        };
+    mul: function mul(destination, multiplicand, constantMultiplier) {
+        if (constantMultiplier) {
+            return function $mul(context, eventVars, loopVars) {
+                const multiplicandValue = multiplicand.get(context, eventVars, loopVars);
+                if (typeof multiplicandValue !== 'number') {
+                    return;
+                }
+                destination.set(context, constantMultiplier * multiplicandValue);
+            };
+        } else {
+            return function $mul(context, eventVars, loopVars) {
+                const originalValue = destination.get(context, eventVars, loopVars);
+                if (typeof originalValue !== 'number') {
+                    return;
+                }
+                const multiplicandValue = multiplicand.get(context, eventVars, loopVars);
+                if (typeof multiplicandValue !== 'number') {
+                    return;
+                }
+                destination.set(context, originalValue * multiplicandValue);
+            };
+        }
     },
     push: function push(array, item) {
         return function $push(context, eventVars, loopVars) {
