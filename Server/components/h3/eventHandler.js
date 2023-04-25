@@ -134,7 +134,13 @@ async function endSession(sessionId, gameVersion) {
         scoreTrackingObjective,
         // ...challenges, // TODO
         // ...playStyles, // TODO
-    ], Object.values(contractSession.events));
+    ], Object.entries(contractSession.events).map(([id, event]) => ({
+        ...event,
+        Id: id,
+        ContractId: contractSession.contractId,
+        ContractSessionId: sessionId,
+        UserId: contractSession.userId,
+    })));
 
     // TODO: handle progression here
 
@@ -269,12 +275,14 @@ async function saveEvents(userId, events, gameVersion) {
 
             // delete unneccessary fields
             // some of these could in theory be used by some statemachines, but that sounds stupid
+            delete event.Origin;
+            delete event.SessionId;
+            // I assume these are equal for all events in one session, so no need to save them each time
+            // they get added again in endSession()
             delete event.ContractId;
             delete event.ContractSessionId;
             delete event.UserId;
-            delete event.Origin;
             delete event.Id;
-            delete event.SessionId;
         }
     }
 
