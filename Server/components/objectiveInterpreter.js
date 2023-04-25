@@ -26,7 +26,7 @@ function parseObjectives(objectives) {
                     currentState: 'Start',
                     inStateSince: 0,
                     context: cloneJsonObject(obj.Definition.Context),
-                    stateHandlers: parseStateMachine(obj.Definition.States, obj.Definition.Context),
+                    stateHandlers: parseStateMachine(obj.Definition),
                     type: 'statemachine',
                 }
             } else {
@@ -120,10 +120,10 @@ function createSimpleEventHandlers(eventValues = {}, targetState, repeatsNeeded 
     ];
 }
 
-function parseStateMachine(states, initialContext) {
+function parseStateMachine(definition) {
     const stateHandlers = {};
-    for (const stateName in states) {
-        const stateObj = states[stateName];
+    for (const stateName in definition.States) {
+        const stateObj = definition.States[stateName];
         const eventListeners = {};
         const properTimers = [];
         const dollarEventHandlers = [];
@@ -149,7 +149,7 @@ function parseStateMachine(states, initialContext) {
                 };
                 for (const property in thingToDo) {
                     if (property === 'Condition') {
-                        eventHandler.condition = parseCondition(thingToDo.Condition);
+                        eventHandler.condition = parseCondition(thingToDo.Condition, definition.Constants);
                     }
                     else if (property === 'Actions') {
                         let actions = thingToDo.Actions
@@ -157,7 +157,7 @@ function parseStateMachine(states, initialContext) {
                             actions = [actions];
                         }
 
-                        eventHandler.actions.push(...actions.flatMap(action => parseAction(action, initialContext)));
+                        eventHandler.actions.push(...actions.flatMap(action => parseAction(action, definition.Context, definition.Constants)));
                     }
                     else if (property === 'Transition') {
                         eventHandler.transition = thingToDo.Transition;
@@ -166,7 +166,7 @@ function parseStateMachine(states, initialContext) {
                         // Assume it's a loose action
                         eventHandler.actions.push(...parseAction({
                             [property]: thingToDo[property]
-                        }, initialContext));
+                        }, definition.Context, definition.Constants));
                     }
                     else {
                         // The game crashes if this happens
@@ -198,7 +198,7 @@ function parseStateMachine(states, initialContext) {
     return stateHandlers;
 }
 
-function parseCondition(conditionObj) {
+function parseCondition(conditionObj, constants) {
     // Most of this function is just type-checking.
     // In cases where this function throws an error, the game usually crashes upon loading the contract.
 
@@ -224,7 +224,7 @@ function parseCondition(conditionObj) {
                     throw new SyntaxError('$and condition operand is something else than an object');
                 }
 
-                return parseCondition(subval);
+                return parseCondition(subval, constants);
             }));
         case '$or':
             if (!Array.isArray(val)) {
@@ -236,13 +236,13 @@ function parseCondition(conditionObj) {
                     throw new SyntaxError('$or condition operand is something else than an object');
                 }
 
-                return parseCondition(subval);
+                return parseCondition(subval, constants);
             }));
         case '$not':
             if (typeof val !== 'object' || Array.isArray(val)) {
                 throw new SyntaxError('$not condition with something else than an object');
             }
-            return conditions.not(parseCondition(val));
+            return conditions.not(parseCondition(val, constants));
         case '$gt':
             if (!Array.isArray(val) || val.length != 2) {
                 throw new SyntaxError('$gt condition with something else than an array of size 2');
@@ -253,7 +253,7 @@ function parseCondition(conditionObj) {
                 }
             }
 
-            return conditions.gt(parseVariableReader(val[0]), parseVariableReader(val[1]));
+            return conditions.gt(parseVariableReader(val[0], constants), parseVariableReader(val[1], constants));
         case '$lt':
             if (!Array.isArray(val) || val.length != 2) {
                 throw new SyntaxError('$lt condition with something else than an array of size 2');
@@ -265,7 +265,7 @@ function parseCondition(conditionObj) {
                 }
             }
 
-            return conditions.lt(parseVariableReader(val[0]), parseVariableReader(val[1]));
+            return conditions.lt(parseVariableReader(val[0], constants), parseVariableReader(val[1], constants));
         case '$ge':
             if (!Array.isArray(val) || val.length != 2) {
                 throw new SyntaxError('$ge condition with something else than an array of size 2');
@@ -277,7 +277,7 @@ function parseCondition(conditionObj) {
                 }
             }
 
-            return conditions.ge(parseVariableReader(val[0]), parseVariableReader(val[1]));
+            return conditions.ge(parseVariableReader(val[0], constants), parseVariableReader(val[1], constants));
         case '$le':
             if (!Array.isArray(val) || val.length != 2) {
                 throw new SyntaxError('$le condition with something else than an array of size 2');
@@ -289,19 +289,18 @@ function parseCondition(conditionObj) {
                 }
             }
 
-            return conditions.le(parseVariableReader(val[0]), parseVariableReader(val[1]));
+            return conditions.le(parseVariableReader(val[0], constants), parseVariableReader(val[1], constants));
         case '$eq':
             if (!Array.isArray(val)) {
                 throw new SyntaxError('$eq condition with something else than an array');
             }
 
-            for (const subval of val) {
+            return conditions.eq(val.map(subval => {
                 if (typeof subval === 'object') {
                     throw new SyntaxError('$eq condition operand is an object/array');
                 }
-            }
-
-            return conditions.eq(val.map(parseVariableReader));
+                return parseVariableReader(subval, constants);
+            }));
         case '$inarray': // TODO: check if there is any difference between $inarray and $any
         case '$any':
             if (typeof val !== 'object' || Array.isArray(val)) {
@@ -315,9 +314,9 @@ function parseCondition(conditionObj) {
             }
 
             if (Array.isArray(val.in)) { // literal array
-                return conditions.any(val.in.map(element => parseVariableReader(element)), parseCondition(val['?']));
+                return conditions.any(val.in.map(element => parseVariableReader(element, constants)), parseCondition(val['?'], constants));
             } else if (typeof val.in === 'string') { // array getter
-                return conditions.any(parseVariableReader(val.in), parseCondition(val['?']));
+                return conditions.any(parseVariableReader(val.in, constants), parseCondition(val['?'], constants));
             } else {
                 throw new SyntaxError('$any/$inarray condition where "in" is neither an array literal nor a string');
             }
@@ -333,9 +332,9 @@ function parseCondition(conditionObj) {
             }
 
             if (Array.isArray(val.in)) { // literal array
-                return conditions.all(val.in.map(element => parseVariableReader(element)), parseCondition(val['?']));
+                return conditions.all(val.in.map(element => parseVariableReader(element, constants)), parseCondition(val['?'], constants));
             } else if (typeof val.in === 'string') { // array getter
-                return conditions.all(parseVariableReader(val.in), parseCondition(val['?']));
+                return conditions.all(parseVariableReader(val.in, constants), parseCondition(val['?'], constants));
             } else {
                 throw new SyntaxError('$all condition where "in" is neither an array literal nor a string');
             }
@@ -347,13 +346,13 @@ function parseCondition(conditionObj) {
                 throw SyntaxError('$pushunique first element is not a string');
             }
 
-            return conditions.pushunique(parseVariableWriter(val[0]), parseVariableReader(val[1]));
+            return conditions.pushunique(parseVariableWriter(val[0]), parseVariableReader(val[1], constants));
         case '$after':
             if (typeof val === 'object') {
                 throw SyntaxError('$after operand is an object');
             }
 
-            return conditions.after(parseVariableReader(val));
+            return conditions.after(parseVariableReader(val, constants));
         case '$contains':
         case '$remove':
             throw new Error(`Action not yet implemented: ${key}`);
@@ -362,7 +361,7 @@ function parseCondition(conditionObj) {
     }
 }
 
-function parseAction(actionObj, initialContext) {
+function parseAction(actionObj, initialContext, constants) {
     // Most of this function is just type-checking.
     // In cases where this function throws an error, the game usually crashes upon loading the contract.
 
@@ -381,7 +380,7 @@ function parseAction(actionObj, initialContext) {
                     throw new SyntaxError('$set action first element is not a string');
                 }
 
-                return actions.set(parseVariableWriter(val[0]), parseVariableReader(val[1]));
+                return actions.set(parseVariableWriter(val[0]), parseVariableReader(val[1], constants));
             case '$reset':
                 if (typeof val !== 'string') {
                     throw new SyntaxError('$reset action with something else than a string');
@@ -400,7 +399,7 @@ function parseAction(actionObj, initialContext) {
                         throw new SyntaxError('$inc action (addition) where second element is neither a string nor a number literal');
                     }
 
-                    return actions.add(parseVariableWriter(val[0]), parseVariableReader(val[1]));
+                    return actions.add(parseVariableWriter(val[0]), parseVariableReader(val[1], constants));
                 } else { // increment
                     if (typeof val !== 'string') {
                         throw new SyntaxError('$inc action (increment) with something else than a string');
@@ -420,7 +419,7 @@ function parseAction(actionObj, initialContext) {
                         throw new SyntaxError('$dec action (subtraction) where second element is neither a string nor a number literal');
                     }
 
-                    return actions.sub(parseVariableWriter(val[0]), parseVariableReader(val[1]));
+                    return actions.sub(parseVariableWriter(val[0]), parseVariableReader(val[1], constants));
                 } else { // decrement
                     if (typeof val !== 'string') {
                         throw new SyntaxError('$dec action (decrement) with something else than a string');
@@ -439,7 +438,7 @@ function parseAction(actionObj, initialContext) {
                     throw new SyntaxError('$mul action where second element is neither a string nor a number literal');
                 }
 
-                return actions.mul(parseVariableWriter(val[0]), parseVariableReader(val[1]));
+                return actions.mul(parseVariableWriter(val[0]), parseVariableReader(val[1], constants));
             case '$push':
                 if (!Array.isArray(val) || val.length != 2) {
                     throw new SyntaxError('$push action with something else than an array of size 2');
@@ -448,7 +447,7 @@ function parseAction(actionObj, initialContext) {
                     throw new SyntaxError('$push action first element is not a string');
                 }
 
-                return actions.push(parseVariableWriter(val[0]), parseVariableReader(val[1]));
+                return actions.push(parseVariableWriter(val[0]), parseVariableReader(val[1], constants));
             case '$pushunique':
                 if (!Array.isArray(val) || val.length != 2) {
                     throw new SyntaxError('$pushunique action with something else than an array of size 2');
@@ -457,7 +456,7 @@ function parseAction(actionObj, initialContext) {
                     throw new SyntaxError('$pushunique action first element is not a string');
                 }
 
-                return actions.pushunique(parseVariableWriter(val[0]), parseVariableReader(val[1]));
+                return actions.pushunique(parseVariableWriter(val[0]), parseVariableReader(val[1], constants));
             case '$remove':
                 if (!Array.isArray(val) || val.length != 2) {
                     throw new SyntaxError('$remove action with something else than an array of size 2');
@@ -466,7 +465,7 @@ function parseAction(actionObj, initialContext) {
                     throw new SyntaxError('$remove action first element is not a string');
                 }
 
-                return actions.remove(parseVariableWriter(val[0]), parseVariableReader(val[1]));
+                return actions.remove(parseVariableWriter(val[0]), parseVariableReader(val[1], constants));
             case "$select":
                 if (typeof val !== 'object' || Array.isArray(val)) {
                     throw new SyntaxError('$select action with something else than an object');
@@ -486,9 +485,11 @@ function parseAction(actionObj, initialContext) {
                 }
 
                 if (Array.isArray(val.in)) { // literal array
-                    return actions.select(val.in.map(elem => parseVariableReader(elem)), parseCondition(val['?']), actionsToRun.flatMap(elem => parseAction(elem, initialContext)));
+                    return actions.select(val.in.map(elem => parseVariableReader(elem, constants)), parseCondition(val['?'], constants),
+                        actionsToRun.flatMap(elem => parseAction(elem, initialContext, constants)));
                 } else if (typeof val.in === 'string') { // array getter
-                    return actions.select(parseVariableReader(val.in), parseCondition(val['?']), actionsToRun.flatMap(elem => parseAction(elem, initialContext)));
+                    return actions.select(parseVariableReader(val.in, constants), parseCondition(val['?'], constants),
+                        actionsToRun.flatMap(elem => parseAction(elem, initialContext, constants)));
                 } else {
                     throw new SyntaxError('$select action where "in" is neither an array literal nor a string');
                 }
@@ -500,7 +501,7 @@ function parseAction(actionObj, initialContext) {
     });
 }
 
-function parseVariableReader(string) {
+function parseVariableReader(string, constants = {}) {
     const typeString = typeof string;
     if (typeString === 'object' ||
         typeString === 'number' ||
@@ -515,6 +516,16 @@ function parseVariableReader(string) {
 
     if (string.startsWith('$.')) {
         const parts = string.substring(2).split('.');
+        let constantValue = constants[parts[0]];
+
+        for (const part of parts.slice(1)) {
+            if (typeof constantValue !== 'object' || Array.isArray(constantValue)) {
+                constantValue = undefined;
+                break;
+            }
+            constantValue = constantValue[part];
+        }
+
         return {
             get: (context, eventVars, loopVars) => {
                 let obj;
@@ -528,9 +539,13 @@ function parseVariableReader(string) {
 
                 for (const part of parts.slice(1)) {
                     if (typeof obj !== 'object' || Array.isArray(obj)) {
-                        return undefined;
+                        return constantValue; // if not in context, fall back to constants
                     }
                     obj = obj[part];
+                }
+
+                if (obj === undefined) {
+                    return constantValue; // if not in context, fall back to constants
                 }
                 return obj;
             },
