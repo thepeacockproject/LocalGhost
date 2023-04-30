@@ -109,8 +109,7 @@
                     "$eq": [
                       "$Value.KillContext",
                       1
-                    ],
-                    "_comment": "EDeathContext enum. 1 = eDC_NOT_HERO"
+                    ]
                   }
                 }
               ]
