@@ -27,6 +27,7 @@
       "killsNoticedBy": [],
       "completedObjectives": [],
       "recording": "NOT_SPOTTED",
+      "firstKill": -1,
       "lastAccident": 0,
       "lastKill": {
         "timestamp": 0,
@@ -46,6 +47,20 @@
           }
         },
         "Kill": [
+          {
+            "Condition": {
+              "$eq": [
+                "$.firstKill",
+                -1
+              ]
+            },
+            "Actions": {
+              "$set": [
+                "firstKill",
+                "$Timestamp"
+              ]
+            }
+          },
           {
             "Condition": {
               "$eq": [
