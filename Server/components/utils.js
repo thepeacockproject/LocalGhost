@@ -242,7 +242,7 @@ function cloneJsonObject(obj) {
     }
 }
 
-const scoreTrackingObjective = JSON.parse(readFileSync(path.join('menudata', 'scoreTrackingObjective.json')));
+const scoreTrackingObjective = require('../menudata/scoreTrackingObjective.json');
 
 module.exports = {
     extractToken,
