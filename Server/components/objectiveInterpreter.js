@@ -25,6 +25,7 @@ function parseObjectives(objectives) {
                 stateMachines[obj.Id] = {
                     currentState: 'Start',
                     inStateSince: 0,
+                    lastTimerTick: 0,
                     context: cloneJsonObject(obj.Definition.Context),
                     stateHandlers: parseStateMachine(obj.Definition),
                     type: 'statemachine',
@@ -771,7 +772,6 @@ function handleEvents(objectives, events) {
     });
 
     let exited = false;
-    let lastHeartbeat = 0;
 
     for (const event of events) {
         if (event.Name === 'exit_gate' || event.Name === 'ContractEnd' || event.Name === 'ContractFailed') {
@@ -781,14 +781,15 @@ function handleEvents(objectives, events) {
         }
 
         // First: tick timers in between the last event and this one
-        // I'm ticking all proper timers with a 'Heartbeat' event every second,
-        // which is approximately what the game does aswell
-        while (lastHeartbeat < event.Timestamp) {
-            handleEventAndTransitions(stateMachines, {
-                Name: 'Heartbeat',
-                Timestamp: lastHeartbeat
-            }, true);
-            lastHeartbeat += 1;
+        // I'm ticking each state machine's proper timers with a 'Heartbeat' event every second since it's last transition.
+        for(const stateMachine of Object.values(stateMachines)) {
+            while (stateMachine.lastTimerTick < event.Timestamp) {
+                handleEventAndTransitions([stateMachine], {
+                    Name: 'Heartbeat',
+                    Timestamp: stateMachine.lastTimerTick
+                }, true);
+                stateMachine.lastTimerTick += 1;
+            }
         }
 
         // Then: handle this event
@@ -808,6 +809,11 @@ function handleEvents(objectives, events) {
 
 function handleEventAndTransitions(stateMachines, event, timerTick = false, initEvent = false) {
     let transitionedSMs = handleSingleEvent(stateMachines, event, timerTick, initEvent);
+
+    // Make sure timer ticks start from the moment that a SM transitions.
+    for(const stateMachine of transitionedSMs) {
+        stateMachine.lastTimerTick = event.Timestamp;
+    }
 
     // Trigger init events for every SM that has transitioned to a new state
     let numberOfLoops = 0;
@@ -1053,7 +1059,7 @@ const conditions = {
     },
     after: function after(timeout) {
         return function $after(context, eventVars, loopVars, timeInState) {
-            return timeInState > timeout.get(context, eventVars, loopVars);
+            return timeInState >= timeout.get(context, eventVars, loopVars);
         }
     }
 }
