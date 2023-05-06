@@ -179,6 +179,7 @@ function parseStateMachine(definition) {
                     if (eventName === '$timer' &&
                         Object.hasOwn(thingToDo, 'Condition') && Object.hasOwn(thingToDo.Condition, '$after')) {
                         properTimers.push(eventHandler);
+                        eventHandler.isProperTimer = true;
                     }
                     // Timers get ticked on every heartbeat, but also on every regular event
                     dollarEventHandlers.push(eventHandler);
@@ -858,9 +859,12 @@ function handleSingleEvent(stateMachines, event, timerTick = false, initEvent = 
             eventHandlers = eventHandlersForEvent;
             eventVars = {};
         }
-        const timeInState = event.Timestamp - stateMachine.inStateSince;
 
         for (const eventHandler of eventHandlers) {
+            // The value that '$after' is compared against in proper timers is the time since the last transition,
+            // but outside of proper timers, the absolute event timestamp is used.
+            const timeInState = eventHandler.isProperTimer ? (event.Timestamp - stateMachine.inStateSince) : event.Timestamp;
+
             if (!Object.hasOwn(eventHandler, 'condition') ||
                 eventHandler.condition(stateMachine.context, eventVars, [], timeInState)) {
                 if (Object.hasOwn(eventHandler, 'actions')) {
