@@ -65,7 +65,7 @@ namespace HitmanPatcher
 			if (File.Exists(path))
 			{
 				string[] lines = File.ReadAllLines(path);
-				if (lines.Length == 1)
+				if (lines.Length == 1) // legacy
 				{
 					result.patchOptions.CustomConfigDomain = lines[0];
 				}
