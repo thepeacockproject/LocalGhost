@@ -172,6 +172,7 @@ namespace HitmanPatcher
 				updateTrayDomains();
 
 				buttonStartGame.Text = value.startButtonText;
+				buttonStartGame.Width = 0;
 			}
 		}
 
