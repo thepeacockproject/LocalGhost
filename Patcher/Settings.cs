@@ -16,8 +16,8 @@ namespace HitmanPatcher
 		public bool minimizeToTray;
 		public List<string> domains;
 
-		private static string localpath = "patcher.conf";
-		private static string appdatapath =
+		private static readonly string localpath = "patcher.conf";
+		private static readonly string appdatapath =
 			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "LocalGhost", "patcher.conf");
 
 		public Settings()
