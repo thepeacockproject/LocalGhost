@@ -23,7 +23,7 @@ namespace HitmanPatcher
 		public MainForm()
 		{
 			InitializeComponent();
-			listView1.Columns[0].Width = listView1.Width - 4 - SystemInformation.VerticalScrollBarWidth;
+			listViewLog.Columns[0].Width = listViewLog.Width - 4 - SystemInformation.VerticalScrollBarWidth;
 			Timer timer = new Timer();
 			timer.Interval = 1000;
 			timer.Tag = this;
@@ -56,7 +56,7 @@ namespace HitmanPatcher
 		{
 			foreach (string line in msg.Split('\n'))
 			{
-				listView1.Items.Insert(0, String.Format("[{0:HH:mm:ss}] - {1}", DateTime.Now, line));
+				listViewLog.Items.Insert(0, String.Format("[{0:HH:mm:ss}] - {1}", DateTime.Now, line));
 			}
 		}
 
@@ -74,9 +74,9 @@ namespace HitmanPatcher
 		{
 			string hostname;
 
-			if (!publicServers.TryGetValue(comboBox1.Text, out hostname))
+			if (!publicServers.TryGetValue(comboBoxAddress.Text, out hostname))
 			{
-				hostname = comboBox1.Text;
+				hostname = comboBoxAddress.Text;
 			}
 
 			if(string.IsNullOrEmpty(hostname))
@@ -96,15 +96,15 @@ namespace HitmanPatcher
 				result = input;
 			}
 
-			comboBox1.Text = result;
+			comboBoxAddress.Text = result;
 		}
 
-		private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		private void linkLabelMadeBy_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			Process.Start("https://gitlab.com/grappigegovert/localghost");
 		}
 
-		private void button2_Click(object sender, EventArgs e)
+		private void buttonStartGame_Click(object sender, EventArgs e)
 		{
 			if (Process.GetProcessesByName("steam").Length > 0)
 			{
@@ -143,17 +143,17 @@ namespace HitmanPatcher
 				if (value.patchOptions.SetCustomConfigDomain)
 				{
 					setSelectedServerHostname(value.patchOptions.CustomConfigDomain);
-					comboBox1.Enabled = true;
+					comboBoxAddress.Enabled = true;
 				}
 				else
 				{
 					setSelectedServerHostname("custom domain disabled");
-					comboBox1.Enabled = false;
+					comboBoxAddress.Enabled = false;
 				}
 
-				comboBox1.Items.Clear();
-				comboBox1.Items.AddRange(publicServers.Keys.ToArray<object>());
-				comboBox1.Items.AddRange(value.domains.ToArray<object>());
+				comboBoxAddress.Items.Clear();
+				comboBoxAddress.Items.AddRange(publicServers.Keys.ToArray<object>());
+				comboBoxAddress.Items.AddRange(value.domains.ToArray<object>());
 				updateTrayDomains();
 			}
 		}
@@ -169,14 +169,14 @@ namespace HitmanPatcher
 			}
 			else
 			{
-				listView1.Columns[0].Width = listView1.Width - 4 - SystemInformation.VerticalScrollBarWidth;
+				listViewLog.Columns[0].Width = listViewLog.Width - 4 - SystemInformation.VerticalScrollBarWidth;
 			}
 		}
 
 		private void copyLogToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			StringBuilder builder = new StringBuilder();
-			foreach (ListViewItem item in listView1.Items)
+			foreach (ListViewItem item in listViewLog.Items)
 			{
 				builder.AppendLine(item.Text);
 			}

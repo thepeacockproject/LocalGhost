@@ -33,16 +33,16 @@ namespace HitmanPatcher
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-			this.label1 = new System.Windows.Forms.Label();
-			this.listView1 = new System.Windows.Forms.ListView();
+			this.labelServerAddress = new System.Windows.Forms.Label();
+			this.listViewLog = new System.Windows.Forms.ListView();
 			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.logContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.copyLogToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.label2 = new System.Windows.Forms.Label();
+			this.labelLog = new System.Windows.Forms.Label();
 			this.buttonRepatch = new System.Windows.Forms.Button();
-			this.comboBox1 = new System.Windows.Forms.ComboBox();
-			this.linkLabel1 = new System.Windows.Forms.LinkLabel();
-			this.button2 = new System.Windows.Forms.Button();
+			this.comboBoxAddress = new System.Windows.Forms.ComboBox();
+			this.linkLabelMadeBy = new System.Windows.Forms.LinkLabel();
+			this.buttonStartGame = new System.Windows.Forms.Button();
 			this.buttonOptions = new System.Windows.Forms.Button();
 			this.trayIcon = new System.Windows.Forms.NotifyIcon(this.components);
 			this.trayMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -54,33 +54,33 @@ namespace HitmanPatcher
 			this.trayMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// label1
+			// labelServerAddress
 			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(12, 15);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(109, 17);
-			this.label1.TabIndex = 0;
-			this.label1.Text = "Server address:";
+			this.labelServerAddress.AutoSize = true;
+			this.labelServerAddress.Location = new System.Drawing.Point(12, 15);
+			this.labelServerAddress.Name = "labelServerAddress";
+			this.labelServerAddress.Size = new System.Drawing.Size(109, 17);
+			this.labelServerAddress.TabIndex = 0;
+			this.labelServerAddress.Text = "Server address:";
 			// 
-			// listView1
+			// listViewLog
 			// 
-			this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+			this.listViewLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+			| System.Windows.Forms.AnchorStyles.Left)
+			| System.Windows.Forms.AnchorStyles.Right)));
+			this.listViewLog.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1});
-			this.listView1.ContextMenuStrip = this.logContextMenu;
-			this.listView1.FullRowSelect = true;
-			this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-			this.listView1.HideSelection = false;
-			this.listView1.Location = new System.Drawing.Point(0, 81);
-			this.listView1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-			this.listView1.Name = "listView1";
-			this.listView1.Size = new System.Drawing.Size(432, 106);
-			this.listView1.TabIndex = 2;
-			this.listView1.UseCompatibleStateImageBehavior = false;
-			this.listView1.View = System.Windows.Forms.View.Details;
+			this.listViewLog.ContextMenuStrip = this.logContextMenu;
+			this.listViewLog.FullRowSelect = true;
+			this.listViewLog.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+			this.listViewLog.HideSelection = false;
+			this.listViewLog.Location = new System.Drawing.Point(0, 81);
+			this.listViewLog.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+			this.listViewLog.Name = "listViewLog";
+			this.listViewLog.Size = new System.Drawing.Size(432, 106);
+			this.listViewLog.TabIndex = 2;
+			this.listViewLog.UseCompatibleStateImageBehavior = false;
+			this.listViewLog.View = System.Windows.Forms.View.Details;
 			// 
 			// columnHeader1
 			// 
@@ -102,14 +102,14 @@ namespace HitmanPatcher
 			this.copyLogToClipboardToolStripMenuItem.Text = "&Copy log to clipboard";
 			this.copyLogToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyLogToClipboardToolStripMenuItem_Click);
 			// 
-			// label2
+			// labelLog
 			// 
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(12, 62);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(36, 17);
-			this.label2.TabIndex = 3;
-			this.label2.Text = "Log:";
+			this.labelLog.AutoSize = true;
+			this.labelLog.Location = new System.Drawing.Point(12, 62);
+			this.labelLog.Name = "labelLog";
+			this.labelLog.Size = new System.Drawing.Size(36, 17);
+			this.labelLog.TabIndex = 3;
+			this.labelLog.Text = "Log:";
 			// 
 			// buttonRepatch
 			// 
@@ -123,41 +123,41 @@ namespace HitmanPatcher
 			this.buttonRepatch.UseVisualStyleBackColor = true;
 			this.buttonRepatch.Click += new System.EventHandler(this.buttonRepatch_Click);
 			// 
-			// comboBox1
+			// comboBoxAddress
 			// 
-			this.comboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.comboBox1.FormattingEnabled = true;
-			this.comboBox1.Location = new System.Drawing.Point(127, 12);
-			this.comboBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-			this.comboBox1.MaxLength = 150;
-			this.comboBox1.Name = "comboBox1";
-			this.comboBox1.Size = new System.Drawing.Size(240, 24);
-			this.comboBox1.TabIndex = 5;
+			this.comboBoxAddress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			| System.Windows.Forms.AnchorStyles.Right)));
+			this.comboBoxAddress.FormattingEnabled = true;
+			this.comboBoxAddress.Location = new System.Drawing.Point(127, 12);
+			this.comboBoxAddress.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+			this.comboBoxAddress.MaxLength = 150;
+			this.comboBoxAddress.Name = "comboBoxAddress";
+			this.comboBoxAddress.Size = new System.Drawing.Size(240, 24);
+			this.comboBoxAddress.TabIndex = 5;
 			// 
-			// linkLabel1
+			// linkLabelMadeBy
 			// 
-			this.linkLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.linkLabel1.AutoSize = true;
-			this.linkLabel1.Location = new System.Drawing.Point(173, 202);
-			this.linkLabel1.Name = "linkLabel1";
-			this.linkLabel1.Size = new System.Drawing.Size(247, 17);
-			this.linkLabel1.TabIndex = 6;
-			this.linkLabel1.TabStop = true;
-			this.linkLabel1.Text = "LocalGhost - Made by grappigegovert";
-			this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+			this.linkLabelMadeBy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.linkLabelMadeBy.AutoSize = true;
+			this.linkLabelMadeBy.Location = new System.Drawing.Point(173, 202);
+			this.linkLabelMadeBy.Name = "linkLabelMadeBy";
+			this.linkLabelMadeBy.Size = new System.Drawing.Size(247, 17);
+			this.linkLabelMadeBy.TabIndex = 6;
+			this.linkLabelMadeBy.TabStop = true;
+			this.linkLabelMadeBy.Text = "LocalGhost - Made by grappigegovert";
+			this.linkLabelMadeBy.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelMadeBy_LinkClicked);
 			// 
-			// button2
+			// buttonStartGame
 			// 
-			this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.button2.Location = new System.Drawing.Point(12, 196);
-			this.button2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-			this.button2.Name = "button2";
-			this.button2.Size = new System.Drawing.Size(109, 28);
-			this.button2.TabIndex = 7;
-			this.button2.Text = "Start Hitman 2";
-			this.button2.UseVisualStyleBackColor = true;
-			this.button2.Click += new System.EventHandler(this.button2_Click);
+			this.buttonStartGame.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.buttonStartGame.Location = new System.Drawing.Point(12, 196);
+			this.buttonStartGame.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+			this.buttonStartGame.Name = "buttonStartGame";
+			this.buttonStartGame.Size = new System.Drawing.Size(109, 28);
+			this.buttonStartGame.TabIndex = 7;
+			this.buttonStartGame.Text = "Start Hitman 2";
+			this.buttonStartGame.UseVisualStyleBackColor = true;
+			this.buttonStartGame.Click += new System.EventHandler(this.buttonStartGame_Click);
 			// 
 			// buttonOptions
 			// 
@@ -223,13 +223,13 @@ namespace HitmanPatcher
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(432, 233);
 			this.Controls.Add(this.buttonOptions);
-			this.Controls.Add(this.button2);
-			this.Controls.Add(this.linkLabel1);
-			this.Controls.Add(this.comboBox1);
+			this.Controls.Add(this.buttonStartGame);
+			this.Controls.Add(this.linkLabelMadeBy);
+			this.Controls.Add(this.comboBoxAddress);
 			this.Controls.Add(this.buttonRepatch);
-			this.Controls.Add(this.label2);
-			this.Controls.Add(this.listView1);
-			this.Controls.Add(this.label1);
+			this.Controls.Add(this.labelLog);
+			this.Controls.Add(this.listViewLog);
+			this.Controls.Add(this.labelServerAddress);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.MaximizeBox = false;
@@ -247,14 +247,14 @@ namespace HitmanPatcher
 
 		#endregion
 
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.ListView listView1;
+		private System.Windows.Forms.Label labelServerAddress;
+		private System.Windows.Forms.ListView listViewLog;
 		private System.Windows.Forms.ColumnHeader columnHeader1;
-		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.Label labelLog;
 		private System.Windows.Forms.Button buttonRepatch;
-		private System.Windows.Forms.ComboBox comboBox1;
-		private System.Windows.Forms.LinkLabel linkLabel1;
-		private System.Windows.Forms.Button button2;
+		private System.Windows.Forms.ComboBox comboBoxAddress;
+		private System.Windows.Forms.LinkLabel linkLabelMadeBy;
+		private System.Windows.Forms.Button buttonStartGame;
 		private System.Windows.Forms.Button buttonOptions;
 		private System.Windows.Forms.ContextMenuStrip logContextMenu;
 		private System.Windows.Forms.ToolStripMenuItem copyLogToClipboardToolStripMenuItem;
