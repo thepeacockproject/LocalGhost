@@ -9,16 +9,37 @@ using System.Linq;
 namespace HitmanPatcher
 {
 
+	public struct StartButtonPreset
+	{
+		public string Name;
+		public string Text;
+		public string Command;
+	}
+
 	public class Settings
 	{
 		public MemoryPatcher.Options patchOptions;
 		public bool startInTray;
 		public bool minimizeToTray;
 		public List<string> domains;
+		public int startButtonPreset;
+		public string startButtonText;
+		public string startButtonCommand;
 
 		private static readonly string localpath = "patcher.conf";
 		private static readonly string appdatapath =
 			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "LocalGhost", "patcher.conf");
+		public static readonly StartButtonPreset[] startButtonPresets = new StartButtonPreset[] {
+            new StartButtonPreset() { Name="Custom", Text="", Command="" },
+            new StartButtonPreset() { Name="H2016 Steam", Text="Start Hitman 1", Command="steam://run/236870//" },
+            new StartButtonPreset() { Name="H2016 EGL", Text="Start Hitman 1", Command="com.epicgames.launcher://apps/Barbet?action=launch&silent=true&args=" },
+            new StartButtonPreset() { Name="H2016 Legendary", Text="Start Hitman 1", Command="legendary launch Barbet" },
+            new StartButtonPreset() { Name="H2 Steam", Text="Start Hitman 2", Command="steam://run/863550//" },
+            new StartButtonPreset() { Name="H3 Steam", Text="Start Hitman 3", Command="steam://run/1659040//" },
+            new StartButtonPreset() { Name="H3 EGL", Text="Start Hitman 3", Command="com.epicgames.launcher://apps/Eider?action=launch&silent=true&args=" },
+            new StartButtonPreset() { Name="H3 Legendary", Text="Start Hitman 3", Command="legendary launch Eider" },
+            new StartButtonPreset() { Name="H3 Gamepass", Text="Start Hitman 3", Command=Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Microsoft", "WindowsApps", "HITMAN3.exe") },
+        };
 
 		public Settings()
 		{
@@ -36,6 +57,9 @@ namespace HitmanPatcher
 			this.startInTray = false;
 			this.minimizeToTray = false;
 			this.domains = new List<string>();
+			this.startButtonPreset = 5; // H3 steam
+			this.startButtonCommand = Settings.startButtonPresets[5].Command;
+			this.startButtonText = Settings.startButtonPresets[5].Text;
 		}
 
 		public void saveToFile(string path)
@@ -50,6 +74,9 @@ namespace HitmanPatcher
 			lines.Add(String.Format("forcedVersion={0}", patchOptions.ForcedVersion));
 			lines.Add(String.Format("startInTray={0}", startInTray));
 			lines.Add(String.Format("minToTray={0}", minimizeToTray));
+			lines.Add(String.Format("startButtonPreset={0}", startButtonPreset));
+			lines.Add(String.Format("startButtonCommand={0}", startButtonCommand));
+			lines.Add(String.Format("startButtonText={0}", startButtonText));
 
 			foreach (string domain in domains)
 			{
@@ -118,6 +145,15 @@ namespace HitmanPatcher
 								break;
 							case "domain":
 								result.domains.Add(linecontents[1]);
+								break;
+							case "startButtonPreset":
+								result.startButtonPreset = Int32.Parse(linecontents[1]);
+								break;
+							case "startButtonCommand":
+								result.startButtonCommand = linecontents[1];
+								break;
+							case "startButtonText":
+								result.startButtonText = linecontents[1];
 								break;
 						}
 					}

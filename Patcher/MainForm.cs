@@ -106,14 +106,29 @@ namespace HitmanPatcher
 
 		private void buttonStartGame_Click(object sender, EventArgs e)
 		{
-			if (Process.GetProcessesByName("steam").Length > 0)
-			{
-				Process.Start("steam://run/863550");
+			// warning: hacky
+			// very cool, C# api, thanks
+			// I guess it's still less LOC than p/invoking CreateProcess
+
+			string c = currentSettings.startButtonCommand;
+			string filePath;
+			string arguments;
+			if (c.StartsWith("\"")) { // quoted path; remove the quotes and use the rest as arguments
+				filePath = c.Substring(1, c.IndexOf('"', 1) - 1);
+				arguments = c.Substring(filePath.Length + 2);
 			}
 			else
 			{
-				MessageBox.Show("Please launch steam first, before using this button.");
+				filePath = c.Split(' ')[0];
+				arguments = c.Substring(filePath.Length);
+				if (filePath.Contains("://")) // not a file, but some custom uri
+				{
+					filePath = c;
+					arguments = "";
+				}
 			}
+
+			Process.Start(filePath, arguments);
 		}
 
 		private void buttonOptions_Click(object sender, EventArgs e)
@@ -155,6 +170,8 @@ namespace HitmanPatcher
 				comboBoxAddress.Items.AddRange(publicServers.Keys.ToArray<object>());
 				comboBoxAddress.Items.AddRange(value.domains.ToArray<object>());
 				updateTrayDomains();
+
+				buttonStartGame.Text = value.startButtonText;
 			}
 		}
 

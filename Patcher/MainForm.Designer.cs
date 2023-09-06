@@ -150,6 +150,7 @@ namespace HitmanPatcher
 			// buttonStartGame
 			// 
 			this.buttonStartGame.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.buttonStartGame.AutoSize = true;
 			this.buttonStartGame.Location = new System.Drawing.Point(12, 196);
 			this.buttonStartGame.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.buttonStartGame.Name = "buttonStartGame";
