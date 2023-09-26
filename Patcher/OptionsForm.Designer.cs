@@ -49,10 +49,19 @@ namespace HitmanPatcher
 			this.tabPageTrayOptions = new System.Windows.Forms.TabPage();
 			this.checkBoxTrayMinimize = new System.Windows.Forms.CheckBox();
 			this.checkBoxTrayStart = new System.Windows.Forms.CheckBox();
+			this.tabPageStartButton = new System.Windows.Forms.TabPage();
+			this.textBoxStartButtonText = new System.Windows.Forms.TextBox();
+			this.labelStartButtonText = new System.Windows.Forms.Label();
+			this.checkBoxSkipLauncher = new System.Windows.Forms.CheckBox();
+			this.labelStartButtonCommand = new System.Windows.Forms.Label();
+			this.textBoxStartButtonCommand = new System.Windows.Forms.TextBox();
+			this.labelStartButtonPreset = new System.Windows.Forms.Label();
+			this.comboBoxStartButtonPreset = new System.Windows.Forms.ComboBox();
 			this.tabControl.SuspendLayout();
 			this.tabPagePatchOptions.SuspendLayout();
 			this.tabPageDomains.SuspendLayout();
 			this.tabPageTrayOptions.SuspendLayout();
+			this.tabPageStartButton.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// buttonSave
@@ -177,6 +186,7 @@ namespace HitmanPatcher
 			this.tabControl.Controls.Add(this.tabPagePatchOptions);
 			this.tabControl.Controls.Add(this.tabPageDomains);
 			this.tabControl.Controls.Add(this.tabPageTrayOptions);
+			this.tabControl.Controls.Add(this.tabPageStartButton);
 			this.tabControl.Location = new System.Drawing.Point(0, 0);
 			this.tabControl.Name = "tabControl";
 			this.tabControl.SelectedIndex = 0;
@@ -265,6 +275,87 @@ namespace HitmanPatcher
 			this.checkBoxTrayStart.Text = "Start in tray";
 			this.checkBoxTrayStart.UseVisualStyleBackColor = true;
 			// 
+			// tabPageStartButton
+			// 
+			this.tabPageStartButton.Controls.Add(this.textBoxStartButtonText);
+			this.tabPageStartButton.Controls.Add(this.labelStartButtonText);
+			this.tabPageStartButton.Controls.Add(this.checkBoxSkipLauncher);
+			this.tabPageStartButton.Controls.Add(this.labelStartButtonCommand);
+			this.tabPageStartButton.Controls.Add(this.textBoxStartButtonCommand);
+			this.tabPageStartButton.Controls.Add(this.labelStartButtonPreset);
+			this.tabPageStartButton.Controls.Add(this.comboBoxStartButtonPreset);
+			this.tabPageStartButton.Location = new System.Drawing.Point(4, 25);
+			this.tabPageStartButton.Name = "tabPageStartButton";
+			this.tabPageStartButton.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPageStartButton.Size = new System.Drawing.Size(417, 158);
+			this.tabPageStartButton.TabIndex = 3;
+			this.tabPageStartButton.Text = "Start Button";
+			this.tabPageStartButton.UseVisualStyleBackColor = true;
+			// 
+			// textBoxStartButtonText
+			// 
+			this.textBoxStartButtonText.Location = new System.Drawing.Point(9, 130);
+			this.textBoxStartButtonText.Name = "textBoxStartButtonText";
+			this.textBoxStartButtonText.ReadOnly = true;
+			this.textBoxStartButtonText.Size = new System.Drawing.Size(400, 22);
+			this.textBoxStartButtonText.TabIndex = 6;
+			// 
+			// labelStartButtonText
+			// 
+			this.labelStartButtonText.AutoSize = true;
+			this.labelStartButtonText.Location = new System.Drawing.Point(10, 110);
+			this.labelStartButtonText.Name = "labelStartButtonText";
+			this.labelStartButtonText.Size = new System.Drawing.Size(79, 17);
+			this.labelStartButtonText.TabIndex = 5;
+			this.labelStartButtonText.Text = "Button text:";
+			// 
+			// checkBoxSkipLauncher
+			// 
+			this.checkBoxSkipLauncher.AutoSize = true;
+			this.checkBoxSkipLauncher.Location = new System.Drawing.Point(288, 33);
+			this.checkBoxSkipLauncher.Name = "checkBoxSkipLauncher";
+			this.checkBoxSkipLauncher.Size = new System.Drawing.Size(121, 21);
+			this.checkBoxSkipLauncher.TabIndex = 1;
+			this.checkBoxSkipLauncher.Text = "Skip Launcher";
+			this.checkBoxSkipLauncher.UseVisualStyleBackColor = true;
+			this.checkBoxSkipLauncher.CheckedChanged += new System.EventHandler(this.checkBoxSkipLauncher_CheckedChanged);
+			// 
+			// labelStartButtonCommand
+			// 
+			this.labelStartButtonCommand.AutoSize = true;
+			this.labelStartButtonCommand.Location = new System.Drawing.Point(10, 65);
+			this.labelStartButtonCommand.Name = "labelStartButtonCommand";
+			this.labelStartButtonCommand.Size = new System.Drawing.Size(75, 17);
+			this.labelStartButtonCommand.TabIndex = 3;
+			this.labelStartButtonCommand.Text = "Command:";
+			// 
+			// textBoxStartButtonCommand
+			// 
+			this.textBoxStartButtonCommand.Location = new System.Drawing.Point(9, 85);
+			this.textBoxStartButtonCommand.Name = "textBoxStartButtonCommand";
+			this.textBoxStartButtonCommand.ReadOnly = true;
+			this.textBoxStartButtonCommand.Size = new System.Drawing.Size(400, 22);
+			this.textBoxStartButtonCommand.TabIndex = 2;
+			// 
+			// labelStartButtonPreset
+			// 
+			this.labelStartButtonPreset.AutoSize = true;
+			this.labelStartButtonPreset.Location = new System.Drawing.Point(8, 10);
+			this.labelStartButtonPreset.Name = "labelStartButtonPreset";
+			this.labelStartButtonPreset.Size = new System.Drawing.Size(128, 17);
+			this.labelStartButtonPreset.TabIndex = 1;
+			this.labelStartButtonPreset.Text = "Start button action:";
+			// 
+			// comboBoxStartButtonPreset
+			// 
+			this.comboBoxStartButtonPreset.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBoxStartButtonPreset.FormattingEnabled = true;
+			this.comboBoxStartButtonPreset.Location = new System.Drawing.Point(9, 30);
+			this.comboBoxStartButtonPreset.Name = "comboBoxStartButtonPreset";
+			this.comboBoxStartButtonPreset.Size = new System.Drawing.Size(263, 24);
+			this.comboBoxStartButtonPreset.TabIndex = 0;
+			this.comboBoxStartButtonPreset.SelectedIndexChanged += new System.EventHandler(this.comboBoxStartButtonPreset_SelectedIndexChanged);
+			// 
 			// OptionsForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -276,6 +367,7 @@ namespace HitmanPatcher
 			this.Controls.Add(this.buttonSave);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+			this.MaximizeBox = false;
 			this.Name = "OptionsForm";
 			this.ShowIcon = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -287,6 +379,8 @@ namespace HitmanPatcher
 			this.tabPageDomains.PerformLayout();
 			this.tabPageTrayOptions.ResumeLayout(false);
 			this.tabPageTrayOptions.PerformLayout();
+			this.tabPageStartButton.ResumeLayout(false);
+			this.tabPageStartButton.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -311,5 +405,13 @@ namespace HitmanPatcher
 		private System.Windows.Forms.CheckBox checkBoxTrayStart;
 		private System.Windows.Forms.Label labelCustomDomains;
 		private System.Windows.Forms.TextBox textBoxDomains;
+		private System.Windows.Forms.TabPage tabPageStartButton;
+		private System.Windows.Forms.Label labelStartButtonPreset;
+		private System.Windows.Forms.ComboBox comboBoxStartButtonPreset;
+		private System.Windows.Forms.TextBox textBoxStartButtonCommand;
+		private System.Windows.Forms.Label labelStartButtonCommand;
+		private System.Windows.Forms.CheckBox checkBoxSkipLauncher;
+		private System.Windows.Forms.TextBox textBoxStartButtonText;
+		private System.Windows.Forms.Label labelStartButtonText;
 	}
 }

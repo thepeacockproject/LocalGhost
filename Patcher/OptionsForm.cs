@@ -16,6 +16,8 @@ namespace HitmanPatcher
 		{
 			InitializeComponent();
 			comboBoxVersion.Items.AddRange(HitmanVersion.Versions.ToArray<object>());
+			comboBoxStartButtonPreset.Items.AddRange(Settings.startButtonPresets.Select(x => x.Name).ToArray());
+
 			this.settings = currentSettings;
 		}
 
@@ -43,7 +45,10 @@ namespace HitmanPatcher
 					},
 					startInTray = checkBoxTrayStart.Checked,
 					minimizeToTray = checkBoxTrayMinimize.Checked,
-					domains = textBoxDomains.Lines.Where(d => !string.IsNullOrWhiteSpace(d)).ToList()
+					domains = textBoxDomains.Lines.Where(d => !string.IsNullOrWhiteSpace(d)).ToList(),
+					startButtonPreset = comboBoxStartButtonPreset.SelectedIndex,
+					startButtonCommand = textBoxStartButtonCommand.Text,
+					startButtonText = textBoxStartButtonText.Text,
 				};
 			}
 			private set
@@ -59,6 +64,18 @@ namespace HitmanPatcher
 				checkBoxTrayStart.Checked = value.startInTray;
 				checkBoxTrayMinimize.Checked = value.minimizeToTray;
 				textBoxDomains.Lines = value.domains.ToArray();
+				comboBoxStartButtonPreset.SelectedIndex = value.startButtonPreset;
+				textBoxStartButtonCommand.Text = value.startButtonCommand;
+				textBoxStartButtonText.Text = value.startButtonText;
+				if (Settings.startButtonPresets[value.startButtonPreset].Name != "Custom"
+					&& value.startButtonCommand.Contains("-skip_launcher"))
+				{
+					checkBoxSkipLauncher.Checked = true;
+				}
+				else
+				{
+					checkBoxSkipLauncher.Checked = false;
+				}
 			}
 		}
 
@@ -103,6 +120,41 @@ namespace HitmanPatcher
 								+ Environment.NewLine + "Don't.", "Error");
 				e.Cancel = true;
 			}
+		}
+
+		private void comboBoxStartButtonPreset_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (comboBoxStartButtonPreset.SelectedIndex == -1)
+				return;
+
+			StartButtonPreset preset = Settings.startButtonPresets[comboBoxStartButtonPreset.SelectedIndex];
+
+			if ((string)comboBoxStartButtonPreset.SelectedItem == "Custom")
+			{
+				checkBoxSkipLauncher.Enabled =
+				textBoxStartButtonText.ReadOnly =
+				textBoxStartButtonCommand.ReadOnly = false;
+				checkBoxSkipLauncher.Checked = false;
+			}
+			else
+			{
+				checkBoxSkipLauncher.Enabled =
+				textBoxStartButtonText.ReadOnly =
+				textBoxStartButtonCommand.ReadOnly = true;
+
+				string additionalParameter = checkBoxSkipLauncher.Checked ? " -skip_launcher" : "";
+				textBoxStartButtonCommand.Text = preset.Command + additionalParameter;
+				textBoxStartButtonText.Text = preset.Text;
+			}
+		}
+
+		private void checkBoxSkipLauncher_CheckedChanged(object sender, EventArgs e)
+		{
+			if (comboBoxStartButtonPreset.SelectedIndex == -1 || (string)comboBoxStartButtonPreset.SelectedItem == "Custom")
+				return;
+
+			string additionalParameter = checkBoxSkipLauncher.Checked ? " -skip_launcher" : "";
+			textBoxStartButtonCommand.Text = Settings.startButtonPresets[comboBoxStartButtonPreset.SelectedIndex].Command + additionalParameter;
 		}
 	}
 }
