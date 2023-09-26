@@ -131,8 +131,10 @@ namespace HitmanPatcher
 		{
 			return Task.Factory.ContinueWhenAll(new[]
 			{
+				// jump 1
 				Task.Factory.StartNew(() => findPattern(data, 0xd, "0f85b50000004883f90675e8")), // unpatched
 				Task.Factory.StartNew(() => findPattern(data, 0xd, "9090909090904883f90675e8")), // patched
+				// jump 2
 				Task.Factory.StartNew(() => findPattern(data, 0x3, "0f84b800000084db0f85b0000000")), // unpatched
 				Task.Factory.StartNew(() => findPattern(data, 0x3, "90909090909084db0f85b0000000")), // patched
 				Task.Factory.StartNew(() => findPattern(data, 0x3, "0f84b500000084db0f85ad000000")), // unpatched gamepass
@@ -140,14 +142,14 @@ namespace HitmanPatcher
 			}, tasks =>
 			{
 				// concat results for non-patched and patched
-				IEnumerable<int> offsetspart1 = tasks.Take(2).SelectMany(task => task.Result);
-				IEnumerable<int> offsetspart2 = tasks.Skip(2).Take(2).SelectMany(task => task.Result);
-				if (offsetspart1.Count() != 1 || offsetspart2.Count() != 1)
+				IEnumerable<int> offsetsjump1 = tasks.Take(2).SelectMany(task => task.Result);
+				IEnumerable<int> offsetsjump2 = tasks.Skip(2).Take(4).SelectMany(task => task.Result);
+				if (offsetsjump1.Count() != 1 || offsetsjump2.Count() != 1)
 					return null;
 				return new[]
 				{
-					new Patch(offsetspart1.First(), "0F85B5000000", "909090909090", MemProtection.PAGE_EXECUTE_READ),
-					new Patch(offsetspart2.First(), "0F84B8000000", "909090909090", MemProtection.PAGE_EXECUTE_READ)
+					new Patch(offsetsjump1.First(), "0F85B5000000", "909090909090", MemProtection.PAGE_EXECUTE_READ),
+					new Patch(offsetsjump2.First(), "0F84B8000000", "909090909090", MemProtection.PAGE_EXECUTE_READ)
 				};
 			});
 		}
@@ -156,10 +158,12 @@ namespace HitmanPatcher
 		{
 			return Task.Factory.ContinueWhenAll(new[]
 			{
+				// jump 1
 				Task.Factory.StartNew(() => findPattern(data, 0x8, "? 18488d15bfb8ce00")), // v2.72 dx12
 				Task.Factory.StartNew(() => findPattern(data, 0x8, "? 18488d15ff02cd00")),
 				Task.Factory.StartNew(() => findPattern(data, 0x8, "? 18488d155fd6cc00")),
 				Task.Factory.StartNew(() => findPattern(data, 0x7, "? 18488d152018cc00")), // v2.13
+				// jump 2
 				Task.Factory.StartNew(() => findPattern(data, 0xc, "0f84860000004584e4")),
 				Task.Factory.StartNew(() => findPattern(data, 0xc, "9090909090904584e4")),
 				Task.Factory.StartNew(() => findPattern(data, 0xb, "0f84830000004584e4")), // v2.13
@@ -167,14 +171,14 @@ namespace HitmanPatcher
 			}, tasks =>
 			{
 				// concat results for non-patched and patched
-				IEnumerable<int> offsetspart1 = tasks.Take(3).SelectMany(task => task.Result);
-				IEnumerable<int> offsetspart2 = tasks.Skip(3).Take(4).SelectMany(task => task.Result);
-				if (offsetspart1.Count() != 1 || offsetspart2.Count() != 1)
+				IEnumerable<int> offsetsjump1 = tasks.Take(4).SelectMany(task => task.Result);
+				IEnumerable<int> offsetsjump2 = tasks.Skip(4).Take(4).SelectMany(task => task.Result);
+				if (offsetsjump1.Count() != 1 || offsetsjump2.Count() != 1)
 					return null;
 				return new[]
 				{
-					new Patch(offsetspart1.First(), "75", "EB", MemProtection.PAGE_EXECUTE_READ),
-					new Patch(offsetspart2.First(), "0F8486000000", "909090909090", MemProtection.PAGE_EXECUTE_READ)
+					new Patch(offsetsjump1.First(), "75", "EB", MemProtection.PAGE_EXECUTE_READ),
+					new Patch(offsetsjump2.First(), "0F8486000000", "909090909090", MemProtection.PAGE_EXECUTE_READ)
 				};
 			});
 		}
@@ -183,21 +187,23 @@ namespace HitmanPatcher
 		{
 			return Task.Factory.ContinueWhenAll(new[]
 			{
+				// jump 1
 				Task.Factory.StartNew(() => findPattern(data, 0x5, "0f84b3000000498bcf")),
 				Task.Factory.StartNew(() => findPattern(data, 0x5, "909090909090498bcf")),
+				// jump 2
 				Task.Factory.StartNew(() => findPattern(data, 0x5, "0f84a30000004584ed")),
 				Task.Factory.StartNew(() => findPattern(data, 0x5, "9090909090904584ed"))
 			}, tasks =>
 			{
 				// concat results for non-patched and patched
-				IEnumerable<int> offsetspart1 = tasks.Take(2).SelectMany(task => task.Result);
-				IEnumerable<int> offsetspart2 = tasks.Skip(2).Take(2).SelectMany(task => task.Result);
-				if (offsetspart1.Count() != 1 || offsetspart2.Count() != 1)
+				IEnumerable<int> offsetsjump1 = tasks.Take(2).SelectMany(task => task.Result);
+				IEnumerable<int> offsetsjump2 = tasks.Skip(2).Take(2).SelectMany(task => task.Result);
+				if (offsetsjump1.Count() != 1 || offsetsjump2.Count() != 1)
 					return null;
 				return new[]
 				{
-					new Patch(offsetspart1.First(), "0F84B3000000", "909090909090", MemProtection.PAGE_EXECUTE_READ),
-					new Patch(offsetspart2.First(), "0F84A3000000", "909090909090", MemProtection.PAGE_EXECUTE_READ)
+					new Patch(offsetsjump1.First(), "0F84B3000000", "909090909090", MemProtection.PAGE_EXECUTE_READ),
+					new Patch(offsetsjump2.First(), "0F84A3000000", "909090909090", MemProtection.PAGE_EXECUTE_READ)
 				};
 			});
 		}
