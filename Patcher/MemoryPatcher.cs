@@ -295,9 +295,29 @@ namespace HitmanPatcher
 		{
 			byte[] buffer = new byte[4];
 			UIntPtr bytesread;
-			Pinvoke.ReadProcessMemory(hProcess, baseAddress + 0x3C, buffer, (UIntPtr)4, out bytesread);
+			MemProtection oldprotectflags;
+			if (!Pinvoke.VirtualProtectEx(hProcess, baseAddress, (UIntPtr)1000, MemProtection.PAGE_READONLY, out oldprotectflags))
+			{
+				throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at {0} for offset {1:X}", "ts-vpe1", baseAddress));
+			}
+
+			if (!Pinvoke.ReadProcessMemory(hProcess, baseAddress + 0x3C, buffer, (UIntPtr)4, out bytesread))
+			{
+				throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at {0} for offset {1:X}", "ts-rpm1", baseAddress + 0x3C));
+			}
 			int NTHeaderOffset = BitConverter.ToInt32(buffer, 0);
-			Pinvoke.ReadProcessMemory(hProcess, baseAddress + NTHeaderOffset + 0x8, buffer, (UIntPtr)4, out bytesread);
+			if (!Pinvoke.ReadProcessMemory(hProcess, baseAddress + NTHeaderOffset + 0x8, buffer, (UIntPtr)4, out bytesread))
+			{
+				throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at {0} for offset {1:X}", "ts-rpm2",
+					baseAddress + NTHeaderOffset + 0x8));
+			}
+
+			MemProtection protectionToRestore = oldprotectflags;
+			if (!Pinvoke.VirtualProtectEx(hProcess, baseAddress, (UIntPtr)1000, protectionToRestore, out oldprotectflags))
+			{
+				throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format("error at {0} for offset {1:X}", "ts-vpe2", baseAddress));
+			}
+
 			return BitConverter.ToUInt32(buffer, 0);
 		}
 	}
