@@ -2,20 +2,21 @@ stages:
   - build
 
 variables:
-  msbuild: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\MSBuild.exe'
+  msbuild: 'C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\MSBuild.exe'
 
 build_patcher:
     stage: build
     tags:
-        - windows
-    only:
-        changes:
+        - saas-windows-medium-amd64
+    rules:
+        - changes:
             - Patcher/**/*
+            - .gitlab-ci.yml
     script:
-        - '& $msbuild .\Patcher\HitmanPatcher.sln /t:Build /p:Configuration=Release'
+        - '& $msbuild .\Patcher\HitmanPatcher.sln /t:Restore /t:Build /p:Configuration=Release'
         - 'mv .\Patcher\bin\x64\Release\HitmanPatcher.exe .\LocalGhostPatcher.exe'
     artifacts:
-        name: "LocalGhost-PatcherBinary-$env:CI_COMMIT_SHORT_SHA"
+        name: "LocalGhost-PatcherBinary-${CI_COMMIT_SHORT_SHA}"
         when: on_success
         expire_in: never
         paths:
