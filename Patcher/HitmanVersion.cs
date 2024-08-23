@@ -89,6 +89,7 @@ namespace HitmanPatcher
 			v1_15.addVersions();
 			v1_16.addVersions();
 			v2_13.addVersions();
+			v2_50.addVersions();
 			v2_70.addVersions();
 			v2_71.addVersions();
 			v2_72.addVersions();
