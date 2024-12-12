@@ -29,6 +29,7 @@ namespace HitmanPatcher
 
 			Task<IEnumerable<Patch[]>> getAuthheadPatches = Task.Factory.ContinueWhenAll(new Task<Patch[]>[]
 			{
+				findAuthhead3_210(exeData),
 				findAuthhead3_30(exeData),
 				findAuthhead2_72(exeData),
 				findAuthhead1_15(exeData),
@@ -97,7 +98,7 @@ namespace HitmanPatcher
 
 		private static Task<Patch[]> findCertpin_nearjump_new(byte[] data)
         {
-			return Task.Factory.StartNew(() => findPattern(data, 0x4, "0f8478fdffff4584f6 ? ? 6ffdffff")).ContinueWith(task =>
+			return Task.Factory.StartNew(() => findPattern(data, 0x4, "0f84 ? fdffff4584f6 ? ? ? fdffff")).ContinueWith(task =>
 			{
 				if (task.Result.Length != 1)
 					return null; // pattern should occur only once
@@ -126,6 +127,31 @@ namespace HitmanPatcher
 		#endregion
 
 		#region authheader
+
+		private static Task<Patch[]> findAuthhead3_210(byte[] data)
+		{
+			return Task.Factory.ContinueWhenAll(new[]
+			{
+				// jump 1
+				Task.Factory.StartNew(() => findPattern(data, 0xc, "75084883f90675eceb22")), // unpatched
+				Task.Factory.StartNew(() => findPattern(data, 0xc, "90904883f90675eceb22")), // patched
+				// jump 2
+				Task.Factory.StartNew(() => findPattern(data, 0x2, "0f84c20000004584ed0f85")), // unpatched
+				Task.Factory.StartNew(() => findPattern(data, 0x2, "9090909090904584ed0f85")), // patched
+			}, tasks =>
+			{
+				// concat results for non-patched and patched
+				IEnumerable<int> offsetsjump1 = tasks.Take(2).SelectMany(task => task.Result);
+				IEnumerable<int> offsetsjump2 = tasks.Skip(2).Take(2).SelectMany(task => task.Result);
+				if (offsetsjump1.Count() != 1 || offsetsjump2.Count() != 1)
+					return null;
+				return new[]
+				{
+					new Patch(offsetsjump1.First(), "7508", "9090", MemProtection.PAGE_EXECUTE_READ),
+					new Patch(offsetsjump2.First(), "0F84C2000000", "909090909090", MemProtection.PAGE_EXECUTE_READ)
+				};
+			});
+		}
 
 		private static Task<Patch[]> findAuthhead3_30(byte[] data)
 		{
@@ -217,7 +243,7 @@ namespace HitmanPatcher
 			return Task.Factory.ContinueWhenAll(new[]
 			{
 				Task.Factory.StartNew(() => findPattern(data, 0xe,
-					"488905 ? ? ? 03488d0d ? ? ? 034883c4205b48ff25 ? ? ? 01"))
+					"488905 ? ? ? ? 488d0d ? ? ? ? 4883c4205b48ff25 ? ? ? 01"))
 					.ContinueWith(task =>
 						task.Result.Select(addr => addr + 14 + BitConverter.ToInt32(data, addr + 10)).ToArray()),
 				Task.Factory.StartNew(() => findPattern(data, 0xd,
@@ -318,6 +344,23 @@ namespace HitmanPatcher
 			});
 		}
 
+		private static Task<Patch[]> findHttpsLength3_210(byte[] data)
+		{
+			return Task.Factory.ContinueWhenAll(new[]
+			{
+				Task.Factory.StartNew(() => findPattern(data, 0x7, "488945d741b8 ? 000080 448945b7")),
+			}, tasks =>
+			{
+				IEnumerable<int> offsets = tasks.SelectMany(task => task.Result);
+				if (offsets.Count() != 1)
+					return null; // pattern should occur only once
+				return new[]
+				{
+					new Patch(offsets.First() + 6, "0B", "0A", MemProtection.PAGE_EXECUTE_READ),
+				};
+			});
+		}
+
 		private static Task<Patch[]> findProtocolCombined(byte[] data)
 		{
 			return Task.Factory.ContinueWhenAll(new[]
@@ -326,6 +369,7 @@ namespace HitmanPatcher
 				findHttpsLengths1_16(data),
 				findHttpsLengthsPre3_30(data),
 				findHttpsLengths3_30(data),
+				findHttpsLength3_210(data),
 			}, tasks =>
 			{
 				if (tasks[0].Result == null)
@@ -346,6 +390,9 @@ namespace HitmanPatcher
 		{
 			return Task.Factory.ContinueWhenAll(new[]
 			{
+				Task.Factory.StartNew(() => findPattern(data, 0x4, "baa7935217488d0d58")) // 3.210
+					.ContinueWith(task =>
+						task.Result.Select(addr => addr + 0x22 + BitConverter.ToInt32(data, addr + 0x1A)).ToArray()),
 				Task.Factory.StartNew(() => findPattern(data, 0x1,
 						"83f17269c193010001488d0d ? ? ? 0383f06569d093010001e8 ? ? 0400488d05 ? ? ? 01c705 ? ? ? 0301000000"))
 					.ContinueWith(task =>
