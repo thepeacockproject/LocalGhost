@@ -103,6 +103,8 @@ namespace HitmanPatcher
 			v3_100.addVersions();
 			v3_110.addVersions();
 			v3_120.addVersions();
+			v3_160.addVersions();
+			v3_210.addVersions();
 		}
 	}
 }
