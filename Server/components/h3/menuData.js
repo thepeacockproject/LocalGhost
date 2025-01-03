@@ -649,6 +649,21 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
                         gameChangerObjectives.push(objective);
                     }
                 } else {
+                    let primary = null;
+                    for(const objective of gameChangerProps.Objectives) {
+                        if (objective.Category === 'primary') {
+                            if (primary === false) {
+                                console.warn(`Gamechanger ${gamechangerId} has more than one objective category`);
+                            }
+                            primary = true;
+                        } else {
+                            if (primary === true) {
+                                console.warn(`Gamechanger ${gamechangerId} has more than one objective category`);
+                            }
+                            primary = false;
+                        }
+                    }
+
                     result.set(gamechangerId, {
                         Type: 'gamechanger',
                         Properties: {
@@ -659,7 +674,7 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
                                 gameChangerProps.Description : gameChangerProps.LongDescription,
                             TileImage: gameChangerProps.TileImage,
                             Icon: gameChangerProps.Icon || '',
-                            ObjectivesCategory: gameChangerProps.ObjectivesCategory,
+                            ObjectivesCategory: primary ? 'primary' : 'secondary',
                         },
                     });
                 }
