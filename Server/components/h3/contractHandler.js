@@ -42,6 +42,7 @@ app.post('/GetForPlay2', express.json(), async (req, res) => {
                     Id: gameChangerId,
                 };
                 Object.assign(gameChanger, gameChangerData[gameChangerId]);
+                delete gameChanger.LongDescription;
 
                 contractData.Data.GameChangerReferences.push(gameChanger);
                 contractData.Data.Bricks.push(...gameChanger.Resource);
