@@ -6,6 +6,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -94,6 +96,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -182,6 +186,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -227,6 +233,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -264,6 +272,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -309,6 +319,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -350,6 +362,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": []
   },
@@ -360,6 +374,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": []
   },
@@ -370,6 +386,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": []
   },
@@ -380,6 +398,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": []
   },
@@ -390,6 +410,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -556,6 +578,8 @@
     "TileImage": "images/contractconditions/condition_contrac_hide_all_bodies.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -781,6 +805,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -817,6 +843,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -899,6 +927,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -973,6 +1003,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -1035,6 +1067,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -1108,6 +1142,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -1172,6 +1208,8 @@
     "TileImage": null,
     "Icon": "",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -1269,6 +1307,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -1347,6 +1387,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -1412,6 +1454,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -1455,6 +1499,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -1617,6 +1663,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -1782,6 +1830,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -1819,6 +1869,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -1856,6 +1908,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -1893,6 +1947,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -1930,6 +1986,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -1999,6 +2057,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -2060,6 +2120,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -2101,6 +2163,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -2142,6 +2206,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -2202,6 +2268,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -2263,6 +2331,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -2322,6 +2392,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -2410,6 +2482,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -2467,6 +2541,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -2515,6 +2591,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -2585,6 +2663,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -2673,6 +2753,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -2761,6 +2843,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -2831,6 +2915,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -2919,6 +3005,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -2960,6 +3048,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -3018,6 +3108,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -3061,6 +3153,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -3112,6 +3206,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -3157,6 +3253,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -3225,6 +3323,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -3299,6 +3399,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -3387,6 +3489,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -3433,6 +3537,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -3521,6 +3627,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": []
   },
@@ -3531,6 +3639,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -3567,6 +3677,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -3627,6 +3739,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -3687,6 +3801,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -3744,6 +3860,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -3799,6 +3917,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -3871,6 +3991,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -3939,6 +4061,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -3995,6 +4119,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -4060,6 +4186,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/thefacility/gamechangers_big_brother_cameras.brick"
     ],
@@ -4135,6 +4263,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/thefacility/gamechangers_guard_enforcers.brick"
     ],
@@ -4146,6 +4276,8 @@
     "TileImage": "images/contracts/gamechangers/Gamechanger_ICA_Facility_BreakAndEnter.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/thefacility/gamechangers_safe_office.brick"
     ],
@@ -4158,6 +4290,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/Paris/Gamechangers_PatrolGuardsSuperEnforcers.brick"
     ],
@@ -4170,6 +4304,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/Paris/Gamechangers_AllCameras.brick"
     ],
@@ -4245,6 +4381,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -4320,6 +4458,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -4395,6 +4535,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/Paris/Gamechangers_LaserMineExitBlocking.brick"
     ],
@@ -4434,6 +4576,8 @@
     "TileImage": "images/contracts/gamechangers/Gamechanger_Paris_BreakAndEnter_2ndFloor.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/Paris/Gamechangers_Safe_2ndFloor.brick"
     ],
@@ -4446,6 +4590,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/paris/gamechangers_auctionstaffenforceowndisguise.brick"
     ],
@@ -4458,6 +4604,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/Paris/Gamechangers_BodyguardBartenders.brick"
     ],
@@ -4469,6 +4617,8 @@
     "TileImage": "images/contracts/gamechangers/Gamechanger_Paris_DataExtraction_1stFloor.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/Paris/Gamechangers_HackableLaptop_1stFloor.brick"
     ],
@@ -4481,6 +4631,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/Paris/Gamechangers_TripWireMaze_03.brick",
       "assembly:/_PRO/Scenes/Missions/Paris/Gamechangers_MineDisableInSafe.brick",
@@ -4495,6 +4647,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -4560,6 +4714,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/Paris/Gamechangers_VIPSuperEnforcers.brick"
     ],
@@ -4572,6 +4728,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -4606,6 +4764,8 @@
     "TileImage": "images/contracts/gamechangers/Gamechanger_Paris_DataExtraction_Basement.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/Paris/Gamechangers_HackableLaptop_Basement.brick"
     ],
@@ -4618,6 +4778,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -4683,6 +4845,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/Paris/gamechanger_pistol_equipped.brick"
     ],
@@ -4741,6 +4905,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -4786,6 +4952,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/paris/gamechangers_backgardenminefield.brick",
       "assembly:/_PRO/Scenes/Missions/Paris/Gamechangers_MineDisableInSafe.brick",
@@ -4800,6 +4968,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/Paris/Gamechangers_TripwireMines.brick",
       "assembly:/_PRO/Scenes/Missions/Paris/Gamechangers_MineDisableInSafe.brick",
@@ -4814,6 +4984,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/Paris/Gamechangers_TripWireMaze_04.brick",
       "assembly:/_PRO/Scenes/Missions/Paris/Gamechangers_MineDisableInSafe.brick",
@@ -4828,6 +5000,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/Paris/Gamechangers_TripWireMaze_02.brick",
       "assembly:/_PRO/Scenes/Missions/Paris/Gamechangers_MineDisableInSafe.brick",
@@ -4842,6 +5016,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/Paris/Gamechangers_TripWireMaze_01.brick",
       "assembly:/_PRO/Scenes/Missions/Paris/Gamechangers_MineDisableInSafe.brick",
@@ -4856,6 +5032,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/paris/gamechangers_modelsenforcemodels.brick"
     ],
@@ -4868,6 +5046,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/coastaltown/gamechangers_mansiongardenminefield.brick",
       "assembly:/_PRO/Scenes/Missions/CoastalTown/Gamechangers_MineDisableInSafe_Mansion.brick"
@@ -4881,6 +5061,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -4916,6 +5098,8 @@
     "TileImage": null,
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/coastaltown/gamechangers_hackablelaptop_lab.brick"
     ],
@@ -4928,6 +5112,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/coastaltown/gamechangers_street_civilian_superenforcers.brick"
     ],
@@ -4940,6 +5126,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -5040,6 +5228,8 @@
     "TileImage": "images/contracts/gamechangers/Gamechanger_Sapienza_Copperhead_Laptop_Bosco_Trailer.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/coastaltown/gamechanger_copperhead_laptop.brick"
     ],
@@ -5052,6 +5242,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -5153,6 +5345,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/CoastalTown/Gamechangers_AllCameras.brick"
     ],
@@ -5228,6 +5422,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/coastaltown/gamechangers_mansion_basement_enforcers.brick"
     ],
@@ -5239,6 +5435,8 @@
     "TileImage": "images/contracts/gamechangers/Gamechanger_Sapienza_DataExtraction_Mansion.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/CoastalTown/Gamechangers_HackableLaptop_Mansion.brick"
     ],
@@ -5251,6 +5449,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/CoastalTown/Gamechangers_MansionBodyguardsEnforceOwnDisguise.brick"
     ],
@@ -5263,6 +5463,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/coastaltown/gamechangers_beach_and_square_civilians_are_guards.brick"
     ],
@@ -5274,6 +5476,8 @@
     "TileImage": null,
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": []
   },
@@ -5284,6 +5488,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -5359,6 +5565,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/CoastalTown/Gamechangers_TripWireMaze_05.brick",
       "assembly:/_PRO/Scenes/Missions/CoastalTown/Gamechangers_MineDisableInSafe_Church.brick",
@@ -5374,6 +5582,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/coastaltown/gamechanger_pistol_equipped.brick"
     ],
@@ -5432,6 +5642,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/marrakesh/gamechangers_big_brother.brick"
     ],
@@ -5506,6 +5718,8 @@
     "TileImage": "images/contracts/gamechangers/Gamechanger_Marrakesh_Safe_Consulate_Basement.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/marrakesh/gamechangers_safe_consulate_basement.brick"
     ],
@@ -5517,6 +5731,8 @@
     "TileImage": "images/contracts/gamechangers/Gamechanger_Marrakesh_Break_And_Enter_Maintenence_Room.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/marrakesh/gamechanger_spider_safe_maintenence_room_street.brick"
     ],
@@ -5529,6 +5745,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/marrakesh/gamechanger_minefield_market.brick"
     ],
@@ -5541,6 +5759,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/marrakesh/gamechanger_market_and_street_guards_enforce_shopkeeper.brick"
     ],
@@ -5552,6 +5772,8 @@
     "TileImage": "images/contracts/gamechangers/Gamechanger_Marrakesh_DataExtraction_Consulate_01.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/marrakesh/gamechangers_laptop_consulate.brick"
     ],
@@ -5564,6 +5786,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/marrakesh/gamechanger_spider_waiters_enhanced_enforcers.brick"
     ],
@@ -5576,6 +5800,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/marrakesh/gamechangers_tripwires_school_01.brick"
     ],
@@ -5587,6 +5813,8 @@
     "TileImage": "images/contracts/gamechangers/Gamechanger_Marrakesh_DataExtraction_Consulate_02.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/marrakesh/gamechanger_laptop_consulate02.brick"
     ],
@@ -5598,6 +5826,8 @@
     "TileImage": "images/contracts/gamechangers/Gamechanger_Marrakesh_Python_BreakAndEnter_AntiqueShop.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/marrakesh/gamechanger_python_safe.brick"
     ],
@@ -5609,6 +5839,8 @@
     "TileImage": "images/contracts/gamechangers/Gamechanger_Marrakesh_School_BreakAndEnter_01.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/marrakesh/gamechanger_break_and_enter_school.brick"
     ],
@@ -5620,6 +5852,8 @@
     "TileImage": "images/contracts/gamechangers/Gamechanger_Marrakesh_School_BreakAndEnter_02.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/marrakesh/gamechanger_break_and_enter_school_02.brick"
     ],
@@ -5631,6 +5865,8 @@
     "TileImage": "images/contracts/gamechangers/Gamechanger_Marrakesh_ProtestersMilitaryPresence_01.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/marrakesh/gamechangers_Protesters_Military_Presence.brick"
     ],
@@ -5642,6 +5878,8 @@
     "TileImage": "images/contracts/gamechangers/Gamechanger_Bangkok_Freezer.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/bangkok/gamechanger_targets_in_freezer.brick"
     ],
@@ -5654,6 +5892,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/bangkok/gamechanger_enhanced_enforcers_exterminator_disguise.brick"
     ],
@@ -5666,6 +5906,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/bangkok/gamechanger_enhanced_enforcers_groundskeeper_disguise.brick"
     ],
@@ -5678,6 +5920,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/bangkok/gamechanger_extreme_security_basement.brick"
     ],
@@ -5690,6 +5934,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -5765,6 +6011,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -5815,6 +6063,8 @@
     "TileImage": "images/contracts/gamechangers/Gamechanger_Colorado_Laptop_Farmhouse.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/colorado_2/gamechanger_bull_hackable_laptop_02.brick"
     ],
@@ -5827,6 +6077,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/colorado_2/gamechanger_enhanced_enforcers_hacker.brick"
     ],
@@ -5839,6 +6091,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -5873,6 +6127,8 @@
     "TileImage": "images/contracts/gamechangers/Gamechanger_Colorado_Laptop_Farmhouse.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/colorado_2/gamechanger_bull_hackable_laptop_01.brick"
     ],
@@ -5885,6 +6141,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/colorado_2/gamechanger_bull_deadly_stalker.brick"
     ],
@@ -5897,6 +6155,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -5967,6 +6227,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/colorado_2/gamechanger_bull_enhanced_enforcers_milita_tech.brick"
     ],
@@ -5979,6 +6241,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -6094,6 +6358,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/hokkaido/gamechanger_snowcrane_trespassers.brick"
     ],
@@ -6325,6 +6591,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/hokkaido/gamechanger_snowcrane_cameras.brick"
     ],
@@ -6337,6 +6605,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -6412,6 +6682,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -6461,6 +6733,8 @@
     "TileImage": null,
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/Hokkaido/gamechanger_snowcrane_safe_sleeping_quarters.brick"
     ],
@@ -6473,6 +6747,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -6560,6 +6836,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": false,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -6647,6 +6925,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": []
   },
@@ -6657,6 +6937,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/miami/gamechanger__flamingo__secured_aquarium.brick"
     ],
@@ -6733,6 +7015,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/miami/gamechanger_flamingo_lamium_unspotted_coach.brick"
     ],
@@ -6777,6 +7061,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/miami/gamechanger_flamingo_pentas_bodydump_wildcard.brick"
     ],
@@ -6816,6 +7102,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/miami/gamechanger__flamingo__additional__enforcers.brick"
     ],
@@ -6828,6 +7116,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -6931,6 +7221,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -7031,6 +7323,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/miami/gamechanger__flamingo__aquarium_fish.brick"
     ],
@@ -7163,6 +7457,8 @@
     "TileImage": null,
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/miami/escalation_crinum.brick"
     ],
@@ -7175,6 +7471,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/miami/gamechanger__flamingo__aquarium_fish.brick"
     ],
@@ -7339,6 +7637,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/miami/gamechanger__flamingo__sticky_food_vendor.brick"
     ],
@@ -7374,6 +7674,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/miami/gamechanger_flamingo_lamium_no_running.brick"
     ],
@@ -7386,6 +7688,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -7445,6 +7749,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -7484,6 +7790,8 @@
     "TileImage": null,
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/Colombia/gamechanger_hippo_holly.brick"
     ],
@@ -7495,6 +7803,8 @@
     "TileImage": null,
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/Colombia/gamechanger_hippo_titanumarum.brick"
     ],
@@ -7507,6 +7817,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/Colombia/gamechanger_hippo_interrogationroom_locked.brick"
     ],
@@ -7536,6 +7848,8 @@
     "TileImage": null,
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/colombia/gamechanger_hippo_interrogator_adjustedloop.brick"
     ],
@@ -7548,6 +7862,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": []
   },
@@ -7558,6 +7874,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/Colombia/gamechanger_hippo_hiding_in_lva.brick"
     ],
@@ -7616,6 +7934,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -7651,6 +7971,8 @@
     "TileImage": "images/contracts/gamechangers/Gamechanger_Global_BigBrother.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/Colombia/gamechanger_hippo_laptop_cave.brick"
     ],
@@ -7663,6 +7985,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/Colombia/gamechanger_hippo_kill_with_shaman_followers_active.brick"
     ],
@@ -7798,6 +8122,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -7839,6 +8165,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -7913,6 +8241,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/Colombia/gamechanger_hippo_cocainebricks_in_village.brick"
     ],
@@ -7925,6 +8255,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/Colombia/gamechanger_hippo_reinforced_safe.brick"
     ],
@@ -7936,6 +8268,8 @@
     "TileImage": null,
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/Mumbai/gamechanger_gloriosa.brick"
     ],
@@ -7947,6 +8281,8 @@
     "TileImage": null,
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/mumbai/escalation_ashoka.brick"
     ],
@@ -7959,6 +8295,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -8228,6 +8566,8 @@
     "TileImage": null,
     "Icon": "",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/Mumbai/gamechanger_nutmeg_building_throw.brick"
     ],
@@ -8240,6 +8580,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/Mumbai/gamechanger_gloriosa_reinforced_container.brick"
     ],
@@ -8252,6 +8594,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -8321,6 +8665,8 @@
     "TileImage": null,
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/skunk/gamechangers_baneberry_rob2houses.brick"
     ],
@@ -8332,6 +8678,8 @@
     "TileImage": "images/challenges/Northamerica/NORTHAMERICA_Become_Mailman.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/skunk/gamechangers_myrtle_mailman_tracker.brick"
     ],
@@ -8343,6 +8691,8 @@
     "TileImage": null,
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/skunk/gamechangers_claytonia.brick"
     ],
@@ -8355,6 +8705,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/Skunk/Gamechangers_DingDongDitch.brick"
     ],
@@ -8366,6 +8718,8 @@
     "TileImage": "images/challenges/northamerica/SKUNK_Letter_Interceptor.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/skunk/gamechangers_gorse_donotkillspencer.brick"
     ],
@@ -8417,6 +8771,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/skunk/gamechangers_baneberry_tresspassingeverywhere.brick"
     ],
@@ -8455,6 +8811,8 @@
     "TileImage": null,
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/skunk/gamechangers_baneberry_rob3rdhouse.brick"
     ],
@@ -8467,6 +8825,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -8543,6 +8903,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/skunk/gamechangers_baneberry_usenodoors.brick"
     ],
@@ -8587,6 +8949,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/skunk/gamechangers_myrtle.brick"
     ],
@@ -8792,6 +9156,8 @@
     "TileImage": null,
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/TheArk/gamechanger_no_constant_glow.brick"
     ],
@@ -8803,6 +9169,8 @@
     "TileImage": null,
     "Icon": "",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/theark/gamechanger_magpie_heather_gargoyle_check.brick"
     ],
@@ -8814,6 +9182,8 @@
     "TileImage": null,
     "Icon": "",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/theark/gamechanger_magpie_heather_gibbet_check.brick"
     ],
@@ -8826,6 +9196,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -8860,6 +9232,8 @@
     "TileImage": "",
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/theark/gamechanger_magpie_dahlia.brick"
     ],
@@ -8871,6 +9245,8 @@
     "TileImage": "",
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/theark/gamechanger_magpie_locked_jail_door.brick"
     ],
@@ -8883,6 +9259,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -8928,6 +9306,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/theark/gamechanger_magpie_guards_enforce_custodians.brick"
     ],
@@ -8939,6 +9319,8 @@
     "TileImage": null,
     "Icon": "",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_pro/scenes/missions/theark/gamechanger_magpie_hogweed_hackable_laptop.brick"
     ],
@@ -8951,6 +9333,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -8982,6 +9366,8 @@
     "TileImage": "",
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/theark/gamechanger_magpie_astilbe.brick"
     ],
@@ -8993,6 +9379,8 @@
     "TileImage": "",
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/theark/gamechanger_magpie_venusflytrap_give_knife_at_spawn.brick"
     ],
@@ -9005,6 +9393,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "primary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -9063,6 +9453,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": []
   },
@@ -9073,6 +9465,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": []
   },
@@ -9083,6 +9477,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": []
   },
@@ -9092,6 +9488,8 @@
     "TileImage": "images/contracts/gamechangers/Gamechanger_Golden_Vine_BodyDrop.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": []
   },
@@ -9102,6 +9500,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": []
   },
@@ -9112,6 +9512,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": []
   },
@@ -9122,6 +9524,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": []
   },
@@ -9132,6 +9536,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/wet/gamechanger_lockeddoors.brick"
     ],
@@ -9144,6 +9550,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [
       "assembly:/_PRO/Scenes/Missions/wet/gamechanger_swapcrowbars.brick"
     ],
@@ -9155,6 +9563,8 @@
     "TileImage": "images/evergreen/gamechangers/020_NoMissedShots.jpg",
     "Icon": "images/test/placeholder.jpg",
     "IsHidden": true,
+    "ShowBasedOnObjectives": false,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -9257,6 +9667,8 @@
     "TileImage": "images/test/placeholder.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -9323,6 +9735,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -9440,6 +9854,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -9589,6 +10005,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -9731,6 +10149,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -9874,6 +10294,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -10014,6 +10436,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -10152,6 +10576,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -10290,6 +10716,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -10438,6 +10866,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -10594,6 +11024,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -10732,6 +11164,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -10870,6 +11304,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -11000,6 +11436,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -11130,6 +11568,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -11260,6 +11700,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -11396,6 +11838,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -11532,6 +11976,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -11718,6 +12164,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -11858,6 +12306,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -12001,6 +12451,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -12130,6 +12582,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -12286,6 +12740,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -12414,6 +12870,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -12560,6 +13018,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -12690,6 +13150,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -12820,6 +13282,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -12960,6 +13424,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -13090,6 +13556,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -13220,6 +13688,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -13350,6 +13820,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -13515,6 +13987,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -13645,6 +14119,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -13773,6 +14249,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -13906,6 +14384,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -14033,6 +14513,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -14281,6 +14763,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -14412,6 +14896,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -14553,6 +15039,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -14675,6 +15163,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -14812,6 +15302,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -14977,6 +15469,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -15164,6 +15658,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -15286,6 +15782,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -15433,6 +15931,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -15591,6 +16091,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -15786,6 +16288,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -15969,6 +16473,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -16126,6 +16632,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -16318,6 +16826,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -16488,6 +16998,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -16634,6 +17146,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -16802,6 +17316,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -16940,6 +17456,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -17072,6 +17590,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -17203,6 +17723,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -17325,6 +17847,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -17447,6 +17971,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -17569,6 +18095,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -17691,6 +18219,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -17839,6 +18369,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -17965,6 +18497,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -18097,6 +18631,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -18244,6 +18780,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -18391,6 +18929,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -18538,6 +19078,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -18685,6 +19227,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -18833,6 +19377,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -18995,6 +19541,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -19135,6 +19683,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -19274,6 +19824,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -19420,6 +19972,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -19799,6 +20353,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -19935,6 +20491,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -20316,6 +20874,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -20472,6 +21032,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -20620,6 +21182,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -20768,6 +21332,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -20916,6 +21482,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -21070,6 +21638,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -21224,6 +21794,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -21372,6 +21944,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -21520,6 +22094,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -21662,6 +22238,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -21816,6 +22394,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -21969,6 +22549,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -22353,6 +22935,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -22738,6 +23322,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -22902,6 +23488,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -23079,6 +23667,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -23225,6 +23815,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -23368,6 +23960,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -23494,6 +24088,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -23620,6 +24216,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -23746,6 +24344,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -23900,6 +24500,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -24052,6 +24654,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -24179,6 +24783,8 @@
     "TileImage": "images/test/placeholder.jpg",
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": true,
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -24279,6 +24885,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -24439,6 +25047,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -24565,6 +25175,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -24691,6 +25303,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -24817,6 +25431,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -24977,6 +25593,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -25146,6 +25764,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -25303,6 +25923,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -25423,6 +26045,8 @@
     "Icon": "images/challenges/default_challenge_icon.png",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": null,
     "Resource": [],
     "Objectives": [
       {
@@ -25558,6 +26182,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
@@ -25729,6 +26355,8 @@
     "Icon": "images/test/placeholder.jpg",
     "ObjectivesCategory": "secondary",
     "IsHidden": null,
+    "ShowBasedOnObjectives": true,
+    "IsPrestigeObjective": true,
     "Resource": [],
     "Objectives": [
       {
