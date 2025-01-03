@@ -74,6 +74,8 @@ function xpRequiredForLevel(level) {
 
 function maxLevelForLocation(location, gameVersion) {
     switch (location.toUpperCase()) {
+        case 'LOCATION_SNUG':
+            return 100;
         case 'LOCATION_PARIS':
         case 'LOCATION_PARENT_COASTALTOWN':
         case 'LOCATION_MARRAKECH':

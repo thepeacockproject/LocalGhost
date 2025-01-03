@@ -184,6 +184,13 @@
           "LastCompletedChallenge": "00000000-0000-0000-0000-000000000000",
           "PreviouslySeenStaging": null,
           "Level": 1
+        },
+        "location_snug": {
+          "Xp": 0,
+          "PreviouslySeenXp": 0,
+          "LastCompletedChallenge": "00000000-0000-0000-0000-000000000000",
+          "PreviouslySeenStaging": null,
+          "Level": 1
         }
       },
       "PlayerProfileXP": {

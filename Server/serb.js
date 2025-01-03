@@ -205,8 +205,8 @@ app.post('/oauth/token', async (req, res) => {
         }
         // add all unlockables to player's inventory
         const allunlockables = JSON.parse(await readFile(path.join('userdata', gameVersion, 'allunlockables.json')))
-            .filter(u => u.Type !== 'location') // locations not in inventory
-            .concat(JSON.parse(await readFile(path.join('userdata', gameVersion, 'emotes.json')))); // add emotes to inventory
+            .concat(JSON.parse(await readFile(path.join('userdata', gameVersion, 'ServerOnlyUnlockables.json')))) // add emotes to inventory
+            .filter(u => u.Type !== 'location'); // locations not in inventory
         // TODO: challengemultiplier type unlockables - (only used for sniper gamemode?)
         userdata.Extensions.inventory = allunlockables.map(unlockable => {
             unlockable.GameAsset = null;

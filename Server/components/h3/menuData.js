@@ -370,7 +370,8 @@ app.get('/Planning', async (req, res) => {
     }
 
     const userData = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'users', `${req.jwt.unique_name}.json`)));
-    const repo = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'allunlockables.json')));
+    const repo = JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'allunlockables.json')))
+        .concat(JSON.parse(await readFile(path.join('userdata', req.gameVersion, 'ServerOnlyUnlockables.json'))));
     const entranceData = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'Entrances.json')));
     readFile(path.join('contractdata', `${req.query.contractid}.json`)).then(async contractfile => {
         const contractData = JSON.parse(contractfile);
