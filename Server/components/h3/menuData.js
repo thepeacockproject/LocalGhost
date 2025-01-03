@@ -642,9 +642,9 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
         const gameChangerData = JSON.parse(await readFile(path.join('menudata', 'h3', 'menudata', 'GameChangerProperties.json')));
         for (const gamechangerId of GameChangers) {
             const gameChangerProps = gameChangerData[gamechangerId];
-            if (gameChangerProps) {
+            if (gameChangerProps && !gameChangerProps.ShowBasedOnObjectives) {
                 if (gameChangerProps.IsHidden) {
-                    if (gameChangerProps.Objectives.length === 1) { // Either 0 or 1 I think.
+                    if (gameChangerProps.Objectives.length === 1) {
                         const objective = gameChangerProps.Objectives[0];
                         objective.Id = gamechangerId;
                         gameChangerObjectives.push(objective);
@@ -684,9 +684,6 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
     }
 
     for (const objective of (Objectives || []).concat(gameChangerObjectives)) {
-        if (!objective.Category) {
-            objective.Category = objective.Primary ? 'primary' : 'secondary';
-        }
         if (objective.Activation
             || (objective.OnActive && objective.OnActive.IfInProgress && objective.OnActive.IfInProgress.Visible === false)
             || (objective.OnActive && objective.OnActive.IfCompleted && objective.OnActive.IfCompleted.Visible === false
@@ -719,10 +716,10 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
                 BriefingText: objective.BriefingText || '',
                 LongBriefingText: objective.LongBriefingText === undefined ?
                     (objective.BriefingText || '') : objective.LongBriefingText,
-                Image: objective.Image,
-                BriefingName: objective.BriefingName,
+                Image: objective.Image || '',
+                BriefingName: objective.BriefingName || '',
                 DisplayAsKill: objective.DisplayAsKillObjective || false,
-                ObjectivesCategory: objective.Category,
+                ObjectivesCategory: (objective.Category && objective.Category != 'primary' || objective.Primary === false) ? 'secondary' : 'primary',
                 ForceShowOnLoadingScreen: objective.ForceShowOnLoadingScreen || false,
             };
             switch (objective.ObjectiveType) {
@@ -783,7 +780,7 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
     for (const { Id, ExcludeFromScoring, ForceShowOnLoadingScreen } of (Objectives || []).concat((GameChangers || []).map(x => ({ Id: x })))) {
         if (!resultIds.has(Id)) {
             let resultobjective = result.get(Id);
-            if (resultobjective && (!ExcludeFromScoring || ForceShowOnLoadingScreen)) {
+            if (resultobjective) {
                 sortedResult.push(resultobjective);
                 resultIds.add(Id);
             }
