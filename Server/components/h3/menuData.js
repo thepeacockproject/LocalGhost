@@ -21,6 +21,16 @@ const scoreHandler = require('./scoreHandler.js');
 
 const app = express.Router();
 
+const LOADOUT_SLOTS = [
+    'carriedweapon',
+    'carrieditem',
+    'concealedweapon',
+    'disguise',
+    'gear',
+    'gear',
+    'stashpoint'
+];
+
 // /profiles/page/
 
 app.get('/dashboard/Dashboard_Category_:category/:subscriptionId/:type/:id/:mode', async (req, res) => {
@@ -249,9 +259,11 @@ app.get('/stashpoint', async (req, res) => {
         });
     }
 
-    if (req.query.slotname.endsWith(req.query.slotid.toString())) {
-        req.query.slotname = req.query.slotname.slice(0, -req.query.slotid.toString().length); // weird
+    let slotname = 'container';
+    if (!UUIDRegex.test(req.query.slotid)) { // uuid slotid means this is a container
+        slotname = LOADOUT_SLOTS[req.query.slotid];
     }
+
 
     const stashData = {
         template: await getTemplate('stashpoint', req.gameVersion),
@@ -260,15 +272,24 @@ app.get('/stashpoint', async (req, res) => {
             LoadoutItemsData: {
                 SlotId: req.query.slotid,
                 Items: userData.Extensions.inventory.filter(item => {
-                    return item.Unlockable.Properties.LoadoutSlot // only display items
-                        && (!req.query.slotname
-                            || ((UUIDRegex.test(req.query.slotid) // container
-                                || req.query.slotname === 'stashpoint') // stashpoint
-                                && item.Unlockable.Properties.LoadoutSlot !== 'disguise') // container or stashpoint => display all items
-                            || item.Unlockable.Properties.LoadoutSlot === req.query.slotname) // else: display items for requested slot
-                        && (req.query.allowcontainers === 'true' || !item.Unlockable.Properties.IsContainer)
-                        && (req.query.allowlargeitems === 'true' || item.Unlockable.Properties.LoadoutSlot !== 'carriedweapon'); // not sure about this one
-                    // TODO: filter for specific stashpoints?
+                    if (!item.Unlockable.Properties.LoadoutSlot) return false; // discard non-item unlockables
+
+                    if (slotname === 'container' || slotname === 'stashpoint') {
+                        if (item.Unlockable.Properties.LoadoutSlot === 'disguise') return false;
+                        // everything but disguises can go in containers and stashpoints
+                    } else {
+                        if (item.Unlockable.Properties.LoadoutSlot !== slotname) return false;
+                        // only let through items that can go in the selected slot
+                    }
+
+                    if (req.query.allowcontainers !== 'true' && item.Unlockable.Properties.IsContainer)
+                        return false;
+                    if (req.query.allowlargeitems !== 'true') {
+                        // TODO: check item size in repo, the following code is technically wrong but gives good enough results
+                        if (item.Unlockable.Properties.LoadoutSlot === 'carriedweapon') return false;
+                    }
+
+                    return true;
                 }).map(item => ({
                     Item: item,
                     ItemDetails: {
@@ -387,15 +408,6 @@ app.get('/Planning', async (req, res) => {
             .map(i => i.Unlockable)
             .filter(unlockable => unlockable.Properties.RepositoryId);
         sublocation.DisplayNameLocKey = `UI_${sublocation.Id}_NAME`;
-        const loadoutSlots = [
-            'carriedweapon',
-            'carrieditem',
-            'concealedweapon',
-            'disguise',
-            'gear',
-            'gear',
-            'stashpoint'
-        ];
         const defaultLoadout = Object.assign(Array(7).fill(null), (userData.Extensions.defaultloadout || {})[sublocation.Properties.ParentLocation]
             || getDefaultLoadout(sublocation.Properties.ParentLocation, req.gameVersion));
 
@@ -421,14 +433,14 @@ app.get('/Planning', async (req, res) => {
                 Location: sublocation,
                 LoadoutData: Object.entries(defaultLoadout).map(([slotid, itemId]) => (
                     {
-                        SlotName: loadoutSlots[slotid] || itemId,
+                        SlotName: LOADOUT_SLOTS[slotid] || itemId,
                         SlotId: slotid,
                         Recommended: itemId ? {
                             item: userData.Extensions.inventory.find(item => item.Unlockable.Id === itemId),
-                            type: loadoutSlots[slotid] || itemId,
+                            type: LOADOUT_SLOTS[slotid] || itemId,
                             owned: true,
                         } : null,
-                        IsContainer: loadoutSlots[slotid] === undefined ? true : undefined,
+                        IsContainer: LOADOUT_SLOTS[slotid] === undefined ? true : undefined,
                     }
                 )),
                 LimitedLoadoutUnlockLevel: 0, // ?
@@ -651,7 +663,7 @@ async function mapObjectives(Objectives, GameChangers, GroupObjectiveDisplayOrde
                     }
                 } else {
                     let primary = null;
-                    for(const objective of gameChangerProps.Objectives) {
+                    for (const objective of gameChangerProps.Objectives) {
                         if (objective.Category === 'primary') {
                             if (primary === false) {
                                 console.warn(`Gamechanger ${gamechangerId} has more than one objective category`);
