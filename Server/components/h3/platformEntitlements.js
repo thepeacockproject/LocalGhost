@@ -33,6 +33,7 @@ function GetPlatformEntitlements(req, res) {
             '6cdf07da030d4f66acd50eaf3cd234c7', // The Disruptor Pack
             'f04198e0ffcf49079b5ec77bb6b66891', // The Drop Pack
             '70a9afcc8de84b6ab0f2b45b2018559b', // The Splitter pack
+            '04cb1b3e5b424308be25236f6bc1b2fb', // The Bruce Lee Pack
             '84a1a6fda4fb48afbb78ee9b2addd475', // WoA Deluxe Pack
         ]);
     } else if (
@@ -65,6 +66,15 @@ function GetPlatformEntitlements(req, res) {
             '1829584', // HITMAN 3 - Seven Deadly Sins Act 5: Gluttony
             '1829585', // HITMAN 3 - Seven Deadly Sins Act 6: Envy
             '1829586', // HITMAN 3 - Seven Deadly Sins Act 7: Wrath
+            '2475260', // HITMAN 3 - Sarajevo Six Campaign Pack
+            '2184790', // HITMAN 3 - Street Art Pack
+            '2184791', // HITMAN 3 - Makeshift Pack
+            '2828470', // HITMAN 3 - The Undying Pack
+            '2973650', // HITMAN 3 - The Disruptor Pack
+            '3110360', // HITMAN 3 - The Drop Pack
+            '3254350', // HITMAN 3 - The Splitter Pack
+            '3711140', // HITMAN 3 - The Banker Pack
+            '3957470', // HITMAN 3 - The Bruce Lee Pack
         ]);
     }
 }

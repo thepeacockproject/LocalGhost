@@ -389,7 +389,37 @@
     "IsHidden": null,
     "TileImage": "images/ContractConditions/Condition_Killmethod_Shotgun.jpg",
     "Resource": [],
-    "Objectives": [],
+    "Objectives": [
+      {
+        "_comment": "----- Silent objective to mark GameChanger as primary -----",
+        "Id": "b956c509-5d79-4c7a-80ef-b0800ad850f9",
+        "Type": "statemachine",
+        "Category": "primary",
+        "ExcludeFromScoring": true,
+        "OnActive": {
+          "IfInProgress": {
+            "Visible": false
+          },
+          "IfCompleted": {
+            "Visible": false
+          },
+          "IfFailed": {
+            "Visible": false
+          }
+        },
+        "Definition": {
+          "Scope": "session",
+          "Context": {},
+          "States": {
+            "Start": {
+              "-": {
+                "Transition": "Success"
+              }
+            }
+          }
+        }
+      }
+    ],
     "ShowBasedOnObjectives": null,
     "IsPrestigeObjective": null
   },
@@ -4312,7 +4342,6 @@
   "ab91b785-7914-4790-96f9-130eea842084": {
     "Name": "UI_GAMECHANGERS_GLOBAL_HOT_DISGUISE_NAME",
     "Description": "UI_GAMECHANGERS_PARIS_AUCTION_STAFF_TIMER_DESC",
-    "LongDescription": "",
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": null,
     "TileImage": "images/contracts/gamechangers/Gamechanger_Paris_Hot_Disguise_Palace_Staff.jpg",
@@ -4389,7 +4418,6 @@
   "30b2d229-c3d7-44f7-98d6-bf88b057e354": {
     "Name": "UI_GAMECHANGERS_GLOBAL_HOT_DISGUISE_NAME",
     "Description": "UI_GAMECHANGERS_PARIS_SECURITY_GUARD_TIMER_DESC",
-    "LongDescription": "",
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": null,
     "TileImage": "images/contracts/gamechangers/Gamechanger_Paris_Hot_Disguise_Security_Guard.jpg",
@@ -5954,6 +5982,93 @@
     "ShowBasedOnObjectives": null,
     "IsPrestigeObjective": null
   },
+  "7de74fc2-5b8c-4b5f-a151-4f14db638908": {
+    "Name": "UI_CONTRACT_BAIJU_GAMECHANGER_CLEAN_HANDS_NAME",
+    "Description": "UI_CONTRACT_BAIJU_GAMECHANGER_CLEAN_HANDS_DESC",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "IsHidden": null,
+    "TileImage": "images/contracts/gamechangers/Gamechanger_Global_CleanHands.jpg",
+    "Resource": [
+      "assembly:/_PRO/scenes/missions/Bangkok/baiju_clean_hands.brick"
+    ],
+    "Objectives": [
+      {
+        "Id": "82603825-3f08-4708-80aa-ca9c78e3509b",
+        "BriefingText": "$loc UI_CONTRACT_BAIJU_GAMECHANGER_CLEAN_HANDS_OBJ",
+        "HUDTemplate": {
+          "display": "$loc UI_CONTRACT_BAIJU_GAMECHANGER_CLEAN_HANDS_OBJ",
+          "iconType": 9
+        },
+        "ExcludeFromScoring": true,
+        "Category": "primary",
+        "Type": "statemachine",
+        "Definition": {
+          "Scope": "session",
+          "States": {
+            "Start": {
+              "Kill": {
+                "Condition": {
+                  "$not": {
+                    "$eq": [
+                      "$Value.KillContext",
+                      1
+                    ]
+                  }
+                },
+                "Transition": "Failure"
+              },
+              "Baiju_ResetCleanHands": {
+                "Transition": "Success"
+              }
+            }
+          }
+        },
+        "OnActive": {
+          "IfCompleted": {
+            "Visible": false
+          }
+        }
+      },
+      {
+        "_comment": "----- Hack to get the objective to show after neutralize assassins -----",
+        "Id": "01e957ba-3441-43d2-acc3-3b9d099853ee",
+        "BriefingText": "$loc UI_CONTRACT_BAIJU_GAMECHANGER_CLEAN_HANDS_OBJ",
+        "HUDTemplate": {
+          "display": "$loc UI_CONTRACT_BAIJU_GAMECHANGER_CLEAN_HANDS_OBJ",
+          "iconType": 9
+        },
+        "Activation": {
+          "$eq": [
+            "$82603825-3f08-4708-80aa-ca9c78e3509b",
+            "Completed"
+          ]
+        },
+        "ExcludeFromScoring": true,
+        "Category": "primary",
+        "Type": "statemachine",
+        "Definition": {
+          "Scope": "session",
+          "States": {
+            "Start": {
+              "Kill": {
+                "Condition": {
+                  "$not": {
+                    "$eq": [
+                      "$Value.KillContext",
+                      1
+                    ]
+                  }
+                },
+                "Transition": "Failure"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null
+  },
   "aec224db-e0ea-4718-bf27-f9fd26aa3ab5": {
     "Name": "UI_GAMECHANGERS_COLORADO_LAPTOP_FARMHOUSE_NAME",
     "Description": "UI_GAMECHANGERS_COLORADO_LAPTOP_ROSE_OFFICE_DESC",
@@ -6490,7 +6605,6 @@
   "eb4c8e84-ca1f-4242-b72a-cf90175d223f": {
     "Name": "UI_GAMECHANGERS_GLOBAL_HOT_DISGUISE_NAME",
     "Description": "UI_GAMECHANGERS_HOKKAIDO_NAILS_HOT_DISGUISE_DESC",
-    "LongDescription": "",
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": null,
     "TileImage": "images/contracts/gamechangers/Gamechanger_Hokkaido_Hot_Disguise_Heli_Pilot.jpg",
@@ -8155,7 +8269,6 @@
   "3ff7f4a5-3410-428e-a635-2dce2c0eedf5": {
     "Name": "UI_GAMECHANGERS_GLOBAL_HOT_DISGUISE_NAME",
     "Description": "UI_GAMECHANGERS_MUMBAI_HOT_DISGUISES_DESC",
-    "LongDescription": "",
     "Icon": "images/challenges/default_challenge_icon.png",
     "IsHidden": null,
     "TileImage": "images/contracts/gamechangers/Gamechanger_Mumbai_Hot_Disguises.jpg",
@@ -19244,7 +19357,8 @@
               "e82b61a6-c534-495a-bbe2-b45e9ae9a030",
               "f1f89faf-a441-4492-b442-9a923b5ecfd1",
               "f2a74ebc-8f07-4845-b421-2339988e1994",
-              "1bbf0ed5-0515-4599-a4c9-454ce59cff44"
+              "1bbf0ed5-0515-4599-a4c9-454ce59cff44",
+              "ccc6b901-6f13-43be-88a1-6750cdb4a6ff"
             ]
           },
           "States": {
@@ -26220,5 +26334,103 @@
     ],
     "ShowBasedOnObjectives": true,
     "IsPrestigeObjective": true
+  },
+  "f42433c0-9574-49fa-bfb4-ddb9e55b1474": {
+    "Name": "UI_CONTRACT_EVERGREEN_MISSION_PAYOUT_OBJ",
+    "Description": "UI_CONTRACT_EVERGREEN_MISSION_PAYOUT_OBJ",
+    "Icon": "images/challenges/default_challenge_icon.png",
+    "IsHidden": true,
+    "TileImage": "images/test/placeholder.jpg",
+    "Resource": [],
+    "Objectives": [
+      {
+        "Id": "6f7e63bc-ac2b-43e4-bc42-4e07e680ae8b",
+        "Category": "secondary",
+        "ExcludeFromScoring": true,
+        "HideInMenu": true,
+        "BriefingText": "$loc UI_CONTRACT_FRENCHMARTINI_OBJ_CURRENCY",
+        "HUDTemplate": {
+          "display": "$loc UI_CONTRACT_FRENCHMARTINI_OBJ_CURRENCY",
+          "iconType": 9
+        },
+        "ObjectiveType": "custom",
+        "Type": "statemachine",
+        "OnActive": {
+          "IfCompleted": {
+            "Visible": false
+          }
+        },
+        "Definition": {
+          "Context": {
+            "Balance": 0,
+            "Other": ""
+          },
+          "ContextListeners": {
+            "Balance": {
+              "type": "custom",
+              "HUDTemplate": {
+                "iconType": 9,
+                "display": {
+                  "$loc": {
+                    "key": "UI_CONTRACT_FRENCHMARTINI_OBJ_CURRENCY",
+                    "data": [
+                      "$formatint $.Balance",
+                      "$.Other"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "States": {
+            "Start": {
+              "-": {
+                "Transition": "Success"
+              }
+            },
+            "Success": {
+              "SetBalance": {
+                "Condition": {
+                  "$gt": [
+                    "$Value.Chips",
+                    0
+                  ]
+                },
+                "Actions": {
+                  "$set": [
+                    "Balance",
+                    "$Value.Chips"
+                  ]
+                },
+                "Transition": "Active"
+              }
+            },
+            "Active": {
+              "SetBalance": [
+                {
+                  "Actions": {
+                    "$set": [
+                      "Balance",
+                      "$Value.Chips"
+                    ]
+                  }
+                },
+                {
+                  "Condition": {
+                    "$eq": [
+                      "$.Balance",
+                      0
+                    ]
+                  },
+                  "Transition": "Success"
+                }
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "ShowBasedOnObjectives": null,
+    "IsPrestigeObjective": null
   }
 }
