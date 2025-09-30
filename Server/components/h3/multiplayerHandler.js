@@ -110,7 +110,7 @@ app.post('/RegisterToPreset', express.json(), (req, res) => { // matchmaking
     // TODO: implement matchmaking
     // req.body.presetId
     // req.body.lobbyId (this is just a timestamp?)
-    res.status(500).end();
+    res.status(501).end();
 });
 
 module.exports = app;
